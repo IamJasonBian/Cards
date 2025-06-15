@@ -1,6 +1,5 @@
 from typing import List
-from collections import defaultdict, deque
-import bisect
+from collections import defaultdict
 
 class Solution:
     def countServers(self, n: int, logs: List[List[int]], x: int, queries: List[int]) -> List[int]:
@@ -12,7 +11,6 @@ class Solution:
         ans = [0] * q
         left = 0
         right = 0
-        from collections import defaultdict
         server_count = defaultdict(int)  # server_id -> count in window
         active_servers = set()  # servers with at least one request in window
         
