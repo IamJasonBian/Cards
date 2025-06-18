@@ -1,0 +1,19 @@
+# Test 1: Basic directory listing
+["FileSystem","ls","mkdir","ls","ls","mkdir","ls","ls","addContentToFile","ls","ls","ls"]
+[[],["/"],["/a/b/c"],["/"],["/a/b"],["/a/b/e"],["/"],["/a/b"],["/a/b/c/d","hello"],["/"],["/a/b/c"],["/a/b/c/d"]]
+[null,[],[],["a"],[],null,["a"],["c","e"],null,["a"],["d"],["d"]]
+
+# Test 2: File operations
+["FileSystem","mkdir","addContentToFile","ls","readContentFromFile","addContentToFile","readContentFromFile"]
+[[],["/a/b/c"],["/a/b/c/d","hello"],["/"],["/a/b/c/d"],["/a/b/c/d"," world"],["/a/b/c/d"]]
+[null,null,null,["a"],"hello",null,"hello world"]
+
+# Test 3: Root directory operations
+["FileSystem","ls","mkdir","ls","addContentToFile","ls","readContentFromFile"]
+[[],["/"],["/a"],["/"],["/file.txt","content"],["/"],["/file.txt"]]
+[null,[],null,["a","file.txt"],null,["a","file.txt"],"content"]
+
+# Test 4: Edge cases
+["FileSystem","mkdir","mkdir","addContentToFile","readContentFromFile","ls","ls","ls"]
+[[],["/a"],["/a"],["/file","content"],["/file"],["/"],["/a"],["/bogus/path"]]
+[null,null,null,null,"content",["a","file"],[],[]]
