@@ -1,0 +1,51 @@
+Test Case 1:
+Input: ["cat","cats","catsdogcats","dog","dogcatsdog","hippopotamuses","rat","ratcatdogcat"]
+Output: ["catsdogcats","dogcatsdog","ratcatdogcat"]
+
+Test Case 2:
+Input: ["cat","dog","catdog"]
+Output: ["catdog"]
+
+Test Case 3:
+Input: ["a","b","ab","abc"]
+Output: ["ab"]
+
+Test Case 4:
+Input: [""]
+Output: []
+
+Test Case 5:
+Input: ["a","aa","aaa","aaaa"]
+Output: ["aa","aaa","aaaa"]
+
+Test Case 6:
+Input: ["a","b","ab","aabb"]
+Output: ["ab","aabb"]
+
+Test Case 7:
+Input: ["cat","dog","catdog","dogcat"]
+Output: ["catdog","dogcat"]
+
+Test Case 8:
+Input: ["a","aa","aaa","aaaa","aaaaa"]
+Output: ["aa","aaa","aaaa","aaaaa"]
+
+Test Case 9:
+Input: ["a","b","c","d","e","f","ab","cd","ef","abcdef"]
+Output: ["abcdef"]
+
+Test Case 10:
+Input: ["a","aa","aab","aabb","aabba"]
+Output: ["aab","aabb","aabba"]
+
+Test Case 11: (Edge Case - Empty List)
+Input: []
+Output: []
+
+Test Case 12: (Edge Case - Single Word)
+Input: ["hello"]
+Output: []
+
+Test Case 13: (All Possible Concatenations)
+Input: ["a","b","ab","abc","d","cd","bcd","abcd"]
+Output: ["ab","abcd","bcd","cd"]
