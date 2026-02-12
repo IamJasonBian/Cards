@@ -148,12 +148,16 @@ const sections: Section[] = [
       {
         label: "Read the Interviewer",
         sub: [
-          "Watch for nods, frowns, or confused looks -- adjust your pace",
-          "If they lean in or ask a follow-up, dig deeper on that point",
-          "If they seem impatient, speed up and cut to the key insight",
+          "PAY ATTENTION to their signals -- this is the #1 skill",
+          "Watch for nods, frowns, or confused looks -- adjust your pace immediately",
+          "If they lean in or ask a follow-up, that's a signal to dig deeper",
+          "If they seem impatient, you're going too slow -- cut to the key insight",
+          "If they repeat a hint or rephrase, they're giving you the answer -- take it",
+          "If they say 'what if...' or 'have you considered...', STOP and pivot",
           "Mirror their energy level -- match formal or casual tone",
-          "If they hint at something, take the hint -- don't ignore it",
-          "Notice if they're trying to help you -- accept the lifeline",
+          "Notice when they're trying to help you -- accept the lifeline, don't resist",
+          "If they go quiet, check in: 'does this approach make sense to you?'",
+          "Their body language tells you more than their words -- read it constantly",
         ],
       },
       {
