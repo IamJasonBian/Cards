@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, ExternalLink, Hash, Clock, Zap } from "lucide-react";
+import { ChevronDown, ChevronUp, ExternalLink, Hash, Clock, Zap, BookOpen } from "lucide-react";
 import type { Pattern } from "../data/patterns";
 
 const tagColors: Record<string, string> = {
@@ -70,6 +70,27 @@ export function PatternCard({ pattern }: { pattern: Pattern }) {
                   {p.name}
                   <ExternalLink size={10} />
                 </a>
+              ))}
+            </div>
+          </div>
+          <div className="mt-4">
+            <div className="flex items-center gap-2 mb-2">
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                <BookOpen size={10} className="inline mr-1" />
+                Boilerplate
+              </p>
+            </div>
+            <pre className="bg-slate-800 text-slate-300 rounded-lg p-4 text-sm overflow-x-auto font-mono leading-relaxed border border-slate-600/30">
+              <code>{pattern.boilerplate}</code>
+            </pre>
+            <div className="flex flex-wrap gap-1.5 mt-2">
+              {pattern.variations.map((v) => (
+                <span
+                  key={v}
+                  className="px-2 py-0.5 rounded-full text-xs font-mono bg-violet-50 text-violet-600 border border-violet-200"
+                >
+                  {v}
+                </span>
               ))}
             </div>
           </div>

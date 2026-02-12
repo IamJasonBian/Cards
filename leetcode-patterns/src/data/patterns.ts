@@ -9,6 +9,8 @@ export interface Pattern {
   solveCount: number;
   tag: string;
   problems: Problem[];
+  boilerplate: string;
+  variations: string[];
   code: string;
   runtime: string;
   optimalCode: string;
@@ -28,6 +30,19 @@ export const patterns: Pattern[] = [
       { name: "Course Schedule", slug: "course-schedule" },
       { name: "Pacific Atlantic Water Flow", slug: "pacific-atlantic-water-flow" },
     ],
+    boilerplate: `BUILD adjacency list from edges
+INIT visited set
+
+FUNCTION dfs(node):
+    MARK node as visited
+    FOR each neighbor of node:
+        IF neighbor NOT visited:
+            dfs(neighbor)
+
+FOR each starting node:
+    IF NOT visited:
+        dfs(node)  → new component found`,
+    variations: ["defaultdict(list)", "set()", "sys.setrecursionlimit", "iterative stack", "connected components"],
     code: `def dfs(graph, node, visited):
     if node in visited:
         return
@@ -73,6 +88,20 @@ def dfs_iterative(graph, start):
       { name: "Word Ladder", slug: "word-ladder" },
       { name: "Binary Tree Level Order Traversal", slug: "binary-tree-level-order-traversal" },
     ],
+    boilerplate: `INIT queue with starting node(s)
+INIT visited set with start
+level = 0
+
+WHILE queue NOT empty:
+    FOR each node in current level:
+        DEQUEUE node
+        PROCESS node
+        FOR each neighbor:
+            IF NOT visited:
+                MARK visited
+                ENQUEUE neighbor
+    level += 1`,
+    variations: ["deque", "multi-source BFS", "level tracking", "visited before enqueue", "bidirectional"],
     code: `def bfs(graph, start):
     queue = deque([start])
     visited = {start}
@@ -124,6 +153,22 @@ def dfs_iterative(graph, start):
       { name: "Climbing Stairs", slug: "climbing-stairs" },
       { name: "Longest Increasing Subsequence", slug: "longest-increasing-subsequence" },
     ],
+    boilerplate: `INIT dp array of size n (or n+1)
+SET base cases
+
+FOR i from 1 to n:
+    dp[i] = TRANSITION(dp[i-1], dp[i-2], ...)
+    // e.g. max(skip, take), min(options), sum(ways)
+
+RETURN dp[n]
+
+--- OR top-down ---
+FUNCTION solve(i):
+    IF base case: RETURN value
+    IF cached: RETURN cache[i]
+    cache[i] = TRANSITION(solve(i-1), ...)
+    RETURN cache[i]`,
+    variations: ["@cache", "@lru_cache(None)", "bisect_left", "rolling variables", "prefix sum"],
     code: `# Bottom-up
 dp = [0] * (n + 1)
 dp[1] = nums[0]
@@ -168,6 +213,18 @@ def lis(nums):
       { name: "Two Sum II", slug: "two-sum-ii-input-array-is-sorted" },
       { name: "Valid Palindrome", slug: "valid-palindrome" },
     ],
+    boilerplate: `SORT array (if needed)
+SET left = 0, right = end
+
+WHILE left < right:
+    COMPUTE value from arr[left], arr[right]
+    IF match target:
+        RECORD result
+    ELSE IF value too small:
+        left += 1
+    ELSE:
+        right -= 1`,
+    variations: ["sort()", "skip duplicates", "three pointers (k-Sum)", "opposite ends", "same direction"],
     code: `nums.sort()
 l, r = 0, len(nums) - 1
 while l < r:
@@ -212,6 +269,19 @@ def threeSum(nums):
       { name: "Longest Repeating Character Replacement", slug: "longest-repeating-character-replacement" },
       { name: "Permutation in String", slug: "permutation-in-string" },
     ],
+    boilerplate: `SET left = 0
+INIT window state (map/counter)
+best = 0
+
+FOR right from 0 to n-1:
+    ADD arr[right] to window
+    WHILE window is INVALID:
+        REMOVE arr[left] from window
+        left += 1
+    UPDATE best with (right - left + 1)
+
+RETURN best`,
+    variations: ["defaultdict(int)", "Counter()", "fixed-size window", "at most K distinct", "minimum window"],
     code: `l = 0
 window = defaultdict(int)
 res = 0
@@ -247,6 +317,17 @@ def lengthOfLongestSubstring(s):
       { name: "Search in Rotated Sorted Array", slug: "search-in-rotated-sorted-array" },
       { name: "Find Minimum in Rotated Sorted Array", slug: "find-minimum-in-rotated-sorted-array" },
     ],
+    boilerplate: `SET lo, hi = search bounds
+
+WHILE lo < hi:
+    mid = (lo + hi) // 2
+    IF condition(mid) is TRUE:
+        hi = mid        // answer is mid or left
+    ELSE:
+        lo = mid + 1    // answer is right of mid
+
+RETURN lo  // lo == hi == answer`,
+    variations: ["bisect_left", "bisect_right", "search on answer", "rotated array", "upper_bound"],
     code: `lo, hi = min_val, max_val
 while lo < hi:
     mid = (lo + hi) // 2
@@ -288,6 +369,17 @@ def minEatingSpeed(piles, h):
       { name: "Word Search", slug: "word-search" },
       { name: "N-Queens", slug: "n-queens" },
     ],
+    boilerplate: `FUNCTION backtrack(state, choices):
+    IF goal reached:
+        RECORD state as solution
+        RETURN
+
+    FOR each choice in choices:
+        IF choice is valid:      // pruning
+            MAKE choice          // modify state
+            backtrack(state, remaining choices)
+            UNDO choice          // restore state`,
+    variations: ["path[:]", "sort() for pruning", "seen set", "bitmask", "start index vs swap"],
     code: `def backtrack(start, path):
     result.append(path[:])
     for i in range(start, len(nums)):
@@ -331,6 +423,17 @@ def exist(board, word):
       { name: "Next Greater Element I", slug: "next-greater-element-i" },
       { name: "Largest Rectangle in Histogram", slug: "largest-rectangle-in-histogram" },
     ],
+    boilerplate: `INIT stack (stores indices)
+INIT result array
+
+FOR i, val in array:
+    WHILE stack NOT empty AND violates monotonic property:
+        popped = stack.pop()
+        COMPUTE answer for popped using i and stack top
+    stack.push(i)
+
+// Process remaining items in stack`,
+    variations: ["decreasing stack", "increasing stack", "sentinel values", "next greater/smaller", "span calculation"],
     code: `stack = []  # indices
 res = [0] * len(nums)
 for i, num in enumerate(nums):
@@ -365,6 +468,19 @@ def largestRectangleArea(heights):
       { name: "Merge K Sorted Lists", slug: "merge-k-sorted-lists" },
       { name: "Task Scheduler", slug: "task-scheduler" },
     ],
+    boilerplate: `// Top-K: keep heap of size k
+INIT min-heap
+
+FOR each item in stream:
+    PUSH item to heap
+    IF heap size > k:
+        POP smallest (maintains top-k largest)
+
+// Frequency-based: count first, then heap
+COMPUTE frequency map
+PUSH (freq, item) pairs into heap
+POP k times for result`,
+    variations: ["Counter()", "heapq.nlargest", "heapq.merge", "tuple comparison (-freq, val)", "bucket sort"],
     code: `# Top K
 count = Counter(nums)
 return heapq.nlargest(k, count, key=count.get)
@@ -411,6 +527,21 @@ def quickselect(nums, k):
       { name: "Graph Valid Tree", slug: "graph-valid-tree" },
       { name: "Number of Connected Components", slug: "number-of-connected-components-in-an-undirected-graph" },
     ],
+    boilerplate: `INIT parent[i] = i for all nodes
+INIT rank/size array
+
+FUNCTION find(x):
+    WHILE parent[x] != x:
+        COMPRESS path
+        x = parent[x]
+    RETURN x
+
+FUNCTION union(a, b):
+    rootA, rootB = find(a), find(b)
+    IF same root: RETURN false (cycle!)
+    ATTACH smaller tree under larger
+    RETURN true`,
+    variations: ["path compression", "union by rank", "union by size", "component count", "~c coordinate trick"],
     code: `parent = list(range(n))
 rank = [0] * n
 
@@ -466,6 +597,19 @@ class DSU:
       { name: "Edit Distance", slug: "edit-distance" },
       { name: "Coin Change II", slug: "coin-change-ii" },
     ],
+    boilerplate: `INIT dp[m+1][n+1] grid with base cases
+
+FOR i from 1 to m:
+    FOR j from 1 to n:
+        IF items match:
+            dp[i][j] = dp[i-1][j-1] + 1    // diagonal
+        ELSE:
+            dp[i][j] = BEST(dp[i-1][j], dp[i][j-1])
+
+RETURN dp[m][n]
+
+// Variants: min (edit distance), count (paths), max (LCS)`,
+    variations: ["rolling row", "diagonal variable", "min/max/count transitions", "knapsack", "string matching"],
     code: `dp = [[0] * (n + 1) for _ in range(m + 1)]
 for i in range(1, m + 1):
     for j in range(1, n + 1):
@@ -499,6 +643,23 @@ def lcs(text1, text2):
       { name: "Course Schedule II", slug: "course-schedule-ii" },
       { name: "Alien Dictionary", slug: "alien-dictionary" },
     ],
+    boilerplate: `BUILD directed graph from dependencies
+COMPUTE indegree for each node
+
+INIT queue with all indegree-0 nodes
+order = []
+
+WHILE queue NOT empty:
+    node = DEQUEUE
+    APPEND node to order
+    FOR each neighbor:
+        indegree[neighbor] -= 1
+        IF indegree == 0:
+            ENQUEUE neighbor
+
+IF len(order) == n: RETURN order  // valid
+ELSE: cycle detected`,
+    variations: ["Kahn's (BFS)", "DFS 3-color", "cycle detection", "indegree[]", "defaultdict(list)"],
     code: `indegree = [0] * n
 graph = defaultdict(list)
 for u, v in edges:
@@ -553,6 +714,18 @@ def topo_dfs(n, edges):
       { name: "Binary Tree Maximum Path Sum", slug: "binary-tree-maximum-path-sum" },
       { name: "Validate Binary Search Tree", slug: "validate-binary-search-tree" },
     ],
+    boilerplate: `FUNCTION dfs(node):
+    IF node is NULL:
+        RETURN base value (0, None, etc.)
+
+    left = dfs(node.left)
+    right = dfs(node.right)
+
+    UPDATE global answer using left + right  // diameter, path sum
+    RETURN value to parent (e.g. depth, sum)
+
+// Key: separate "answer" (global) from "return value" (to parent)`,
+    variations: ["global variable", "return tuple", "inorder/preorder/postorder", "boundary passing", "iterative stack"],
     code: `def dfs(node):
     if not node:
         return 0
@@ -594,6 +767,20 @@ def inorder_morris(root):
       { name: "Cheapest Flights Within K Stops", slug: "cheapest-flights-within-k-stops" },
       { name: "Swim in Rising Water", slug: "swim-in-rising-water" },
     ],
+    boilerplate: `INIT dist[all] = infinity
+dist[source] = 0
+INIT min-heap with (0, source)
+
+WHILE heap NOT empty:
+    d, u = POP minimum
+    IF d > dist[u]: SKIP (stale entry)
+    FOR each (neighbor, weight) of u:
+        IF dist[u] + weight < dist[neighbor]:
+            dist[neighbor] = dist[u] + weight
+            PUSH (dist[neighbor], neighbor)
+
+RETURN dist`,
+    variations: ["heapq", "0-1 BFS deque", "Bellman-Ford", "A* heuristic", "modified weight (max-path, min-bottleneck)"],
     code: `def dijkstra(graph, src, n):
     dist = [float('inf')] * n
     dist[src] = 0
@@ -637,6 +824,22 @@ def bfs_01(graph, src, n):
       { name: "Find the Duplicate Number", slug: "find-the-duplicate-number" },
       { name: "Reverse Linked List", slug: "reverse-linked-list" },
     ],
+    boilerplate: `// Slow/Fast pointer (find middle, detect cycle)
+SET slow = head, fast = head
+WHILE fast AND fast.next:
+    slow = slow.next
+    fast = fast.next.next
+// slow is now at midpoint
+
+// Reverse a segment
+SET prev = NULL, curr = head
+WHILE curr:
+    nxt = curr.next
+    curr.next = prev
+    prev = curr
+    curr = nxt
+RETURN prev  // new head`,
+    variations: ["dummy node", "slow/fast pointers", "prev/curr/nxt", "reverse in groups", "merge two lists"],
     code: `# Find middle (slow/fast)
 slow = fast = head
 while fast and fast.next:
@@ -688,6 +891,21 @@ def reverseKGroup(head, k):
       { name: "Flood Fill", slug: "flood-fill" },
       { name: "Shortest Path in Binary Matrix", slug: "shortest-path-in-binary-matrix" },
     ],
+    boilerplate: `SET rows, cols = grid dimensions
+DIRECTIONS = [(0,1),(0,-1),(1,0),(-1,0)]
+
+FUNCTION dfs(r, c):
+    IF out of bounds OR invalid cell:
+        RETURN
+    MARK (r, c) as visited
+    FOR each (dr, dc) in DIRECTIONS:
+        dfs(r + dr, c + dc)
+
+FOR each cell (r, c):
+    IF valid starting cell AND NOT visited:
+        dfs(r, c)
+        component_count += 1`,
+    variations: ["in-place marking", "visited set", "4-directional", "8-directional", "BFS shortest path", "boundary DFS"],
     code: `def numIslands(grid):
     rows, cols = len(grid), len(grid[0])
     visited = set()
@@ -757,6 +975,19 @@ def shortestPathBinaryMatrix(grid):
       { name: "Accounts Merge", slug: "accounts-merge" },
       { name: "Making A Large Island", slug: "making-a-large-island" },
     ],
+    boilerplate: `// Group elements that share a property (row, col, email, etc.)
+FOR each element:
+    UNION(element's property_A, element's property_B)
+    // e.g. union(row, ~col) for coordinate grouping
+
+COUNT distinct components
+ANSWER = total elements - components
+
+// Alternative: label components, then try modifications
+LABEL each component with unique ID + size
+FOR each candidate cell:
+    SUM sizes of adjacent unique components`,
+    variations: ["Union-Find ~c trick", "DFS adjacency", "label + expand", "component size tracking", "coordinate mapping"],
     code: `# Most Stones Removed -- group by shared row/col
 def removeStones(stones):
     parent = {}
