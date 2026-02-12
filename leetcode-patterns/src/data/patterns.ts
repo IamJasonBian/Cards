@@ -873,6 +873,237 @@ def largestIsland(grid):
     optimalRuntime: "O(n^2) time, O(n^2) space",
     optimalNote: "For Most Stones: Union-Find with ~c trick maps rows and cols to the same space. For Making A Large Island: label components first, then try flipping each 0 and summing adjacent unique labels.",
   },
+  {
+    id: 18,
+    name: "Anagram / Frequency Counting",
+    solveCount: 31,
+    tag: "String",
+    problems: [
+      { name: "Group Anagrams", slug: "group-anagrams" },
+      { name: "Valid Anagram", slug: "valid-anagram" },
+      { name: "Find All Anagrams in a String", slug: "find-all-anagrams-in-a-string" },
+      { name: "Minimum Window Substring", slug: "minimum-window-substring" },
+    ],
+    techniques: ["sorted key grouping", "frequency array (26-slot)", "sliding window + counter match", "counter diff tracking", "tuple as dict key"],
+    dataStructures: ["Counter()", "defaultdict(list)", "sorted()", "freq[26] array", "tuple(sorted(s))"],
+    code: `# Group Anagrams
+def groupAnagrams(strs):
+    groups = defaultdict(list)
+    for s in strs:
+        key = tuple(sorted(s))
+        groups[key].append(s)
+    return list(groups.values())
+
+# Find All Anagrams (sliding window)
+def findAnagrams(s, p):
+    if len(p) > len(s):
+        return []
+    p_count = Counter(p)
+    window = Counter(s[:len(p)])
+    res = []
+    if window == p_count:
+        res.append(0)
+    for i in range(len(p), len(s)):
+        window[s[i]] += 1
+        window[s[i - len(p)]] -= 1
+        if window[s[i - len(p)]] == 0:
+            del window[s[i - len(p)]]
+        if window == p_count:
+            res.append(i - len(p) + 1)
+    return res`,
+    runtime: "O(n * k log k) grouping / O(n) sliding window",
+    optimalCode: `# O(n * k) grouping with frequency tuple key
+def groupAnagrams(strs):
+    groups = defaultdict(list)
+    for s in strs:
+        count = [0] * 26
+        for c in s:
+            count[ord(c) - ord('a')] += 1
+        groups[tuple(count)].append(s)
+    return list(groups.values())
+
+# Minimum Window Substring with counter diff
+def minWindow(s, t):
+    need = Counter(t)
+    missing = len(t)
+    l = start = 0
+    min_len = float('inf')
+    for r, c in enumerate(s):
+        if need[c] > 0:
+            missing -= 1
+        need[c] -= 1
+        while missing == 0:
+            if r - l + 1 < min_len:
+                min_len = r - l + 1
+                start = l
+            need[s[l]] += 1
+            if need[s[l]] > 0:
+                missing += 1
+            l += 1
+    return "" if min_len == float('inf') else s[start:start + min_len]`,
+    optimalRuntime: "O(n * k) grouping / O(n) min window",
+    optimalNote: "Frequency tuple key avoids O(k log k) sorting per string. For min window, track 'missing' count instead of comparing two Counter objects each step.",
+  },
+  {
+    id: 19,
+    name: "Trie (Prefix Tree)",
+    solveCount: 12,
+    tag: "String",
+    problems: [
+      { name: "Implement Trie", slug: "implement-trie-prefix-tree" },
+      { name: "Word Search II", slug: "word-search-ii" },
+      { name: "Design Add and Search Words", slug: "design-add-and-search-words-data-structure" },
+      { name: "Word Break", slug: "word-break" },
+    ],
+    techniques: ["prefix lookup", "wildcard DFS ('.' matching)", "backtracking + trie pruning", "word termination flag", "node deletion after match"],
+    dataStructures: ["dict-of-dicts (children)", "TrieNode class", "set() (word list)", "boolean end flag"],
+    code: `class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.is_end = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word):
+        node = self.root
+        for c in word:
+            if c not in node.children:
+                node.children[c] = TrieNode()
+            node = node.children[c]
+        node.is_end = True
+
+    def search(self, word):
+        node = self.root
+        for c in word:
+            if c not in node.children:
+                return False
+            node = node.children[c]
+        return node.is_end
+
+    def startsWith(self, prefix):
+        node = self.root
+        for c in prefix:
+            if c not in node.children:
+                return False
+            node = node.children[c]
+        return True`,
+    runtime: "O(m) per insert/search (m = word length)",
+    optimalCode: `# defaultdict trie (fewer lines)
+Trie = lambda: defaultdict(Trie)
+trie = Trie()
+
+def insert(word):
+    node = trie
+    for c in word:
+        node = node[c]
+    node['#'] = True  # end marker
+
+# Word Search II: trie + backtracking with pruning
+def findWords(board, words):
+    trie = Trie()
+    for w in words:
+        node = trie
+        for c in w:
+            node = node[c]
+        node['#'] = w  # store full word at leaf
+
+    rows, cols = len(board), len(board[0])
+    res = []
+
+    def dfs(r, c, node):
+        c_val = board[r][c]
+        if c_val not in node:
+            return
+        nxt = node[c_val]
+        if '#' in nxt:
+            res.append(nxt.pop('#'))  # dedup + prune
+        board[r][c] = '.'
+        for dr, dc in [(0,1),(0,-1),(1,0),(-1,0)]:
+            nr, nc = r+dr, c+dc
+            if 0 <= nr < rows and 0 <= nc < cols and board[nr][nc] != '.':
+                dfs(nr, nc, nxt)
+        board[r][c] = c_val
+        if not nxt:
+            del node[c_val]  # prune empty branches
+
+    for r in range(rows):
+        for c in range(cols):
+            dfs(r, c, trie)
+    return res`,
+    optimalRuntime: "O(m) per op / Word Search II: O(m*n * 4^L)",
+    optimalNote: "defaultdict(Trie) is a one-liner trie. For Word Search II, store the full word at the leaf (no reconstruction), pop on find (dedup), and prune empty branches to shrink the trie as words are found.",
+  },
+  {
+    id: 20,
+    name: "Palindrome Patterns",
+    solveCount: 18,
+    tag: "String",
+    problems: [
+      { name: "Longest Palindromic Substring", slug: "longest-palindromic-substring" },
+      { name: "Palindromic Substrings", slug: "palindromic-substrings" },
+      { name: "Valid Palindrome II", slug: "valid-palindrome-ii" },
+      { name: "Longest Palindrome", slug: "longest-palindrome" },
+    ],
+    techniques: ["expand from center", "two pointer inward check", "odd/even center handling", "skip one char (k-tolerance)", "frequency counting (build palindrome)"],
+    dataStructures: ["two index variables (l, r)", "Counter()", "string slicing", "dp[][] (interval DP)"],
+    code: `# Expand from center
+def longestPalindrome(s):
+    res = ""
+    for i in range(len(s)):
+        for l, r in [(i, i), (i, i+1)]:  # odd + even
+            while l >= 0 and r < len(s) and s[l] == s[r]:
+                if r - l + 1 > len(res):
+                    res = s[l:r+1]
+                l -= 1
+                r += 1
+    return res
+
+# Count palindromic substrings
+def countSubstrings(s):
+    count = 0
+    for i in range(len(s)):
+        for l, r in [(i, i), (i, i+1)]:
+            while l >= 0 and r < len(s) and s[l] == s[r]:
+                count += 1
+                l -= 1
+                r += 1
+    return count`,
+    runtime: "O(n^2) time, O(1) space",
+    optimalCode: `# Manacher's Algorithm: O(n) longest palindrome
+def manacher(s):
+    t = '#' + '#'.join(s) + '#'
+    n = len(t)
+    p = [0] * n
+    c = r = 0
+    for i in range(n):
+        mirror = 2 * c - i
+        if i < r:
+            p[i] = min(r - i, p[mirror])
+        while (i + p[i] + 1 < n and i - p[i] - 1 >= 0
+               and t[i + p[i] + 1] == t[i - p[i] - 1]):
+            p[i] += 1
+        if i + p[i] > r:
+            c, r = i, i + p[i]
+    max_len = max(p)
+    center = p.index(max_len)
+    start = (center - max_len) // 2
+    return s[start:start + max_len]
+
+# Build longest palindrome from chars
+def longestPalindromeBuild(s):
+    counts = Counter(s)
+    length = 0
+    odd_found = False
+    for cnt in counts.values():
+        length += cnt // 2 * 2
+        if cnt % 2 == 1:
+            odd_found = True
+    return length + (1 if odd_found else 0)`,
+    optimalRuntime: "O(n) time (Manacher's), O(n) space",
+    optimalNote: "Manacher's uses previously computed palindromes to skip redundant comparisons. For building a palindrome from chars, just count pairs + at most one odd center.",
+  },
 ];
 
 export const tags = [...new Set(patterns.map((p) => p.tag))];

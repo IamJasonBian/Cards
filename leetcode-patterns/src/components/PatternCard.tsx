@@ -13,6 +13,7 @@ const tagColors: Record<string, string> = {
   Tree: "bg-green-100 text-green-700",
   "Linked List": "bg-indigo-100 text-indigo-700",
   Matrix: "bg-rose-100 text-rose-700",
+  String: "bg-lime-100 text-lime-700",
 };
 
 export function PatternCard({ pattern }: { pattern: Pattern }) {
