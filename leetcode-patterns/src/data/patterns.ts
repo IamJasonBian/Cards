@@ -676,6 +676,167 @@ def reverseKGroup(head, k):
     optimalRuntime: "O(n) time, O(1) space",
     optimalNote: "Dummy node eliminates head edge cases. The reverse-k-group pattern generalizes to all linked list reversal problems -- reorder list is just reverse-2nd-half + merge.",
   },
+  {
+    id: 16,
+    name: "Grid DFS / BFS (Matrix Traversal)",
+    solveCount: 62,
+    tag: "Matrix",
+    problems: [
+      { name: "Number of Islands", slug: "number-of-islands" },
+      { name: "Max Area of Island", slug: "max-area-of-island" },
+      { name: "Surrounded Regions", slug: "surrounded-regions" },
+      { name: "Flood Fill", slug: "flood-fill" },
+      { name: "Shortest Path in Binary Matrix", slug: "shortest-path-in-binary-matrix" },
+    ],
+    code: `def numIslands(grid):
+    rows, cols = len(grid), len(grid[0])
+    visited = set()
+    count = 0
+
+    def dfs(r, c):
+        if (r < 0 or r >= rows or c < 0 or c >= cols
+                or grid[r][c] == '0' or (r, c) in visited):
+            return
+        visited.add((r, c))
+        for dr, dc in [(0,1),(0,-1),(1,0),(-1,0)]:
+            dfs(r + dr, c + dc)
+
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == '1' and (r, c) not in visited:
+                dfs(r, c)
+                count += 1
+    return count`,
+    runtime: "O(m * n) time, O(m * n) space",
+    optimalCode: `# In-place marking: no visited set needed
+def numIslands(grid):
+    rows, cols = len(grid), len(grid[0])
+    count = 0
+
+    def dfs(r, c):
+        if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] != '1':
+            return
+        grid[r][c] = '#'  # mark visited in-place
+        dfs(r+1, c); dfs(r-1, c); dfs(r, c+1); dfs(r, c-1)
+
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == '1':
+                dfs(r, c)
+                count += 1
+    return count
+
+# BFS for shortest path (8-directional)
+def shortestPathBinaryMatrix(grid):
+    n = len(grid)
+    if grid[0][0] or grid[n-1][n-1]:
+        return -1
+    q = deque([(0, 0, 1)])
+    grid[0][0] = 1
+    for r, c, dist in q:
+        if r == n-1 and c == n-1:
+            return dist
+        for dr in [-1, 0, 1]:
+            for dc in [-1, 0, 1]:
+                nr, nc = r+dr, c+dc
+                if 0 <= nr < n and 0 <= nc < n and not grid[nr][nc]:
+                    grid[nr][nc] = 1
+                    q.append((nr, nc, dist+1))
+    return -1`,
+    optimalRuntime: "O(m * n) time, O(min(m, n)) space for DFS stack",
+    optimalNote: "Mark cells in-place ('1' -> '#') to eliminate the visited set entirely. For shortest path problems, use BFS with distance tracking. 8-directional for binary matrix.",
+  },
+  {
+    id: 17,
+    name: "Matrix Connected Components",
+    solveCount: 21,
+    tag: "Matrix",
+    problems: [
+      { name: "Most Stones Removed with Same Row or Column", slug: "most-stones-removed-with-same-row-or-column" },
+      { name: "Number of Provinces", slug: "number-of-provinces" },
+      { name: "Accounts Merge", slug: "accounts-merge" },
+      { name: "Making A Large Island", slug: "making-a-large-island" },
+    ],
+    code: `# Most Stones Removed -- group by shared row/col
+def removeStones(stones):
+    parent = {}
+
+    def find(x):
+        parent.setdefault(x, x)
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(a, b):
+        parent[find(a)] = find(b)
+
+    for r, c in stones:
+        union(r, ~c)  # ~c maps col to negative space
+
+    # answer = total stones - number of components
+    return len(stones) - len({find(r) for r, c in stones})`,
+    runtime: "O(n * alpha(n)) time, O(n) space",
+    optimalCode: `# DFS approach: fewer lines, same idea
+def removeStones(stones):
+    adj = defaultdict(list)
+    for i, (r1, c1) in enumerate(stones):
+        for j in range(i+1, len(stones)):
+            r2, c2 = stones[j]
+            if r1 == r2 or c1 == c2:
+                adj[i].append(j)
+                adj[j].append(i)
+
+    visited = set()
+    components = 0
+    def dfs(i):
+        visited.add(i)
+        for j in adj[i]:
+            if j not in visited:
+                dfs(j)
+
+    for i in range(len(stones)):
+        if i not in visited:
+            dfs(i)
+            components += 1
+    return len(stones) - components
+
+# Making A Large Island: label + expand
+def largestIsland(grid):
+    n = len(grid)
+    label, size = 2, {}
+
+    def dfs(r, c, lbl):
+        if r<0 or r>=n or c<0 or c>=n or grid[r][c]!=1:
+            return 0
+        grid[r][c] = lbl
+        return 1 + sum(dfs(r+d, c+e, lbl)
+            for d, e in [(0,1),(0,-1),(1,0),(-1,0)])
+
+    for r in range(n):
+        for c in range(n):
+            if grid[r][c] == 1:
+                size[label] = dfs(r, c, label)
+                label += 1
+
+    res = max(size.values(), default=0)
+    for r in range(n):
+        for c in range(n):
+            if grid[r][c] == 0:
+                seen = set()
+                total = 1
+                for dr, dc in [(0,1),(0,-1),(1,0),(-1,0)]:
+                    nr, nc = r+dr, c+dc
+                    if 0<=nr<n and 0<=nc<n and grid[nr][nc]>1:
+                        lbl = grid[nr][nc]
+                        if lbl not in seen:
+                            seen.add(lbl)
+                            total += size[lbl]
+                res = max(res, total)
+    return res`,
+    optimalRuntime: "O(n^2) time, O(n^2) space",
+    optimalNote: "For Most Stones: Union-Find with ~c trick maps rows and cols to the same space. For Making A Large Island: label components first, then try flipping each 0 and summing adjacent unique labels.",
+  },
 ];
 
 export const tags = [...new Set(patterns.map((p) => p.tag))];

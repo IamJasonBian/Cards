@@ -17,7 +17,7 @@ function App() {
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center gap-3">
           <Code size={24} className="text-indigo-600" />
           <h1 className="text-xl font-bold text-gray-900">
-            Top 15 LeetCode Patterns
+            LeetCode Patterns
           </h1>
           <span className="ml-auto text-sm text-gray-400">slenderman73</span>
         </div>
