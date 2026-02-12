@@ -141,6 +141,68 @@ const sections: Section[] = [
       },
     ],
   },
+  {
+    title: "Behavioural & Soft Skills",
+    color: "amber",
+    items: [
+      {
+        label: "Read the Interviewer",
+        sub: [
+          "Watch for nods, frowns, or confused looks -- adjust your pace",
+          "If they lean in or ask a follow-up, dig deeper on that point",
+          "If they seem impatient, speed up and cut to the key insight",
+          "Mirror their energy level -- match formal or casual tone",
+          "If they hint at something, take the hint -- don't ignore it",
+          "Notice if they're trying to help you -- accept the lifeline",
+        ],
+      },
+      {
+        label: "Communicate Proactively",
+        sub: [
+          "Think out loud -- silence is your enemy",
+          "State your approach BEFORE writing code, not after",
+          "When stuck, say what you're stuck on instead of going silent",
+          "Narrate trade-offs as you make decisions",
+          "Ask 'does this direction make sense?' before going deep",
+          "Summarize your solution at the end without being asked",
+          "If you change your approach, explain why explicitly",
+        ],
+      },
+      {
+        label: "Show Ownership & Drive",
+        sub: [
+          "Treat it like a real problem, not an exercise -- show you care",
+          "Volunteer edge cases and failure modes before asked",
+          "Suggest tests and verification steps proactively",
+          "If you finish early, offer optimizations or follow-ups",
+          "Ask thoughtful questions about the team/product at the end",
+          "Show curiosity -- 'I wonder if we could also...'",
+        ],
+      },
+      {
+        label: "Manage Your Energy",
+        sub: [
+          "You should feel spent at the end -- leave nothing on the table",
+          "Don't coast after solving it -- push for the optimal solution",
+          "If you have time left, discuss testing, monitoring, or scale",
+          "Stay engaged even when you're confident -- don't check out",
+          "Bring the same intensity to the last round as the first",
+          "Pace yourself across rounds -- don't burn out in round 1",
+        ],
+      },
+      {
+        label: "Handle Mistakes & Pressure",
+        sub: [
+          "If you make an error, correct it calmly -- don't panic",
+          "Say 'good catch' when the interviewer finds a bug -- not defensive",
+          "If you don't know something, say so honestly, then reason through it",
+          "Don't apologize repeatedly -- fix the issue and move forward",
+          "Use silence strategically: 10 seconds of thinking > rambling",
+          "Remember: they want you to succeed -- it's collaborative, not adversarial",
+        ],
+      },
+    ],
+  },
 ];
 
 function ChecklistSection({ section }: { section: Section }) {
@@ -162,14 +224,16 @@ function ChecklistSection({ section }: { section: Section }) {
   );
   const checkedCount = checked.size;
 
-  const borderColor =
-    section.color === "indigo" ? "border-indigo-200" : "border-emerald-200";
-  const bgColor =
-    section.color === "indigo" ? "bg-indigo-50" : "bg-emerald-50";
-  const textColor =
-    section.color === "indigo" ? "text-indigo-700" : "text-emerald-700";
-  const progressBg =
-    section.color === "indigo" ? "bg-indigo-500" : "bg-emerald-500";
+  const colorMap: Record<string, { border: string; bg: string; text: string; progress: string }> = {
+    indigo: { border: "border-indigo-200", bg: "bg-indigo-50", text: "text-indigo-700", progress: "bg-indigo-500" },
+    emerald: { border: "border-emerald-200", bg: "bg-emerald-50", text: "text-emerald-700", progress: "bg-emerald-500" },
+    amber: { border: "border-amber-200", bg: "bg-amber-50", text: "text-amber-700", progress: "bg-amber-500" },
+  };
+  const c = colorMap[section.color] ?? colorMap.indigo;
+  const borderColor = c.border;
+  const bgColor = c.bg;
+  const textColor = c.text;
+  const progressBg = c.progress;
 
   return (
     <div className={`rounded-xl border ${borderColor} bg-white`}>
