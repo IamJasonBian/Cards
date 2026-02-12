@@ -3,6 +3,7 @@ import { Code, Filter } from "lucide-react";
 import { patterns, tags } from "./data/patterns";
 import { StatsGrid } from "./components/StatsGrid";
 import { PatternCard } from "./components/PatternCard";
+import { InterviewChecklist } from "./components/InterviewChecklist";
 
 function App() {
   const [activeTag, setActiveTag] = useState<string | null>(null);
@@ -60,6 +61,8 @@ function App() {
             <PatternCard key={pattern.id} pattern={pattern} />
           ))}
         </div>
+
+        <InterviewChecklist />
 
         <footer className="mt-12 pb-8 text-center text-xs text-gray-400">
           639 problems solved | Python3 | Data from LeetCode via alfa-leetcode-api
