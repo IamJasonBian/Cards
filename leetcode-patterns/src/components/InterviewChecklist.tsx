@@ -1,15 +1,10 @@
 import { useState } from "react";
 import { CheckSquare, ChevronDown, ChevronUp, Square } from "lucide-react";
 
-interface CheckItem {
-  label: string;
-  sub?: string[];
-}
-
 interface Section {
   title: string;
   color: string;
-  items: CheckItem[];
+  items: string[];
 }
 
 const sections: Section[] = [
@@ -17,194 +12,34 @@ const sections: Section[] = [
     title: "Coding Interview",
     color: "indigo",
     items: [
-      {
-        label: "Clarify the Problem",
-        sub: [
-          "Restate the problem in your own words",
-          "Identify inputs, outputs, and return type",
-          "Ask about edge cases (empty, single element, negatives, duplicates)",
-          "Confirm constraints (size of n, value range, sorted?)",
-          "Ask: can I modify the input in-place?",
-        ],
-      },
-      {
-        label: "Explore Approaches & Alternates",
-        sub: [
-          "Start with brute force -- state its time/space complexity",
-          "Identify the bottleneck in brute force",
-          "Consider 2-3 alternate approaches (hash map, sort + two pointers, sliding window, etc.)",
-          "Pick the best approach and justify why (runtime, space, simplicity)",
-          "State the expected time and space complexity before coding",
-        ],
-      },
-      {
-        label: "Explain Your Plan",
-        sub: [
-          "Walk through the algorithm step by step in plain English",
-          "Describe the data structures you'll use and why",
-          "Mention key variables (left/right, window, visited, dp)",
-          "Identify the loop invariant or recursion base case",
-          "Get interviewer buy-in before writing code",
-        ],
-      },
-      {
-        label: "Code It",
-        sub: [
-          "Write clean, readable code (meaningful variable names)",
-          "Handle base cases / edge cases first",
-          "Keep it simple -- avoid over-engineering",
-          "Talk while you code (narrate your decisions)",
-          "Don't get stuck on syntax -- pseudocode a line and move on",
-        ],
-      },
-      {
-        label: "Verify & Test",
-        sub: [
-          "Dry-run through a simple example step by step",
-          "Trace through an edge case (empty, min/max, duplicates)",
-          "Check off-by-one errors (loop bounds, indices, len vs len-1)",
-          "Verify return value matches expected output",
-          "If time: discuss how you'd test this in production",
-        ],
-      },
-      {
-        label: "Optimize & Discuss",
-        sub: [
-          "Confirm final time and space complexity",
-          "Can you reduce space? (rolling variables, in-place)",
-          "Can you reduce time? (sort + binary search, prefix sums)",
-          "Mention trade-offs (readability vs performance)",
-          "Discuss follow-ups if prompted (streaming, distributed, larger n)",
-        ],
-      },
+      "Clarify -- restate the problem, ask about edge cases, confirm constraints and input size",
+      "Brute force first -- state its complexity, identify the bottleneck, then propose 2-3 better approaches",
+      "Think out loud -- walk through your plan in plain English and get interviewer buy-in BEFORE coding",
+      "Read signals -- if they hint, pivot, or say 'what if...', STOP and listen. They're guiding you.",
+      "Code clean -- meaningful names, handle edge cases first, narrate as you write",
+      "Dry-run your solution -- trace through a simple example, then an edge case, check off-by-one errors",
+      "State final time and space complexity -- mention trade-offs and possible optimizations",
+      "Be precise, not verbose -- say what matters in few words. Overcommunicating wastes time and buries the signal.",
+      "When stuck, say what you're stuck on -- silence is your enemy, keep communicating",
+      "If you make an error, fix it calmly -- say 'good catch', don't panic or over-apologize",
+      "Leave nothing on the table -- push for optimal, volunteer follow-ups, you should feel spent at the end",
     ],
   },
   {
-    title: "LLD / System Design",
+    title: "System Design",
     color: "emerald",
     items: [
-      {
-        label: "Gather Requirements (5 min)",
-        sub: [
-          "Who are the users? (B2C, B2B, internal)",
-          "What are the core use cases? (list top 3-5)",
-          "What is the expected scale? (DAU, QPS, storage)",
-          "What are the read/write ratios?",
-          "What consistency model? (strong, eventual)",
-          "What are the latency requirements? (p99 targets)",
-          "Any compliance / geographic constraints?",
-        ],
-      },
-      {
-        label: "Define API & Data Model (5 min)",
-        sub: [
-          "List key API endpoints (REST or RPC)",
-          "Define request/response schemas",
-          "Identify core entities and relationships",
-          "Choose SQL vs NoSQL (and justify)",
-          "Design the primary table schema / document structure",
-          "Identify indexes needed for query patterns",
-        ],
-      },
-      {
-        label: "High-Level Architecture (10 min)",
-        sub: [
-          "Draw client -> load balancer -> service -> DB",
-          "Identify read-heavy vs write-heavy paths",
-          "Add caching layer (Redis/Memcached) -- what to cache?",
-          "Add message queue if async processing needed",
-          "Consider CDN for static content",
-          "Identify single points of failure",
-        ],
-      },
-      {
-        label: "Deep Dive & Scale (10 min)",
-        sub: [
-          "How to partition/shard the database?",
-          "Replication strategy (leader-follower, multi-leader)",
-          "Cache invalidation strategy (TTL, write-through, write-behind)",
-          "Rate limiting and throttling",
-          "How to handle hot partitions / celebrity problem?",
-          "Monitoring, alerting, and observability",
-        ],
-      },
-      {
-        label: "Trade-offs & Edge Cases (5 min)",
-        sub: [
-          "CAP theorem: which two are you prioritizing?",
-          "What happens during a network partition?",
-          "How do you handle failures gracefully? (retries, circuit breakers)",
-          "Data migration and backward compatibility",
-          "Cost considerations (compute vs storage vs network)",
-          "What would you change at 10x / 100x scale?",
-        ],
-      },
-    ],
-  },
-  {
-    title: "Behavioural & Soft Skills",
-    color: "amber",
-    items: [
-      {
-        label: "Read the Interviewer",
-        sub: [
-          "PAY ATTENTION to their signals -- this is the #1 skill",
-          "Watch for nods, frowns, or confused looks -- adjust your pace immediately",
-          "If they lean in or ask a follow-up, that's a signal to dig deeper",
-          "If they seem impatient, you're going too slow -- cut to the key insight",
-          "If they repeat a hint or rephrase, they're giving you the answer -- take it",
-          "If they say 'what if...' or 'have you considered...', STOP and pivot",
-          "Mirror their energy level -- match formal or casual tone",
-          "Notice when they're trying to help you -- accept the lifeline, don't resist",
-          "If they go quiet, check in: 'does this approach make sense to you?'",
-          "Their body language tells you more than their words -- read it constantly",
-        ],
-      },
-      {
-        label: "Communicate Proactively",
-        sub: [
-          "Think out loud -- silence is your enemy",
-          "State your approach BEFORE writing code, not after",
-          "When stuck, say what you're stuck on instead of going silent",
-          "Narrate trade-offs as you make decisions",
-          "Ask 'does this direction make sense?' before going deep",
-          "Summarize your solution at the end without being asked",
-          "If you change your approach, explain why explicitly",
-        ],
-      },
-      {
-        label: "Show Ownership & Drive",
-        sub: [
-          "Treat it like a real problem, not an exercise -- show you care",
-          "Volunteer edge cases and failure modes before asked",
-          "Suggest tests and verification steps proactively",
-          "If you finish early, offer optimizations or follow-ups",
-          "Ask thoughtful questions about the team/product at the end",
-          "Show curiosity -- 'I wonder if we could also...'",
-        ],
-      },
-      {
-        label: "Manage Your Energy",
-        sub: [
-          "You should feel spent at the end -- leave nothing on the table",
-          "Don't coast after solving it -- push for the optimal solution",
-          "If you have time left, discuss testing, monitoring, or scale",
-          "Stay engaged even when you're confident -- don't check out",
-          "Bring the same intensity to the last round as the first",
-          "Pace yourself across rounds -- don't burn out in round 1",
-        ],
-      },
-      {
-        label: "Handle Mistakes & Pressure",
-        sub: [
-          "If you make an error, correct it calmly -- don't panic",
-          "Say 'good catch' when the interviewer finds a bug -- not defensive",
-          "If you don't know something, say so honestly, then reason through it",
-          "Don't apologize repeatedly -- fix the issue and move forward",
-          "Use silence strategically: 10 seconds of thinking > rambling",
-          "Remember: they want you to succeed -- it's collaborative, not adversarial",
-        ],
-      },
+      "Gather requirements -- users, core use cases, scale (DAU/QPS), read/write ratio, latency targets",
+      "Define API and data model -- endpoints, schemas, SQL vs NoSQL, key indexes",
+      "Think out loud -- state your assumptions, check in with 'does this direction make sense?'",
+      "Draw the high-level architecture -- client, load balancer, services, DB, cache, message queue",
+      "Read signals -- if they push on a component, that's where they want depth. Follow their lead.",
+      "Deep dive on scale -- sharding, replication, cache invalidation, hot partitions, rate limiting",
+      "Discuss trade-offs -- CAP theorem, consistency vs availability, cost vs performance",
+      "Handle failures -- retries, circuit breakers, graceful degradation, what happens during partitions",
+      "Be precise, not verbose -- every sentence should advance the design. Don't ramble or over-explain.",
+      "When you don't know, say so honestly -- then reason through it out loud",
+      "Leave nothing on the table -- discuss monitoring, 10x/100x scale, show curiosity and ownership",
     ],
   },
 ];
@@ -222,10 +57,7 @@ function ChecklistSection({ section }: { section: Section }) {
     });
   };
 
-  const totalItems = section.items.reduce(
-    (acc, item) => acc + (item.sub?.length ?? 1),
-    0,
-  );
+  const totalItems = section.items.length;
   const checkedCount = checked.size;
 
   const colorMap: Record<string, { border: string; bg: string; text: string; progress: string }> = {
@@ -276,46 +108,36 @@ function ChecklistSection({ section }: { section: Section }) {
       </button>
 
       {open && (
-        <div className="border-t border-gray-100 px-5 pb-5">
-          {section.items.map((item) => (
-            <div key={item.label} className="mt-4">
-              <p className={`text-sm font-semibold ${textColor} mb-2`}>
-                {item.label}
-              </p>
-              {item.sub && (
-                <div className="space-y-1.5 ml-1">
-                  {item.sub.map((s) => {
-                    const key = `${item.label}::${s}`;
-                    const isChecked = checked.has(key);
-                    return (
-                      <button
-                        key={key}
-                        onClick={() => toggle(key)}
-                        className="flex items-start gap-2 w-full text-left cursor-pointer group"
-                      >
-                        {isChecked ? (
-                          <CheckSquare
-                            size={16}
-                            className={`${textColor} mt-0.5 shrink-0`}
-                          />
-                        ) : (
-                          <Square
-                            size={16}
-                            className="text-gray-300 group-hover:text-gray-400 mt-0.5 shrink-0"
-                          />
-                        )}
-                        <span
-                          className={`text-sm ${isChecked ? "text-gray-400 line-through" : "text-gray-600"}`}
-                        >
-                          {s}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          ))}
+        <div className="border-t border-gray-100 px-5 pb-5 pt-3">
+          <div className="space-y-1.5">
+            {section.items.map((item) => {
+              const isChecked = checked.has(item);
+              return (
+                <button
+                  key={item}
+                  onClick={() => toggle(item)}
+                  className="flex items-start gap-2 w-full text-left cursor-pointer group"
+                >
+                  {isChecked ? (
+                    <CheckSquare
+                      size={16}
+                      className={`${textColor} mt-0.5 shrink-0`}
+                    />
+                  ) : (
+                    <Square
+                      size={16}
+                      className="text-gray-300 group-hover:text-gray-400 mt-0.5 shrink-0"
+                    />
+                  )}
+                  <span
+                    className={`text-sm ${isChecked ? "text-gray-400 line-through" : "text-gray-600"}`}
+                  >
+                    {item}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       )}
     </div>
