@@ -1107,6 +1107,64 @@ def longestPalindromeBuild(s):
     optimalRuntime: "O(n) time (Manacher's), O(n) space",
     optimalNote: "Manacher's uses previously computed palindromes to skip redundant comparisons. For building a palindrome from chars, just count pairs + at most one odd center.",
   },
+  {
+    id: 21,
+    name: "Topological Sort",
+    solveCount: 32,
+    tag: "Graph",
+    problems: [
+      { name: "Course Schedule", slug: "course-schedule" },
+      { name: "Course Schedule II", slug: "course-schedule-ii" },
+      { name: "Alien Dictionary", slug: "alien-dictionary" },
+      { name: "Minimum Height Trees", slug: "minimum-height-trees" },
+      { name: "Parallel Courses", slug: "parallel-courses" },
+      { name: "Find All Possible Recipes from Given Supplies", slug: "find-all-possible-recipes-from-given-supplies" },
+    ],
+    techniques: ["Kahn's algorithm (BFS + indegree)", "DFS post-order + reverse", "cycle detection (impossible if not all visited)", "level-by-level BFS (parallel courses / min semesters)", "peel leaves inward (minimum height trees)"],
+    dataStructures: ["defaultdict(list) (adjacency list)", "indegree[] array", "deque (BFS queue)", "visited set / coloring (white-gray-black)"],
+    code: `# Kahn's algorithm (BFS)
+from collections import deque, defaultdict
+def topoSort(n, prereqs):
+    graph = defaultdict(list)
+    indegree = [0] * n
+    for a, b in prereqs:
+        graph[b].append(a)
+        indegree[a] += 1
+    q = deque(i for i in range(n) if indegree[i] == 0)
+    order = []
+    while q:
+        node = q.popleft()
+        order.append(node)
+        for nei in graph[node]:
+            indegree[nei] -= 1
+            if indegree[nei] == 0:
+                q.append(nei)
+    return order if len(order) == n else []`,
+    runtime: "O(V + E) time, O(V + E) space",
+    optimalCode: `# DFS-based topo sort with cycle detection
+def topoSort(n, prereqs):
+    graph = defaultdict(list)
+    for a, b in prereqs:
+        graph[b].append(a)
+    # 0 = unvisited, 1 = in-stack, 2 = done
+    state = [0] * n
+    order = []
+    def dfs(node):
+        if state[node] == 1: return False  # cycle
+        if state[node] == 2: return True
+        state[node] = 1
+        for nei in graph[node]:
+            if not dfs(nei): return False
+        state[node] = 2
+        order.append(node)
+        return True
+    for i in range(n):
+        if state[i] == 0:
+            if not dfs(i): return []
+    return order[::-1]`,
+    optimalRuntime: "O(V + E) time, O(V + E) space",
+    optimalNote: "BFS (Kahn's) is iterative and gives level-order (useful for parallel scheduling). DFS post-order is recursive and detects cycles via 3-color marking. Both are O(V+E).",
+  },
 ];
 
 export const tags = [...new Set(patterns.map((p) => p.tag))];
