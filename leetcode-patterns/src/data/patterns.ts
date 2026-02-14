@@ -177,6 +177,7 @@ def lis(nums):
       { name: "Valid Palindrome", slug: "valid-palindrome" },
       { name: "Trapping Rain Water", slug: "trapping-rain-water" },
       { name: "4Sum", slug: "4sum" },
+      { name: "Maximize Greatness of an Array", slug: "maximize-greatness-of-an-array" },
     ],
     techniques: ["opposite-end convergence", "skip duplicates", "early termination", "k-sum reduction", "sorted input required", "monotonically increasing/decreasing", "binary search on sorted half", "move min-bound pointer inward (bottleneck = shorter side)"],
     dataStructures: ["sort()", "two index variables", "set() (dedup alt)", "left/right max arrays"],
