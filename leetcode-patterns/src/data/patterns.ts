@@ -178,7 +178,7 @@ def lis(nums):
       { name: "Trapping Rain Water", slug: "trapping-rain-water" },
       { name: "4Sum", slug: "4sum" },
     ],
-    techniques: ["opposite-end convergence", "skip duplicates", "early termination", "k-sum reduction", "sorted input required", "monotonically increasing/decreasing", "binary search on sorted half", "greedy shrink from max side"],
+    techniques: ["opposite-end convergence", "skip duplicates", "early termination", "k-sum reduction", "sorted input required", "monotonically increasing/decreasing", "binary search on sorted half", "move min-bound pointer inward (bottleneck = shorter side)"],
     dataStructures: ["sort()", "two index variables", "set() (dedup alt)", "left/right max arrays"],
     code: `nums.sort()
 l, r = 0, len(nums) - 1
