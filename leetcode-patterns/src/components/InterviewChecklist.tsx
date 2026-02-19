@@ -13,6 +13,7 @@ const sections: Section[] = [
     color: "indigo",
     items: [
       "Clarify -- restate the problem, ask about edge cases, confirm constraints and input size",
+      "List your approach high level first -- outline the strategy in 2-3 sentences before diving in. Stay on rails, talk with clarity, don't meander.",
       "Brute force first -- state its complexity, identify the bottleneck, then propose 2-3 better approaches",
       "Think out loud -- walk through your plan in plain English and get interviewer buy-in BEFORE coding",
       "Read signals -- if they hint, pivot, or say 'what if...', STOP and listen. They're guiding you.",
