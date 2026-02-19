@@ -44,6 +44,21 @@ const sections: Section[] = [
       "Leave nothing on the table -- discuss monitoring, 10x/100x scale, show curiosity and ownership",
     ],
   },
+  {
+    title: "Post-Interview Self-Check",
+    color: "amber",
+    items: [
+      "You clearly clarified the system requirements upfront",
+      "You followed a logical and structured design flow",
+      "You demonstrated depth when asked to zoom in",
+      "You discussed tradeoffs clearly and confidently",
+      "The interviewer stayed engaged and collaborative",
+      "You proactively brought up scaling and failure scenarios",
+      "You summarized your design and offered thoughtful next steps",
+      "You stayed calm and adaptable under pressure",
+      "You made the conversation feel like a real-world design session",
+    ],
+  },
 ];
 
 function ChecklistSection({ section }: { section: Section }) {
