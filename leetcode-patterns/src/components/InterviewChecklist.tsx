@@ -29,6 +29,7 @@ const sections: Section[] = [
     title: "System Design",
     color: "emerald",
     items: [
+      "Ask every clarifying question you can -- users, geo, scale, SLAs, edge cases. More questions = better scope = better design.",
       "Functional requirements -- list the core use cases (3-5). What can users DO? This is your scope.",
       "Non-functional requirements -- latency (p99), availability (99.9%?), consistency model, scale (DAU/QPS/storage)",
       "Think out loud -- state your assumptions, check in with 'does this direction make sense?'",
