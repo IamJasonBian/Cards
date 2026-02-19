@@ -10,7 +10,7 @@ interface Section {
   title: string;
   color: string;
   items: string[];
-  subChecklist?: SubChecklist;
+  subChecklists?: SubChecklist[];
 }
 
 const selfCheckItems: SubChecklist = {
@@ -25,6 +25,30 @@ const selfCheckItems: SubChecklist = {
     "You summarized your design and offered thoughtful next steps",
     "You stayed calm and adaptable under pressure",
     "You made the conversation feel like a real-world design session",
+  ],
+};
+
+const frameworkOne: SubChecklist = {
+  title: "Pre-Interview Framework 1: What Interviewers Actually Evaluate",
+  items: [
+    "Dealing with ambiguity -- spend the first 5 min clarifying requirements. Have a mental checklist: scale, performance, consistency, business priorities.",
+    "Context-driven decisions -- don't just pick a technology. Articulate how each option affects the overall success of the project.",
+    "Tradeoff navigation -- follow every design decision with 'The trade-off here is...' Make it a reflex.",
+    "Collaboration and feedback -- treat interviewer suggestions as valuable info, not criticism. 'That's an interesting perspective I hadn't considered -- let me explore that.'",
+    "Practical intuition -- don't just say 'we'll use a message queue'. Say 'we'll use a queue, but I've seen these cause oncall pain -- we need retry policies, DLQs, or something like Temporal for explicit failure modes.'",
+    "Depth flexibility -- seamlessly shift between high-level architecture, component-level interactions, and implementation specifics. Signal transitions: 'Let's zoom in on the storage layer' or 'Let me step back to the overall architecture.'",
+  ],
+};
+
+const frameworkTwo: SubChecklist = {
+  title: "Pre-Interview Framework 2: The Real Decision",
+  items: [
+    "The final decision isn't about whether you dropped in a Redis. The interviewer is thinking: 'I wish they had talked more coherently about tradeoffs.'",
+    "Don't just name components -- justify them. Why Redis and not Memcached? Why Kafka and not SQS? Tie every choice to a requirement.",
+    "When diving deeper, explicitly signal: 'Let's zoom in on X since that's critical for this system.'",
+    "When returning to high-level, signal: 'Before we go deeper, let's make sure this approach aligns with our overall requirements.'",
+    "Show you can operate at different levels of abstraction -- executives to junior devs. Extract from details for the big picture, dive deep for critical issues.",
+    "The most impressive thing you can do is acknowledge when you're changing levels of abstraction.",
   ],
 };
 
@@ -46,7 +70,7 @@ const sections: Section[] = [
       "If you make an error, fix it calmly -- say 'good catch', don't panic or over-apologize",
       "Leave nothing on the table -- push for optimal, volunteer follow-ups, you should feel spent at the end",
     ],
-    subChecklist: selfCheckItems,
+    subChecklists: [selfCheckItems],
   },
   {
     title: "System Design",
@@ -65,7 +89,7 @@ const sections: Section[] = [
       "Be precise, not verbose -- every sentence should advance the design. Don't ramble or over-explain.",
       "Leave nothing on the table -- discuss monitoring, 10x/100x scale, show curiosity and ownership",
     ],
-    subChecklist: selfCheckItems,
+    subChecklists: [frameworkOne, frameworkTwo, selfCheckItems],
   },
 ];
 
@@ -82,9 +106,10 @@ function ChecklistSection({ section }: { section: Section }) {
     });
   };
 
-  const allItems = section.subChecklist
-    ? section.items.length + section.subChecklist.items.length
-    : section.items.length;
+  const subTotal = section.subChecklists
+    ? section.subChecklists.reduce((acc, sc) => acc + sc.items.length, 0)
+    : 0;
+  const allItems = section.items.length + subTotal;
   const checkedCount = checked.size;
 
   const colorMap: Record<string, { border: string; bg: string; text: string; progress: string }> = {
@@ -97,6 +122,9 @@ function ChecklistSection({ section }: { section: Section }) {
   const bgColor = c.bg;
   const textColor = c.text;
   const progressBg = c.progress;
+
+  const subColors = ["text-amber-600", "text-violet-600", "text-rose-500"];
+  const subBorders = ["border-amber-200", "border-violet-200", "border-rose-200"];
 
   const renderCheckItem = (item: string, color: string) => {
     const isChecked = checked.has(item);
@@ -168,18 +196,21 @@ function ChecklistSection({ section }: { section: Section }) {
             {section.items.map((item) => renderCheckItem(item, textColor))}
           </div>
 
-          {section.subChecklist && (
-            <div className="mt-4 ml-3 pl-3 border-l-2 border-amber-200">
-              <p className="text-xs font-semibold text-amber-600 uppercase tracking-wide mb-2">
-                {section.subChecklist.title}
+          {section.subChecklists?.map((sub, idx) => (
+            <div
+              key={sub.title}
+              className={`mt-4 ml-3 pl-3 border-l-2 ${subBorders[idx % subBorders.length]}`}
+            >
+              <p className={`text-xs font-semibold ${subColors[idx % subColors.length]} uppercase tracking-wide mb-2`}>
+                {sub.title}
               </p>
               <div className="space-y-1.5">
-                {section.subChecklist.items.map((item) =>
-                  renderCheckItem(item, "text-amber-600")
+                {sub.items.map((item) =>
+                  renderCheckItem(item, subColors[idx % subColors.length])
                 )}
               </div>
             </div>
-          )}
+          ))}
         </div>
       )}
     </div>
