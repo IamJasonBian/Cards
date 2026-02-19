@@ -14,7 +14,7 @@ interface Section {
 }
 
 const selfCheckItems: SubChecklist = {
-  title: "Pre-Interview Check",
+  title: "Post-Interview Retro",
   items: [
     "You clearly clarified the system requirements upfront",
     "You followed a logical and structured design flow",
@@ -29,7 +29,7 @@ const selfCheckItems: SubChecklist = {
 };
 
 const frameworkOne: SubChecklist = {
-  title: "Pre-Interview Framework 1: What Interviewers Actually Evaluate",
+  title: "Interview Framework 1",
   items: [
     "Dealing with ambiguity -- spend the first 5 min clarifying requirements. Have a mental checklist: scale, performance, consistency, business priorities.",
     "Context-driven decisions -- don't just pick a technology. Articulate how each option affects the overall success of the project.",
@@ -41,7 +41,7 @@ const frameworkOne: SubChecklist = {
 };
 
 const frameworkTwo: SubChecklist = {
-  title: "Pre-Interview Framework 2: The Real Decision",
+  title: "Interview Framework 2",
   items: [
     "The final decision isn't about whether you dropped in a Redis. The interviewer is thinking: 'I wish they had talked more coherently about tradeoffs.'",
     "Don't just name components -- justify them. Why Redis and not Memcached? Why Kafka and not SQS? Tie every choice to a requirement.",
@@ -96,6 +96,24 @@ const afterCoding: SubChecklist = {
   ],
 };
 
+const preInterviewChecklist: SubChecklist = {
+  title: "Pre-Interview Checklist",
+  items: [
+    "Ask every clarifying question you can -- users, geo, scale, SLAs, edge cases. More questions = better scope = better design.",
+    "Functional requirements -- list the core use cases (3-5). What can users DO? This is your scope.",
+    "Non-functional requirements -- latency (p99), availability (99.9%?), consistency model, scale (DAU/QPS/storage)",
+    "Think out loud -- state your assumptions, check in with 'does this direction make sense?'",
+    "Draw high-level architecture -- client, LB, services, DB, cache, queue. Keep it big-picture first.",
+    "Map each component to a non-functional requirement -- why this cache? (latency). Why this queue? (availability). Justify every box.",
+    "Read signals -- if they push on a component, that's where they want depth. Follow their lead.",
+    "Deep dive on scale -- sharding, replication, cache invalidation, hot partitions, rate limiting",
+    "Discuss trade-offs -- CAP theorem, consistency vs availability, cost vs performance. Every choice has a cost.",
+    "Handle failures -- retries, circuit breakers, graceful degradation. What happens during partitions?",
+    "Be precise, not verbose -- every sentence should advance the design. Don't ramble or over-explain.",
+    "Leave nothing on the table -- discuss monitoring, 10x/100x scale, show curiosity and ownership",
+  ],
+};
+
 const sections: Section[] = [
   {
     title: "Coding Interview",
@@ -106,21 +124,8 @@ const sections: Section[] = [
   {
     title: "System Design",
     color: "emerald",
-    items: [
-      "Ask every clarifying question you can -- users, geo, scale, SLAs, edge cases. More questions = better scope = better design.",
-      "Functional requirements -- list the core use cases (3-5). What can users DO? This is your scope.",
-      "Non-functional requirements -- latency (p99), availability (99.9%?), consistency model, scale (DAU/QPS/storage)",
-      "Think out loud -- state your assumptions, check in with 'does this direction make sense?'",
-      "Draw high-level architecture -- client, LB, services, DB, cache, queue. Keep it big-picture first.",
-      "Map each component to a non-functional requirement -- why this cache? (latency). Why this queue? (availability). Justify every box.",
-      "Read signals -- if they push on a component, that's where they want depth. Follow their lead.",
-      "Deep dive on scale -- sharding, replication, cache invalidation, hot partitions, rate limiting",
-      "Discuss trade-offs -- CAP theorem, consistency vs availability, cost vs performance. Every choice has a cost.",
-      "Handle failures -- retries, circuit breakers, graceful degradation. What happens during partitions?",
-      "Be precise, not verbose -- every sentence should advance the design. Don't ramble or over-explain.",
-      "Leave nothing on the table -- discuss monitoring, 10x/100x scale, show curiosity and ownership",
-    ],
-    subChecklists: [frameworkOne, frameworkTwo, selfCheckItems],
+    items: [],
+    subChecklists: [preInterviewChecklist, frameworkOne, frameworkTwo, selfCheckItems],
   },
 ];
 
