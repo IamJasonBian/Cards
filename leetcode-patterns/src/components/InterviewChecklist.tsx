@@ -14,7 +14,7 @@ interface Section {
 }
 
 const selfCheckItems: SubChecklist = {
-  title: "Post-Interview Self-Check",
+  title: "Pre-Interview Check",
   items: [
     "You clearly clarified the system requirements upfront",
     "You followed a logical and structured design flow",
