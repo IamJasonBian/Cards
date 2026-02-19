@@ -52,25 +52,56 @@ const frameworkTwo: SubChecklist = {
   ],
 };
 
+const beforeCoding: SubChecklist = {
+  title: "Phase 1: Before Coding",
+  items: [
+    "Restate the problem in your own words -- confirm understanding",
+    "Clarify inputs, outputs, and return types",
+    "Ask about constraints -- input size, value ranges, duplicates, nulls",
+    "Identify edge cases -- empty input, single element, all same, negative values",
+    "Confirm expected time/space complexity given input size",
+  ],
+};
+
+const planSolution: SubChecklist = {
+  title: "Phase 2: Plan",
+  items: [
+    "Think out loud -- state your approach in 2-3 sentences before coding",
+    "Start brute force, identify bottleneck, then optimize",
+    "Select data structures -- hash map, heap, stack, deque, sorted set",
+    "Get interviewer buy-in on approach before writing code",
+    "State target time and space complexity",
+  ],
+};
+
+const whileCoding: SubChecklist = {
+  title: "Phase 3: While Coding",
+  items: [
+    "Use clear variable names -- narrate as you write",
+    "Code incrementally -- build core logic first, then edge cases",
+    "Handle edge cases explicitly at the top",
+    "If stuck, say what you're stuck on -- silence is your enemy",
+    "Reassess time/space as you code -- list alternatives if suboptimal",
+  ],
+};
+
+const afterCoding: SubChecklist = {
+  title: "Phase 4: After Coding",
+  items: [
+    "Dry-run with a sample input -- trace through step by step",
+    "Test an edge case -- check off-by-one, empty, boundary values",
+    "State final time and space complexity",
+    "Be open to feedback -- if they hint, pivot. Say 'good catch', don't panic.",
+    "Volunteer optimizations or follow-ups -- leave nothing on the table",
+  ],
+};
+
 const sections: Section[] = [
   {
     title: "Coding Interview",
     color: "indigo",
-    items: [
-      "Clarify -- restate the problem, ask about edge cases, confirm constraints and input size",
-      "List your approach high level first -- outline the strategy in 2-3 sentences before diving in. Stay on rails, talk with clarity, don't meander.",
-      "Brute force first -- state its complexity, identify the bottleneck, then propose 2-3 better approaches",
-      "Think out loud -- walk through your plan in plain English and get interviewer buy-in BEFORE coding",
-      "Read signals -- if they hint, pivot, or say 'what if...', STOP and listen. They're guiding you.",
-      "Code clean -- meaningful names, handle edge cases first, narrate as you write",
-      "Dry-run your solution -- trace through a simple example, then an edge case, check off-by-one errors",
-      "State final time and space complexity -- mention trade-offs and possible optimizations",
-      "Be precise, not verbose -- say what matters in few words. Overcommunicating wastes time and buries the signal.",
-      "When stuck, say what you're stuck on -- silence is your enemy, keep communicating",
-      "If you make an error, fix it calmly -- say 'good catch', don't panic or over-apologize",
-      "Leave nothing on the table -- push for optimal, volunteer follow-ups, you should feel spent at the end",
-    ],
-    subChecklists: [selfCheckItems],
+    items: [],
+    subChecklists: [beforeCoding, planSolution, whileCoding, afterCoding, selfCheckItems],
   },
   {
     title: "System Design",
