@@ -1,11 +1,32 @@
 import { useState } from "react";
 import { CheckSquare, ChevronDown, ChevronUp, Square } from "lucide-react";
 
+interface SubChecklist {
+  title: string;
+  items: string[];
+}
+
 interface Section {
   title: string;
   color: string;
   items: string[];
+  subChecklist?: SubChecklist;
 }
+
+const selfCheckItems: SubChecklist = {
+  title: "Post-Interview Self-Check",
+  items: [
+    "You clearly clarified the system requirements upfront",
+    "You followed a logical and structured design flow",
+    "You demonstrated depth when asked to zoom in",
+    "You discussed tradeoffs clearly and confidently",
+    "The interviewer stayed engaged and collaborative",
+    "You proactively brought up scaling and failure scenarios",
+    "You summarized your design and offered thoughtful next steps",
+    "You stayed calm and adaptable under pressure",
+    "You made the conversation feel like a real-world design session",
+  ],
+};
 
 const sections: Section[] = [
   {
@@ -25,6 +46,7 @@ const sections: Section[] = [
       "If you make an error, fix it calmly -- say 'good catch', don't panic or over-apologize",
       "Leave nothing on the table -- push for optimal, volunteer follow-ups, you should feel spent at the end",
     ],
+    subChecklist: selfCheckItems,
   },
   {
     title: "System Design",
@@ -43,21 +65,7 @@ const sections: Section[] = [
       "Be precise, not verbose -- every sentence should advance the design. Don't ramble or over-explain.",
       "Leave nothing on the table -- discuss monitoring, 10x/100x scale, show curiosity and ownership",
     ],
-  },
-  {
-    title: "Post-Interview Self-Check",
-    color: "amber",
-    items: [
-      "You clearly clarified the system requirements upfront",
-      "You followed a logical and structured design flow",
-      "You demonstrated depth when asked to zoom in",
-      "You discussed tradeoffs clearly and confidently",
-      "The interviewer stayed engaged and collaborative",
-      "You proactively brought up scaling and failure scenarios",
-      "You summarized your design and offered thoughtful next steps",
-      "You stayed calm and adaptable under pressure",
-      "You made the conversation feel like a real-world design session",
-    ],
+    subChecklist: selfCheckItems,
   },
 ];
 
@@ -74,7 +82,9 @@ function ChecklistSection({ section }: { section: Section }) {
     });
   };
 
-  const totalItems = section.items.length;
+  const allItems = section.subChecklist
+    ? section.items.length + section.subChecklist.items.length
+    : section.items.length;
   const checkedCount = checked.size;
 
   const colorMap: Record<string, { border: string; bg: string; text: string; progress: string }> = {
@@ -87,6 +97,34 @@ function ChecklistSection({ section }: { section: Section }) {
   const bgColor = c.bg;
   const textColor = c.text;
   const progressBg = c.progress;
+
+  const renderCheckItem = (item: string, color: string) => {
+    const isChecked = checked.has(item);
+    return (
+      <button
+        key={item}
+        onClick={() => toggle(item)}
+        className="flex items-start gap-2 w-full text-left cursor-pointer group"
+      >
+        {isChecked ? (
+          <CheckSquare
+            size={16}
+            className={`${color} mt-0.5 shrink-0`}
+          />
+        ) : (
+          <Square
+            size={16}
+            className="text-gray-300 group-hover:text-gray-400 mt-0.5 shrink-0"
+          />
+        )}
+        <span
+          className={`text-sm ${isChecked ? "text-gray-400 line-through" : "text-gray-600"}`}
+        >
+          {item}
+        </span>
+      </button>
+    );
+  };
 
   return (
     <div className={`rounded-xl border ${borderColor} bg-white`}>
@@ -104,13 +142,13 @@ function ChecklistSection({ section }: { section: Section }) {
             </h3>
             <div className="flex items-center gap-3 mt-1">
               <span className="text-xs text-gray-400">
-                {checkedCount} / {totalItems} items
+                {checkedCount} / {allItems} items
               </span>
               <div className="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                 <div
                   className={`h-full ${progressBg} rounded-full transition-all`}
                   style={{
-                    width: `${totalItems > 0 ? (checkedCount / totalItems) * 100 : 0}%`,
+                    width: `${allItems > 0 ? (checkedCount / allItems) * 100 : 0}%`,
                   }}
                 />
               </div>
@@ -127,34 +165,21 @@ function ChecklistSection({ section }: { section: Section }) {
       {open && (
         <div className="border-t border-gray-100 px-5 pb-5 pt-3">
           <div className="space-y-1.5">
-            {section.items.map((item) => {
-              const isChecked = checked.has(item);
-              return (
-                <button
-                  key={item}
-                  onClick={() => toggle(item)}
-                  className="flex items-start gap-2 w-full text-left cursor-pointer group"
-                >
-                  {isChecked ? (
-                    <CheckSquare
-                      size={16}
-                      className={`${textColor} mt-0.5 shrink-0`}
-                    />
-                  ) : (
-                    <Square
-                      size={16}
-                      className="text-gray-300 group-hover:text-gray-400 mt-0.5 shrink-0"
-                    />
-                  )}
-                  <span
-                    className={`text-sm ${isChecked ? "text-gray-400 line-through" : "text-gray-600"}`}
-                  >
-                    {item}
-                  </span>
-                </button>
-              );
-            })}
+            {section.items.map((item) => renderCheckItem(item, textColor))}
           </div>
+
+          {section.subChecklist && (
+            <div className="mt-4 ml-3 pl-3 border-l-2 border-amber-200">
+              <p className="text-xs font-semibold text-amber-600 uppercase tracking-wide mb-2">
+                {section.subChecklist.title}
+              </p>
+              <div className="space-y-1.5">
+                {section.subChecklist.items.map((item) =>
+                  renderCheckItem(item, "text-amber-600")
+                )}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
