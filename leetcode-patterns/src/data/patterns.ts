@@ -29,6 +29,11 @@ export const patterns: Pattern[] = [
       { name: "Clone Graph", slug: "clone-graph" },
       { name: "Course Schedule", slug: "course-schedule" },
       { name: "Pacific Atlantic Water Flow", slug: "pacific-atlantic-water-flow" },
+      { name: "All Paths From Source to Target", slug: "all-paths-from-source-to-target" },
+      { name: "Keys and Rooms", slug: "keys-and-rooms" },
+      { name: "Evaluate Division", slug: "evaluate-division" },
+      { name: "Reconstruct Itinerary", slug: "reconstruct-itinerary" },
+      { name: "Loud and Rich", slug: "loud-and-rich" },
     ],
     techniques: ["recursive traversal", "iterative traversal", "connected components", "cycle detection", "path tracking"],
     dataStructures: ["set()", "defaultdict(list)", "stack (iterative)", "visited array"],
@@ -76,6 +81,11 @@ def dfs_iterative(graph, start):
       { name: "Walls and Gates", slug: "walls-and-gates" },
       { name: "Word Ladder", slug: "word-ladder" },
       { name: "Binary Tree Level Order Traversal", slug: "binary-tree-level-order-traversal" },
+      { name: "Open the Lock", slug: "open-the-lock" },
+      { name: "Minimum Knight Moves", slug: "minimum-knight-moves" },
+      { name: "Shortest Path in Binary Matrix", slug: "shortest-path-in-binary-matrix" },
+      { name: "Bus Routes", slug: "bus-routes" },
+      { name: "Snakes and Ladders", slug: "snakes-and-ladders" },
     ],
     techniques: ["level-order traversal", "multi-source BFS", "bidirectional search", "shortest unweighted path", "visit before enqueue"],
     dataStructures: ["deque", "set()", "dict()", "level counter"],
@@ -129,6 +139,11 @@ def dfs_iterative(graph, start):
       { name: "Coin Change", slug: "coin-change" },
       { name: "Climbing Stairs", slug: "climbing-stairs" },
       { name: "Longest Increasing Subsequence", slug: "longest-increasing-subsequence" },
+      { name: "Decode Ways", slug: "decode-ways" },
+      { name: "Word Break", slug: "word-break" },
+      { name: "Maximum Subarray", slug: "maximum-subarray" },
+      { name: "Jump Game", slug: "jump-game" },
+      { name: "Partition Equal Subset Sum", slug: "partition-equal-subset-sum" },
     ],
     techniques: ["bottom-up tabulation", "top-down memoization", "rolling variables (O(1) space)", "state compression", "patience sort"],
     dataStructures: ["dp[] array", "@cache / @lru_cache", "bisect_left", "prefix sum[]"],
@@ -178,6 +193,11 @@ def lis(nums):
       { name: "Trapping Rain Water", slug: "trapping-rain-water" },
       { name: "4Sum", slug: "4sum" },
       { name: "Maximize Greatness of an Array", slug: "maximize-greatness-of-an-array" },
+      { name: "Sort Colors", slug: "sort-colors" },
+      { name: "Remove Duplicates from Sorted Array", slug: "remove-duplicates-from-sorted-array" },
+      { name: "Boats to Save People", slug: "boats-to-save-people" },
+      { name: "Merge Sorted Array", slug: "merge-sorted-array" },
+      { name: "Squares of a Sorted Array", slug: "squares-of-a-sorted-array" },
     ],
     techniques: ["opposite-end convergence", "skip duplicates", "early termination", "k-sum reduction", "sorted input required", "monotonically increasing/decreasing", "binary search on sorted half", "move min-bound pointer inward (bottleneck = shorter side)"],
     dataStructures: ["sort()", "two index variables", "set() (dedup alt)", "left/right max arrays"],
@@ -224,6 +244,11 @@ def threeSum(nums):
       { name: "Longest Substring Without Repeating Characters", slug: "longest-substring-without-repeating-characters" },
       { name: "Longest Repeating Character Replacement", slug: "longest-repeating-character-replacement" },
       { name: "Permutation in String", slug: "permutation-in-string" },
+      { name: "Minimum Size Subarray Sum", slug: "minimum-size-subarray-sum" },
+      { name: "Fruit Into Baskets", slug: "fruit-into-baskets" },
+      { name: "Subarrays with K Different Integers", slug: "subarrays-with-k-different-integers" },
+      { name: "Max Consecutive Ones III", slug: "max-consecutive-ones-iii" },
+      { name: "Grumpy Bookstore Owner", slug: "grumpy-bookstore-owner" },
     ],
     techniques: ["expand/shrink window", "constant-space index tracking", "last-seen index jump", "fixed-size window", "at most K distinct"],
     dataStructures: ["defaultdict(int)", "Counter()", "dict() (last index)", "left/right pointers"],
@@ -261,6 +286,11 @@ def lengthOfLongestSubstring(s):
       { name: "Koko Eating Bananas", slug: "koko-eating-bananas" },
       { name: "Search in Rotated Sorted Array", slug: "search-in-rotated-sorted-array" },
       { name: "Find Minimum in Rotated Sorted Array", slug: "find-minimum-in-rotated-sorted-array" },
+      { name: "Search a 2D Matrix", slug: "search-a-2d-matrix" },
+      { name: "Median of Two Sorted Arrays", slug: "median-of-two-sorted-arrays" },
+      { name: "Split Array Largest Sum", slug: "split-array-largest-sum" },
+      { name: "Capacity To Ship Packages", slug: "capacity-to-ship-packages-within-d-days" },
+      { name: "Find Peak Element", slug: "find-peak-element" },
     ],
     techniques: ["search on answer space", "lower/upper bound", "rotated array halving", "condition function", "ceiling division trick"],
     dataStructures: ["bisect_left / bisect_right", "lo/hi/mid indices", "sorted array"],
@@ -304,6 +334,11 @@ def minEatingSpeed(piles, h):
       { name: "Permutations", slug: "permutations" },
       { name: "Word Search", slug: "word-search" },
       { name: "N-Queens", slug: "n-queens" },
+      { name: "Subsets II", slug: "subsets-ii" },
+      { name: "Palindrome Partitioning", slug: "palindrome-partitioning" },
+      { name: "Letter Combinations of a Phone Number", slug: "letter-combinations-of-a-phone-number" },
+      { name: "Generate Parentheses", slug: "generate-parentheses" },
+      { name: "Combination Sum II", slug: "combination-sum-ii" },
     ],
     techniques: ["choose/explore/unchoose", "pruning with sort()", "start index (subsets)", "swap-based (permutations)", "bitmask enumeration"],
     dataStructures: ["path[:] (copy)", "set() (seen)", "sorted input", "bitmask int"],
@@ -349,6 +384,11 @@ def exist(board, word):
       { name: "Daily Temperatures", slug: "daily-temperatures" },
       { name: "Next Greater Element I", slug: "next-greater-element-i" },
       { name: "Largest Rectangle in Histogram", slug: "largest-rectangle-in-histogram" },
+      { name: "Online Stock Span", slug: "online-stock-span" },
+      { name: "Maximal Rectangle", slug: "maximal-rectangle" },
+      { name: "Remove K Digits", slug: "remove-k-digits" },
+      { name: "Sum of Subarray Minimums", slug: "sum-of-subarray-minimums" },
+      { name: "Trapping Rain Water", slug: "trapping-rain-water" },
     ],
     techniques: ["next greater/smaller element", "span calculation", "sentinel trick (avoid edge cases)", "index-based popping", "area under histogram"],
     dataStructures: ["stack (list)", "index array", "sentinel values [0]+arr+[0]"],
@@ -385,6 +425,11 @@ def largestRectangleArea(heights):
       { name: "K Closest Points to Origin", slug: "k-closest-points-to-origin" },
       { name: "Merge K Sorted Lists", slug: "merge-k-sorted-lists" },
       { name: "Task Scheduler", slug: "task-scheduler" },
+      { name: "Kth Largest Element in an Array", slug: "kth-largest-element-in-an-array" },
+      { name: "Find Median from Data Stream", slug: "find-median-from-data-stream" },
+      { name: "Reorganize String", slug: "reorganize-string" },
+      { name: "Ugly Number II", slug: "ugly-number-ii" },
+      { name: "Smallest Range Covering Elements from K Lists", slug: "smallest-range-covering-elements-from-k-lists" },
     ],
     techniques: ["maintain size-k heap", "frequency counting", "bucket sort (O(n))", "quickselect (avg O(n))", "negate for max-heap"],
     dataStructures: ["heapq", "Counter()", "tuple (-freq, val)", "bucket[] array"],
@@ -433,6 +478,11 @@ def quickselect(nums, k):
       { name: "Redundant Connection", slug: "redundant-connection" },
       { name: "Graph Valid Tree", slug: "graph-valid-tree" },
       { name: "Number of Connected Components", slug: "number-of-connected-components-in-an-undirected-graph" },
+      { name: "Longest Consecutive Sequence", slug: "longest-consecutive-sequence" },
+      { name: "Accounts Merge", slug: "accounts-merge" },
+      { name: "Satisfiability of Equality Equations", slug: "satisfiability-of-equality-equations" },
+      { name: "Most Stones Removed with Same Row or Column", slug: "most-stones-removed-with-same-row-or-column" },
+      { name: "Smallest String With Swaps", slug: "smallest-string-with-swaps" },
     ],
     techniques: ["path compression", "union by rank", "union by size", "cycle detection (return False)", "component counting"],
     dataStructures: ["parent[] array", "rank[] / size[]", "set comprehension (roots)", "dict (dynamic nodes)"],
@@ -490,6 +540,11 @@ class DSU:
       { name: "Longest Common Subsequence", slug: "longest-common-subsequence" },
       { name: "Edit Distance", slug: "edit-distance" },
       { name: "Coin Change II", slug: "coin-change-ii" },
+      { name: "Minimum Path Sum", slug: "minimum-path-sum" },
+      { name: "Interleaving String", slug: "interleaving-string" },
+      { name: "Distinct Subsequences", slug: "distinct-subsequences" },
+      { name: "Target Sum", slug: "target-sum" },
+      { name: "Regular Expression Matching", slug: "regular-expression-matching" },
     ],
     techniques: ["rolling single row (space opt)", "diagonal prev variable", "iterate shorter dimension", "knapsack reduction", "min/max/count transitions"],
     dataStructures: ["2D dp[][] grid", "1D dp[] + prev", "string indices"],
@@ -525,6 +580,11 @@ def lcs(text1, text2):
       { name: "Course Schedule", slug: "course-schedule" },
       { name: "Course Schedule II", slug: "course-schedule-ii" },
       { name: "Alien Dictionary", slug: "alien-dictionary" },
+      { name: "Sequence Reconstruction", slug: "sequence-reconstruction" },
+      { name: "Minimum Semesters for Course Plan", slug: "parallel-courses" },
+      { name: "Sort Items by Groups Respecting Dependencies", slug: "sort-items-by-groups-respecting-dependencies" },
+      { name: "Find All Possible Recipes from Given Supplies", slug: "find-all-possible-recipes-from-given-supplies" },
+      { name: "Longest Increasing Path in a Matrix", slug: "longest-increasing-path-in-a-matrix" },
     ],
     techniques: ["Kahn's algorithm (BFS)", "DFS 3-color cycle detection", "dependency ordering", "post-order reversal"],
     dataStructures: ["indegree[] array", "deque", "defaultdict(list)", "color[] (WHITE/GRAY/BLACK)"],
@@ -581,6 +641,11 @@ def topo_dfs(n, edges):
       { name: "Diameter of Binary Tree", slug: "diameter-of-binary-tree" },
       { name: "Binary Tree Maximum Path Sum", slug: "binary-tree-maximum-path-sum" },
       { name: "Validate Binary Search Tree", slug: "validate-binary-search-tree" },
+      { name: "Lowest Common Ancestor of a Binary Tree", slug: "lowest-common-ancestor-of-a-binary-tree" },
+      { name: "Kth Smallest Element in a BST", slug: "kth-smallest-element-in-a-bst" },
+      { name: "Serialize and Deserialize Binary Tree", slug: "serialize-and-deserialize-binary-tree" },
+      { name: "Construct Binary Tree from Preorder and Inorder", slug: "construct-binary-tree-from-preorder-and-inorder-traversal" },
+      { name: "Invert Binary Tree", slug: "invert-binary-tree" },
     ],
     techniques: ["postorder return value", "global state update (self.ans)", "boundary passing (min/max)", "Morris threading (O(1) space)", "inorder/preorder/postorder"],
     dataStructures: ["recursion stack", "threaded pointers", "tuple return (val, depth)"],
@@ -624,6 +689,11 @@ def inorder_morris(root):
       { name: "Network Delay Time", slug: "network-delay-time" },
       { name: "Cheapest Flights Within K Stops", slug: "cheapest-flights-within-k-stops" },
       { name: "Swim in Rising Water", slug: "swim-in-rising-water" },
+      { name: "Path with Maximum Probability", slug: "path-with-maximum-probability" },
+      { name: "Path With Minimum Effort", slug: "path-with-minimum-effort" },
+      { name: "Shortest Path in a Grid with Obstacles Elimination", slug: "shortest-path-in-a-grid-with-obstacles-elimination" },
+      { name: "Find the City With the Smallest Number of Neighbors", slug: "find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance" },
+      { name: "Minimum Cost to Make at Least One Valid Path in a Grid", slug: "minimum-cost-to-make-at-least-one-valid-path-in-a-grid" },
     ],
     techniques: ["lazy deletion (skip stale)", "0-1 BFS (binary weights)", "Bellman-Ford (k stops)", "modified weights (min-bottleneck)", "early termination"],
     dataStructures: ["heapq (min-heap)", "deque (0-1 BFS)", "dist[] array", "adjacency list + weights"],
@@ -669,6 +739,11 @@ def bfs_01(graph, src, n):
       { name: "Linked List Cycle", slug: "linked-list-cycle" },
       { name: "Find the Duplicate Number", slug: "find-the-duplicate-number" },
       { name: "Reverse Linked List", slug: "reverse-linked-list" },
+      { name: "Merge Two Sorted Lists", slug: "merge-two-sorted-lists" },
+      { name: "Remove Nth Node From End of List", slug: "remove-nth-node-from-end-of-list" },
+      { name: "Add Two Numbers", slug: "add-two-numbers" },
+      { name: "Reverse Nodes in k-Group", slug: "reverse-nodes-in-k-group" },
+      { name: "LRU Cache", slug: "lru-cache" },
     ],
     techniques: ["slow/fast pointer (find middle)", "reverse in-place", "dummy node (avoid edge cases)", "reverse in k-groups", "merge two sorted lists"],
     dataStructures: ["ListNode", "prev/curr/nxt pointers", "dummy ListNode(0)"],
@@ -722,6 +797,11 @@ def reverseKGroup(head, k):
       { name: "Surrounded Regions", slug: "surrounded-regions" },
       { name: "Flood Fill", slug: "flood-fill" },
       { name: "Shortest Path in Binary Matrix", slug: "shortest-path-in-binary-matrix" },
+      { name: "Walls and Gates", slug: "walls-and-gates" },
+      { name: "Pacific Atlantic Water Flow", slug: "pacific-atlantic-water-flow" },
+      { name: "Rotting Oranges", slug: "rotting-oranges" },
+      { name: "Word Search", slug: "word-search" },
+      { name: "The Maze", slug: "the-maze" },
     ],
     techniques: ["in-place marking (no visited set)", "4-directional traversal", "8-directional traversal", "boundary-first DFS", "BFS shortest path", "connected components"],
     dataStructures: ["directions[] array", "set() (visited)", "deque (BFS)", "grid mutation (mark '#')"],
@@ -793,6 +873,11 @@ def shortestPathBinaryMatrix(grid):
       { name: "Number of Provinces", slug: "number-of-provinces" },
       { name: "Accounts Merge", slug: "accounts-merge" },
       { name: "Making A Large Island", slug: "making-a-large-island" },
+      { name: "Number of Distinct Islands", slug: "number-of-distinct-islands" },
+      { name: "Count Sub Islands", slug: "count-sub-islands" },
+      { name: "Island Perimeter", slug: "island-perimeter" },
+      { name: "Largest Component Size by Common Factor", slug: "largest-component-size-by-common-factor" },
+      { name: "Bricks Falling When Hit", slug: "bricks-falling-when-hit" },
     ],
     techniques: ["~c coordinate trick (row/col union)", "label + expand (try flipping)", "component counting", "DFS adjacency grouping", "total - components = removable"],
     dataStructures: ["Union-Find (dict)", "adjacency list", "label grid", "size{} map"],
@@ -886,6 +971,11 @@ def largestIsland(grid):
       { name: "Valid Anagram", slug: "valid-anagram" },
       { name: "Find All Anagrams in a String", slug: "find-all-anagrams-in-a-string" },
       { name: "Minimum Window Substring", slug: "minimum-window-substring" },
+      { name: "Top K Frequent Words", slug: "top-k-frequent-words" },
+      { name: "First Unique Character in a String", slug: "first-unique-character-in-a-string" },
+      { name: "Sort Characters By Frequency", slug: "sort-characters-by-frequency" },
+      { name: "Ransom Note", slug: "ransom-note" },
+      { name: "Custom Sort String", slug: "custom-sort-string" },
     ],
     techniques: ["sorted key grouping", "frequency array (26-slot)", "sliding window + counter match", "counter diff tracking", "tuple as dict key"],
     dataStructures: ["Counter()", "defaultdict(list)", "sorted()", "freq[26] array", "tuple(sorted(s))"],
@@ -957,6 +1047,11 @@ def minWindow(s, t):
       { name: "Word Search II", slug: "word-search-ii" },
       { name: "Design Add and Search Words", slug: "design-add-and-search-words-data-structure" },
       { name: "Word Break", slug: "word-break" },
+      { name: "Replace Words", slug: "replace-words" },
+      { name: "Map Sum Pairs", slug: "map-sum-pairs" },
+      { name: "Longest Word in Dictionary", slug: "longest-word-in-dictionary" },
+      { name: "Search Suggestions System", slug: "search-suggestions-system" },
+      { name: "Stream of Characters", slug: "stream-of-characters" },
     ],
     techniques: ["prefix lookup", "wildcard DFS ('.' matching)", "backtracking + trie pruning", "word termination flag", "node deletion after match"],
     dataStructures: ["dict-of-dicts (children)", "TrieNode class", "set() (word list)", "boolean end flag"],
@@ -1048,6 +1143,11 @@ def findWords(board, words):
       { name: "Palindromic Substrings", slug: "palindromic-substrings" },
       { name: "Valid Palindrome II", slug: "valid-palindrome-ii" },
       { name: "Longest Palindrome", slug: "longest-palindrome" },
+      { name: "Palindrome Partitioning", slug: "palindrome-partitioning" },
+      { name: "Shortest Palindrome", slug: "shortest-palindrome" },
+      { name: "Palindrome Pairs", slug: "palindrome-pairs" },
+      { name: "Break a Palindrome", slug: "break-a-palindrome" },
+      { name: "Longest Palindromic Subsequence", slug: "longest-palindromic-subsequence" },
     ],
     techniques: ["expand from center", "two pointer inward check", "odd/even center handling", "skip one char (k-tolerance)", "frequency counting (build palindrome)"],
     dataStructures: ["two index variables (l, r)", "Counter()", "string slicing", "dp[][] (interval DP)"],
@@ -1106,6 +1206,69 @@ def longestPalindromeBuild(s):
     return length + (1 if odd_found else 0)`,
     optimalRuntime: "O(n) time (Manacher's), O(n) space",
     optimalNote: "Manacher's uses previously computed palindromes to skip redundant comparisons. For building a palindrome from chars, just count pairs + at most one odd center.",
+  },
+  {
+    id: 21,
+    name: "Topological Sort",
+    solveCount: 32,
+    tag: "Graph",
+    problems: [
+      { name: "Course Schedule", slug: "course-schedule" },
+      { name: "Course Schedule II", slug: "course-schedule-ii" },
+      { name: "Alien Dictionary", slug: "alien-dictionary" },
+      { name: "Minimum Height Trees", slug: "minimum-height-trees" },
+      { name: "Parallel Courses", slug: "parallel-courses" },
+      { name: "Find All Possible Recipes from Given Supplies", slug: "find-all-possible-recipes-from-given-supplies" },
+      { name: "Longest Increasing Path in a Matrix", slug: "longest-increasing-path-in-a-matrix" },
+      { name: "Sequence Reconstruction", slug: "sequence-reconstruction" },
+      { name: "Sort Items by Groups Respecting Dependencies", slug: "sort-items-by-groups-respecting-dependencies" },
+      { name: "Loud and Rich", slug: "loud-and-rich" },
+      { name: "Course Schedule IV", slug: "course-schedule-iv" },
+    ],
+    techniques: ["Kahn's algorithm (BFS + indegree)", "DFS post-order + reverse", "cycle detection (impossible if not all visited)", "level-by-level BFS (parallel courses / min semesters)", "peel leaves inward (minimum height trees)"],
+    dataStructures: ["defaultdict(list) (adjacency list)", "indegree[] array", "deque (BFS queue)", "visited set / coloring (white-gray-black)"],
+    code: `# Kahn's algorithm (BFS)
+from collections import deque, defaultdict
+def topoSort(n, prereqs):
+    graph = defaultdict(list)
+    indegree = [0] * n
+    for a, b in prereqs:
+        graph[b].append(a)
+        indegree[a] += 1
+    q = deque(i for i in range(n) if indegree[i] == 0)
+    order = []
+    while q:
+        node = q.popleft()
+        order.append(node)
+        for nei in graph[node]:
+            indegree[nei] -= 1
+            if indegree[nei] == 0:
+                q.append(nei)
+    return order if len(order) == n else []`,
+    runtime: "O(V + E) time, O(V + E) space",
+    optimalCode: `# DFS-based topo sort with cycle detection
+def topoSort(n, prereqs):
+    graph = defaultdict(list)
+    for a, b in prereqs:
+        graph[b].append(a)
+    # 0 = unvisited, 1 = in-stack, 2 = done
+    state = [0] * n
+    order = []
+    def dfs(node):
+        if state[node] == 1: return False  # cycle
+        if state[node] == 2: return True
+        state[node] = 1
+        for nei in graph[node]:
+            if not dfs(nei): return False
+        state[node] = 2
+        order.append(node)
+        return True
+    for i in range(n):
+        if state[i] == 0:
+            if not dfs(i): return []
+    return order[::-1]`,
+    optimalRuntime: "O(V + E) time, O(V + E) space",
+    optimalNote: "BFS (Kahn's) is iterative and gives level-order (useful for parallel scheduling). DFS post-order is recursive and detects cycles via 3-color marking. Both are O(V+E).",
   },
 ];
 

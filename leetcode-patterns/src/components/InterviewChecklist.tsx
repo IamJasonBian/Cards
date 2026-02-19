@@ -1,11 +1,56 @@
 import { useState } from "react";
 import { CheckSquare, ChevronDown, ChevronUp, Square } from "lucide-react";
 
+interface SubChecklist {
+  title: string;
+  items: string[];
+}
+
 interface Section {
   title: string;
   color: string;
   items: string[];
+  subChecklists?: SubChecklist[];
 }
+
+const selfCheckItems: SubChecklist = {
+  title: "Post-Interview Self-Check",
+  items: [
+    "You clearly clarified the system requirements upfront",
+    "You followed a logical and structured design flow",
+    "You demonstrated depth when asked to zoom in",
+    "You discussed tradeoffs clearly and confidently",
+    "The interviewer stayed engaged and collaborative",
+    "You proactively brought up scaling and failure scenarios",
+    "You summarized your design and offered thoughtful next steps",
+    "You stayed calm and adaptable under pressure",
+    "You made the conversation feel like a real-world design session",
+  ],
+};
+
+const frameworkOne: SubChecklist = {
+  title: "Pre-Interview Framework 1: What Interviewers Actually Evaluate",
+  items: [
+    "Dealing with ambiguity -- spend the first 5 min clarifying requirements. Have a mental checklist: scale, performance, consistency, business priorities.",
+    "Context-driven decisions -- don't just pick a technology. Articulate how each option affects the overall success of the project.",
+    "Tradeoff navigation -- follow every design decision with 'The trade-off here is...' Make it a reflex.",
+    "Collaboration and feedback -- treat interviewer suggestions as valuable info, not criticism. 'That's an interesting perspective I hadn't considered -- let me explore that.'",
+    "Practical intuition -- don't just say 'we'll use a message queue'. Say 'we'll use a queue, but I've seen these cause oncall pain -- we need retry policies, DLQs, or something like Temporal for explicit failure modes.'",
+    "Depth flexibility -- seamlessly shift between high-level architecture, component-level interactions, and implementation specifics. Signal transitions: 'Let's zoom in on the storage layer' or 'Let me step back to the overall architecture.'",
+  ],
+};
+
+const frameworkTwo: SubChecklist = {
+  title: "Pre-Interview Framework 2: The Real Decision",
+  items: [
+    "The final decision isn't about whether you dropped in a Redis. The interviewer is thinking: 'I wish they had talked more coherently about tradeoffs.'",
+    "Don't just name components -- justify them. Why Redis and not Memcached? Why Kafka and not SQS? Tie every choice to a requirement.",
+    "When diving deeper, explicitly signal: 'Let's zoom in on X since that's critical for this system.'",
+    "When returning to high-level, signal: 'Before we go deeper, let's make sure this approach aligns with our overall requirements.'",
+    "Show you can operate at different levels of abstraction -- executives to junior devs. Extract from details for the big picture, dive deep for critical issues.",
+    "The most impressive thing you can do is acknowledge when you're changing levels of abstraction.",
+  ],
+};
 
 const sections: Section[] = [
   {
@@ -13,6 +58,7 @@ const sections: Section[] = [
     color: "indigo",
     items: [
       "Clarify -- restate the problem, ask about edge cases, confirm constraints and input size",
+      "List your approach high level first -- outline the strategy in 2-3 sentences before diving in. Stay on rails, talk with clarity, don't meander.",
       "Brute force first -- state its complexity, identify the bottleneck, then propose 2-3 better approaches",
       "Think out loud -- walk through your plan in plain English and get interviewer buy-in BEFORE coding",
       "Read signals -- if they hint, pivot, or say 'what if...', STOP and listen. They're guiding you.",
@@ -24,23 +70,26 @@ const sections: Section[] = [
       "If you make an error, fix it calmly -- say 'good catch', don't panic or over-apologize",
       "Leave nothing on the table -- push for optimal, volunteer follow-ups, you should feel spent at the end",
     ],
+    subChecklists: [selfCheckItems],
   },
   {
     title: "System Design",
     color: "emerald",
     items: [
-      "Gather requirements -- users, core use cases, scale (DAU/QPS), read/write ratio, latency targets",
-      "Define API and data model -- endpoints, schemas, SQL vs NoSQL, key indexes",
+      "Ask every clarifying question you can -- users, geo, scale, SLAs, edge cases. More questions = better scope = better design.",
+      "Functional requirements -- list the core use cases (3-5). What can users DO? This is your scope.",
+      "Non-functional requirements -- latency (p99), availability (99.9%?), consistency model, scale (DAU/QPS/storage)",
       "Think out loud -- state your assumptions, check in with 'does this direction make sense?'",
-      "Draw the high-level architecture -- client, load balancer, services, DB, cache, message queue",
+      "Draw high-level architecture -- client, LB, services, DB, cache, queue. Keep it big-picture first.",
+      "Map each component to a non-functional requirement -- why this cache? (latency). Why this queue? (availability). Justify every box.",
       "Read signals -- if they push on a component, that's where they want depth. Follow their lead.",
       "Deep dive on scale -- sharding, replication, cache invalidation, hot partitions, rate limiting",
-      "Discuss trade-offs -- CAP theorem, consistency vs availability, cost vs performance",
-      "Handle failures -- retries, circuit breakers, graceful degradation, what happens during partitions",
+      "Discuss trade-offs -- CAP theorem, consistency vs availability, cost vs performance. Every choice has a cost.",
+      "Handle failures -- retries, circuit breakers, graceful degradation. What happens during partitions?",
       "Be precise, not verbose -- every sentence should advance the design. Don't ramble or over-explain.",
-      "When you don't know, say so honestly -- then reason through it out loud",
       "Leave nothing on the table -- discuss monitoring, 10x/100x scale, show curiosity and ownership",
     ],
+    subChecklists: [frameworkOne, frameworkTwo, selfCheckItems],
   },
 ];
 
@@ -57,7 +106,10 @@ function ChecklistSection({ section }: { section: Section }) {
     });
   };
 
-  const totalItems = section.items.length;
+  const subTotal = section.subChecklists
+    ? section.subChecklists.reduce((acc, sc) => acc + sc.items.length, 0)
+    : 0;
+  const allItems = section.items.length + subTotal;
   const checkedCount = checked.size;
 
   const colorMap: Record<string, { border: string; bg: string; text: string; progress: string }> = {
@@ -70,6 +122,37 @@ function ChecklistSection({ section }: { section: Section }) {
   const bgColor = c.bg;
   const textColor = c.text;
   const progressBg = c.progress;
+
+  const subColors = ["text-amber-600", "text-violet-600", "text-rose-500"];
+  const subBorders = ["border-amber-200", "border-violet-200", "border-rose-200"];
+
+  const renderCheckItem = (item: string, color: string) => {
+    const isChecked = checked.has(item);
+    return (
+      <button
+        key={item}
+        onClick={() => toggle(item)}
+        className="flex items-start gap-2 w-full text-left cursor-pointer group"
+      >
+        {isChecked ? (
+          <CheckSquare
+            size={16}
+            className={`${color} mt-0.5 shrink-0`}
+          />
+        ) : (
+          <Square
+            size={16}
+            className="text-gray-300 group-hover:text-gray-400 mt-0.5 shrink-0"
+          />
+        )}
+        <span
+          className={`text-sm ${isChecked ? "text-gray-400 line-through" : "text-gray-600"}`}
+        >
+          {item}
+        </span>
+      </button>
+    );
+  };
 
   return (
     <div className={`rounded-xl border ${borderColor} bg-white`}>
@@ -87,13 +170,13 @@ function ChecklistSection({ section }: { section: Section }) {
             </h3>
             <div className="flex items-center gap-3 mt-1">
               <span className="text-xs text-gray-400">
-                {checkedCount} / {totalItems} items
+                {checkedCount} / {allItems} items
               </span>
               <div className="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                 <div
                   className={`h-full ${progressBg} rounded-full transition-all`}
                   style={{
-                    width: `${totalItems > 0 ? (checkedCount / totalItems) * 100 : 0}%`,
+                    width: `${allItems > 0 ? (checkedCount / allItems) * 100 : 0}%`,
                   }}
                 />
               </div>
@@ -110,34 +193,24 @@ function ChecklistSection({ section }: { section: Section }) {
       {open && (
         <div className="border-t border-gray-100 px-5 pb-5 pt-3">
           <div className="space-y-1.5">
-            {section.items.map((item) => {
-              const isChecked = checked.has(item);
-              return (
-                <button
-                  key={item}
-                  onClick={() => toggle(item)}
-                  className="flex items-start gap-2 w-full text-left cursor-pointer group"
-                >
-                  {isChecked ? (
-                    <CheckSquare
-                      size={16}
-                      className={`${textColor} mt-0.5 shrink-0`}
-                    />
-                  ) : (
-                    <Square
-                      size={16}
-                      className="text-gray-300 group-hover:text-gray-400 mt-0.5 shrink-0"
-                    />
-                  )}
-                  <span
-                    className={`text-sm ${isChecked ? "text-gray-400 line-through" : "text-gray-600"}`}
-                  >
-                    {item}
-                  </span>
-                </button>
-              );
-            })}
+            {section.items.map((item) => renderCheckItem(item, textColor))}
           </div>
+
+          {section.subChecklists?.map((sub, idx) => (
+            <div
+              key={sub.title}
+              className={`mt-4 ml-3 pl-3 border-l-2 ${subBorders[idx % subBorders.length]}`}
+            >
+              <p className={`text-xs font-semibold ${subColors[idx % subColors.length]} uppercase tracking-wide mb-2`}>
+                {sub.title}
+              </p>
+              <div className="space-y-1.5">
+                {sub.items.map((item) =>
+                  renderCheckItem(item, subColors[idx % subColors.length])
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
