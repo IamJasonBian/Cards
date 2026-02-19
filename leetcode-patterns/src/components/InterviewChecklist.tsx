@@ -124,6 +124,71 @@ const sections: Section[] = [
   },
 ];
 
+function SubChecklistSection({
+  sub,
+  idx,
+  checked,
+  toggle,
+  subColors,
+  subBorders,
+}: {
+  sub: SubChecklist;
+  idx: number;
+  checked: Set<string>;
+  toggle: (key: string) => void;
+  subColors: string[];
+  subBorders: string[];
+}) {
+  const [subOpen, setSubOpen] = useState(false);
+  const color = subColors[idx % subColors.length];
+  const border = subBorders[idx % subBorders.length];
+  const checkedCount = sub.items.filter((item) => checked.has(item)).length;
+
+  return (
+    <div className={`mt-3 ml-3 pl-3 border-l-2 ${border}`}>
+      <button
+        onClick={() => setSubOpen(!subOpen)}
+        className="flex items-center gap-2 w-full text-left cursor-pointer"
+      >
+        <p className={`text-xs font-semibold ${color} uppercase tracking-wide`}>
+          {sub.title}
+        </p>
+        <span className="text-xs text-gray-400">
+          {checkedCount}/{sub.items.length}
+        </span>
+        {subOpen ? (
+          <ChevronUp size={14} className="text-gray-400" />
+        ) : (
+          <ChevronDown size={14} className="text-gray-400" />
+        )}
+      </button>
+      {subOpen && (
+        <div className="space-y-1.5 mt-2">
+          {sub.items.map((item) => {
+            const isChecked = checked.has(item);
+            return (
+              <button
+                key={item}
+                onClick={() => toggle(item)}
+                className="flex items-start gap-2 w-full text-left cursor-pointer group"
+              >
+                {isChecked ? (
+                  <CheckSquare size={16} className={`${color} mt-0.5 shrink-0`} />
+                ) : (
+                  <Square size={16} className="text-gray-300 group-hover:text-gray-400 mt-0.5 shrink-0" />
+                )}
+                <span className={`text-sm ${isChecked ? "text-gray-400 line-through" : "text-gray-600"}`}>
+                  {item}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ChecklistSection({ section }: { section: Section }) {
   const [open, setOpen] = useState(false);
   const [checked, setChecked] = useState<Set<string>>(new Set());
@@ -228,19 +293,15 @@ function ChecklistSection({ section }: { section: Section }) {
           </div>
 
           {section.subChecklists?.map((sub, idx) => (
-            <div
+            <SubChecklistSection
               key={sub.title}
-              className={`mt-4 ml-3 pl-3 border-l-2 ${subBorders[idx % subBorders.length]}`}
-            >
-              <p className={`text-xs font-semibold ${subColors[idx % subColors.length]} uppercase tracking-wide mb-2`}>
-                {sub.title}
-              </p>
-              <div className="space-y-1.5">
-                {sub.items.map((item) =>
-                  renderCheckItem(item, subColors[idx % subColors.length])
-                )}
-              </div>
-            </div>
+              sub={sub}
+              idx={idx}
+              checked={checked}
+              toggle={toggle}
+              subColors={subColors}
+              subBorders={subBorders}
+            />
           ))}
         </div>
       )}
