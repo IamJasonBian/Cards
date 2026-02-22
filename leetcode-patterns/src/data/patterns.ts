@@ -1274,6 +1274,20 @@ def topoSort(n, prereqs):
 
 export const tags = [...new Set(patterns.map((p) => p.tag))];
 
+export const tagColors: Record<string, string> = {
+  Graph: "bg-purple-100 text-purple-700",
+  DP: "bg-orange-100 text-orange-700",
+  Array: "bg-blue-100 text-blue-700",
+  Search: "bg-cyan-100 text-cyan-700",
+  Recursion: "bg-pink-100 text-pink-700",
+  Stack: "bg-amber-100 text-amber-700",
+  Heap: "bg-teal-100 text-teal-700",
+  Tree: "bg-green-100 text-green-700",
+  "Linked List": "bg-indigo-100 text-indigo-700",
+  Matrix: "bg-rose-100 text-rose-700",
+  String: "bg-lime-100 text-lime-700",
+};
+
 export const stats = {
   totalSolved: 639,
   easy: 156,
