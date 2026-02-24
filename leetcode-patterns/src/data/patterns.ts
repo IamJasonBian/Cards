@@ -804,7 +804,7 @@ def reverseKGroup(head, k):
       { name: "The Maze", slug: "the-maze" },
     ],
     techniques: ["in-place marking (no visited set)", "4-directional traversal", "8-directional traversal", "boundary-first DFS", "BFS shortest path", "connected components"],
-    dataStructures: ["directions[] array", "set() (visited)", "deque (BFS)", "grid mutation (mark '#')"],
+    dataStructures: ["directions[] array", "set() (visited)", "deque (BFS)", "grid mutation (mark '#')", "(r,c) tuple keys"],
     code: `def numIslands(grid):
     rows, cols = len(grid), len(grid[0])
     visited = set()
@@ -978,7 +978,7 @@ def largestIsland(grid):
       { name: "Custom Sort String", slug: "custom-sort-string" },
     ],
     techniques: ["sorted key grouping", "frequency array (26-slot)", "sliding window + counter match", "counter diff tracking", "tuple as dict key"],
-    dataStructures: ["Counter()", "defaultdict(list)", "sorted()", "freq[26] array", "tuple(sorted(s))"],
+    dataStructures: ["Counter()", "defaultdict(list)", "sorted()", '"".join(sorted(word))', "freq[26] array", "tuple(sorted(s))"],
     code: `# Group Anagrams
 def groupAnagrams(strs):
     groups = defaultdict(list)
@@ -1296,3 +1296,359 @@ export const stats = {
   primaryLang: "Python3",
   problemsSolvedInPython: 502,
 };
+
+export interface DSRefEntry {
+  name: string;
+  color: string;
+  code: string;
+  relatedProblems: { name: string; slug: string }[];
+}
+
+export const dsReference: DSRefEntry[] = [
+  {
+    name: "dict / defaultdict",
+    color: "bg-purple-100 text-purple-700 border-purple-200",
+    code: `# Basic dict — O(1) lookup, insert, delete
+seen = {}
+seen[key] = value
+if key in seen: ...
+
+# defaultdict — auto-initializes missing keys
+from collections import defaultdict
+graph = defaultdict(list)         # adjacency list
+graph[u].append(v)
+
+freq = defaultdict(int)           # frequency counter
+for x in arr:
+    freq[x] += 1
+
+groups = defaultdict(list)        # group by key
+for s in strs:
+    groups[tuple(sorted(s))].append(s)
+
+# dict.setdefault — Union-Find with dynamic nodes
+parent = {}
+parent.setdefault(x, x)          # init node if missing
+
+# dict comprehension
+index = {val: i for i, val in enumerate(nums)}`,
+    relatedProblems: [
+      { name: "Two Sum", slug: "two-sum" },
+      { name: "Group Anagrams", slug: "group-anagrams" },
+      { name: "Clone Graph", slug: "clone-graph" },
+      { name: "Course Schedule", slug: "course-schedule" },
+      { name: "LRU Cache", slug: "lru-cache" },
+      { name: "Subarray Sum Equals K", slug: "subarray-sum-equals-k" },
+    ],
+  },
+  {
+    name: 'str — "".join(sorted(word))',
+    color: "bg-lime-100 text-lime-700 border-lime-200",
+    code: `# Sorted string key (anagram grouping)
+key = "".join(sorted(word))       # "eat" -> "aet"
+groups[key].append(word)
+
+# String building
+"".join(chars)                    # list -> string, O(n)
+s[::-1]                           # reverse a string
+
+# Character operations
+ord('a')                          # 97 — char to int
+chr(97)                           # 'a' — int to char
+ord(c) - ord('a')                 # char to 0-25 index
+
+# Frequency array (faster than Counter for fixed charset)
+count = [0] * 26
+for c in word:
+    count[ord(c) - ord('a')] += 1
+key = tuple(count)                # hashable freq key
+
+# Common string patterns
+s.lower(); s.isalnum()            # clean for palindrome
+word[:i] + c + word[i+1:]         # swap char at index i`,
+    relatedProblems: [
+      { name: "Group Anagrams", slug: "group-anagrams" },
+      { name: "Valid Anagram", slug: "valid-anagram" },
+      { name: "Longest Palindromic Substring", slug: "longest-palindromic-substring" },
+      { name: "Word Ladder", slug: "word-ladder" },
+      { name: "Valid Palindrome", slug: "valid-palindrome" },
+      { name: "Reverse String", slug: "reverse-string" },
+    ],
+  },
+  {
+    name: "heapq (min-heap)",
+    color: "bg-teal-100 text-teal-700 border-teal-200",
+    code: `import heapq
+
+# Push / Pop — O(log n)
+heap = []
+heapq.heappush(heap, val)
+smallest = heapq.heappop(heap)
+
+# Negate for max-heap (Python has no max-heap)
+heapq.heappush(heap, -val)
+largest = -heapq.heappop(heap)
+
+# Top-K pattern — maintain size-k heap
+for val in stream:
+    heapq.heappush(heap, val)
+    if len(heap) > k:
+        heapq.heappop(heap)       # drop smallest
+# heap now has k largest elements
+
+# nlargest / nsmallest shortcuts
+heapq.nlargest(k, arr)            # O(n log k)
+heapq.nsmallest(k, arr)
+
+# Tuple priority (ties broken by second element)
+heapq.heappush(heap, (dist, node))
+heapq.heappush(heap, (-freq, val))
+
+# Heapify existing list — O(n)
+heapq.heapify(arr)
+
+# Merge k sorted lists
+for val in heapq.merge(*lists):   # lazy merge`,
+    relatedProblems: [
+      { name: "Top K Frequent Elements", slug: "top-k-frequent-elements" },
+      { name: "Merge K Sorted Lists", slug: "merge-k-sorted-lists" },
+      { name: "Find Median from Data Stream", slug: "find-median-from-data-stream" },
+      { name: "Kth Largest Element in an Array", slug: "kth-largest-element-in-an-array" },
+      { name: "Task Scheduler", slug: "task-scheduler" },
+      { name: "Network Delay Time", slug: "network-delay-time" },
+    ],
+  },
+  {
+    name: "Counter / frequency counting",
+    color: "bg-orange-100 text-orange-700 border-orange-200",
+    code: `from collections import Counter
+
+# Count elements — O(n)
+count = Counter(nums)             # {val: freq}
+count = Counter(s)                # char freq in string
+
+# Most common
+count.most_common(k)              # [(val, freq), ...]
+
+# Arithmetic
+count[x] += 1                     # increment
+count[x] -= 1                     # decrement
+if count[x] == 0: del count[x]   # clean zero entries
+
+# Counter comparison (sliding window anagram check)
+window = Counter(s[:len(p)])
+target = Counter(p)
+if window == target: ...          # O(26) for lowercase
+
+# "missing" count trick (Minimum Window Substring)
+need = Counter(t)
+missing = len(t)
+for c in s:
+    if need[c] > 0:
+        missing -= 1
+    need[c] -= 1
+
+# Subtract / intersection
+count1 - count2                   # elements in 1 not in 2
+count1 & count2                   # min of each element`,
+    relatedProblems: [
+      { name: "Top K Frequent Elements", slug: "top-k-frequent-elements" },
+      { name: "Minimum Window Substring", slug: "minimum-window-substring" },
+      { name: "Find All Anagrams in a String", slug: "find-all-anagrams-in-a-string" },
+      { name: "Task Scheduler", slug: "task-scheduler" },
+      { name: "Reorganize String", slug: "reorganize-string" },
+      { name: "First Unique Character in a String", slug: "first-unique-character-in-a-string" },
+    ],
+  },
+  {
+    name: "deque — queue / BFS",
+    color: "bg-cyan-100 text-cyan-700 border-cyan-200",
+    code: `from collections import deque
+
+# BFS level-order traversal
+queue = deque([start])
+visited = {start}
+level = 0
+while queue:
+    for _ in range(len(queue)):   # process one level
+        node = queue.popleft()    # O(1) — left pop
+        for nei in graph[node]:
+            if nei not in visited:
+                visited.add(nei)
+                queue.append(nei) # O(1) — right push
+    level += 1
+
+# Multi-source BFS (start from all sources at once)
+queue = deque([(r,c) for r,c in sources])
+
+# 0-1 BFS (binary weights — no heap needed)
+dq = deque([src])
+if w == 0: dq.appendleft(v)      # weight 0 → front
+else:      dq.append(v)          # weight 1 → back
+
+# Sliding window max (monotonic deque)
+dq = deque()                      # stores indices
+for i, num in enumerate(nums):
+    while dq and nums[dq[-1]] < num:
+        dq.pop()                  # remove smaller
+    dq.append(i)
+    if dq[0] <= i - k:
+        dq.popleft()              # remove out-of-window`,
+    relatedProblems: [
+      { name: "Rotting Oranges", slug: "rotting-oranges" },
+      { name: "Word Ladder", slug: "word-ladder" },
+      { name: "Binary Tree Level Order Traversal", slug: "binary-tree-level-order-traversal" },
+      { name: "Walls and Gates", slug: "walls-and-gates" },
+      { name: "Open the Lock", slug: "open-the-lock" },
+      { name: "Sliding Window Maximum", slug: "sliding-window-maximum" },
+    ],
+  },
+  {
+    name: "set()",
+    color: "bg-pink-100 text-pink-700 border-pink-200",
+    code: `# O(1) lookup, add, remove (hash-based)
+visited = set()
+visited.add(node)
+if node in visited: ...           # O(1) membership check
+visited.remove(node)              # KeyError if missing
+visited.discard(node)             # safe remove
+
+# Set from iterable
+words = set(word_list)            # dedup + fast lookup
+
+# Visited pattern (DFS / BFS)
+visited = set()
+def dfs(node):
+    if node in visited: return
+    visited.add(node)
+    for nei in graph[node]:
+        dfs(nei)
+
+# Grid visited with (r,c) tuples
+visited = set()
+visited.add((r, c))
+if (nr, nc) not in visited: ...
+
+# Set operations
+a | b                             # union
+a & b                             # intersection
+a - b                             # difference
+a ^ b                             # symmetric difference
+
+# Frozenset as dict key (hashable set)
+key = frozenset(items)`,
+    relatedProblems: [
+      { name: "Number of Islands", slug: "number-of-islands" },
+      { name: "Longest Consecutive Sequence", slug: "longest-consecutive-sequence" },
+      { name: "Word Break", slug: "word-break" },
+      { name: "3Sum", slug: "3sum" },
+      { name: "Contains Duplicate", slug: "contains-duplicate" },
+      { name: "Course Schedule", slug: "course-schedule" },
+    ],
+  },
+  {
+    name: "Grid DFS / BFS traversal",
+    color: "bg-rose-100 text-rose-700 border-rose-200",
+    code: `# 4-directional movement
+directions = [(0,1), (0,-1), (1,0), (-1,0)]
+
+# Bounds check + visit (DFS)
+rows, cols = len(grid), len(grid[0])
+def dfs(r, c):
+    if r < 0 or r >= rows or c < 0 or c >= cols:
+        return                        # out of bounds
+    if grid[r][c] != '1':
+        return                        # water or visited
+    grid[r][c] = '#'                  # mark in-place
+    for dr, dc in directions:
+        dfs(r + dr, c + dc)
+
+# BFS shortest path on grid
+queue = deque([(start_r, start_c, 0)])  # (r, c, dist)
+visited = {(start_r, start_c)}
+while queue:
+    r, c, dist = queue.popleft()
+    if r == target_r and c == target_c:
+        return dist
+    for dr, dc in directions:
+        nr, nc = r + dr, c + dc
+        if 0 <= nr < rows and 0 <= nc < cols:
+            if (nr, nc) not in visited and grid[nr][nc] == 0:
+                visited.add((nr, nc))
+                queue.append((nr, nc, dist + 1))
+
+# Multi-source BFS (Rotting Oranges / Walls and Gates)
+queue = deque()
+for r in range(rows):
+    for c in range(cols):
+        if grid[r][c] == source_val:
+            queue.append((r, c, 0))   # all sources at once`,
+    relatedProblems: [
+      { name: "Number of Islands", slug: "number-of-islands" },
+      { name: "Rotting Oranges", slug: "rotting-oranges" },
+      { name: "Shortest Path in Binary Matrix", slug: "shortest-path-in-binary-matrix" },
+      { name: "Pacific Atlantic Water Flow", slug: "pacific-atlantic-water-flow" },
+      { name: "Surrounded Regions", slug: "surrounded-regions" },
+      { name: "Word Search", slug: "word-search" },
+    ],
+  },
+  {
+    name: "TreeNode / ListNode access",
+    color: "bg-green-100 text-green-700 border-green-200",
+    code: `# TreeNode definition
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+# Tree DFS — postorder return pattern
+def dfs(node):
+    if not node: return 0
+    left = dfs(node.left)
+    right = dfs(node.right)
+    self.ans = max(self.ans, left + right)  # update global
+    return max(left, right) + 1             # return up
+
+# Tree BFS — level-order
+queue = deque([root])
+while queue:
+    for _ in range(len(queue)):
+        node = queue.popleft()
+        if node.left:  queue.append(node.left)
+        if node.right: queue.append(node.right)
+
+# ListNode definition
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+# Linked list traversal
+curr = head
+while curr:
+    # process curr.val
+    curr = curr.next
+
+# Dummy node pattern (avoids head edge cases)
+dummy = ListNode(0, head)
+prev = dummy
+# ... modify list ...
+return dummy.next
+
+# Slow/fast pointer (find middle)
+slow = fast = head
+while fast and fast.next:
+    slow = slow.next
+    fast = fast.next.next
+# slow is at the middle`,
+    relatedProblems: [
+      { name: "Diameter of Binary Tree", slug: "diameter-of-binary-tree" },
+      { name: "Lowest Common Ancestor", slug: "lowest-common-ancestor-of-a-binary-tree" },
+      { name: "Validate BST", slug: "validate-binary-search-tree" },
+      { name: "Reverse Linked List", slug: "reverse-linked-list" },
+      { name: "Merge Two Sorted Lists", slug: "merge-two-sorted-lists" },
+      { name: "Reorder List", slug: "reorder-list" },
+    ],
+  },
+];

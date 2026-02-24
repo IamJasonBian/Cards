@@ -5,6 +5,7 @@ import type { Pattern, Problem } from "./data/patterns";
 import { StatsGrid } from "./components/StatsGrid";
 import { PatternCard } from "./components/PatternCard";
 import { InterviewChecklist } from "./components/InterviewChecklist";
+import { DSReference } from "./components/DSReference";
 import { PatternSidebar } from "./components/PatternSidebar";
 import { PracticeSetView } from "./components/PracticeSetView";
 
@@ -127,6 +128,8 @@ function App() {
                   <PatternCard key={pattern.id} pattern={pattern} />
                 ))}
               </div>
+
+              <DSReference />
 
               <InterviewChecklist />
 
