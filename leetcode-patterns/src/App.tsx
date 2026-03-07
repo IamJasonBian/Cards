@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Code, Filter } from "lucide-react";
+import { Code, Filter, Zap } from "lucide-react";
 import { patterns, tags } from "./data/patterns";
 import type { Pattern, Problem } from "./data/patterns";
 import { StatsGrid } from "./components/StatsGrid";
@@ -8,6 +8,7 @@ import { InterviewChecklist } from "./components/InterviewChecklist";
 import { DSReference } from "./components/DSReference";
 import { PatternSidebar } from "./components/PatternSidebar";
 import { PracticeSetView } from "./components/PracticeSetView";
+import { WordHunt } from "./components/WordHunt";
 
 function getRelatedProblems(
   selected: Pattern,
@@ -37,6 +38,7 @@ function getRelatedProblems(
 }
 
 function App() {
+  const [view, setView] = useState<"patterns" | "speed-apps">("patterns");
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [selectedPatternId, setSelectedPatternId] = useState<number | null>(
     null
@@ -70,19 +72,48 @@ function App() {
           <h1 className="text-xl font-bold text-gray-900">
             LeetCode Patterns
           </h1>
+
+          <div className="flex gap-1 ml-6">
+            <button
+              onClick={() => { setView("patterns"); clearSelection(); }}
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
+                view === "patterns"
+                  ? "bg-indigo-100 text-indigo-700"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              Patterns
+            </button>
+            <button
+              onClick={() => { setView("speed-apps"); clearSelection(); }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
+                view === "speed-apps"
+                  ? "bg-indigo-100 text-indigo-700"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              <Zap size={14} />
+              Speed Apps
+            </button>
+          </div>
+
           <span className="ml-auto text-sm text-gray-400">slenderman73</span>
         </div>
       </nav>
 
       <div className="flex">
-        <PatternSidebar
-          patterns={patterns}
-          selectedId={selectedPatternId}
-          onSelect={selectPattern}
-        />
+        {view === "patterns" && (
+          <PatternSidebar
+            patterns={patterns}
+            selectedId={selectedPatternId}
+            onSelect={selectPattern}
+          />
+        )}
 
         <main className="flex-1 min-w-0 px-6 py-8">
-          {selectedPattern ? (
+          {view === "speed-apps" ? (
+            <WordHunt />
+          ) : selectedPattern ? (
             <PracticeSetView
               pattern={selectedPattern}
               relatedProblems={relatedProblems}
