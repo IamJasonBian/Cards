@@ -1,4 +1,5 @@
-import { ArrowLeft, ExternalLink, Hash, Clock, Zap } from "lucide-react";
+import { ArrowLeft, ExternalLink, Hash, Clock, Zap, RotateCw } from "lucide-react";
+import { useEffect, useState } from "react";
 import { tagColors } from "../data/patterns";
 import type { Pattern, Problem } from "../data/patterns";
 
@@ -6,12 +7,25 @@ export function PracticeSetView({
   pattern,
   relatedProblems,
   onBack,
+  onRotate,
 }: {
   pattern: Pattern;
   relatedProblems: Problem[];
   onBack: () => void;
+  onRotate: () => void;
 }) {
   const coreProblems = pattern.problems.slice(0, 10);
+  const [spinning, setSpinning] = useState(false);
+
+  useEffect(() => {
+    setSpinning(true);
+    const t = setTimeout(() => setSpinning(false), 500);
+    return () => clearTimeout(t);
+  }, [relatedProblems]);
+
+  function handleRotate() {
+    onRotate();
+  }
 
   return (
     <div>
@@ -65,9 +79,19 @@ export function PracticeSetView({
 
       {relatedProblems.length > 0 && (
         <div className="bg-white rounded-xl border border-gray-200 p-5 mb-4">
-          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">
-            Related Problems — {pattern.tag} tag ({relatedProblems.length})
-          </p>
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+              Related Problems — {pattern.tag} tag ({relatedProblems.length})
+            </p>
+            <button
+              onClick={handleRotate}
+              title="Rotate to a new set"
+              className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs text-violet-500 hover:text-violet-700 hover:bg-violet-50 border border-transparent hover:border-violet-200 transition-colors cursor-pointer"
+            >
+              <RotateCw size={12} className={spinning ? "animate-spin" : ""} />
+              Rotate
+            </button>
+          </div>
           <div className="flex flex-wrap gap-1.5">
             {relatedProblems.map((p) => (
               <a
