@@ -59,6 +59,11 @@ function App() {
     setRelatedProblems(getRelatedProblems(pattern, patterns, 5));
   }
 
+  function rotateRelatedProblems() {
+    if (!selectedPattern) return;
+    setRelatedProblems(getRelatedProblems(selectedPattern, patterns, 5));
+  }
+
   function clearSelection() {
     setSelectedPatternId(null);
     setRelatedProblems([]);
@@ -118,6 +123,7 @@ function App() {
               pattern={selectedPattern}
               relatedProblems={relatedProblems}
               onBack={clearSelection}
+              onRotate={rotateRelatedProblems}
             />
           ) : (
             <>
