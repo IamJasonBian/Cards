@@ -1,4 +1,5 @@
 import { ArrowLeft, ExternalLink, Hash, Clock, Zap, RotateCw } from "lucide-react";
+import { useEffect, useState } from "react";
 import { tagColors } from "../data/patterns";
 import type { Pattern, Problem } from "../data/patterns";
 
@@ -14,6 +15,17 @@ export function PracticeSetView({
   onRotate: () => void;
 }) {
   const coreProblems = pattern.problems.slice(0, 10);
+  const [spinning, setSpinning] = useState(false);
+
+  useEffect(() => {
+    setSpinning(true);
+    const t = setTimeout(() => setSpinning(false), 500);
+    return () => clearTimeout(t);
+  }, [relatedProblems]);
+
+  function handleRotate() {
+    onRotate();
+  }
 
   return (
     <div>
@@ -72,11 +84,11 @@ export function PracticeSetView({
               Related Problems — {pattern.tag} tag ({relatedProblems.length})
             </p>
             <button
-              onClick={onRotate}
+              onClick={handleRotate}
               title="Rotate to a new set"
               className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs text-violet-500 hover:text-violet-700 hover:bg-violet-50 border border-transparent hover:border-violet-200 transition-colors cursor-pointer"
             >
-              <RotateCw size={12} />
+              <RotateCw size={12} className={spinning ? "animate-spin" : ""} />
               Rotate
             </button>
           </div>
