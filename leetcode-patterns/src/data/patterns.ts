@@ -1301,6 +1301,7 @@ export interface DSRefEntry {
   name: string;
   color: string;
   code: string;
+  docUrl: string;
   relatedProblems: { name: string; slug: string }[];
 }
 
@@ -1308,6 +1309,7 @@ export const dsReference: DSRefEntry[] = [
   {
     name: "dict / defaultdict",
     color: "bg-purple-100 text-purple-700 border-purple-200",
+    docUrl: "https://docs.python.org/3/library/collections.html#collections.defaultdict",
     code: `# Basic dict — O(1) lookup, insert, delete
 seen = {}
 seen[key] = value
@@ -1344,6 +1346,7 @@ index = {val: i for i, val in enumerate(nums)}`,
   {
     name: 'str — "".join(sorted(word))',
     color: "bg-lime-100 text-lime-700 border-lime-200",
+    docUrl: "https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str",
     code: `# Sorted string key (anagram grouping)
 key = "".join(sorted(word))       # "eat" -> "aet"
 groups[key].append(word)
@@ -1378,6 +1381,7 @@ word[:i] + c + word[i+1:]         # swap char at index i`,
   {
     name: "heapq (min-heap)",
     color: "bg-teal-100 text-teal-700 border-teal-200",
+    docUrl: "https://docs.python.org/3/library/heapq.html",
     code: `import heapq
 
 # Push / Pop — O(log n)
@@ -1421,6 +1425,7 @@ for val in heapq.merge(*lists):   # lazy merge`,
   {
     name: "Counter / frequency counting",
     color: "bg-orange-100 text-orange-700 border-orange-200",
+    docUrl: "https://docs.python.org/3/library/collections.html#collections.Counter",
     code: `from collections import Counter
 
 # Count elements — O(n)
@@ -1463,6 +1468,7 @@ count1 & count2                   # min of each element`,
   {
     name: "deque — queue / BFS",
     color: "bg-cyan-100 text-cyan-700 border-cyan-200",
+    docUrl: "https://docs.python.org/3/library/collections.html#collections.deque",
     code: `from collections import deque
 
 # BFS level-order traversal
@@ -1506,6 +1512,7 @@ for i, num in enumerate(nums):
   {
     name: "set()",
     color: "bg-pink-100 text-pink-700 border-pink-200",
+    docUrl: "https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset",
     code: `# O(1) lookup, add, remove (hash-based)
 visited = set()
 visited.add(node)
@@ -1549,6 +1556,7 @@ key = frozenset(items)`,
   {
     name: "Grid DFS / BFS traversal",
     color: "bg-rose-100 text-rose-700 border-rose-200",
+    docUrl: "https://docs.python.org/3/library/collections.html#collections.deque",
     code: `# 4-directional movement
 directions = [(0,1), (0,-1), (1,0), (-1,0)]
 
@@ -1595,6 +1603,7 @@ for r in range(rows):
   {
     name: "TreeNode / ListNode access",
     color: "bg-green-100 text-green-700 border-green-200",
+    docUrl: "https://docs.python.org/3/tutorial/classes.html",
     code: `# TreeNode definition
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -1649,6 +1658,208 @@ while fast and fast.next:
       { name: "Reverse Linked List", slug: "reverse-linked-list" },
       { name: "Merge Two Sorted Lists", slug: "merge-two-sorted-lists" },
       { name: "Reorder List", slug: "reorder-list" },
+    ],
+  },
+  {
+    name: "@dataclass / namedtuple",
+    color: "bg-violet-100 text-violet-700 border-violet-200",
+    docUrl: "https://docs.python.org/3/library/dataclasses.html",
+    code: `from dataclasses import dataclass, field
+
+# Basic dataclass — auto __init__, __repr__, __eq__
+@dataclass
+class Point:
+    x: int
+    y: int
+
+# Frozen (hashable, usable as dict key or in set)
+@dataclass(frozen=True)
+class State:
+    row: int
+    col: int
+    keys: frozenset
+
+visited = set()
+visited.add(State(0, 0, frozenset()))
+
+# Ordered comparison (for heapq)
+@dataclass(order=True)
+class Entry:
+    priority: int
+    value: str = field(compare=False)
+
+# Default factory for mutable defaults
+@dataclass
+class Graph:
+    adj: dict = field(default_factory=dict)
+
+# NamedTuple — lightweight alternative
+from typing import NamedTuple
+
+class Edge(NamedTuple):
+    src: int
+    dst: int
+    weight: int
+
+edges.sort(key=lambda e: e.weight)  # Kruskal's`,
+    relatedProblems: [
+      { name: "Design Twitter", slug: "design-twitter" },
+      { name: "Shortest Path to Get All Keys", slug: "shortest-path-to-get-all-keys" },
+      { name: "Serialize and Deserialize Binary Tree", slug: "serialize-and-deserialize-binary-tree" },
+      { name: "LRU Cache", slug: "lru-cache" },
+    ],
+  },
+  {
+    name: "classes / OOP patterns",
+    color: "bg-amber-100 text-amber-700 border-amber-200",
+    docUrl: "https://docs.python.org/3/tutorial/classes.html",
+    code: `# Union-Find with path compression + rank
+class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+
+    def union(self, x, y):
+        px, py = self.find(x), self.find(y)
+        if px == py: return False
+        if self.rank[px] < self.rank[py]:
+            px, py = py, px
+        self.parent[py] = px
+        if self.rank[px] == self.rank[py]:
+            self.rank[px] += 1
+        return True
+
+# Trie
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.is_end = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word):
+        node = self.root
+        for ch in word:
+            if ch not in node.children:
+                node.children[ch] = TrieNode()
+            node = node.children[ch]
+        node.is_end = True
+
+    def search(self, word):
+        node = self.root
+        for ch in word:
+            if ch not in node.children:
+                return False
+            node = node.children[ch]
+        return node.is_end`,
+    relatedProblems: [
+      { name: "Number of Connected Components", slug: "number-of-connected-components-in-an-undirected-graph" },
+      { name: "Redundant Connection", slug: "redundant-connection" },
+      { name: "Implement Trie", slug: "implement-trie-prefix-tree" },
+      { name: "Word Search II", slug: "word-search-ii" },
+      { name: "Accounts Merge", slug: "accounts-merge" },
+    ],
+  },
+  {
+    name: "sortedcontainers / bisect",
+    color: "bg-sky-100 text-sky-700 border-sky-200",
+    docUrl: "https://docs.python.org/3/library/bisect.html",
+    code: `import bisect
+
+# Binary search on sorted list — O(log n)
+i = bisect.bisect_left(arr, target)   # leftmost insert pos
+j = bisect.bisect_right(arr, target)  # rightmost insert pos
+
+# Check if target exists
+if i < len(arr) and arr[i] == target: ...
+
+# Insert maintaining sorted order
+bisect.insort(arr, val)               # O(n) due to shift
+
+# SortedList — O(log n) add/remove/index
+from sortedcontainers import SortedList
+sl = SortedList()
+sl.add(val)                           # O(log n)
+sl.remove(val)                        # O(log n)
+sl[0]                                 # min element
+sl[-1]                                # max element
+sl.bisect_left(val)                   # index of val
+
+# Sliding window with sorted structure
+sl = SortedList()
+for i, num in enumerate(nums):
+    sl.add(num)
+    if len(sl) > k:
+        sl.remove(nums[i - k])
+    # sl[0] is window min, sl[-1] is window max
+
+# SortedDict for ordered key-value
+from sortedcontainers import SortedDict
+sd = SortedDict()
+sd[key] = val
+sd.peekitem(0)                        # smallest key
+sd.peekitem(-1)                       # largest key`,
+    relatedProblems: [
+      { name: "Count of Smaller Numbers After Self", slug: "count-of-smaller-numbers-after-self" },
+      { name: "My Calendar I", slug: "my-calendar-i" },
+      { name: "Contains Duplicate III", slug: "contains-duplicate-iii" },
+      { name: "Find Median from Data Stream", slug: "find-median-from-data-stream" },
+    ],
+  },
+  {
+    name: "functools / itertools",
+    color: "bg-fuchsia-100 text-fuchsia-700 border-fuchsia-200",
+    docUrl: "https://docs.python.org/3/library/functools.html",
+    code: `from functools import lru_cache, cache
+
+# Memoized recursion (top-down DP)
+@cache                                # Python 3.9+
+def dp(i, j):
+    if i == 0: return j
+    if j == 0: return i
+    return min(dp(i-1, j), dp(i, j-1), dp(i-1, j-1)) + cost
+
+# lru_cache with size limit
+@lru_cache(maxsize=None)              # unlimited cache
+def fib(n):
+    if n < 2: return n
+    return fib(n-1) + fib(n-2)
+
+# functools.reduce — accumulate values
+from functools import reduce
+total = reduce(lambda a, b: a * b, nums)
+
+# itertools essentials
+from itertools import (
+    combinations,     # C(n,k) — choose k from n
+    permutations,     # P(n,k) — ordered arrangements
+    product,          # cartesian product (nested loops)
+    accumulate,       # running prefix sums / ops
+    groupby,          # group consecutive equal elements
+    chain,            # flatten iterables
+)
+
+# Combinations / permutations
+list(combinations([1,2,3], 2))       # [(1,2),(1,3),(2,3)]
+list(permutations([1,2,3], 2))       # [(1,2),(1,3),(2,1),...]
+
+# Prefix sums via accumulate
+from itertools import accumulate
+prefix = list(accumulate(nums))       # running sum`,
+    relatedProblems: [
+      { name: "Climbing Stairs", slug: "climbing-stairs" },
+      { name: "Edit Distance", slug: "edit-distance" },
+      { name: "Coin Change", slug: "coin-change" },
+      { name: "Subsets", slug: "subsets" },
+      { name: "Permutations", slug: "permutations" },
+      { name: "Letter Combinations of a Phone Number", slug: "letter-combinations-of-a-phone-number" },
     ],
   },
 ];

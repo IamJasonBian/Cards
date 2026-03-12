@@ -23,11 +23,23 @@ function DSCard({ entry }: { entry: DSRefEntry }) {
             {entry.relatedProblems.length} key problems
           </span>
         </div>
-        {open ? (
-          <ChevronUp size={18} className="text-gray-400" />
-        ) : (
-          <ChevronDown size={18} className="text-gray-400" />
-        )}
+        <div className="flex items-center gap-2">
+          <a
+            href={entry.docUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium text-blue-600 hover:bg-blue-50 transition-colors"
+          >
+            Python Docs
+            <ExternalLink size={10} />
+          </a>
+          {open ? (
+            <ChevronUp size={18} className="text-gray-400" />
+          ) : (
+            <ChevronDown size={18} className="text-gray-400" />
+          )}
+        </div>
       </button>
 
       {open && (
