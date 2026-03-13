@@ -1270,6 +1270,127 @@ def topoSort(n, prereqs):
     optimalRuntime: "O(V + E) time, O(V + E) space",
     optimalNote: "BFS (Kahn's) is iterative and gives level-order (useful for parallel scheduling). DFS post-order is recursive and detects cycles via 3-color marking. Both are O(V+E).",
   },
+  {
+    id: 22,
+    name: "Task Dependency System (ToDo List)",
+    solveCount: 0,
+    tag: "OOD",
+    problems: [
+      { name: "Course Schedule", slug: "course-schedule" },
+      { name: "Course Schedule II", slug: "course-schedule-ii" },
+      { name: "Design Task Manager", slug: "design-task-manager" },
+    ],
+    techniques: ["auto-incrementing IDs", "dependency graph (reverse map)", "cascading failure (recursive DFS)", "unblocking (check all parents)", "topological sort (Kahn's)", "transition validation (state machine)"],
+    dataStructures: ["Dict[int, Task] (task store)", "Dict[int, Set[int]] (dependents reverse map)", "Set[int] (dependencies)", "deque (Kahn's BFS queue)"],
+    code: `from enum import Enum
+from dataclasses import dataclass, field
+
+class TaskStatus(Enum):
+    READY = "READY"
+    IN_PROGRESS = "IN_PROGRESS"
+    SUCCEEDED = "SUCCEEDED"
+    FAILED = "FAILED"
+    BLOCKED = "BLOCKED"
+
+@dataclass
+class Task:
+    task_id: int
+    description: str
+    status: TaskStatus = TaskStatus.READY
+    dependencies: set = field(default_factory=set)
+
+class ToDoList:
+    def __init__(self):
+        self.tasks = {}           # task_id -> Task
+        self.dependents = {}      # parent_id -> {child_ids}
+        self._next_id = 1
+
+    def add_task(self, description, dependencies=None):
+        task_id = self._next_id
+        self._next_id += 1
+        dep_set = set(dependencies or [])
+        for dep_id in dep_set:
+            if dep_id not in self.tasks:
+                raise ValueError(f"Dep {dep_id} missing")
+        status = TaskStatus.READY
+        if dep_set and not all(
+            self.tasks[d].status == TaskStatus.SUCCEEDED
+            for d in dep_set
+        ):
+            status = TaskStatus.BLOCKED
+        task = Task(task_id, description, status, dep_set)
+        self.tasks[task_id] = task
+        for d in dep_set:
+            self.dependents.setdefault(d, set()).add(task_id)
+        return task
+
+    def update_status(self, task_id, new_status):
+        task = self.tasks[task_id]
+        task.status = new_status
+        if new_status == TaskStatus.SUCCEEDED:
+            self._unblock(task_id)
+        elif new_status == TaskStatus.FAILED:
+            self._cascade_fail(task_id)
+
+    def _unblock(self, task_id):
+        for cid in self.dependents.get(task_id, []):
+            c = self.tasks[cid]
+            if c.status == TaskStatus.BLOCKED and all(
+                self.tasks[d].status == TaskStatus.SUCCEEDED
+                for d in c.dependencies
+            ):
+                c.status = TaskStatus.READY
+
+    def _cascade_fail(self, task_id):
+        for cid in self.dependents.get(task_id, []):
+            c = self.tasks[cid]
+            if c.status != TaskStatus.FAILED:
+                c.status = TaskStatus.FAILED
+                self._cascade_fail(cid)`,
+    runtime: "add: O(D), get: O(1), update: O(C*D) unblock / O(N) cascade, topo: O(N+E)",
+    optimalCode: `# Part 4: Tags, priority, topo sort, transition validation
+VALID_TRANSITIONS = {
+    TaskStatus.READY: {TaskStatus.IN_PROGRESS, TaskStatus.FAILED},
+    TaskStatus.IN_PROGRESS: {TaskStatus.SUCCEEDED, TaskStatus.FAILED},
+    TaskStatus.BLOCKED: {TaskStatus.READY, TaskStatus.FAILED},
+    TaskStatus.SUCCEEDED: set(),
+    TaskStatus.FAILED: set(),
+}
+
+def update_status(self, task_id, new_status):
+    task = self.tasks[task_id]
+    if new_status not in VALID_TRANSITIONS[task.status]:
+        raise ValueError("Invalid transition")
+    task.status = new_status
+    if new_status == TaskStatus.SUCCEEDED:
+        self._unblock(task_id)
+    elif new_status == TaskStatus.FAILED:
+        self._cascade_fail(task_id)
+
+def get_topological_order(self):
+    in_deg = {tid: len(t.dependencies)
+              for tid, t in self.tasks.items()}
+    queue = [t for t, d in in_deg.items() if d == 0]
+    result = []
+    while queue:
+        cur = queue.pop(0)
+        result.append(cur)
+        for cid in self.dependents.get(cur, []):
+            in_deg[cid] -= 1
+            if in_deg[cid] == 0:
+                queue.append(cid)
+    if len(result) != len(self.tasks):
+        raise ValueError("Cycle detected")
+    return result
+
+def get_ready_tasks_sorted_by_priority(self):
+    ready = [t for t in self.tasks.values()
+             if t.status == TaskStatus.READY]
+    return sorted(ready, key=lambda t: t.priority,
+                  reverse=True)`,
+    optimalRuntime: "topo: O(N+E), priority sort: O(R log R)",
+    optimalNote: "4-part progressive problem: (1) CRUD with auto-ID, (2) dependency graph with cascade failure, (3) status filtering, (4) tags/priority/topo sort. Key gotchas: diamond cascade needs 'if not FAILED' guard, IDs increment even on failed adds, transition validation makes SUCCEEDED/FAILED terminal.",
+  },
 ];
 
 export const tags = [...new Set(patterns.map((p) => p.tag))];
@@ -1286,6 +1407,7 @@ export const tagColors: Record<string, string> = {
   "Linked List": "bg-indigo-100 text-indigo-700",
   Matrix: "bg-rose-100 text-rose-700",
   String: "bg-lime-100 text-lime-700",
+  OOD: "bg-slate-100 text-slate-700",
 };
 
 export const stats = {
