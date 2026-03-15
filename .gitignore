@@ -31,6 +31,19 @@ wheels/
 venv/
 env/
 
+# Node dependencies
+/node_modules
+test_node_env/node_modules
+
+# Emacs
+*~
+
 # System Files
 .DS_Store
 Thumbs.db
+*.icloud
+
+# Build artifacts
+sicpjs.zip
+test_node_env/expect.txt
+test_node_env/result.txt
