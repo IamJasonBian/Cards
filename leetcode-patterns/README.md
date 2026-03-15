@@ -1,4 +1,25 @@
-# React + TypeScript + Vite
+# LeetCode Patterns
+
+A comprehensive collection of LeetCode patterns, interview preparation resources, and practice problems.
+
+## Features
+
+- **21 Core Patterns**: Organized coding patterns with curated problem sets
+- **Speed Apps**: Interactive tools like Word Hunt Solver
+- **Interview Binaries**: Collection of interview problems from CoderPad and other platforms (hidden page, accessible via direct link)
+- **Interview Checklists**: Structured checklists for coding and system design interviews
+- **DS Reference**: Quick reference for data structures and algorithms
+
+## Accessing Hidden Pages
+
+### Interview Binaries Page
+The Interview Binaries page is intentionally hidden from the main navigation but can be accessed via:
+- Direct URL: `https://your-site.netlify.app/#interview-binaries`
+- Or locally: `http://localhost:5173/#interview-binaries`
+
+This page contains links to CoderPad problems and other interview practice materials stored in the repository.
+
+## Development
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

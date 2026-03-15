@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Code, Filter, Zap } from "lucide-react";
 import { patterns, tags } from "./data/patterns";
 import type { Pattern, Problem } from "./data/patterns";
@@ -9,6 +9,7 @@ import { DSReference } from "./components/DSReference";
 import { PatternSidebar } from "./components/PatternSidebar";
 import { PracticeSetView } from "./components/PracticeSetView";
 import { WordHunt } from "./components/WordHunt";
+import { InterviewBinaries } from "./components/InterviewBinaries";
 
 function getRelatedProblems(
   selected: Pattern,
@@ -38,7 +39,7 @@ function getRelatedProblems(
 }
 
 function App() {
-  const [view, setView] = useState<"patterns" | "speed-apps">("patterns");
+  const [view, setView] = useState<"patterns" | "speed-apps" | "interview-binaries">("patterns");
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [selectedPatternId, setSelectedPatternId] = useState<number | null>(
     null
@@ -68,6 +69,22 @@ function App() {
     setSelectedPatternId(null);
     setRelatedProblems([]);
   }
+
+  // Check URL hash on mount to enable direct linking to interview binaries
+  useEffect(() => {
+    if (window.location.hash === "#interview-binaries") {
+      setView("interview-binaries");
+    }
+  }, []);
+
+  // Update URL hash when view changes
+  useEffect(() => {
+    if (view === "interview-binaries") {
+      window.history.replaceState(null, "", "#interview-binaries");
+    } else if (window.location.hash === "#interview-binaries") {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  }, [view]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -118,6 +135,8 @@ function App() {
         <main className="flex-1 min-w-0 px-6 py-8">
           {view === "speed-apps" ? (
             <WordHunt />
+          ) : view === "interview-binaries" ? (
+            <InterviewBinaries />
           ) : selectedPattern ? (
             <PracticeSetView
               pattern={selectedPattern}

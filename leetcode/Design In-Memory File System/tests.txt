@@ -17,3 +17,6 @@
 ["FileSystem","mkdir","mkdir","addContentToFile","readContentFromFile","ls","ls","ls"]
 [[],["/a"],["/a"],["/file","content"],["/file"],["/"],["/a"],["/bogus/path"]]
 [null,null,null,null,"content",["a","file"],[],[]]
+
+["FileSystem","mkdir","ls","ls","mkdir","ls","ls","addContentToFile","readContentFromFile","ls","readContentFromFile"]
+[[],["/zijzllb"],["/"],["/zijzllb"],["/r"],["/"],["/r"],["/zijzllb/hfktg","d"],["/zijzllb/hfktg"],["/"],["/zijzllb/hfktg"]]
