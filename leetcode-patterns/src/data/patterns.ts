@@ -1391,6 +1391,195 @@ def get_ready_tasks_sorted_by_priority(self):
     optimalRuntime: "topo: O(N+E), priority sort: O(R log R)",
     optimalNote: "4-part progressive problem: (1) CRUD with auto-ID, (2) dependency graph with cascade failure, (3) status filtering, (4) tags/priority/topo sort. Key gotchas: diamond cascade needs 'if not FAILED' guard, IDs increment even on failed adds, transition validation makes SUCCEEDED/FAILED terminal.",
   },
+  {
+    id: 23,
+    name: "Binary Tree Side Views (Right & Left)",
+    solveCount: 2,
+    tag: "Tree",
+    problems: [
+      { name: "Binary Tree Right Side View", slug: "binary-tree-right-side-view" },
+      { name: "Binary Tree Level Order Traversal", slug: "binary-tree-level-order-traversal" },
+      { name: "Binary Tree Zigzag Level Order Traversal", slug: "binary-tree-zigzag-level-order-traversal" },
+      { name: "Average of Levels in Binary Tree", slug: "average-of-levels-in-binary-tree" },
+      { name: "Find Largest Value in Each Tree Row", slug: "find-largest-value-in-each-tree-row" },
+      { name: "Populating Next Right Pointers in Each Node", slug: "populating-next-right-pointers-in-each-node" },
+      { name: "Populating Next Right Pointers in Each Node II", slug: "populating-next-right-pointers-in-each-node-ii" },
+    ],
+    techniques: ["BFS level-order (last node = right view, first node = left view)", "DFS right-first pre-order (depth tracks first-seen node)", "deque for O(1) popleft"],
+    dataStructures: ["deque", "recursion stack", "level_size snapshot"],
+    code: `# BFS — Right Side View (last node each level)
+from collections import deque
+def rightSideView(root):
+    if not root: return []
+    result, queue = [], deque([root])
+    while queue:
+        level_size = len(queue)
+        for i in range(level_size):
+            node = queue.popleft()
+            if i == level_size - 1:   # last = visible from right
+                result.append(node.val)
+            if node.left:  queue.append(node.left)
+            if node.right: queue.append(node.right)
+    return result
+
+# Left Side View: change condition to i == 0`,
+    runtime: "O(n) time, O(n) space (queue holds one full level)",
+    optimalCode: `# DFS — Right Side View (right-first pre-order)
+def rightSideView(root):
+    result = []
+    def dfs(node, depth):
+        if not node: return
+        if depth == len(result):      # first visit to this depth
+            result.append(node.val)
+        dfs(node.right, depth + 1)   # right subtree first
+        dfs(node.left,  depth + 1)
+    dfs(root, 0)
+    return result
+
+# Left Side View: swap dfs order → left first, same depth check`,
+    optimalRuntime: "O(n) time, O(h) space (recursion stack = height)",
+    optimalNote: "BFS is more intuitive; DFS is O(h) space instead of O(n). The key insight: right-side view = first node visited at each depth when traversing right-first. Left-side view = mirror (left-first). Both use the same depth == len(result) trick.",
+  },
+  {
+    id: 24,
+    name: "BST Iterator",
+    solveCount: 1,
+    tag: "Tree",
+    problems: [
+      { name: "Binary Search Tree Iterator", slug: "binary-search-tree-iterator" },
+      { name: "Kth Smallest Element in a BST", slug: "kth-smallest-element-in-a-bst" },
+      { name: "Validate Binary Search Tree", slug: "validate-binary-search-tree" },
+      { name: "Convert BST to Greater Tree", slug: "convert-bst-to-greater-tree" },
+      { name: "Inorder Successor in BST", slug: "inorder-successor-in-bst" },
+      { name: "All Elements in Two Binary Search Trees", slug: "all-elements-in-two-binary-search-trees" },
+    ],
+    techniques: ["explicit stack replaces call stack", "push-left-spine: push all nodes from current down to leftmost", "each node pushed/popped exactly once → O(1) amortized next()", "O(h) space at all times"],
+    dataStructures: ["list as stack", "BST property (in-order = sorted)"],
+    code: `class BSTIterator:
+    def __init__(self, root):
+        self.stack = []
+        self._push_left(root)
+
+    def _push_left(self, node):
+        while node:
+            self.stack.append(node)
+            node = node.left
+
+    def next(self) -> int:
+        node = self.stack.pop()        # smallest remaining
+        self._push_left(node.right)    # prepare right subtree
+        return node.val
+
+    def hasNext(self) -> bool:
+        return bool(self.stack)`,
+    runtime: "O(h) space, O(1) amortized next(), O(1) hasNext()",
+    optimalCode: `# Bidirectional BST Iterator (next + prev)
+class BSTIteratorBidirectional:
+    def __init__(self, root):
+        self._asc, self._desc = [], []
+        self._push_left(root)
+        self._push_right(root)
+
+    def _push_left(self, node):
+        while node:
+            self._asc.append(node); node = node.left
+
+    def _push_right(self, node):
+        while node:
+            self._desc.append(node); node = node.right
+
+    def next(self) -> int:
+        node = self._asc.pop()
+        self._push_left(node.right)
+        return node.val
+
+    def prev(self) -> int:
+        node = self._desc.pop()
+        self._push_right(node.left)
+        return node.val`,
+    optimalRuntime: "O(h) space per stack, O(1) amortized per call",
+    optimalNote: "Core trick: maintain a stack holding the 'left spine' from the current position. next() pops the top (smallest), then pushes left spine of its right child. Each node is pushed and popped exactly once across all n calls → O(n) total, O(1) amortized. Bidirectional: mirror with a second stack for descending.",
+  },
+  {
+    id: 25,
+    name: "OG Binary Tree Problems",
+    solveCount: 12,
+    tag: "Tree",
+    problems: [
+      { name: "Maximum Depth of Binary Tree", slug: "maximum-depth-of-binary-tree" },
+      { name: "Same Tree", slug: "same-tree" },
+      { name: "Symmetric Tree", slug: "symmetric-tree" },
+      { name: "Binary Tree Level Order Traversal", slug: "binary-tree-level-order-traversal" },
+      { name: "Path Sum", slug: "path-sum" },
+      { name: "Path Sum II", slug: "path-sum-ii" },
+      { name: "Binary Tree Right Side View", slug: "binary-tree-right-side-view" },
+      { name: "Invert Binary Tree", slug: "invert-binary-tree" },
+      { name: "Diameter of Binary Tree", slug: "diameter-of-binary-tree" },
+      { name: "Balanced Binary Tree", slug: "balanced-binary-tree" },
+      { name: "Lowest Common Ancestor of a Binary Tree", slug: "lowest-common-ancestor-of-a-binary-tree" },
+      { name: "Binary Tree Maximum Path Sum", slug: "binary-tree-maximum-path-sum" },
+      { name: "Serialize and Deserialize Binary Tree", slug: "serialize-and-deserialize-binary-tree" },
+      { name: "Construct Binary Tree from Preorder and Inorder Traversal", slug: "construct-binary-tree-from-preorder-and-inorder-traversal" },
+      { name: "Validate Binary Search Tree", slug: "validate-binary-search-tree" },
+      { name: "Binary Search Tree Iterator", slug: "binary-search-tree-iterator" },
+      { name: "Kth Smallest Element in a BST", slug: "kth-smallest-element-in-a-bst" },
+      { name: "Binary Tree Inorder Traversal", slug: "binary-tree-inorder-traversal" },
+      { name: "Convert Sorted Array to Binary Search Tree", slug: "convert-sorted-array-to-binary-search-tree" },
+      { name: "Path Sum III", slug: "path-sum-iii" },
+    ],
+    techniques: [
+      "DFS post-order: height/diameter/LCA/max-path-sum",
+      "DFS pre-order: serialize, path building, flatten",
+      "DFS in-order: BST sorted order, validate BST",
+      "BFS level-order: views, min depth, level averages",
+      "Prefix sum map: path sum counting (LC 437)",
+      "Divide & conquer: reconstruct from traversal arrays",
+    ],
+    dataStructures: ["recursion stack", "deque (BFS)", "hashmap (prefix sums, inorder index)", "explicit stack (iterative)"],
+    code: `# Post-order template — height / diameter / LCA
+def dfs(node):
+    if not node:
+        return 0        # or None / (0,0) depending on problem
+    left  = dfs(node.left)
+    right = dfs(node.right)
+    # --- process at node after children ---
+    self.ans = max(self.ans, left + right)  # diameter
+    return max(left, right) + 1             # height
+
+# Pre-order template — path building
+def dfs(node, path):
+    if not node: return
+    path.append(node.val)
+    if not node.left and not node.right:
+        result.append(list(path))           # leaf reached
+    dfs(node.left,  path)
+    dfs(node.right, path)
+    path.pop()                              # backtrack`,
+    runtime: "O(n) time, O(h) space (h = height)",
+    optimalCode: `# BFS level-order — views / zigzag / averages
+from collections import deque
+def levelOrder(root):
+    if not root: return []
+    result, q = [], deque([root])
+    while q:
+        level = []
+        for _ in range(len(q)):           # snapshot size
+            node = q.popleft()
+            level.append(node.val)
+            if node.left:  q.append(node.left)
+            if node.right: q.append(node.right)
+        result.append(level)
+    return result
+
+# Validate BST — in-order boundary passing
+def isValidBST(root, lo=float('-inf'), hi=float('inf')):
+    if not root: return True
+    if not (lo < root.val < hi): return False
+    return (isValidBST(root.left, lo, root.val) and
+            isValidBST(root.right, root.val, hi))`,
+    optimalRuntime: "O(n) time, O(n) space for BFS; O(h) for DFS",
+    optimalNote: "Study order: (1) depth/height, (2) same/symmetric/invert, (3) level-order, (4) path sums, (5) views, (6) BST ops, (7) LCA, (8) construction/serialize. Every hard tree problem is a composition of these building blocks.",
+  },
 ];
 
 export const tags = [...new Set(patterns.map((p) => p.tag))];
