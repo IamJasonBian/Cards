@@ -22,18 +22,23 @@
 
 # Solution
 def computeGaps(planets):
-    results = []
+
+    # Entities
+    results: list[list[int]] = []
     boundaries: list[tuple[int, int]] = []
+    cursor: int = 0
+
     for loc, orbit in planets:
         boundaries.append((loc - orbit, loc + orbit))
     boundaries.sort()
-    cursor = 0
+
     for start, end in boundaries:
         if cursor < start:
             results.append([cursor, start])
         cursor = max(cursor, end)
     if cursor < 1000:
         results.append([cursor, 1000])
+
     return results
 
 
