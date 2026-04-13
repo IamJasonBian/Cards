@@ -1,11 +1,34 @@
-import { useState } from "react";
-import { ChevronDown, ChevronUp, Database, ExternalLink } from "lucide-react";
+import { useState, useCallback } from "react";
+import { ChevronDown, ChevronUp, Database, ExternalLink, RotateCw } from "lucide-react";
 import { dsReference } from "../data/patterns";
 import type { DSRefEntry } from "../data/patterns";
+
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+const VISIBLE_COUNT = 5;
 
 function DSCard({ entry }: { entry: DSRefEntry }) {
   const [open, setOpen] = useState(false);
   const [bgClass, textClass, borderClass] = entry.color.split(" ");
+  const [problems, setProblems] = useState(entry.relatedProblems.slice(0, VISIBLE_COUNT));
+  const [spinning, setSpinning] = useState(false);
+
+  const handleRotate = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setSpinning(true);
+      setProblems(shuffle(entry.relatedProblems).slice(0, VISIBLE_COUNT));
+      setTimeout(() => setSpinning(false), 500);
+    },
+    [entry.relatedProblems],
+  );
 
   return (
     <div className={`rounded-xl border ${borderClass} bg-white`}>
@@ -49,11 +72,23 @@ function DSCard({ entry }: { entry: DSRefEntry }) {
           </pre>
 
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-              Key Problems
-            </p>
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                Key Problems
+              </p>
+              {entry.relatedProblems.length > VISIBLE_COUNT && (
+                <button
+                  onClick={handleRotate}
+                  title="Shuffle to a new set"
+                  className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs text-violet-500 hover:text-violet-700 hover:bg-violet-50 border border-transparent hover:border-violet-200 transition-colors cursor-pointer"
+                >
+                  <RotateCw size={12} className={spinning ? "animate-spin" : ""} />
+                  Refresh
+                </button>
+              )}
+            </div>
             <div className="flex flex-wrap gap-1.5">
-              {entry.relatedProblems.map((p) => (
+              {problems.map((p) => (
                 <a
                   key={p.slug}
                   href={`https://leetcode.com/problems/${p.slug}/`}

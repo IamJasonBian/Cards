@@ -1890,6 +1890,79 @@ class Trie:
     ],
   },
   {
+    name: "TrieNode — prefix tree",
+    color: "bg-indigo-100 text-indigo-700 border-indigo-200",
+    docUrl: "https://docs.python.org/3/library/stdtypes.html#dict",
+    code: `# TrieNode definition
+class TrieNode:
+    def __init__(self):
+        self.children = {}        # char -> TrieNode
+        self.is_end = False
+
+# Insert a word — O(len(word))
+def insert(root, word):
+    node = root
+    for ch in word:
+        if ch not in node.children:
+            node.children[ch] = TrieNode()
+        node = node.children[ch]
+    node.is_end = True
+
+# Search exact word — O(len(word))
+def search(root, word):
+    node = root
+    for ch in word:
+        if ch not in node.children:
+            return False
+        node = node.children[ch]
+    return node.is_end
+
+# Starts-with prefix check — O(len(prefix))
+def starts_with(root, prefix):
+    node = root
+    for ch in prefix:
+        if ch not in node.children:
+            return False
+        node = node.children[ch]
+    return True
+
+# Word Search II — Trie + DFS backtracking
+def findWords(board, words):
+    root = TrieNode()
+    for w in words:
+        insert(root, w)
+
+    res, rows, cols = [], len(board), len(board[0])
+    def dfs(r, c, node, path):
+        ch = board[r][c]
+        if ch not in node.children: return
+        node = node.children[ch]
+        if node.is_end:
+            res.append(path + ch)
+            node.is_end = False       # de-dup
+        board[r][c] = '#'             # mark visited
+        for dr, dc in [(0,1),(0,-1),(1,0),(-1,0)]:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < rows and 0 <= nc < cols and board[nr][nc] != '#':
+                dfs(nr, nc, node, path + ch)
+        board[r][c] = ch              # backtrack
+
+    for r in range(rows):
+        for c in range(cols):
+            dfs(r, c, root, "")
+    return res`,
+    relatedProblems: [
+      { name: "Implement Trie", slug: "implement-trie-prefix-tree" },
+      { name: "Word Search II", slug: "word-search-ii" },
+      { name: "Design Add and Search Words", slug: "design-add-and-search-words-data-structure" },
+      { name: "Replace Words", slug: "replace-words" },
+      { name: "Word Break", slug: "word-break" },
+      { name: "Longest Word in Dictionary", slug: "longest-word-in-dictionary" },
+      { name: "Map Sum Pairs", slug: "map-sum-pairs" },
+      { name: "Maximum XOR of Two Numbers", slug: "maximum-xor-of-two-numbers-in-an-array" },
+    ],
+  },
+  {
     name: "sortedcontainers / bisect",
     color: "bg-sky-100 text-sky-700 border-sky-200",
     docUrl: "https://docs.python.org/3/library/bisect.html",
@@ -1982,6 +2055,161 @@ prefix = list(accumulate(nums))       # running sum`,
       { name: "Subsets", slug: "subsets" },
       { name: "Permutations", slug: "permutations" },
       { name: "Letter Combinations of a Phone Number", slug: "letter-combinations-of-a-phone-number" },
+    ],
+  },
+  {
+    name: "BFS — binary tree leftmost node",
+    color: "bg-emerald-100 text-emerald-700 border-emerald-200",
+    docUrl: "https://docs.python.org/3/library/collections.html#collections.deque",
+    code: `from collections import deque
+
+# BFS level-order — track leftmost node per level
+def leftmost_values(root):
+    if not root: return []
+    result = []
+    queue = deque([root])
+    while queue:
+        level_size = len(queue)
+        for i in range(level_size):
+            node = queue.popleft()
+            if i == 0:                    # first node = leftmost
+                result.append(node.val)
+            if node.left:  queue.append(node.left)
+            if node.right: queue.append(node.right)
+    return result
+
+# Rightmost node per level (Binary Tree Right Side View)
+def right_side_view(root):
+    if not root: return []
+    result = []
+    queue = deque([root])
+    while queue:
+        level_size = len(queue)
+        for i in range(level_size):
+            node = queue.popleft()
+            if i == level_size - 1:       # last node = rightmost
+                result.append(node.val)
+            if node.left:  queue.append(node.left)
+            if node.right: queue.append(node.right)
+    return result
+
+# Find bottom-left value (last level's leftmost)
+def bottom_left(root):
+    queue = deque([root])
+    node = root
+    while queue:
+        node = queue.popleft()
+        # Push right BEFORE left → last popped is bottom-left
+        if node.right: queue.append(node.right)
+        if node.left:  queue.append(node.left)
+    return node.val
+
+# Max width of binary tree (track position indices)
+def max_width(root):
+    if not root: return 0
+    max_w = 0
+    queue = deque([(root, 0)])            # (node, index)
+    while queue:
+        level_size = len(queue)
+        _, first_idx = queue[0]
+        for _ in range(level_size):
+            node, idx = queue.popleft()
+            if node.left:  queue.append((node.left,  2*idx))
+            if node.right: queue.append((node.right, 2*idx+1))
+        max_w = max(max_w, idx - first_idx + 1)
+    return max_w`,
+    relatedProblems: [
+      { name: "Binary Tree Level Order Traversal", slug: "binary-tree-level-order-traversal" },
+      { name: "Binary Tree Right Side View", slug: "binary-tree-right-side-view" },
+      { name: "Find Bottom Left Tree Value", slug: "find-bottom-left-tree-value" },
+      { name: "Maximum Width of Binary Tree", slug: "maximum-width-of-binary-tree" },
+      { name: "Binary Tree Zigzag Level Order", slug: "binary-tree-zigzag-level-order-traversal" },
+      { name: "Average of Levels in Binary Tree", slug: "average-of-levels-in-binary-tree" },
+      { name: "Populating Next Right Pointers", slug: "populating-next-right-pointers-in-each-node" },
+      { name: "Minimum Depth of Binary Tree", slug: "minimum-depth-of-binary-tree" },
+    ],
+  },
+  {
+    name: "Reverse Linked List",
+    color: "bg-red-100 text-red-700 border-red-200",
+    docUrl: "https://docs.python.org/3/tutorial/classes.html",
+    code: `# Iterative reverse — O(n) time, O(1) space
+def reverse(head):
+    prev = None
+    curr = head
+    while curr:
+        nxt = curr.next
+        curr.next = prev              # flip pointer
+        prev = curr
+        curr = nxt
+    return prev                       # new head
+
+# Recursive reverse
+def reverse_recursive(head):
+    if not head or not head.next:
+        return head
+    new_head = reverse_recursive(head.next)
+    head.next.next = head             # flip pointer
+    head.next = None                  # break old link
+    return new_head
+
+# Reverse between positions left..right (one-pass)
+def reverseBetween(head, left, right):
+    dummy = ListNode(0, head)
+    prev = dummy
+    for _ in range(left - 1):
+        prev = prev.next              # node before reversal
+    curr = prev.next
+    for _ in range(right - left):
+        nxt = curr.next
+        curr.next = nxt.next
+        nxt.next = prev.next
+        prev.next = nxt               # move nxt to front
+    return dummy.next
+
+# Reverse in k-groups
+def reverseKGroup(head, k):
+    dummy = ListNode(0, head)
+    prev_group = dummy
+    while True:
+        kth = prev_group
+        for _ in range(k):
+            kth = kth.next
+            if not kth: return dummy.next
+        group_next = kth.next
+        # reverse the group
+        prev, curr = kth.next, prev_group.next
+        while curr != group_next:
+            nxt = curr.next
+            curr.next = prev
+            prev = curr
+            curr = nxt
+        tmp = prev_group.next         # will be group tail
+        prev_group.next = kth         # point to new group head
+        prev_group = tmp              # advance to group tail
+
+# Palindrome check using reverse
+def isPalindrome(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    rev = reverse(slow)               # reverse second half
+    while rev:
+        if head.val != rev.val:
+            return False
+        head = head.next
+        rev = rev.next
+    return True`,
+    relatedProblems: [
+      { name: "Reverse Linked List", slug: "reverse-linked-list" },
+      { name: "Reverse Linked List II", slug: "reverse-linked-list-ii" },
+      { name: "Palindrome Linked List", slug: "palindrome-linked-list" },
+      { name: "Reverse Nodes in k-Group", slug: "reverse-nodes-in-k-group" },
+      { name: "Swap Nodes in Pairs", slug: "swap-nodes-in-pairs" },
+      { name: "Reorder List", slug: "reorder-list" },
+      { name: "Add Two Numbers", slug: "add-two-numbers" },
+      { name: "Odd Even Linked List", slug: "odd-even-linked-list" },
     ],
   },
 ];
