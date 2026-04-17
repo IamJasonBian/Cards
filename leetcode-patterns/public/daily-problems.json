@@ -1,0 +1,18 @@
+{
+  "updatedAt": "2026-04-17",
+  "easy": {
+    "title": "Number of Bit Changes to Make Two Integers Equal",
+    "titleSlug": "number-of-bit-changes-to-make-two-integers-equal",
+    "difficulty": "Easy"
+  },
+  "medium": {
+    "title": "Top K Frequent Words",
+    "titleSlug": "top-k-frequent-words",
+    "difficulty": "Medium"
+  },
+  "hard": {
+    "title": "Last Substring in Lexicographical Order",
+    "titleSlug": "last-substring-in-lexicographical-order",
+    "difficulty": "Hard"
+  }
+}

@@ -10,6 +10,7 @@ import { PatternSidebar } from "./components/PatternSidebar";
 import { PracticeSetView } from "./components/PracticeSetView";
 import { WordHunt } from "./components/WordHunt";
 import { InterviewBinaries } from "./components/InterviewBinaries";
+import { DailyRandomProblems } from "./components/DailyRandomProblems";
 
 function getRelatedProblems(
   selected: Pattern,
@@ -122,6 +123,8 @@ function App() {
           <span className="ml-auto text-sm text-gray-400">slenderman73</span>
         </div>
       </nav>
+
+      <DailyRandomProblems />
 
       <div className="flex">
         {view === "patterns" && (
