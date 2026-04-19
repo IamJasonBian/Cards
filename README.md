@@ -1,6 +1,3 @@
-# Textbooks and LC Sync in one place
+# LeetCards
 
-
-* LC Sync
-  
-* Textbooks
+Anki, chrome leetcode.com hotkeys, and Leetcoe Flashcards for spaced repetition. 
