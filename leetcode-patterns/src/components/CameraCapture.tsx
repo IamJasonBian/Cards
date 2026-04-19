@@ -21,7 +21,7 @@ export function CameraCapture({ mode, onResult }: Props) {
   const startCamera = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } },
+        video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } },
       });
       streamRef.current = stream;
       if (videoRef.current) {
@@ -55,7 +55,7 @@ export function CameraCapture({ mode, onResult }: Props) {
 
   useEffect(() => {
     if (open) startCamera();
-    return () => { if (!open) stopCamera(); };
+    return () => stopCamera();
   }, [open, startCamera, stopCamera]);
 
   function capture() {
