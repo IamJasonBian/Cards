@@ -12,6 +12,10 @@ const PARSE_PROMPTS = {
     "Extract all code visible in this image exactly as written, preserving indentation and syntax. Return only the code — no commentary or markdown fences.",
 };
 
+const RATE_LIMIT = 10;          // max parses per IP
+const RATE_WINDOW_MS = 60 * 60 * 1000; // per hour
+const MAX_IMAGE_BYTES = 1.5 * 1024 * 1024; // 1.5 MB base64 (~1 MB raw)
+
 const DEFAULT_USER = "local";
 
 export function buildApp(store: Storage): Hono {
@@ -57,6 +61,19 @@ export function buildApp(store: Storage): Hono {
     if (!PARSE_PROMPTS[body.mode]) {
       return c.json({ error: "mode must be 'problem' or 'code'" }, 400);
     }
+    if (body.image.length > MAX_IMAGE_BYTES) {
+      return c.json({ error: "Image too large — maximum 1 MB." }, 413);
+    }
+
+    const ip =
+      c.req.header("x-nf-client-connection-ip") ??   // Netlify real IP header
+      c.req.header("x-forwarded-for")?.split(",")[0].trim() ??
+      "unknown";
+    const bucket = await store.incrementRateLimit(`parse:${ip}`, RATE_WINDOW_MS, Date.now());
+    if (bucket.count > RATE_LIMIT) {
+      return c.json({ error: "Rate limit exceeded — max 10 parses per hour." }, 429);
+    }
+
     const message = await anthropic.messages.create({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 2048,
