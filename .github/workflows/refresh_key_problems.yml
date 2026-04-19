@@ -1,0 +1,55 @@
+name: Refresh Key Problems
+
+on:
+  workflow_dispatch:
+    inputs:
+      problem:
+        description: >
+          Problem slug to refresh (e.g. "two-sum").
+          Leave blank or enter "all" to refresh every key problem.
+        required: false
+        default: "all"
+        type: string
+      username:
+        description: LeetCode username
+        required: false
+        default: slenderman73
+        type: string
+
+jobs:
+  refresh:
+    name: Refresh LeetCode data
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Refresh key problems
+        env:
+          LEETCODE_USERNAME: ${{ inputs.username }}
+        run: |
+          if [ "${{ inputs.problem }}" = "all" ] || [ -z "${{ inputs.problem }}" ]; then
+            echo "Refreshing ALL key problems for ${{ inputs.username }}"
+            python3 refresh.py --username "${{ inputs.username }}"
+          else
+            echo "Refreshing problem: ${{ inputs.problem }}"
+            python3 refresh.py --problem "${{ inputs.problem }}" --username "${{ inputs.username }}"
+          fi
+
+      - name: Run solutions against test cases
+        run: python3 runner.py
+
+      - name: Commit refreshed data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --staged --quiet || git commit -m "[Refresh] Key problems data $(date -u +%Y-%m-%d)"
+          git push

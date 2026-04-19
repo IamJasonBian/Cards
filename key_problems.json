@@ -1,0 +1,70 @@
+{
+  "description": "Curated list of key LeetCode problems. Each entry includes the folder name, test cases, and method signature so runner.py can execute solutions locally.",
+  "solutions_dir": "leetcode",
+  "key_problems": [
+    {
+      "slug": "find-triangular-sum-of-an-array",
+      "title": "Find Triangular Sum of an Array",
+      "difficulty": "Medium",
+      "folder": "Find Triangular Sum of an Array",
+      "method": "triangularSum",
+      "unordered_result": false,
+      "test_cases": [
+        {"args": [[1, 2, 3, 4, 5]], "expected": 8},
+        {"args": [[5]], "expected": 5},
+        {"args": [[0, 0, 0, 0]], "expected": 0},
+        {"args": [[9, 9, 9, 9]], "expected": 2},
+        {"args": [[4, 6]], "expected": 0}
+      ]
+    },
+    {
+      "slug": "largest-palindrome-product",
+      "title": "Largest Palindrome Product",
+      "difficulty": "Hard",
+      "folder": "Largest Palindrome Product",
+      "method": "largestPalindrome",
+      "unordered_result": false,
+      "test_cases": [
+        {"args": [2], "expected": 987},
+        {"args": [1], "expected": 9}
+      ]
+    },
+    {
+      "slug": "student-attendance-record-ii",
+      "title": "Student Attendance Record II",
+      "difficulty": "Hard",
+      "folder": "Student Attendance Record II",
+      "method": "checkRecord",
+      "unordered_result": false,
+      "test_cases": [
+        {"args": [2], "expected": 8},
+        {"args": [1], "expected": 3},
+        {"args": [10101], "expected": 183236316}
+      ]
+    },
+    {
+      "slug": "stickers-to-spell-word",
+      "title": "Stickers to Spell Word",
+      "difficulty": "Hard",
+      "folder": "Stickers to Spell Word",
+      "method": "minStickers",
+      "unordered_result": false,
+      "test_cases": [
+        {"args": [["with", "example", "science"], "thehat"], "expected": 3},
+        {"args": [["notice", "possible"], "basicbasic"], "expected": -1}
+      ]
+    },
+    {
+      "slug": "concatenated-words",
+      "title": "Concatenated Words",
+      "difficulty": "Hard",
+      "folder": "Concatenated Words",
+      "method": "findAllConcatenatedWordsInADict",
+      "unordered_result": true,
+      "test_cases": [
+        {"args": [["cat", "dog", "catdog"]], "expected": ["catdog"]},
+        {"args": [["a", "b", "ab", "abc"]], "expected": ["ab"]}
+      ]
+    }
+  ]
+}
