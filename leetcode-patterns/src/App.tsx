@@ -13,6 +13,7 @@ import { InterviewBinaries } from "./components/InterviewBinaries";
 import { RandomProblem } from "./components/RandomProblem";
 import { PopularLists } from "./components/PopularLists";
 import { Flashcards } from "./components/Flashcards";
+import { InterviewDrill } from "./components/InterviewDrill";
 
 function getRelatedProblems(
   selected: Pattern,
@@ -42,7 +43,7 @@ function getRelatedProblems(
 }
 
 function App() {
-  const [view, setView] = useState<"patterns" | "speed-apps" | "interview-binaries" | "popular-lists" | "flashcards">("patterns");
+  const [view, setView] = useState<"patterns" | "speed-apps" | "interview-binaries" | "popular-lists" | "flashcards" | "interview-drill">("patterns");
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [selectedPatternId, setSelectedPatternId] = useState<number | null>(
     null
@@ -81,6 +82,8 @@ function App() {
       setView("popular-lists");
     } else if (window.location.hash === "#flashcards") {
       setView("flashcards");
+    } else if (window.location.hash === "#interview-drill") {
+      setView("interview-drill");
     }
   }, []);
 
@@ -92,10 +95,13 @@ function App() {
       window.history.replaceState(null, "", "#popular-lists");
     } else if (view === "flashcards") {
       window.history.replaceState(null, "", "#flashcards");
+    } else if (view === "interview-drill") {
+      window.history.replaceState(null, "", "#interview-drill");
     } else if (
       window.location.hash === "#interview-binaries" ||
       window.location.hash === "#popular-lists" ||
-      window.location.hash === "#flashcards"
+      window.location.hash === "#flashcards" ||
+      window.location.hash === "#interview-drill"
     ) {
       window.history.replaceState(null, "", window.location.pathname);
     }
@@ -154,6 +160,17 @@ function App() {
               <Layers size={14} />
               Flashcards
             </button>
+            <button
+              onClick={() => { setView("interview-drill"); clearSelection(); }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
+                view === "interview-drill"
+                  ? "bg-indigo-100 text-indigo-700"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              <Code size={14} />
+              Interview Drill
+            </button>
           </div>
 
           <span className="ml-auto text-sm text-gray-400">slenderman73</span>
@@ -178,6 +195,8 @@ function App() {
             <PopularLists />
           ) : view === "flashcards" ? (
             <Flashcards />
+          ) : view === "interview-drill" ? (
+            <InterviewDrill />
           ) : selectedPattern ? (
             <PracticeSetView
               pattern={selectedPattern}
