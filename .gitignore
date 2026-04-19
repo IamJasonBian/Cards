@@ -47,3 +47,6 @@ Thumbs.db
 sicpjs.zip
 test_node_env/expect.txt
 test_node_env/result.txt
+
+# Local Netlify folder
+.netlify
