@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Code, Filter, Zap } from "lucide-react";
+import { BookOpen, Code, Filter, Layers, Zap } from "lucide-react";
 import { patterns, tags } from "./data/patterns";
 import type { Pattern, Problem } from "./data/patterns";
 import { StatsGrid } from "./components/StatsGrid";
@@ -11,6 +11,8 @@ import { PracticeSetView } from "./components/PracticeSetView";
 import { WordHunt } from "./components/WordHunt";
 import { InterviewBinaries } from "./components/InterviewBinaries";
 import { RandomProblem } from "./components/RandomProblem";
+import { PopularLists } from "./components/PopularLists";
+import { Flashcards } from "./components/Flashcards";
 
 function getRelatedProblems(
   selected: Pattern,
@@ -40,7 +42,7 @@ function getRelatedProblems(
 }
 
 function App() {
-  const [view, setView] = useState<"patterns" | "speed-apps" | "interview-binaries">("patterns");
+  const [view, setView] = useState<"patterns" | "speed-apps" | "interview-binaries" | "popular-lists" | "flashcards">("patterns");
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [selectedPatternId, setSelectedPatternId] = useState<number | null>(
     null
@@ -71,10 +73,14 @@ function App() {
     setRelatedProblems([]);
   }
 
-  // Check URL hash on mount to enable direct linking to interview binaries
+  // Check URL hash on mount to enable direct linking
   useEffect(() => {
     if (window.location.hash === "#interview-binaries") {
       setView("interview-binaries");
+    } else if (window.location.hash === "#popular-lists") {
+      setView("popular-lists");
+    } else if (window.location.hash === "#flashcards") {
+      setView("flashcards");
     }
   }, []);
 
@@ -82,7 +88,15 @@ function App() {
   useEffect(() => {
     if (view === "interview-binaries") {
       window.history.replaceState(null, "", "#interview-binaries");
-    } else if (window.location.hash === "#interview-binaries") {
+    } else if (view === "popular-lists") {
+      window.history.replaceState(null, "", "#popular-lists");
+    } else if (view === "flashcards") {
+      window.history.replaceState(null, "", "#flashcards");
+    } else if (
+      window.location.hash === "#interview-binaries" ||
+      window.location.hash === "#popular-lists" ||
+      window.location.hash === "#flashcards"
+    ) {
       window.history.replaceState(null, "", window.location.pathname);
     }
   }, [view]);
@@ -118,6 +132,28 @@ function App() {
               <Zap size={14} />
               Speed Apps
             </button>
+            <button
+              onClick={() => { setView("popular-lists"); clearSelection(); }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
+                view === "popular-lists"
+                  ? "bg-indigo-100 text-indigo-700"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              <BookOpen size={14} />
+              Popular Lists
+            </button>
+            <button
+              onClick={() => { setView("flashcards"); clearSelection(); }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
+                view === "flashcards"
+                  ? "bg-indigo-100 text-indigo-700"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              <Layers size={14} />
+              Flashcards
+            </button>
           </div>
 
           <span className="ml-auto text-sm text-gray-400">slenderman73</span>
@@ -138,6 +174,10 @@ function App() {
             <WordHunt />
           ) : view === "interview-binaries" ? (
             <InterviewBinaries />
+          ) : view === "popular-lists" ? (
+            <PopularLists />
+          ) : view === "flashcards" ? (
+            <Flashcards />
           ) : selectedPattern ? (
             <PracticeSetView
               pattern={selectedPattern}

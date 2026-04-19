@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reverse a Linked List — Pointer Visualization</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e0f14;
+    --surface: #161820;
+    --surface2: #1e2030;
+    --border: rgba(255,255,255,0.07);
+    --purple-bright: #a78bfa;
+    --purple-mid: #7c5cbf;
+    --purple-dim: #2d1f4e;
+    --teal-bright: #34d399;
+    --teal-mid: #0d9e6e;
+    --teal-dim: #0a2e22;
+    --coral: #f87171;
+    --coral-dim: #3b1010;
+    --gray: #4b5563;
+    --gray-light: #9ca3af;
+    --text: #f1f5f9;
+    --text-muted: #64748b;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 4rem;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--purple-bright);
+    background: var(--purple-dim);
+    border: 1px solid var(--purple-mid);
+    border-radius: 4px;
+    padding: 3px 10px;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: clamp(20px, 4vw, 28px);
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  h1 span { color: var(--purple-bright); }
+
+  .subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 0.4rem;
+    font-family: var(--mono);
+  }
+
+  .card {
+    width: 100%;
+    max-width: 720px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  svg#viz {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .dots {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    margin: 1rem 0 0.5rem;
+  }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    transition: background 0.2s, transform 0.2s;
+  }
+  .dot.active { background: var(--purple-bright); transform: scale(1.3); }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--gray-light);
+    text-align: center;
+    min-height: 3em;
+    line-height: 1.6;
+    padding: 0 0.5rem;
+    margin-top: 0.75rem;
+    font-family: var(--sans);
+  }
+
+  .code-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-top: 1rem;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--text-muted);
+    letter-spacing: 0.01em;
+  }
+
+  .code-block .hi { color: var(--purple-bright); font-weight: 600; }
+  .code-block .comment { color: #3d4f6a; }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+
+  button {
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 8px 22px;
+    border-radius: 7px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: var(--surface2);
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    letter-spacing: 0.03em;
+  }
+  button:hover:not(:disabled) { background: #2a2d3e; border-color: var(--purple-mid); }
+  button:active:not(:disabled) { transform: scale(0.97); }
+  button:disabled { opacity: 0.28; cursor: default; }
+
+  .legend {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    font-family: var(--mono);
+  }
+
+  .legend-swatch {
+    width: 24px; height: 3px;
+    border-radius: 2px;
+  }
+  .legend-swatch.fwd { background: var(--gray); }
+  .legend-swatch.rev { background: var(--teal-bright); }
+  .legend-swatch.dead { background: var(--coral); border: none; }
+
+  .progress-bar {
+    width: 100%;
+    height: 2px;
+    background: var(--surface2);
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--purple-bright);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tag">linked list</div>
+  <h1>Reverse a <span>Linked List</span></h1>
+  <p class="subtitle">iterative · 3-pointer walk · O(n) time · O(1) space</p>
+</header>
+
+<div class="card">
+  <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+  <svg id="viz" viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div class="dots" id="dots"></div>
+  <p class="step-desc" id="desc"></p>
+  <div class="code-block" id="codeline"></div>
+  <div class="btn-row">
+    <button id="prevB" onclick="move(-1)">← prev</button>
+    <button id="nextB" onclick="move(1)">next →</button>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-swatch fwd"></div>original next</div>
+    <div class="legend-item"><div class="legend-swatch rev"></div>reversed next</div>
+    <div class="legend-item"><div class="legend-swatch dead" style="background:none;width:24px;height:3px;border-top:2px dashed #f87171;"></div>severed link</div>
+  </div>
+</div>
+
+<script>
+const VALS = [1, 2, 3, 4];
+const N = VALS.length;
+const NW = 74, NH = 42, NR = 7;
+const W = 660, SX = 70;
+const GAP = (W - SX * 2 - NW) / (N - 1);
+const NX = VALS.map((_, i) => SX + i * GAP);
+const NY = 84;
+const PTR_Y = NY + NH + 42;
+
+const C = {
+  nodeFill: '#1e2030', nodeActive: '#2d1f4e',
+  nodeStroke: '#3d3560', nodeActiveStroke: '#a78bfa',
+  nodeText: '#c4b5fd',
+  ptrFill: '#0a2e22', ptrStroke: '#0d9e6e', ptrText: '#34d399',
+  fwd: '#374151', rev: '#34d399', dead: '#f87171', null: '#4b5563',
+};
+
+const steps = [
+  { prev:null, curr:0, nxt:null, dead:[], rev:[],
+    desc:'Initial state. prev = None, curr = head (node 1). All next pointers point forward.',
+    code:'<span class="hi">prev</span>, <span class="hi">curr</span> = None, head' },
+  { prev:null, curr:0, nxt:1, dead:[], rev:[],
+    desc:'Save nxt = curr.next before breaking the link. Without this we lose the rest of the list.',
+    code:'<span class="hi">nxt</span> = curr.next  <span class="comment"># save node 2 before unlinking</span>' },
+  { prev:null, curr:0, nxt:1, dead:[0], rev:[],
+    desc:'Point curr.next → prev (None). Node 1 now points backward. The old forward link is severed.',
+    code:'curr.next = <span class="hi">prev</span>  <span class="comment"># node 1 → None</span>' },
+  { prev:0, curr:1, nxt:null, dead:[0], rev:[0],
+    desc:'Advance: prev = curr (node 1), curr = nxt (node 2). The reversed arrow locks in.',
+    code:'<span class="hi">prev</span> = curr; <span class="hi">curr</span> = nxt' },
+  { prev:0, curr:1, nxt:2, dead:[0], rev:[0],
+    desc:'Save nxt = curr.next (node 3).',
+    code:'<span class="hi">nxt</span> = curr.next  <span class="comment"># save node 3</span>' },
+  { prev:0, curr:1, nxt:2, dead:[0,1], rev:[0,1],
+    desc:'Point curr.next → prev (node 1). Node 2 now links back to node 1.',
+    code:'curr.next = <span class="hi">prev</span>  <span class="comment"># node 2 → node 1</span>' },
+  { prev:1, curr:2, nxt:null, dead:[0,1], rev:[0,1],
+    desc:'Advance: prev = node 2, curr = node 3.',
+    code:'<span class="hi">prev</span> = curr; <span class="hi">curr</span> = nxt' },
+  { prev:1, curr:2, nxt:3, dead:[0,1], rev:[0,1],
+    desc:'Save nxt = curr.next (node 4).',
+    code:'<span class="hi">nxt</span> = curr.next  <span class="comment"># save node 4</span>' },
+  { prev:1, curr:2, nxt:3, dead:[0,1,2], rev:[0,1,2],
+    desc:'Point curr.next → prev (node 2). Node 3 → node 2.',
+    code:'curr.next = <span class="hi">prev</span>  <span class="comment"># node 3 → node 2</span>' },
+  { prev:2, curr:3, nxt:null, dead:[0,1,2], rev:[0,1,2],
+    desc:'Advance: prev = node 3, curr = node 4.',
+    code:'<span class="hi">prev</span> = curr; <span class="hi">curr</span> = nxt' },
+  { prev:2, curr:3, nxt:null, dead:[0,1,2], rev:[0,1,2],
+    desc:'Save nxt = curr.next — it\'s None. This is the last node.',
+    code:'<span class="hi">nxt</span> = curr.next  <span class="comment"># None (last node)</span>' },
+  { prev:2, curr:3, nxt:null, dead:[0,1,2,3], rev:[0,1,2,3],
+    desc:'Point curr.next → prev (node 3). Node 4 → node 3. All links reversed.',
+    code:'curr.next = <span class="hi">prev</span>  <span class="comment"># node 4 → node 3</span>' },
+  { prev:3, curr:null, nxt:null, dead:[0,1,2,3], rev:[0,1,2,3],
+    desc:'curr is None — loop exits. Return prev (node 4) as the new head. Done: 4 → 3 → 2 → 1 → None.',
+    code:'return <span class="hi">prev</span>  <span class="comment"># new head = node 4 ✓</span>' },
+];
+
+let step = 0;
+
+function mk(tag, attrs, ...children) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  for (const c of children) el.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+  return el;
+}
+
+function render() {
+  const s = steps[step];
+  const svg = document.getElementById('viz');
+  svg.innerHTML = '';
+
+  const defs = mk('defs', {});
+  const mkMarker = (id, color) => {
+    const m = mk('marker', { id, markerWidth:'8', markerHeight:'8', refX:'6', refY:'3', orient:'auto' });
+    m.appendChild(mk('path', { d:'M0,0 L0,6 L8,3 z', fill: color }));
+    return m;
+  };
+  defs.appendChild(mkMarker('m-fwd', C.fwd));
+  defs.appendChild(mkMarker('m-rev', C.rev));
+  defs.appendChild(mkMarker('m-ptr', C.ptrStroke));
+  svg.appendChild(defs);
+
+  for (let i = 0; i < N - 1; i++) {
+    const isDead = s.dead.includes(i);
+    const isRev = s.rev.includes(i);
+    if (isDead && isRev) {
+      const x1 = NX[i+1] + NW/2, x2 = NX[i] + NW + 2;
+      const mx = (x1+x2)/2, cy = NY + NH/2 - 26;
+      svg.appendChild(mk('path', {
+        d:`M${x1},${NY+NH/2} Q${mx},${cy} ${x2},${NY+NH/2}`,
+        fill:'none', stroke:C.rev, 'stroke-width':'2', 'marker-end':'url(#m-rev)'
+      }));
+      svg.appendChild(mk('line', {
+        x1:NX[i]+NW-6, y1:NY+NH/2, x2:NX[i+1]+4, y2:NY+NH/2,
+        stroke:C.dead, 'stroke-width':'1.5', 'stroke-dasharray':'4,3', opacity:'0.4'
+      }));
+    } else {
+      svg.appendChild(mk('line', {
+        x1:NX[i]+NW-6, y1:NY+NH/2, x2:NX[i+1]+4, y2:NY+NH/2,
+        stroke:C.fwd, 'stroke-width':'1.5', 'marker-end':'url(#m-fwd)'
+      }));
+    }
+  }
+
+  const lastDone = s.dead.includes(N-2) && s.rev.includes(N-2);
+  const noneX = NX[N-1] + NW + 28;
+  if (!lastDone) {
+    svg.appendChild(mk('line', { x1:NX[N-1]+NW-6, y1:NY+NH/2, x2:noneX, y2:NY+NH/2,
+      stroke:C.fwd, 'stroke-width':'1.5', 'marker-end':'url(#m-fwd)' }));
+    svg.appendChild(mk('text', { x:noneX+4, y:NY+NH/2+4, 'font-size':'11', fill:C.null,
+      'font-family':'JetBrains Mono, monospace' }, 'None'));
+  } else {
+    svg.appendChild(mk('line', { x1:NX[N-1]+NW-6, y1:NY+NH/2, x2:noneX, y2:NY+NH/2,
+      stroke:C.dead, 'stroke-width':'1.5', 'stroke-dasharray':'4,3', opacity:'0.4' }));
+    svg.appendChild(mk('text', { x:noneX+4, y:NY+NH/2+4, 'font-size':'11', fill:C.null,
+      'font-family':'JetBrains Mono, monospace', opacity:'0.4' }, 'None'));
+    svg.appendChild(mk('line', { x1:NX[0]-2, y1:NY+NH/2, x2:NX[0]-18, y2:NY+NH/2,
+      stroke:C.rev, 'stroke-width':'2', 'marker-end':'url(#m-rev)' }));
+    svg.appendChild(mk('text', { x:NX[0]-42, y:NY+NH/2+4, 'font-size':'11', fill:C.rev,
+      'font-family':'JetBrains Mono, monospace' }, 'None'));
+  }
+
+  for (let i = 0; i < N; i++) {
+    const active = s.curr === i;
+    const g = mk('g', {});
+    g.appendChild(mk('rect', {
+      x:NX[i], y:NY, width:NW, height:NH, rx:NR,
+      fill: active ? C.nodeActive : C.nodeFill,
+      stroke: active ? C.nodeActiveStroke : C.nodeStroke,
+      'stroke-width': active ? '2' : '1'
+    }));
+    const t = mk('text', {
+      x: NX[i]+NW/2, y: NY+NH/2+5,
+      'text-anchor':'middle', 'font-size':'16', 'font-weight':'500',
+      fill: active ? '#c4b5fd' : '#6b7280',
+      'font-family':'JetBrains Mono, monospace'
+    }, String(VALS[i]));
+    g.appendChild(t);
+    svg.appendChild(g);
+  }
+
+  const PTRS = [{name:'prev', idx:s.prev}, {name:'curr', idx:s.curr}, {name:'nxt', idx:s.nxt}];
+  const offsets = [-14, 0, 14];
+
+  for (let p = 0; p < PTRS.length; p++) {
+    const { name, idx } = PTRS[p];
+    const lx = idx !== null ? NX[idx] + NW/2 + offsets[p]
+      : (p === 0 ? 24 : p === 2 ? W - 24 : W/2);
+    const ly = PTR_Y + 16;
+
+    svg.appendChild(mk('rect', {
+      x:lx-19, y:ly-14, width:38, height:20, rx:'5',
+      fill:C.ptrFill, stroke:C.ptrStroke, 'stroke-width':'1'
+    }));
+    svg.appendChild(mk('text', {
+      x:lx, y:ly, 'text-anchor':'middle', 'font-size':'10.5', 'font-weight':'500',
+      fill:C.ptrText, 'font-family':'JetBrains Mono, monospace'
+    }, name));
+
+    if (idx !== null) {
+      const tx = NX[idx] + NW/2;
+      svg.appendChild(mk('line', {
+        x1:lx, y1:ly-14, x2:tx, y2:NY+NH+3,
+        stroke:C.ptrStroke, 'stroke-width':'1.5', 'marker-end':'url(#m-ptr)'
+      }));
+    } else {
+      svg.appendChild(mk('text', {
+        x:lx, y:ly-18, 'text-anchor':'middle', 'font-size':'10', fill:C.null,
+        'font-family':'JetBrains Mono, monospace'
+      }, 'None'));
+    }
+  }
+
+  document.getElementById('desc').textContent = s.desc;
+  document.getElementById('codeline').innerHTML = s.code;
+  document.getElementById('prevB').disabled = step === 0;
+  document.getElementById('nextB').disabled = step === steps.length - 1;
+  document.getElementById('prog').style.width = `${((step + 1) / steps.length * 100).toFixed(0)}%`;
+
+  const dots = document.getElementById('dots');
+  dots.innerHTML = steps.map((_, i) =>
+    `<div class="dot${i === step ? ' active' : ''}"></div>`).join('');
+}
+
+function move(d) {
+  step = Math.max(0, Math.min(steps.length - 1, step + d));
+  render();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') move(1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   move(-1);
+});
+
+render();
+</script>
+</body>
+</html>
