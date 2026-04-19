@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.90.0",
     "@hono/node-server": "^1.13.0",
     "@netlify/blobs": "^10.0.10",
     "hono": "^4.11.4",
