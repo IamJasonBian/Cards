@@ -19,17 +19,25 @@ export type Grade = "again" | "hard" | "good" | "easy";
 //   review:{userId}:{cardId}   → hash (we store JSON blob here for simplicity)
 //   due:{userId}               → sorted set (score = due ms, member = cardId)
 // A RedisStore implementation can be swapped in later without changing callers.
+export interface RateLimitBucket {
+  count: number;
+  windowStart: number; // epoch ms of the start of the current window
+}
+
 export interface Storage {
   getReview(userId: string, cardId: string): Promise<ReviewState | null>;
   saveReview(userId: string, state: ReviewState): Promise<void>;
   listDue(userId: string, now: number, limit?: number): Promise<string[]>;
   listAllReviews(userId: string): Promise<ReviewState[]>;
+  // Returns updated count after increment; callers compare against their limit.
+  incrementRateLimit(key: string, windowMs: number, now: number): Promise<RateLimitBucket>;
 }
 
 // ---- In-memory + JSON-backed store (single-user dev default) ----
 export class InMemoryStore implements Storage {
   // reviews[userId][cardId] = ReviewState
   private reviews = new Map<string, Map<string, ReviewState>>();
+  private rateLimits = new Map<string, RateLimitBucket>();
   private path: string | null;
 
   constructor(persistencePath?: string) {
@@ -86,6 +94,16 @@ export class InMemoryStore implements Storage {
   async listAllReviews(userId: string): Promise<ReviewState[]> {
     const bucket = this.reviews.get(userId);
     return bucket ? Array.from(bucket.values()) : [];
+  }
+
+  async incrementRateLimit(key: string, windowMs: number, now: number): Promise<RateLimitBucket> {
+    const existing = this.rateLimits.get(key);
+    const inWindow = existing && now - existing.windowStart < windowMs;
+    const next: RateLimitBucket = inWindow
+      ? { count: existing.count + 1, windowStart: existing.windowStart }
+      : { count: 1, windowStart: now };
+    this.rateLimits.set(key, next);
+    return next;
   }
 }
 

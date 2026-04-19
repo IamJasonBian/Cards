@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ChevronRight, Play, RotateCcw } from "lucide-react";
+import { CameraCapture } from "./CameraCapture";
 
 type Phase = "solve" | "code" | "verify";
 type CheckState = "pending" | "pass" | "fail";
@@ -189,14 +190,17 @@ export function InterviewDrill() {
       {phase === "solve" && (
         <div className="space-y-4">
           <Card>
-            <SectionLabel>Problem Statement</SectionLabel>
+            <div className="flex items-center justify-between mb-2">
+              <SectionLabel>Problem Statement</SectionLabel>
+              <CameraCapture mode="problem" onResult={(text) => setProblemText(text)} />
+            </div>
             <p className="text-xs text-gray-500 mb-2">
-              Paste the full problem — constraints and examples included. Work out the approach here before writing any code.
+              Paste the full problem — or capture it from your camera.
             </p>
             <textarea
               className="w-full border border-gray-200 rounded-lg p-3 text-sm font-mono resize-y focus:outline-none focus:border-indigo-400"
               rows={7}
-              placeholder="Paste the problem here..."
+              placeholder="Paste or capture the problem here..."
               value={problemText}
               onChange={(e) => setProblemText(e.target.value)}
             />
@@ -292,9 +296,12 @@ export function InterviewDrill() {
       {phase === "code" && (
         <div className="space-y-4">
           <Card>
-            <SectionLabel>Your Implementation</SectionLabel>
+            <div className="flex items-center justify-between mb-2">
+              <SectionLabel>Your Implementation</SectionLabel>
+              <CameraCapture mode="code" onResult={(text) => setCodeText(text)} />
+            </div>
             <p className="text-xs text-gray-500 mb-2">
-              You write. Use dry-run and the checklist to self-check before asking for hints.
+              Type your code — or capture handwritten code from your camera.
             </p>
             <textarea
               className="w-full border border-gray-200 rounded-lg p-3 text-sm font-mono resize-y focus:outline-none focus:border-indigo-400"

@@ -1,5 +1,5 @@
 import { getStore, type Store } from "@netlify/blobs";
-import type { ReviewState, Storage } from "./storage.ts";
+import type { RateLimitBucket, ReviewState, Storage } from "./storage.ts";
 
 // Key layout inside the single "leetcards-reviews" blob store:
 //   review/{userId}/{cardId}  → JSON ReviewState
@@ -48,5 +48,16 @@ export class NetlifyBlobsStore implements Storage {
       .sort((a, b) => a.due - b.due)
       .slice(0, limit)
       .map((r) => r.cardId);
+  }
+
+  async incrementRateLimit(key: string, windowMs: number, now: number): Promise<RateLimitBucket> {
+    const blobKey = `ratelimit/${key}`;
+    const existing = await this.store.get(blobKey, { type: "json" }) as RateLimitBucket | null;
+    const inWindow = existing && now - existing.windowStart < windowMs;
+    const next: RateLimitBucket = inWindow
+      ? { count: existing.count + 1, windowStart: existing.windowStart }
+      : { count: 1, windowStart: now };
+    await this.store.setJSON(blobKey, next);
+    return next;
   }
 }
