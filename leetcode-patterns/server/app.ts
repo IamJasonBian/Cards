@@ -1,6 +1,16 @@
+import Anthropic from "@anthropic-ai/sdk";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { schedule, type Grade, type Storage } from "./storage.ts";
+
+const anthropic = new Anthropic();
+
+const PARSE_PROMPTS = {
+  problem:
+    "Extract the LeetCode problem statement from this image exactly as written. Include the description, constraints, and all examples. Return only the problem text — no commentary.",
+  code:
+    "Extract all code visible in this image exactly as written, preserving indentation and syntax. Return only the code — no commentary or markdown fences.",
+};
 
 const DEFAULT_USER = "local";
 
@@ -33,6 +43,38 @@ export function buildApp(store: Storage): Hono {
     const next = schedule(prev, body.grade, body.cardId, now);
     await store.saveReview(user, next);
     return c.json({ state: next });
+  });
+
+  app.post("/api/parse-image", async (c) => {
+    const body = (await c.req.json()) as {
+      image?: string;
+      mimeType?: string;
+      mode?: "problem" | "code";
+    };
+    if (!body.image || !body.mimeType || !body.mode) {
+      return c.json({ error: "image, mimeType, and mode are required" }, 400);
+    }
+    if (!PARSE_PROMPTS[body.mode]) {
+      return c.json({ error: "mode must be 'problem' or 'code'" }, 400);
+    }
+    const message = await anthropic.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 2048,
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "image",
+              source: { type: "base64", media_type: body.mimeType as "image/jpeg" | "image/png" | "image/gif" | "image/webp", data: body.image },
+            },
+            { type: "text", text: PARSE_PROMPTS[body.mode] },
+          ],
+        },
+      ],
+    });
+    const text = message.content.find((b) => b.type === "text")?.text ?? "";
+    return c.json({ text });
   });
 
   app.get("/api/stats", async (c) => {
