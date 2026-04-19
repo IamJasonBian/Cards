@@ -61,11 +61,15 @@ export function CameraCapture({ mode, onResult }: Props) {
   function capture() {
     if (!videoRef.current) return;
     const video = videoRef.current;
+    const MAX_DIM = 1024;
+    const scale = Math.min(1, MAX_DIM / Math.max(video.videoWidth, video.videoHeight));
+    const w = Math.round(video.videoWidth * scale);
+    const h = Math.round(video.videoHeight * scale);
     const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext("2d")!.drawImage(video, 0, 0);
-    const dataUrl = canvas.toDataURL("image/jpeg", 0.9);
+    canvas.width = w;
+    canvas.height = h;
+    canvas.getContext("2d")!.drawImage(video, 0, 0, w, h);
+    const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
     const base64 = dataUrl.split(",")[1];
     setCapturedSrc(dataUrl);
     setCapturedBase64(base64);
@@ -88,6 +92,7 @@ export function CameraCapture({ mode, onResult }: Props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ image: capturedBase64, mimeType: "image/jpeg", mode }),
       });
+      if (res.status === 429) throw new Error("Rate limit reached — max 10 parses per hour.");
       if (!res.ok) throw new Error(await res.text());
       const { text } = await res.json() as { text: string };
       onResult(text);
