@@ -6,7 +6,11 @@ import {
   tagStyles,
   type Flashcard,
   type FlashcardTag,
+  type VizKind,
 } from "../data/flashcards";
+import { AlgoViz } from "./algo-viz";
+
+type VizOpen = { kind: "path"; value: string } | { kind: "algo"; value: VizKind } | null;
 
 type Grade = "again" | "hard" | "good" | "easy";
 
@@ -76,7 +80,7 @@ export function Flashcards() {
   const [mode, setMode] = useState<Mode>("all");
   const [idx, setIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
-  const [vizOpen, setVizOpen] = useState<string | null>(null);
+  const [vizOpen, setVizOpen] = useState<VizOpen>(null);
 
   const refreshReviews = useCallback(async () => {
     try {
@@ -298,11 +302,12 @@ export function Flashcards() {
                     Implementation
                   </span>
                   <div className="flex items-center gap-2">
-                    {card.vizPath && (
+                    {(card.vizPath || card.viz) && (
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          setVizOpen(card.vizPath!);
+                          if (card.viz) setVizOpen({ kind: "algo", value: card.viz });
+                          else if (card.vizPath) setVizOpen({ kind: "path", value: card.vizPath });
                         }}
                         className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs text-violet-600 hover:bg-violet-50 border border-violet-200 transition-colors cursor-pointer"
                       >
@@ -399,30 +404,29 @@ export function Flashcards() {
       {/* Viz modal */}
       {vizOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4"
           onClick={() => setVizOpen(null)}
         >
           <div
-            className="bg-white rounded-xl shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden"
+            className="bg-white rounded-xl shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden relative"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200">
-              <span className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                <Sparkles size={14} className="text-violet-600" />
-                Pointer Visualization
-              </span>
-              <button
-                onClick={() => setVizOpen(null)}
-                className="p-1 rounded hover:bg-gray-100 cursor-pointer"
-              >
-                <X size={18} />
-              </button>
-            </div>
-            <iframe
-              src={vizOpen}
-              title="visualization"
-              className="flex-1 w-full border-0"
-            />
+            <button
+              onClick={() => setVizOpen(null)}
+              className="absolute top-2 right-2 z-10 p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white cursor-pointer"
+              aria-label="Close"
+            >
+              <X size={18} />
+            </button>
+            {vizOpen.kind === "path" ? (
+              <iframe
+                src={vizOpen.value}
+                title="visualization"
+                className="flex-1 w-full border-0"
+              />
+            ) : (
+              <AlgoViz kind={vizOpen.value} />
+            )}
           </div>
         </div>
       )}

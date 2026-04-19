@@ -7,6 +7,14 @@ export type FlashcardTag =
   | "heap"
   | "str";
 
+export type VizKind =
+  | "two-pointers"
+  | "sliding-window"
+  | "binary-search"
+  | "bfs-layer"
+  | "floyds-cycle"
+  | "stack-match";
+
 export interface Flashcard {
   id: string;
   tag: FlashcardTag;
@@ -15,6 +23,7 @@ export interface Flashcard {
   code: string;
   note: string;
   vizPath?: string;
+  viz?: VizKind;
 }
 
 export const flashcards: Flashcard[] = [
@@ -68,6 +77,7 @@ def cycle_start(head):
             return slow
     return None`,
     note: "Meeting point → reset one to head → advance both 1 step → meet at cycle start.",
+    viz: "floyds-cycle",
   },
   {
     id: "merge-two-sorted-lists",
@@ -162,6 +172,7 @@ def level_order(root):
         res.append(level)
     return res`,
     note: "Snapshot len(q) before loop to isolate each layer. Works on any tree/graph.",
+    viz: "bfs-layer",
   },
   {
     id: "lca-bst",
@@ -291,6 +302,7 @@ def topo_sort(n, edges):
         res = max(res, r - l + 1)
     return res`,
     note: "Template: expand r → violates condition? → shrink l until valid → update answer.",
+    viz: "sliding-window",
   },
   {
     id: "two-pointers",
@@ -323,6 +335,7 @@ def three_sum(nums):
             else: r -= 1
     return res`,
     note: "Sort first. Skip duplicates explicitly in 3Sum to avoid duplicate triplets.",
+    viz: "two-pointers",
   },
   {
     id: "binary-search-bisect",
@@ -348,6 +361,7 @@ def bisect_left(nums, target):
         else: hi = mid
     return lo`,
     note: "bisect_left: loop condition hi=n (not n-1), strict < for lo update.",
+    viz: "binary-search",
   },
   {
     id: "knapsack-01",
@@ -453,6 +467,7 @@ def merge_k_lists(lists):
             stack.pop()
     return len(stack) == 0`,
     note: "Map each closer to its opener. Stack must be empty at end.",
+    viz: "stack-match",
   },
   {
     id: "anagram-freq",
