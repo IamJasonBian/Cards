@@ -2212,4 +2212,76 @@ def isPalindrome(head):
       { name: "Odd Even Linked List", slug: "odd-even-linked-list" },
     ],
   },
+  {
+    name: "Graph (Adjacency List)",
+    color: "bg-emerald-100 text-emerald-700 border-emerald-200",
+    docUrl: "https://docs.python.org/3/library/collections.html#collections.defaultdict",
+    code: `from collections import defaultdict, deque
+
+# Build adjacency list — O(E) time
+graph = defaultdict(list)
+for u, v in edges:
+    graph[u].append(v)
+    graph[v].append(u)         # omit for directed graph
+
+# BFS traversal — O(V + E)
+def bfs(graph, start):
+    visited, order = {start}, []
+    queue = deque([start])
+    while queue:
+        node = queue.popleft()
+        order.append(node)
+        for nei in graph[node]:
+            if nei not in visited:
+                visited.add(nei)
+                queue.append(nei)
+    return order
+
+# DFS traversal — O(V + E)
+def dfs(graph, node, visited, order):
+    visited.add(node)
+    order.append(node)
+    for nei in graph[node]:
+        if nei not in visited:
+            dfs(graph, nei, visited, order)
+
+# Has path (BFS) — O(V + E)
+def has_path(graph, src, dst):
+    visited = {src}
+    queue = deque([src])
+    while queue:
+        node = queue.popleft()
+        if node == dst:
+            return True
+        for nei in graph[node]:
+            if nei not in visited:
+                visited.add(nei)
+                queue.append(nei)
+    return False
+
+# Topological sort (Kahn's BFS) — O(V + E)
+def topo_sort(graph, indegree):
+    queue = deque(n for n in indegree if indegree[n] == 0)
+    order = []
+    while queue:
+        node = queue.popleft()
+        order.append(node)
+        for nei in graph[node]:
+            indegree[nei] -= 1
+            if indegree[nei] == 0:
+                queue.append(nei)
+    return order if len(order) == len(indegree) else []`,
+    relatedProblems: [
+      { name: "Number of Islands", slug: "number-of-islands" },
+      { name: "Clone Graph", slug: "clone-graph" },
+      { name: "Course Schedule", slug: "course-schedule" },
+      { name: "Course Schedule II", slug: "course-schedule-ii" },
+      { name: "Pacific Atlantic Water Flow", slug: "pacific-atlantic-water-flow" },
+      { name: "Graph Valid Tree", slug: "graph-valid-tree" },
+      { name: "Number of Connected Components", slug: "number-of-connected-components-in-an-undirected-graph" },
+      { name: "Alien Dictionary", slug: "alien-dictionary" },
+      { name: "Shortest Path in Binary Matrix", slug: "shortest-path-in-binary-matrix" },
+      { name: "Network Delay Time", slug: "network-delay-time" },
+    ],
+  },
 ];
