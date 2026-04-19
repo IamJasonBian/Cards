@@ -10,6 +10,7 @@ import { PatternSidebar } from "./components/PatternSidebar";
 import { PracticeSetView } from "./components/PracticeSetView";
 import { WordHunt } from "./components/WordHunt";
 import { InterviewBinaries } from "./components/InterviewBinaries";
+import { RandomProblem } from "./components/RandomProblem";
 
 function getRelatedProblems(
   selected: Pattern,
@@ -146,6 +147,7 @@ function App() {
             />
           ) : (
             <>
+              <RandomProblem />
               <StatsGrid />
 
               <div className="flex items-center gap-2 mb-6">
