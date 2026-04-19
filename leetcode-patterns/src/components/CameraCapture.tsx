@@ -8,6 +8,29 @@ interface Props {
 
 type Step = "idle" | "preview" | "captured" | "parsing" | "error";
 
+// iOS non-Safari (Chrome, Firefox, Edge on iOS) blocks getUserMedia via WebKit
+// entitlement restrictions. Any browser without the API also falls back.
+function detectInputMethod(): "stream" | "file" {
+  if (typeof navigator === "undefined") return "file";
+  if (!navigator.mediaDevices?.getUserMedia) return "file";
+  const ua = navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(ua) && !(window as unknown as Record<string, unknown>).MSStream;
+  const isSafariOnIOS = isIOS && /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+  return isIOS && !isSafariOnIOS ? "file" : "stream";
+}
+
+function resizeToBase64(source: HTMLVideoElement | HTMLImageElement, maxDim = 1024, quality = 0.85): { dataUrl: string; base64: string } {
+  const w = "videoWidth" in source ? source.videoWidth : source.naturalWidth;
+  const h = "videoHeight" in source ? source.videoHeight : source.naturalHeight;
+  const scale = Math.min(1, maxDim / Math.max(w, h));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(w * scale);
+  canvas.height = Math.round(h * scale);
+  canvas.getContext("2d")!.drawImage(source, 0, 0, canvas.width, canvas.height);
+  const dataUrl = canvas.toDataURL("image/jpeg", quality);
+  return { dataUrl, base64: dataUrl.split(",")[1] };
+}
+
 export function CameraCapture({ mode, onResult }: Props) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<Step>("idle");
@@ -17,71 +40,97 @@ export function CameraCapture({ mode, onResult }: Props) {
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const inputMethod = useRef(detectInputMethod());
 
-  const startCamera = useCallback(async () => {
+  // ── Stream path ─────────────────────────────────────────────────────────────
+  const startStream = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } },
       });
       streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
+      if (videoRef.current) videoRef.current.srcObject = stream;
       setStep("preview");
     } catch {
-      setErrorMsg("Camera access denied. Allow camera permissions and try again.");
-      setStep("error");
+      // Gracefully fall back to file input if getUserMedia fails at runtime
+      // (e.g. Android browser that reports support but then denies)
+      inputMethod.current = "file";
+      fileInputRef.current?.click();
+      setOpen(false);
     }
   }, []);
 
-  const stopCamera = useCallback(() => {
+  const stopStream = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
   }, []);
 
+  useEffect(() => {
+    if (open && inputMethod.current === "stream") startStream();
+    return () => stopStream();
+  }, [open, startStream, stopStream]);
+
+  function captureFrame() {
+    if (!videoRef.current) return;
+    const { dataUrl, base64 } = resizeToBase64(videoRef.current);
+    setCapturedSrc(dataUrl);
+    setCapturedBase64(base64);
+    stopStream();
+    setStep("captured");
+  }
+
+  function retakeStream() {
+    setCapturedSrc("");
+    setCapturedBase64("");
+    setStep("idle");
+    startStream();
+  }
+
+  // ── File input path (iOS Chrome, Android fallback) ───────────────────────────
   function handleOpen() {
     setStep("idle");
     setCapturedSrc("");
     setCapturedBase64("");
     setErrorMsg("");
-    setOpen(true);
+    if (inputMethod.current === "file") {
+      fileInputRef.current?.click();
+    } else {
+      setOpen(true);
+    }
   }
 
-  function handleClose() {
-    stopCamera();
-    setOpen(false);
-    setStep("idle");
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      const { dataUrl, base64 } = resizeToBase64(img);
+      URL.revokeObjectURL(objectUrl);
+      setCapturedSrc(dataUrl);
+      setCapturedBase64(base64);
+      setStep("captured");
+      setOpen(true);
+      // Reset input so the same file can be re-selected on retake
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    };
+    img.src = objectUrl;
   }
 
-  useEffect(() => {
-    if (open) startCamera();
-    return () => stopCamera();
-  }, [open, startCamera, stopCamera]);
-
-  function capture() {
-    if (!videoRef.current) return;
-    const video = videoRef.current;
-    const MAX_DIM = 1024;
-    const scale = Math.min(1, MAX_DIM / Math.max(video.videoWidth, video.videoHeight));
-    const w = Math.round(video.videoWidth * scale);
-    const h = Math.round(video.videoHeight * scale);
-    const canvas = document.createElement("canvas");
-    canvas.width = w;
-    canvas.height = h;
-    canvas.getContext("2d")!.drawImage(video, 0, 0, w, h);
-    const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
-    const base64 = dataUrl.split(",")[1];
-    setCapturedSrc(dataUrl);
-    setCapturedBase64(base64);
-    stopCamera();
-    setStep("captured");
-  }
-
-  function retake() {
+  function retakeFile() {
     setCapturedSrc("");
     setCapturedBase64("");
     setStep("idle");
-    startCamera();
+    setOpen(false);
+    setTimeout(() => fileInputRef.current?.click(), 50);
+  }
+
+  // ── Shared ────────────────────────────────────────────────────────────────────
+  function handleClose() {
+    stopStream();
+    setOpen(false);
+    setStep("idle");
   }
 
   async function parse() {
@@ -94,7 +143,7 @@ export function CameraCapture({ mode, onResult }: Props) {
       });
       if (res.status === 429) throw new Error("Rate limit reached — max 10 parses per hour.");
       if (!res.ok) throw new Error(await res.text());
-      const { text } = await res.json() as { text: string };
+      const { text } = (await res.json()) as { text: string };
       onResult(text);
       handleClose();
     } catch (e) {
@@ -103,10 +152,29 @@ export function CameraCapture({ mode, onResult }: Props) {
     }
   }
 
+  const isFile = inputMethod.current === "file";
   const label = mode === "problem" ? "problem statement" : "code";
+
+  const stepLabel: Record<Step, string> = {
+    idle:     "Starting camera…",
+    preview:  "Point at the content, then capture.",
+    captured: "Looks good? Parse it, or retake.",
+    parsing:  "Sending to Claude…",
+    error:    "Something went wrong.",
+  };
 
   return (
     <>
+      {/* Hidden file input — used by both iOS path and Android fallback */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={handleFileChange}
+      />
+
       <button
         type="button"
         onClick={handleOpen}
@@ -123,13 +191,7 @@ export function CameraCapture({ mode, onResult }: Props) {
             <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100">
               <div>
                 <p className="font-semibold text-gray-900 text-sm">Capture {label}</p>
-                <p className="text-xs text-gray-400 mt-0.5">
-                  {step === "preview" && "Point at the content, then capture."}
-                  {step === "captured" && "Looks good? Parse it, or retake."}
-                  {step === "parsing" && "Sending to Claude..."}
-                  {step === "error" && "Something went wrong."}
-                  {step === "idle" && "Starting camera..."}
-                </p>
+                <p className="text-xs text-gray-400 mt-0.5">{stepLabel[step]}</p>
               </div>
               <button onClick={handleClose} className="text-gray-400 hover:text-gray-700">
                 <X size={18} />
@@ -138,14 +200,8 @@ export function CameraCapture({ mode, onResult }: Props) {
 
             {/* Viewfinder / preview */}
             <div className="relative bg-black aspect-video">
-              {(step === "preview" || step === "idle") && (
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  playsInline
-                  muted
-                  className="w-full h-full object-cover"
-                />
+              {!isFile && (step === "preview" || step === "idle") && (
+                <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover" />
               )}
               {step === "captured" && capturedSrc && (
                 <img src={capturedSrc} alt="captured" className="w-full h-full object-cover" />
@@ -153,7 +209,7 @@ export function CameraCapture({ mode, onResult }: Props) {
               {step === "parsing" && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white">
                   <Sparkles size={28} className="animate-pulse text-indigo-400" />
-                  <p className="text-sm">Parsing with Claude...</p>
+                  <p className="text-sm">Parsing with Claude…</p>
                 </div>
               )}
               {step === "error" && (
@@ -165,9 +221,9 @@ export function CameraCapture({ mode, onResult }: Props) {
 
             {/* Actions */}
             <div className="flex items-center justify-end gap-2 px-5 py-3 border-t border-gray-100">
-              {step === "preview" && (
+              {!isFile && step === "preview" && (
                 <button
-                  onClick={capture}
+                  onClick={captureFrame}
                   className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition-colors"
                 >
                   <Camera size={14} /> Capture
@@ -176,7 +232,7 @@ export function CameraCapture({ mode, onResult }: Props) {
               {step === "captured" && (
                 <>
                   <button
-                    onClick={retake}
+                    onClick={isFile ? retakeFile : retakeStream}
                     className="flex items-center gap-1.5 px-3 py-2 border border-gray-200 text-gray-600 text-sm rounded-lg hover:bg-gray-50 transition-colors"
                   >
                     <RotateCcw size={13} /> Retake
@@ -191,7 +247,7 @@ export function CameraCapture({ mode, onResult }: Props) {
               )}
               {step === "error" && (
                 <button
-                  onClick={retake}
+                  onClick={isFile ? retakeFile : retakeStream}
                   className="flex items-center gap-1.5 px-3 py-2 border border-gray-200 text-gray-600 text-sm rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <RotateCcw size={13} /> Try again
