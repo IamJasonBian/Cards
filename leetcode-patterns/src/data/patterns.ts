@@ -2022,13 +2022,13 @@ def reverse(head):
         curr = nxt
     return prev                       # new head
 
-# Recursive reverse
-def reverse_recursive(head):
+# Recursive
+def reverse_recursive(head: ListNode | None) -> ListNode | None:
     if not head or not head.next:
         return head
     new_head = reverse_recursive(head.next)
-    head.next.next = head             # flip pointer
-    head.next = None                  # break old link
+    head.next.next = head
+    head.next = None
     return new_head
 
 # Reverse between positions left..right (one-pass)
@@ -2065,6 +2065,21 @@ def reverseKGroup(head, k):
         tmp = prev_group.next         # will be group tail
         prev_group.next = kth         # point to new group head
         prev_group = tmp              # advance to group tail
+
+# Stack
+def reverse_stack(head: ListNode | None) -> ListNode | None:
+    if not head:
+        return head
+    stack = []
+    while head:
+        stack.append(head)
+        head = head.next
+    new_head = cur = stack.pop()
+    while stack:
+        cur.next = stack.pop()
+        cur = cur.next
+    cur.next = None
+    return new_head
 
 # Palindrome check using reverse
 def isPalindrome(head):
