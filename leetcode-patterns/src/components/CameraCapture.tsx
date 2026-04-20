@@ -92,9 +92,16 @@ export function CameraCapture({ mode, onResult }: Props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ image: capturedBase64, mimeType: "image/jpeg", mode }),
       });
-      if (res.status === 429) throw new Error("Rate limit reached — max 10 parses per hour.");
-      if (!res.ok) throw new Error(await res.text());
-      const { text } = await res.json() as { text: string };
+      if (!res.ok) {
+        const ct = res.headers.get("content-type") ?? "";
+        let msg = `Request failed (${res.status})`;
+        if (ct.includes("application/json")) {
+          const data = (await res.json().catch(() => null)) as { error?: string } | null;
+          if (data?.error) msg = data.error;
+        }
+        throw new Error(msg);
+      }
+      const { text } = (await res.json()) as { text: string };
       onResult(text);
       handleClose();
     } catch (e) {
@@ -136,7 +143,7 @@ export function CameraCapture({ mode, onResult }: Props) {
               </button>
             </div>
 
-            {/* Viewfinder / preview */}
+            {/* Viewfinder / preview — object-contain so the preview shows the exact frame that will be captured */}
             <div className="relative bg-black aspect-video">
               {(step === "preview" || step === "idle") && (
                 <video
@@ -144,11 +151,11 @@ export function CameraCapture({ mode, onResult }: Props) {
                   autoPlay
                   playsInline
                   muted
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               )}
               {step === "captured" && capturedSrc && (
-                <img src={capturedSrc} alt="captured" className="w-full h-full object-cover" />
+                <img src={capturedSrc} alt="captured" className="w-full h-full object-contain" />
               )}
               {step === "parsing" && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white">
