@@ -1,0 +1,260 @@
+{
+  "slug": "longest-common-subsequence",
+  "title": "Longest Common Subsequence",
+  "number": 1143,
+  "difficulty": "Medium",
+  "category": "DP",
+  "url": "https://leetcode.com/problems/longest-common-subsequence/",
+  "statement": "Given two strings text1 and text2, return the length of their longest common subsequence. A subsequence of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.",
+  "constraints": [
+    "1 <= text1.length, text2.length <= 1000",
+    "text1 and text2 consist of only lowercase English characters"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "longestCommonSubsequence",
+    "params": [
+      {
+        "name": "text1",
+        "pyType": "str",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "text2",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def longestCommonSubsequence(self, text1: str, text2: str) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "text1": "abc",
+        "text2": "abc"
+      },
+      "output": 3,
+      "explanation": "The longest common subsequence is 'abc' and its length is 3."
+    },
+    {
+      "input": {
+        "text1": "abc",
+        "text2": "def"
+      },
+      "output": 0,
+      "explanation": "There is no common subsequence between 'abc' and 'def'."
+    },
+    {
+      "input": {
+        "text1": "abcde",
+        "text2": "ace"
+      },
+      "output": 3,
+      "explanation": "The longest common subsequence is 'ace' and its length is 3."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_identical",
+      "input": {
+        "text1": "a",
+        "text2": "a"
+      },
+      "expected": 1
+    },
+    {
+      "name": "minimal_different",
+      "input": {
+        "text1": "a",
+        "text2": "b"
+      },
+      "expected": 0
+    },
+    {
+      "name": "minimal_one_empty_like",
+      "input": {
+        "text1": "a",
+        "text2": ""
+      },
+      "expected": 0
+    },
+    {
+      "name": "length_2_no_match",
+      "input": {
+        "text1": "ab",
+        "text2": "cd"
+      },
+      "expected": 0
+    },
+    {
+      "name": "length_2_full_match",
+      "input": {
+        "text1": "ab",
+        "text2": "ab"
+      },
+      "expected": 2
+    },
+    {
+      "name": "length_2_partial",
+      "input": {
+        "text1": "ab",
+        "text2": "ba"
+      },
+      "expected": 1
+    },
+    {
+      "name": "all_same_char_text1",
+      "input": {
+        "text1": "aaaa",
+        "text2": "a"
+      },
+      "expected": 1
+    },
+    {
+      "name": "all_same_char_text2",
+      "input": {
+        "text1": "a",
+        "text2": "aaaa"
+      },
+      "expected": 1
+    },
+    {
+      "name": "both_all_same_char",
+      "input": {
+        "text1": "aaa",
+        "text2": "aaa"
+      },
+      "expected": 3
+    },
+    {
+      "name": "both_all_same_char_different_lengths",
+      "input": {
+        "text1": "aaaaa",
+        "text2": "aa"
+      },
+      "expected": 2
+    },
+    {
+      "name": "reversed_strings",
+      "input": {
+        "text1": "abcde",
+        "text2": "edcba"
+      },
+      "expected": 1
+    },
+    {
+      "name": "no_common_chars",
+      "input": {
+        "text1": "abcde",
+        "text2": "fghij"
+      },
+      "expected": 0
+    },
+    {
+      "name": "single_char_overlap",
+      "input": {
+        "text1": "abcde",
+        "text2": "xyzec"
+      },
+      "expected": 1
+    },
+    {
+      "name": "interleaved_match",
+      "input": {
+        "text1": "aebdc",
+        "text2": "ace"
+      },
+      "expected": 2
+    },
+    {
+      "name": "first_last_only",
+      "input": {
+        "text1": "abcdefgh",
+        "text2": "axxxxxxxxh"
+      },
+      "expected": 2
+    },
+    {
+      "name": "repeated_pattern_1",
+      "input": {
+        "text1": "ababab",
+        "text2": "bababa"
+      },
+      "expected": 5
+    },
+    {
+      "name": "repeated_pattern_2",
+      "input": {
+        "text1": "aabbcc",
+        "text2": "abcabc"
+      },
+      "expected": 4
+    },
+    {
+      "name": "long_first_short_second",
+      "input": {
+        "text1": "abcdefghijklmnopqrst",
+        "text2": "ace"
+      },
+      "expected": 3
+    },
+    {
+      "name": "short_first_long_second",
+      "input": {
+        "text1": "ace",
+        "text2": "abcdefghijklmnopqrst"
+      },
+      "expected": 3
+    },
+    {
+      "name": "ascending_both",
+      "input": {
+        "text1": "abcdefghij",
+        "text2": "abcdefghij"
+      },
+      "expected": 10
+    },
+    {
+      "name": "descending_both",
+      "input": {
+        "text1": "jihgfedcba",
+        "text2": "jihgfedcba"
+      },
+      "expected": 10
+    },
+    {
+      "name": "ascending_descending",
+      "input": {
+        "text1": "abcdefghij",
+        "text2": "jihgfedcba"
+      },
+      "expected": 1
+    },
+    {
+      "name": "large_no_match",
+      "input": {
+        "text1": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcdefghij",
+        "text2": "xyzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
+      },
+      "expected": 0
+    },
+    {
+      "name": "large_high_overlap",
+      "input": {
+        "text1": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz",
+        "text2": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
+      },
+      "expected": 78
+    },
+    {
+      "name": "large_sparse_match",
+      "input": {
+        "text1": "aaaaaaaaaaaaaaaaaaaaaaaaaabcdefghijklmnopqrstuvwxyz",
+        "text2": "zzzzzzzzzzzzzzzzzzzzzzzzzbcdefghijklmnopqrstuvwxyza"
+      },
+      "expected": 25
+    }
+  ]
+}

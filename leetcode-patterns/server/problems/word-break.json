@@ -1,0 +1,411 @@
+{
+  "slug": "word-break",
+  "title": "Word Break",
+  "number": 139,
+  "difficulty": "Medium",
+  "category": "DP",
+  "url": "https://leetcode.com/problems/word-break/",
+  "statement": "Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words.\n\nEach word in the dictionary may be reused multiple times in the segmentation.",
+  "constraints": [
+    "1 <= s.length <= 300",
+    "1 <= wordDict.length <= 1000",
+    "1 <= wordDict[i].length <= 20",
+    "s and wordDict[i] consist of only lowercase English letters",
+    "All the strings of wordDict are unique"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "wordBreak",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "wordDict",
+        "pyType": "list[str]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def wordBreak(self, s: str, wordDict: list[str]) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "leetcode",
+        "wordDict": [
+          "leet",
+          "code"
+        ]
+      },
+      "output": true,
+      "explanation": "Return true because \"leetcode\" can be segmented as \"leet\" + \"code\"."
+    },
+    {
+      "input": {
+        "s": "applepenapple",
+        "wordDict": [
+          "apple",
+          "pen"
+        ]
+      },
+      "output": true,
+      "explanation": "Return true because \"applepenapple\" can be segmented as \"apple\" + \"pen\" + \"apple\"."
+    },
+    {
+      "input": {
+        "s": "catsandog",
+        "wordDict": [
+          "cat",
+          "cats",
+          "and",
+          "sand",
+          "dog"
+        ]
+      },
+      "output": false,
+      "explanation": "Return false because \"catsandog\" cannot be segmented into words from wordDict."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_single_char_match",
+      "input": {
+        "s": "a",
+        "wordDict": [
+          "a"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "minimal_single_char_no_match",
+      "input": {
+        "s": "a",
+        "wordDict": [
+          "b"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "minimal_two_char_split",
+      "input": {
+        "s": "ab",
+        "wordDict": [
+          "a",
+          "b"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "simple_exact_match",
+      "input": {
+        "s": "cat",
+        "wordDict": [
+          "cat"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "simple_no_match",
+      "input": {
+        "s": "cat",
+        "wordDict": [
+          "dog"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "two_word_sequence",
+      "input": {
+        "s": "catdog",
+        "wordDict": [
+          "cat",
+          "dog"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "repeated_word_usage",
+      "input": {
+        "s": "aaaa",
+        "wordDict": [
+          "a",
+          "aa"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "ambiguous_prefix",
+      "input": {
+        "s": "catsandcatsdog",
+        "wordDict": [
+          "cat",
+          "cats",
+          "and",
+          "sand",
+          "dog"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "no_match_partial_overlap",
+      "input": {
+        "s": "abcd",
+        "wordDict": [
+          "ab",
+          "cd",
+          "abc"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "many_single_chars",
+      "input": {
+        "s": "abcde",
+        "wordDict": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "long_prefix_mismatch",
+      "input": {
+        "s": "aaaab",
+        "wordDict": [
+          "aa",
+          "aaa"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "greedy_fails",
+      "input": {
+        "s": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
+        "wordDict": [
+          "a",
+          "aa",
+          "aaa",
+          "aaaa",
+          "aaaaa"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "overlapping_words",
+      "input": {
+        "s": "abab",
+        "wordDict": [
+          "ab",
+          "ba"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "duplicate_in_dict",
+      "input": {
+        "s": "aa",
+        "wordDict": [
+          "a",
+          "a",
+          "a"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "very_long_no_match",
+      "input": {
+        "s": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac",
+        "wordDict": [
+          "a",
+          "aa",
+          "aaa"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "common_substring_trap",
+      "input": {
+        "s": "abcabcabcabc",
+        "wordDict": [
+          "ab",
+          "abc",
+          "cab"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "single_long_word_match",
+      "input": {
+        "s": "thequickbrownfox",
+        "wordDict": [
+          "thequickbrownfox"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "single_long_word_no_match",
+      "input": {
+        "s": "thequickbrownfox",
+        "wordDict": [
+          "thequick",
+          "brownfox"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "max_length_string",
+      "input": {
+        "s": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuv",
+        "wordDict": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+          "k",
+          "l",
+          "m",
+          "n",
+          "o",
+          "p",
+          "q",
+          "r",
+          "s",
+          "t",
+          "u",
+          "v",
+          "w",
+          "x",
+          "y",
+          "z"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "early_termination_needed",
+      "input": {
+        "s": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac",
+        "wordDict": [
+          "aa",
+          "aaa",
+          "aaaa",
+          "aaaaa",
+          "aaaaaa"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "exponential_backtrack_case",
+      "input": {
+        "s": "ababababababababababc",
+        "wordDict": [
+          "a",
+          "b",
+          "ab",
+          "ba",
+          "bab",
+          "aba",
+          "abab",
+          "babab"
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "all_chars_needed",
+      "input": {
+        "s": "programming",
+        "wordDict": [
+          "pro",
+          "gram",
+          "ming"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "prefix_suffix_collision",
+      "input": {
+        "s": "aaa",
+        "wordDict": [
+          "aa",
+          "aaa"
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "word_dict_max_size",
+      "input": {
+        "s": "abc",
+        "wordDict": [
+          "a",
+          "b",
+          "c",
+          "ab",
+          "bc",
+          "abc",
+          "aa",
+          "bb",
+          "cc",
+          "dd",
+          "ee",
+          "ff",
+          "gg",
+          "hh",
+          "ii",
+          "jj",
+          "kk",
+          "ll",
+          "mm",
+          "nn",
+          "oo",
+          "pp",
+          "qq",
+          "rr",
+          "ss",
+          "tt",
+          "uu",
+          "vv",
+          "ww",
+          "xx",
+          "yy",
+          "zz"
+        ]
+      },
+      "expected": true
+    }
+  ]
+}

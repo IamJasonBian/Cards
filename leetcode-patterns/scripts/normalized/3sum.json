@@ -1,0 +1,99 @@
+{
+  "slug": "3sum",
+  "number": 15,
+  "title": "3Sum",
+  "difficulty": "Medium",
+  "category": "Array",
+  "url": "https://leetcode.com/problems/3sum/",
+  "statement": "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j != k != i and nums[i] + nums[j] + nums[k] == 0.\n\nThe solution set must not contain duplicate triplets. You may return the solution set in any order.",
+  "constraints": [
+    "3 <= nums.length <= 3000",
+    "-10^5 <= nums[i] <= 10^5"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "threeSum",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "list[list[int]]"
+  },
+  "starterCode": "class Solution:\n    def threeSum(self, nums: list[int]) -> list[list[int]]:\n        # write your solution here\n        pass\n",
+  "equality": "set-of-sets",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          -1,
+          0,
+          1,
+          2,
+          -1,
+          -4
+        ]
+      },
+      "output": [
+        [
+          -1,
+          -1,
+          2
+        ],
+        [
+          -1,
+          0,
+          1
+        ]
+      ],
+      "explanation": "nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0 and nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0. The distinct triplets are [-1,0,1] and [-1,-1,2]."
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output": [
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "explanation": "The only possible triplet is [0,0,0]."
+    },
+    {
+      "input": {
+        "nums": [
+          -2,
+          0,
+          1,
+          1,
+          2
+        ]
+      },
+      "output": [
+        [
+          -2,
+          0,
+          2
+        ],
+        [
+          -2,
+          1,
+          1
+        ]
+      ],
+      "explanation": "The distinct triplets that sum to zero are [-2,0,2] and [-2,1,1]."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": "",
+  "referenceCode": "class Solution:\n    def threeSum(self, nums: list[int]) -> list[list[int]]:\n        res = []\n        nums.sort()\n\n        for i, a in enumerate(nums):\n            # Skip positive integers\n            if a > 0:\n                break\n\n            if i > 0 and a == nums[i - 1]:\n                continue\n\n            l, r = i + 1, len(nums) - 1\n            while l < r:\n                threeSum = a + nums[l] + nums[r]\n                if threeSum > 0:\n                    r -= 1\n                elif threeSum < 0:\n                    l += 1\n                else:\n                    res.append([a, nums[l], nums[r]])\n                    l += 1\n                    r -= 1\n                    while nums[l] == nums[l - 1] and l < r:\n                        l += 1\n\n        return res\n"
+}

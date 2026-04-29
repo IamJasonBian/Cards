@@ -1,0 +1,143 @@
+{
+  "slug": "pacific-atlantic-water-flow",
+  "title": "Pacific Atlantic Water Flow",
+  "number": 417,
+  "difficulty": "Medium",
+  "category": "Graph",
+  "url": "https://leetcode.com/problems/pacific-atlantic-water-flow/",
+  "statement": "Given an m × n matrix of non-negative integers representing elevation heights, determine which cells can have water flow to both the Pacific Ocean and the Atlantic Ocean.\n\nWater flows from a cell to its adjacent cells (up, down, left, right) if the adjacent cell's height is less than or equal to the current cell's height. The Pacific Ocean touches the left and top edges of the matrix, while the Atlantic Ocean touches the right and bottom edges.\n\nReturn a list of all cells where water can flow to both oceans.",
+  "constraints": [
+    "1 <= m, n <= 100",
+    "0 <= heights[i][j] <= 10^5",
+    "m == heights.length",
+    "n == heights[i].length"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "pacificAtlantic",
+    "params": [
+      {
+        "name": "heights",
+        "pyType": "list[list[int]]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "list[list[int]]"
+  },
+  "starterCode": "class Solution:\n    def pacificAtlantic(self, heights: list[list[int]]) -> list[list[int]]:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "heights": [
+          [
+            4,
+            2,
+            7,
+            6
+          ],
+          [
+            9,
+            4,
+            8,
+            6
+          ],
+          [
+            2,
+            4,
+            5,
+            3
+          ]
+        ]
+      },
+      "output": [
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "explanation": "These cells can flow to both oceans because water can reach lower or equal-height neighbors until reaching an ocean boundary."
+    },
+    {
+      "input": {
+        "heights": [
+          [
+            1
+          ]
+        ]
+      },
+      "output": [
+        [
+          0,
+          0
+        ]
+      ],
+      "explanation": "A single cell touches both the Pacific (top-left) and Atlantic (bottom-right) ocean boundaries."
+    },
+    {
+      "input": {
+        "heights": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      },
+      "output": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "explanation": "All cells have the same height and can flow to both oceans."
+    }
+  ],
+  "hiddenCount": 24
+}

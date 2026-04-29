@@ -1,0 +1,63 @@
+{
+  "slug": "remove-nth-node-from-end-of-list",
+  "number": 19,
+  "title": "Remove Nth Node From End of List",
+  "difficulty": "Medium",
+  "category": "Linked List",
+  "url": "https://leetcode.com/problems/remove-nth-node-from-end-of-list/",
+  "statement": "Given the head of a linked list, remove the nth node from the end of the list and return the head of the modified list.\n\nThe removal should be done in a single pass through the list.",
+  "constraints": [
+    "The number of nodes in the list is sz",
+    "1 <= sz <= 30",
+    "0 <= Node.val <= 100",
+    "1 <= n <= sz"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "removeNthFromEnd",
+    "params": [
+      {
+        "name": "head",
+        "pyType": "Optional[ListNode]",
+        "inputKind": "ListNode"
+      },
+      {
+        "name": "n",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "Optional[ListNode]"
+  },
+  "starterCode": "class Solution:\n    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "head": "[1,2,3,4,5]",
+        "n": 2
+      },
+      "output": "[1,2,3,5]",
+      "explanation": "Remove the second node from the end (node with value 4)"
+    },
+    {
+      "input": {
+        "head": "[1]",
+        "n": 1
+      },
+      "output": "[]",
+      "explanation": "Remove the only node in the list"
+    },
+    {
+      "input": {
+        "head": "[1,2]",
+        "n": 1
+      },
+      "output": "[1]",
+      "explanation": "Remove the last node"
+    }
+  ],
+  "jsonFriendly": false,
+  "jsonFriendlyReason": "The head parameter is a ListNode (linked list), which requires a custom adapter for JSON serialization.",
+  "referenceCode": "class Solution:\n    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:\n        dummy = ListNode(0, head)\n        left = dummy\n        right = head\n\n        while n > 0:\n            right = right.next\n            n -= 1\n\n        while right:\n            left = left.next\n            right = right.next\n\n        left.next = left.next.next\n        return dummy.next\n"
+}

@@ -1,0 +1,512 @@
+{
+  "slug": "longest-increasing-subsequence",
+  "title": "Longest Increasing Subsequence",
+  "number": 300,
+  "difficulty": "Medium",
+  "category": "DP",
+  "url": "https://leetcode.com/problems/longest-increasing-subsequence/",
+  "statement": "Given an integer array nums, find the length of the longest strictly increasing subsequence.\n\nA subsequence is a sequence that can be derived from an array by deleting some or no elements without changing the order of the remaining elements.",
+  "constraints": [
+    "1 <= nums.length <= 2500",
+    "-10^4 <= nums[i] <= 10^4"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "lengthOfLIS",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def lengthOfLIS(self, nums: list[int]) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          10,
+          9,
+          2,
+          5,
+          3,
+          7,
+          101,
+          18
+        ]
+      },
+      "output": 4,
+      "explanation": "The longest increasing subsequence is [2,3,7,101], therefore the length is 4."
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          1,
+          0,
+          4,
+          4,
+          4,
+          3,
+          2,
+          3
+        ]
+      },
+      "output": 4,
+      "explanation": "The longest increasing subsequence is [0,1,4] which has length 4. Other valid sequences include [0,1,2,3] with length 4."
+    },
+    {
+      "input": {
+        "nums": [
+          3,
+          10,
+          2,
+          1,
+          20
+        ]
+      },
+      "output": 3,
+      "explanation": "The longest increasing subsequence is [3,10,20] with length 3."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_single",
+      "input": {
+        "nums": [
+          1
+        ]
+      },
+      "expected": 1
+    },
+    {
+      "name": "minimal_two_ascending",
+      "input": {
+        "nums": [
+          1,
+          2
+        ]
+      },
+      "expected": 2
+    },
+    {
+      "name": "minimal_two_descending",
+      "input": {
+        "nums": [
+          2,
+          1
+        ]
+      },
+      "expected": 1
+    },
+    {
+      "name": "all_duplicates",
+      "input": {
+        "nums": [
+          5,
+          5,
+          5,
+          5,
+          5
+        ]
+      },
+      "expected": 1
+    },
+    {
+      "name": "sorted_ascending",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      "expected": 10
+    },
+    {
+      "name": "sorted_descending",
+      "input": {
+        "nums": [
+          10,
+          9,
+          8,
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      "expected": 1
+    },
+    {
+      "name": "all_zeros",
+      "input": {
+        "nums": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": 1
+    },
+    {
+      "name": "negative_to_positive",
+      "input": {
+        "nums": [
+          -5,
+          -3,
+          -1,
+          0,
+          2,
+          5,
+          10
+        ]
+      },
+      "expected": 7
+    },
+    {
+      "name": "negative_only",
+      "input": {
+        "nums": [
+          -10,
+          -8,
+          -6,
+          -4,
+          -2
+        ]
+      },
+      "expected": 5
+    },
+    {
+      "name": "negative_descending",
+      "input": {
+        "nums": [
+          -1,
+          -3,
+          -5,
+          -7,
+          -9
+        ]
+      },
+      "expected": 1
+    },
+    {
+      "name": "single_spike",
+      "input": {
+        "nums": [
+          1,
+          5,
+          1,
+          1,
+          1
+        ]
+      },
+      "expected": 2
+    },
+    {
+      "name": "alternating",
+      "input": {
+        "nums": [
+          1,
+          2,
+          1,
+          2,
+          1,
+          2,
+          1,
+          2
+        ]
+      },
+      "expected": 2
+    },
+    {
+      "name": "two_subsequences_equal",
+      "input": {
+        "nums": [
+          1,
+          3,
+          5,
+          2,
+          4,
+          6
+        ]
+      },
+      "expected": 4
+    },
+    {
+      "name": "long_then_short",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          1,
+          1,
+          1
+        ]
+      },
+      "expected": 5
+    },
+    {
+      "name": "short_then_long",
+      "input": {
+        "nums": [
+          5,
+          4,
+          3,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "expected": 6
+    },
+    {
+      "name": "many_duplicates_mixed",
+      "input": {
+        "nums": [
+          1,
+          1,
+          2,
+          2,
+          3,
+          3,
+          2,
+          2,
+          1,
+          1
+        ]
+      },
+      "expected": 3
+    },
+    {
+      "name": "extreme_negatives",
+      "input": {
+        "nums": [
+          -10000,
+          -9999,
+          -9998,
+          -9997
+        ]
+      },
+      "expected": 4
+    },
+    {
+      "name": "extreme_positives",
+      "input": {
+        "nums": [
+          9997,
+          9998,
+          9999,
+          10000
+        ]
+      },
+      "expected": 4
+    },
+    {
+      "name": "mixed_extremes",
+      "input": {
+        "nums": [
+          -10000,
+          0,
+          10000
+        ]
+      },
+      "expected": 3
+    },
+    {
+      "name": "large_gap_values",
+      "input": {
+        "nums": [
+          1,
+          1000,
+          2,
+          999,
+          3,
+          998
+        ]
+      },
+      "expected": 4
+    },
+    {
+      "name": "quadratic_worst_case_100",
+      "input": {
+        "nums": [
+          100,
+          99,
+          98,
+          97,
+          96,
+          95,
+          94,
+          93,
+          92,
+          91,
+          90,
+          89,
+          88,
+          87,
+          86,
+          85,
+          84,
+          83,
+          82,
+          81,
+          80,
+          79,
+          78,
+          77,
+          76,
+          75,
+          74,
+          73,
+          72,
+          71,
+          70,
+          69,
+          68,
+          67,
+          66,
+          65,
+          64,
+          63,
+          62,
+          61,
+          60,
+          59,
+          58,
+          57,
+          56,
+          55,
+          54,
+          53,
+          52,
+          51,
+          50,
+          49,
+          48,
+          47,
+          46,
+          45,
+          44,
+          43,
+          42,
+          41,
+          40,
+          39,
+          38,
+          37,
+          36,
+          35,
+          34,
+          33,
+          32,
+          31,
+          30,
+          29,
+          28,
+          27,
+          26,
+          25,
+          24,
+          23,
+          22,
+          21,
+          20,
+          19,
+          18,
+          17,
+          16,
+          15,
+          14,
+          13,
+          12,
+          11,
+          10,
+          9,
+          8,
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      "expected": 1
+    },
+    {
+      "name": "zigzag_pattern",
+      "input": {
+        "nums": [
+          1,
+          10,
+          2,
+          9,
+          3,
+          8,
+          4,
+          7,
+          5,
+          6
+        ]
+      },
+      "expected": 6
+    },
+    {
+      "name": "plateau_then_climb",
+      "input": {
+        "nums": [
+          5,
+          5,
+          5,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      "expected": 6
+    },
+    {
+      "name": "valley_pattern",
+      "input": {
+        "nums": [
+          10,
+          5,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          10
+        ]
+      },
+      "expected": 7
+    }
+  ]
+}

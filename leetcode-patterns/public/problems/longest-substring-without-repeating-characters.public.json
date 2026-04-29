@@ -1,0 +1,51 @@
+{
+  "slug": "longest-substring-without-repeating-characters",
+  "title": "Longest Substring Without Repeating Characters",
+  "number": 3,
+  "difficulty": "Medium",
+  "category": "String",
+  "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+  "statement": "Given a string s, find the length of the longest substring without repeating characters.\n\nA substring is a contiguous sequence of characters within a string. The task is to identify the longest contiguous substring where no character appears more than once and return its length.",
+  "constraints": [
+    "0 <= len(s) <= 5 * 10^4",
+    "s consists of English letters, digits, symbols and spaces",
+    "The answer is guaranteed to be unique"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "lengthOfLongestSubstring",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "abcabcbb"
+      },
+      "output": 3,
+      "explanation": "The longest substring without repeating characters is \"abc\" with length 3."
+    },
+    {
+      "input": {
+        "s": "bbbbb"
+      },
+      "output": 1,
+      "explanation": "The longest substring without repeating characters is \"b\" with length 1."
+    },
+    {
+      "input": {
+        "s": "pwwkew"
+      },
+      "output": 3,
+      "explanation": "The longest substring without repeating characters is \"wke\" with length 3."
+    }
+  ],
+  "hiddenCount": 25
+}

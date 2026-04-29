@@ -1,0 +1,227 @@
+{
+  "slug": "palindromic-substrings",
+  "title": "Palindromic Substrings",
+  "number": 647,
+  "difficulty": "Medium",
+  "category": "String",
+  "url": "https://leetcode.com/problems/palindromic-substrings/",
+  "statement": "Given a string s, return the number of palindromic substrings in it.\n\nA palindromic substring is a contiguous sequence of characters that reads the same forwards and backwards.",
+  "constraints": [
+    "1 <= s.length <= 1000",
+    "s consists of lowercase English letters"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "countSubstrings",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def countSubstrings(self, s: str) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "abc"
+      },
+      "output": 3,
+      "explanation": "Three palindromes: 'a', 'b', 'c' (all single characters)"
+    },
+    {
+      "input": {
+        "s": "abba"
+      },
+      "output": 6,
+      "explanation": "Six palindromes: 'a', 'b', 'b', 'a', 'bb', 'abba'"
+    },
+    {
+      "input": {
+        "s": "aaa"
+      },
+      "output": 6,
+      "explanation": "Six palindromes: 'a' (3 times), 'aa' (2 times), 'aaa' (1 time)"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_single_char",
+      "input": {
+        "s": "a"
+      },
+      "expected": 1
+    },
+    {
+      "name": "minimal_two_different",
+      "input": {
+        "s": "ab"
+      },
+      "expected": 2
+    },
+    {
+      "name": "minimal_two_same",
+      "input": {
+        "s": "aa"
+      },
+      "expected": 3
+    },
+    {
+      "name": "all_same_length_4",
+      "input": {
+        "s": "aaaa"
+      },
+      "expected": 10
+    },
+    {
+      "name": "all_same_length_5",
+      "input": {
+        "s": "aaaaa"
+      },
+      "expected": 15
+    },
+    {
+      "name": "all_same_length_10",
+      "input": {
+        "s": "aaaaaaaaaa"
+      },
+      "expected": 55
+    },
+    {
+      "name": "single_palindrome_center",
+      "input": {
+        "s": "racecar"
+      },
+      "expected": 10
+    },
+    {
+      "name": "no_palindromes_except_singles",
+      "input": {
+        "s": "abcdef"
+      },
+      "expected": 6
+    },
+    {
+      "name": "alternating_pattern",
+      "input": {
+        "s": "ababab"
+      },
+      "expected": 12
+    },
+    {
+      "name": "palindrome_at_start",
+      "input": {
+        "s": "aabcdef"
+      },
+      "expected": 8
+    },
+    {
+      "name": "palindrome_at_end",
+      "input": {
+        "s": "abcdeff"
+      },
+      "expected": 8
+    },
+    {
+      "name": "multiple_separated_palindromes",
+      "input": {
+        "s": "abaxyz"
+      },
+      "expected": 7
+    },
+    {
+      "name": "nested_palindromes",
+      "input": {
+        "s": "abacaba"
+      },
+      "expected": 12
+    },
+    {
+      "name": "long_all_same",
+      "input": {
+        "s": "aaaaaaaaaaaaaaaaaaa"
+      },
+      "expected": 190
+    },
+    {
+      "name": "zigzag_pattern",
+      "input": {
+        "s": "abcbacba"
+      },
+      "expected": 10
+    },
+    {
+      "name": "ascending_then_descending",
+      "input": {
+        "s": "abcdcba"
+      },
+      "expected": 10
+    },
+    {
+      "name": "repeated_pairs",
+      "input": {
+        "s": "ababababab"
+      },
+      "expected": 30
+    },
+    {
+      "name": "many_single_chars_only",
+      "input": {
+        "s": "abcdefghij"
+      },
+      "expected": 10
+    },
+    {
+      "name": "two_char_repeats_only",
+      "input": {
+        "s": "ababab"
+      },
+      "expected": 12
+    },
+    {
+      "name": "even_palindrome_focus",
+      "input": {
+        "s": "aabbaa"
+      },
+      "expected": 11
+    },
+    {
+      "name": "odd_palindrome_focus",
+      "input": {
+        "s": "abacaba"
+      },
+      "expected": 12
+    },
+    {
+      "name": "max_length_mixed",
+      "input": {
+        "s": "abcdefghijklmnopqrstuvwxyzzyxwvutsrqponmlkjihgfedcba"
+      },
+      "expected": 78
+    },
+    {
+      "name": "many_repeated_chars_spread",
+      "input": {
+        "s": "aabbaabbaa"
+      },
+      "expected": 23
+    },
+    {
+      "name": "single_long_palindrome",
+      "input": {
+        "s": "abacdcabaa"
+      },
+      "expected": 17
+    },
+    {
+      "name": "dense_overlapping_palindromes",
+      "input": {
+        "s": "abaababaaba"
+      },
+      "expected": 26
+    }
+  ]
+}

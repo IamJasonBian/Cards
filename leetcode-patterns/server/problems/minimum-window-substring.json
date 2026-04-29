@@ -1,0 +1,261 @@
+{
+  "slug": "minimum-window-substring",
+  "title": "Minimum Window Substring",
+  "number": 76,
+  "difficulty": "Hard",
+  "category": "String",
+  "url": "https://leetcode.com/problems/minimum-window-substring/",
+  "statement": "Given two strings s and t, find the minimum window substring of s that contains all the characters in t (including duplicates). If no such window exists, return an empty string.\n\nA window substring is a contiguous sequence of characters from s. The characters in t can appear in any order within the window.",
+  "constraints": [
+    "1 <= s.length <= 10^5",
+    "1 <= t.length <= 10^5",
+    "s and t consist of uppercase and lowercase English letters"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "minWindow",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "t",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "str"
+  },
+  "starterCode": "class Solution:\n    def minWindow(self, s: str, t: str) -> str:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "ADOBECODEBANC",
+        "t": "ABC"
+      },
+      "output": "BANC",
+      "explanation": "The minimum window substring is \"BANC\" which contains all characters in \"ABC\"."
+    },
+    {
+      "input": {
+        "s": "a",
+        "t": "a"
+      },
+      "output": "a",
+      "explanation": "The entire string \"a\" is the minimum window."
+    },
+    {
+      "input": {
+        "s": "a",
+        "t": "aa"
+      },
+      "output": "",
+      "explanation": "No window can contain two 'a's from the string \"a\"."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_single_char_match",
+      "input": {
+        "s": "a",
+        "t": "a"
+      },
+      "expected": "a"
+    },
+    {
+      "name": "minimal_no_match",
+      "input": {
+        "s": "a",
+        "t": "b"
+      },
+      "expected": ""
+    },
+    {
+      "name": "minimal_duplicate_needed",
+      "input": {
+        "s": "a",
+        "t": "aa"
+      },
+      "expected": ""
+    },
+    {
+      "name": "two_char_exact",
+      "input": {
+        "s": "ab",
+        "t": "ab"
+      },
+      "expected": "ab"
+    },
+    {
+      "name": "two_char_no_match",
+      "input": {
+        "s": "ab",
+        "t": "cd"
+      },
+      "expected": ""
+    },
+    {
+      "name": "window_at_start",
+      "input": {
+        "s": "ABCDE",
+        "t": "ABC"
+      },
+      "expected": "ABC"
+    },
+    {
+      "name": "window_at_end",
+      "input": {
+        "s": "DEABC",
+        "t": "ABC"
+      },
+      "expected": "ABC"
+    },
+    {
+      "name": "window_in_middle",
+      "input": {
+        "s": "DDEABCE",
+        "t": "ABC"
+      },
+      "expected": "ABC"
+    },
+    {
+      "name": "all_same_chars_in_s",
+      "input": {
+        "s": "aaaa",
+        "t": "aa"
+      },
+      "expected": "aa"
+    },
+    {
+      "name": "all_same_chars_no_match",
+      "input": {
+        "s": "aaaa",
+        "t": "ab"
+      },
+      "expected": ""
+    },
+    {
+      "name": "all_same_chars_excess_needed",
+      "input": {
+        "s": "aaaa",
+        "t": "aaaaa"
+      },
+      "expected": ""
+    },
+    {
+      "name": "repeated_pattern",
+      "input": {
+        "s": "abcabcabc",
+        "t": "abc"
+      },
+      "expected": "abc"
+    },
+    {
+      "name": "repeated_pattern_duplicates",
+      "input": {
+        "s": "aabbccaabbcc",
+        "t": "aabbcc"
+      },
+      "expected": "aabbcc"
+    },
+    {
+      "name": "t_longer_than_s",
+      "input": {
+        "s": "ab",
+        "t": "abcdef"
+      },
+      "expected": ""
+    },
+    {
+      "name": "case_sensitive_lower",
+      "input": {
+        "s": "abcde",
+        "t": "abc"
+      },
+      "expected": "abc"
+    },
+    {
+      "name": "case_sensitive_upper",
+      "input": {
+        "s": "ABCDE",
+        "t": "ABC"
+      },
+      "expected": "ABC"
+    },
+    {
+      "name": "case_sensitive_mixed",
+      "input": {
+        "s": "AaBbCc",
+        "t": "aAbBcC"
+      },
+      "expected": "AaBbCc"
+    },
+    {
+      "name": "single_char_multiple_occurrences",
+      "input": {
+        "s": "bab",
+        "t": "ab"
+      },
+      "expected": "ba"
+    },
+    {
+      "name": "large_s_small_t",
+      "input": {
+        "s": "xyzxyzxyzxyzabc",
+        "t": "abc"
+      },
+      "expected": "abc"
+    },
+    {
+      "name": "many_duplicates_in_t",
+      "input": {
+        "s": "aaabbbccc",
+        "t": "aabbcc"
+      },
+      "expected": "aabbbcc"
+    },
+    {
+      "name": "sparse_match",
+      "input": {
+        "s": "axbycz",
+        "t": "abc"
+      },
+      "expected": "axbyc"
+    },
+    {
+      "name": "descending_order",
+      "input": {
+        "s": "zyxwvu",
+        "t": "zyx"
+      },
+      "expected": "zyx"
+    },
+    {
+      "name": "ascending_order",
+      "input": {
+        "s": "abcdef",
+        "t": "abc"
+      },
+      "expected": "abc"
+    },
+    {
+      "name": "adversarial_almost_all",
+      "input": {
+        "s": "aaaaaab",
+        "t": "ab"
+      },
+      "expected": "ab"
+    },
+    {
+      "name": "long_repeated_prefix",
+      "input": {
+        "s": "aaaaaaaaaaaaaaaaaaaaaaaaaab",
+        "t": "ab"
+      },
+      "expected": "ab"
+    }
+  ]
+}

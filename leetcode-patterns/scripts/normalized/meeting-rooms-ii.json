@@ -1,0 +1,89 @@
+{
+  "slug": "meeting-rooms-ii",
+  "number": 253,
+  "title": "Meeting Rooms II",
+  "difficulty": "Medium",
+  "category": "Interval",
+  "url": "https://leetcode.com/problems/meeting-rooms-ii/",
+  "statement": "Given an array of meeting intervals where each interval is represented as [start, end], determine the minimum number of meeting rooms required to accommodate all meetings without any time conflicts.\n\nTwo meetings conflict if one starts before the other ends. A meeting that ends at time t does not conflict with a meeting that starts at time t.",
+  "constraints": [
+    "1 <= intervals.length <= 10^4",
+    "0 <= start < end <= 10^6",
+    "intervals may be unsorted"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "minMeetingRooms",
+    "params": [
+      {
+        "name": "intervals",
+        "pyType": "list[list[int]]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def minMeetingRooms(self, intervals: list[list[int]]) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "intervals": [
+          [
+            0,
+            30
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            15,
+            20
+          ]
+        ]
+      },
+      "output": 2,
+      "explanation": "At time 5, two meetings are occurring: [0, 30] and [5, 10], so we need 2 rooms."
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            7,
+            10
+          ],
+          [
+            2,
+            4
+          ]
+        ]
+      },
+      "output": 1,
+      "explanation": "The meetings do not overlap, so only 1 room is needed."
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            2,
+            7
+          ]
+        ]
+      },
+      "output": 3,
+      "explanation": "All three meetings overlap during the interval [2, 5], requiring 3 rooms."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": "",
+  "referenceCode": "class Solution:\n    def minMeetingRooms(self, intervals: list[list[int]]) -> int:\n        time = []\n        for start, end in intervals:\n            time.append((start, 1))\n            time.append((end, -1))\n        \n        time.sort(key=lambda x: (x[0], x[1]))\n        \n        count = 0\n        max_count = 0\n        for t in time:\n            count += t[1]\n            max_count = max(max_count, count)\n        return max_count\n"
+}

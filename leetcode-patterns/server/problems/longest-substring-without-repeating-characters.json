@@ -1,0 +1,228 @@
+{
+  "slug": "longest-substring-without-repeating-characters",
+  "title": "Longest Substring Without Repeating Characters",
+  "number": 3,
+  "difficulty": "Medium",
+  "category": "String",
+  "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+  "statement": "Given a string s, find the length of the longest substring without repeating characters.\n\nA substring is a contiguous sequence of characters within a string. The task is to identify the longest contiguous substring where no character appears more than once and return its length.",
+  "constraints": [
+    "0 <= len(s) <= 5 * 10^4",
+    "s consists of English letters, digits, symbols and spaces",
+    "The answer is guaranteed to be unique"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "lengthOfLongestSubstring",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "abcabcbb"
+      },
+      "output": 3,
+      "explanation": "The longest substring without repeating characters is \"abc\" with length 3."
+    },
+    {
+      "input": {
+        "s": "bbbbb"
+      },
+      "output": 1,
+      "explanation": "The longest substring without repeating characters is \"b\" with length 1."
+    },
+    {
+      "input": {
+        "s": "pwwkew"
+      },
+      "output": 3,
+      "explanation": "The longest substring without repeating characters is \"wke\" with length 3."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "empty_string",
+      "input": {
+        "s": ""
+      },
+      "expected": 0
+    },
+    {
+      "name": "single_char",
+      "input": {
+        "s": "a"
+      },
+      "expected": 1
+    },
+    {
+      "name": "two_chars_same",
+      "input": {
+        "s": "aa"
+      },
+      "expected": 1
+    },
+    {
+      "name": "two_chars_diff",
+      "input": {
+        "s": "ab"
+      },
+      "expected": 2
+    },
+    {
+      "name": "all_unique",
+      "input": {
+        "s": "abcdefghijklmnopqrstuvwxyz"
+      },
+      "expected": 26
+    },
+    {
+      "name": "all_same",
+      "input": {
+        "s": "aaaaaaaaaa"
+      },
+      "expected": 1
+    },
+    {
+      "name": "alternating_pairs",
+      "input": {
+        "s": "ababababab"
+      },
+      "expected": 2
+    },
+    {
+      "name": "ascending_then_repeat",
+      "input": {
+        "s": "abcdefga"
+      },
+      "expected": 7
+    },
+    {
+      "name": "descending_chars",
+      "input": {
+        "s": "zyxwvutsrq"
+      },
+      "expected": 10
+    },
+    {
+      "name": "longest_at_start",
+      "input": {
+        "s": "abcdefaaa"
+      },
+      "expected": 6
+    },
+    {
+      "name": "longest_at_end",
+      "input": {
+        "s": "aaabcdefg"
+      },
+      "expected": 7
+    },
+    {
+      "name": "longest_in_middle",
+      "input": {
+        "s": "aabcdefga"
+      },
+      "expected": 7
+    },
+    {
+      "name": "many_digits",
+      "input": {
+        "s": "0123456789"
+      },
+      "expected": 10
+    },
+    {
+      "name": "digits_with_repeat",
+      "input": {
+        "s": "012345678901234567890"
+      },
+      "expected": 10
+    },
+    {
+      "name": "with_spaces",
+      "input": {
+        "s": "a b c a b c"
+      },
+      "expected": 3
+    },
+    {
+      "name": "with_symbols",
+      "input": {
+        "s": "!@#$%^&*!@#$"
+      },
+      "expected": 8
+    },
+    {
+      "name": "mixed_alphanumeric",
+      "input": {
+        "s": "aB1cD2eF3aB"
+      },
+      "expected": 9
+    },
+    {
+      "name": "long_unique_prefix",
+      "input": {
+        "s": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+      },
+      "expected": 62
+    },
+    {
+      "name": "repeating_triplet",
+      "input": {
+        "s": "abcabcabcabc"
+      },
+      "expected": 3
+    },
+    {
+      "name": "adjacent_duplicates",
+      "input": {
+        "s": "aabbccddee"
+      },
+      "expected": 2
+    },
+    {
+      "name": "complex_pattern",
+      "input": {
+        "s": "au"
+      },
+      "expected": 2
+    },
+    {
+      "name": "large_unique_near_limit",
+      "input": {
+        "s": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrst"
+      },
+      "expected": 52
+    },
+    {
+      "name": "worst_case_sliding_window",
+      "input": {
+        "s": "dvdf"
+      },
+      "expected": 3
+    },
+    {
+      "name": "repeated_char_at_end",
+      "input": {
+        "s": "abcdefghijklmnopqrstuvwxyza"
+      },
+      "expected": 26
+    },
+    {
+      "name": "space_char_focus",
+      "input": {
+        "s": "a b c d e f g h a"
+      },
+      "expected": 3
+    }
+  ]
+}

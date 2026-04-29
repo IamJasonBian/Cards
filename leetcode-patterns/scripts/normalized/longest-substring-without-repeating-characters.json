@@ -1,0 +1,54 @@
+{
+  "slug": "longest-substring-without-repeating-characters",
+  "number": 3,
+  "title": "Longest Substring Without Repeating Characters",
+  "difficulty": "Medium",
+  "category": "String",
+  "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+  "statement": "Given a string s, find the length of the longest substring without repeating characters.\n\nA substring is a contiguous sequence of characters within a string. The task is to identify the longest contiguous substring where no character appears more than once and return its length.",
+  "constraints": [
+    "0 <= len(s) <= 5 * 10^4",
+    "s consists of English letters, digits, symbols and spaces",
+    "The answer is guaranteed to be unique"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "lengthOfLongestSubstring",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "abcabcbb"
+      },
+      "output": 3,
+      "explanation": "The longest substring without repeating characters is \"abc\" with length 3."
+    },
+    {
+      "input": {
+        "s": "bbbbb"
+      },
+      "output": 1,
+      "explanation": "The longest substring without repeating characters is \"b\" with length 1."
+    },
+    {
+      "input": {
+        "s": "pwwkew"
+      },
+      "output": 3,
+      "explanation": "The longest substring without repeating characters is \"wke\" with length 3."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": "All parameters and return type are primitives (str and int).",
+  "referenceCode": "class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        charSet = set()\n        l = 0\n        res = 0\n\n        for r in range(len(s)):\n            while s[r] in charSet:\n                charSet.remove(s[l])\n                l += 1\n            charSet.add(s[r])\n            res = max(res, r - l + 1)\n        return res\n"
+}

@@ -1,0 +1,63 @@
+{
+  "slug": "alien-dictionary",
+  "title": "Alien Dictionary",
+  "number": 269,
+  "difficulty": "Hard",
+  "category": "Graph",
+  "url": "https://leetcode.com/problems/alien-dictionary/",
+  "statement": "Given a list of words from an alien dictionary, derive the order of characters in that alien language. The words are sorted lexicographically according to the alien dictionary's character ordering.\n\nIf the given input is invalid (e.g., a longer word comes before its prefix), return an empty string. If there is a cycle in the character ordering (which would make it impossible to derive a valid ordering), return an empty string. Otherwise, return a string representing the character order in the alien dictionary.",
+  "constraints": [
+    "1 <= words.length <= 100",
+    "1 <= words[i].length <= 100",
+    "words[i] consists of lowercase English letters"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "alienOrder",
+    "params": [
+      {
+        "name": "words",
+        "pyType": "list[str]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "str"
+  },
+  "starterCode": "class Solution:\n    def alienOrder(self, words: list[str]) -> str:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "words": [
+          "wrt",
+          "wrf",
+          "er",
+          "ett",
+          "rftt"
+        ]
+      },
+      "output": "wertf",
+      "explanation": "From the sorted order, we can deduce: w before e, e before r, r before t, t before f."
+    },
+    {
+      "input": {
+        "words": [
+          "z",
+          "x"
+        ]
+      },
+      "output": "zx",
+      "explanation": "The first character differs; z comes before x in the alien dictionary."
+    },
+    {
+      "input": {
+        "words": [
+          "z",
+          "z"
+        ]
+      },
+      "output": "z",
+      "explanation": "Only one unique character."
+    }
+  ],
+  "hiddenCount": 25
+}

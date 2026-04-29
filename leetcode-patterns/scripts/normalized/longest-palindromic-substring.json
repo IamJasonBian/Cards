@@ -1,0 +1,53 @@
+{
+  "slug": "longest-palindromic-substring",
+  "number": 5,
+  "title": "Longest Palindromic Substring",
+  "difficulty": "Medium",
+  "category": "String",
+  "url": "https://leetcode.com/problems/longest-palindromic-substring/",
+  "statement": "Given a string s, find the longest contiguous substring that reads the same forwards and backwards (a palindrome). If there are multiple palindromes of equal length, return any one of them.",
+  "constraints": [
+    "1 <= s.length <= 1000",
+    "s consist of only digits and English letters (lower-case and/or upper-case)"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "longestPalindrome",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "str"
+  },
+  "starterCode": "class Solution:\n    def longestPalindrome(self, s: str) -> str:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "babad"
+      },
+      "output": "bab",
+      "explanation": "Both 'bab' and 'aba' are valid answers; either is acceptable."
+    },
+    {
+      "input": {
+        "s": "cbbd"
+      },
+      "output": "bb",
+      "explanation": "The longest palindromic substring is 'bb'."
+    },
+    {
+      "input": {
+        "s": "a"
+      },
+      "output": "a",
+      "explanation": "A single character is a palindrome."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": null,
+  "referenceCode": "class Solution:\n    def longestPalindrome(self, s: str) -> str:\n        self.res = \"\"\n        self.lenres = 0\n        for i in range(len(s)):\n            self.helper(s, i, i)\n            self.helper(s, i, i + 1)\n        return self.res\n    \n    def helper(self, s: str, left: int, right: int) -> str:\n        while left >= 0 and right < len(s) and s[left] == s[right]:\n            if (right - left + 1) > self.lenres:\n                self.res = s[left:right + 1]\n                self.lenres = right - left + 1\n            left -= 1\n            right += 1\n        return self.res\n"
+}

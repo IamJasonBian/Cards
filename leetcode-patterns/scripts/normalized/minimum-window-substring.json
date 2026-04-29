@@ -1,0 +1,62 @@
+{
+  "slug": "minimum-window-substring",
+  "number": 76,
+  "title": "Minimum Window Substring",
+  "difficulty": "Hard",
+  "category": "String",
+  "url": "https://leetcode.com/problems/minimum-window-substring/",
+  "statement": "Given two strings s and t, find the minimum window substring of s that contains all the characters in t (including duplicates). If no such window exists, return an empty string.\n\nA window substring is a contiguous sequence of characters from s. The characters in t can appear in any order within the window.",
+  "constraints": [
+    "1 <= s.length <= 10^5",
+    "1 <= t.length <= 10^5",
+    "s and t consist of uppercase and lowercase English letters"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "minWindow",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "t",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "str"
+  },
+  "starterCode": "class Solution:\n    def minWindow(self, s: str, t: str) -> str:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "ADOBECODEBANC",
+        "t": "ABC"
+      },
+      "output": "BANC",
+      "explanation": "The minimum window substring is \"BANC\" which contains all characters in \"ABC\"."
+    },
+    {
+      "input": {
+        "s": "a",
+        "t": "a"
+      },
+      "output": "a",
+      "explanation": "The entire string \"a\" is the minimum window."
+    },
+    {
+      "input": {
+        "s": "a",
+        "t": "aa"
+      },
+      "output": "",
+      "explanation": "No window can contain two 'a's from the string \"a\"."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": null,
+  "referenceCode": "class Solution:\n    def minWindow(self, s: str, t: str) -> str:\n        if len(s) < len(t):\n            return \"\"\n\n        countT, window = {}, {}\n        for c in t:\n            countT[c] = 1 + countT.get(c, 0)\n\n        have, need = 0, len(countT)\n        res, resLen = [-1, -1], float(\"infinity\")\n        l = 0\n        for r in range(len(s)):\n            c = s[r]\n            window[c] = 1 + window.get(c, 0)\n\n            if c in countT and window[c] == countT[c]:\n                have += 1\n\n            while have == need:\n                if (r - l + 1) < resLen:\n                    res = [l, r]\n                    resLen = r - l + 1\n                window[s[l]] -= 1\n                if s[l] in countT and window[s[l]] < countT[s[l]]:\n                    have -= 1\n                l += 1\n        l, r = res\n        return s[l : r + 1] if resLen != float(\"infinity\") else \"\""
+}

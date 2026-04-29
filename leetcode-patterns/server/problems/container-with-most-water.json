@@ -1,0 +1,533 @@
+{
+  "slug": "container-with-most-water",
+  "title": "Container With Most Water",
+  "number": 11,
+  "difficulty": "Medium",
+  "category": "Array",
+  "url": "https://leetcode.com/problems/container-with-most-water/",
+  "statement": "You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).\n\nFind two lines that together with the x-axis form a container such that the container holds the most water.\n\nReturn the maximum area of water a container can store. You may not slant the container.",
+  "constraints": [
+    "n == height.length",
+    "2 <= n <= 10^5",
+    "0 <= height[i] <= 10^4"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "maxArea",
+    "params": [
+      {
+        "name": "height",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def maxArea(self, height: list[int]) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "height": [
+          1,
+          8,
+          6,
+          2,
+          5,
+          4,
+          8,
+          3,
+          7
+        ]
+      },
+      "output": 49,
+      "explanation": "The vertical lines at indices 1 and 8 have heights 8 and 7. The width is 8 - 1 = 7, and the area is min(8, 7) * 7 = 49."
+    },
+    {
+      "input": {
+        "height": [
+          1,
+          1
+        ]
+      },
+      "output": 1,
+      "explanation": "The two vertical lines have heights 1 and 1. The width is 1, and the area is min(1, 1) * 1 = 1."
+    },
+    {
+      "input": {
+        "height": [
+          4,
+          3,
+          2,
+          1,
+          4
+        ]
+      },
+      "output": 16,
+      "explanation": "The vertical lines at indices 0 and 4 have heights 4 and 4. The width is 4 - 0 = 4, and the area is min(4, 4) * 4 = 16."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_two_elements",
+      "input": {
+        "height": [
+          1,
+          1
+        ]
+      },
+      "expected": 1
+    },
+    {
+      "name": "minimal_different",
+      "input": {
+        "height": [
+          0,
+          1
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "name": "minimal_large_values",
+      "input": {
+        "height": [
+          10000,
+          10000
+        ]
+      },
+      "expected": 10000
+    },
+    {
+      "name": "all_zeros",
+      "input": {
+        "height": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "name": "ascending_order",
+      "input": {
+        "height": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      "expected": 25
+    },
+    {
+      "name": "descending_order",
+      "input": {
+        "height": [
+          10,
+          9,
+          8,
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      "expected": 25
+    },
+    {
+      "name": "peak_in_middle",
+      "input": {
+        "height": [
+          1,
+          2,
+          3,
+          10,
+          3,
+          2,
+          1
+        ]
+      },
+      "expected": 8
+    },
+    {
+      "name": "peak_at_start",
+      "input": {
+        "height": [
+          10000,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "expected": 4
+    },
+    {
+      "name": "peak_at_end",
+      "input": {
+        "height": [
+          1,
+          1,
+          1,
+          1,
+          10000
+        ]
+      },
+      "expected": 4
+    },
+    {
+      "name": "two_peaks_far_apart",
+      "input": {
+        "height": [
+          10000,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          10000
+        ]
+      },
+      "expected": 70000
+    },
+    {
+      "name": "all_same_value",
+      "input": {
+        "height": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ]
+      },
+      "expected": 35
+    },
+    {
+      "name": "alternating_high_low",
+      "input": {
+        "height": [
+          10000,
+          0,
+          10000,
+          0,
+          10000,
+          0,
+          10000
+        ]
+      },
+      "expected": 60000
+    },
+    {
+      "name": "one_large_rest_zero",
+      "input": {
+        "height": [
+          0,
+          0,
+          10000,
+          0,
+          0
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "name": "valley_shape",
+      "input": {
+        "height": [
+          5,
+          4,
+          3,
+          2,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": 40
+    },
+    {
+      "name": "inverted_valley",
+      "input": {
+        "height": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      "expected": 12
+    },
+    {
+      "name": "many_duplicates",
+      "input": {
+        "height": [
+          3,
+          3,
+          3,
+          9,
+          3,
+          3,
+          3,
+          9,
+          3,
+          3,
+          3
+        ]
+      },
+      "expected": 36
+    },
+    {
+      "name": "long_ascending",
+      "input": {
+        "height": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ]
+      },
+      "expected": 100
+    },
+    {
+      "name": "long_descending",
+      "input": {
+        "height": [
+          20,
+          19,
+          18,
+          17,
+          16,
+          15,
+          14,
+          13,
+          12,
+          11,
+          10,
+          9,
+          8,
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      "expected": 100
+    },
+    {
+      "name": "sawtooth_pattern",
+      "input": {
+        "height": [
+          1,
+          10,
+          1,
+          10,
+          1,
+          10,
+          1,
+          10,
+          1,
+          10
+        ]
+      },
+      "expected": 80
+    },
+    {
+      "name": "mostly_zeros_two_large",
+      "input": {
+        "height": [
+          0,
+          0,
+          0,
+          10000,
+          0,
+          0,
+          0,
+          0,
+          10000,
+          0,
+          0
+        ]
+      },
+      "expected": 50000
+    },
+    {
+      "name": "large_size_random_like",
+      "input": {
+        "height": [
+          42,
+          17,
+          89,
+          5,
+          123,
+          67,
+          34,
+          156,
+          78,
+          2,
+          99,
+          234,
+          45,
+          88,
+          12,
+          167,
+          56,
+          120,
+          9,
+          100,
+          31,
+          62,
+          44,
+          11,
+          138,
+          87,
+          19,
+          76,
+          102,
+          53
+        ]
+      },
+      "expected": 2460
+    },
+    {
+      "name": "power_of_two_size",
+      "input": {
+        "height": [
+          100,
+          50,
+          75,
+          60,
+          90,
+          70,
+          55,
+          80,
+          65,
+          110,
+          48,
+          85,
+          95,
+          40,
+          105,
+          72
+        ]
+      },
+      "expected": 1400
+    },
+    {
+      "name": "two_max_at_extremes",
+      "input": {
+        "height": [
+          10000,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10000
+        ]
+      },
+      "expected": 100000
+    },
+    {
+      "name": "decreasing_then_increasing",
+      "input": {
+        "height": [
+          100,
+          80,
+          60,
+          40,
+          20,
+          40,
+          60,
+          80,
+          100
+        ]
+      },
+      "expected": 800
+    },
+    {
+      "name": "near_max_constraint_size",
+      "input": {
+        "height": [
+          5,
+          10,
+          15,
+          20,
+          25,
+          30,
+          35,
+          40,
+          45,
+          50,
+          45,
+          40,
+          35,
+          30,
+          25,
+          20,
+          15,
+          10,
+          5,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          100
+        ]
+      },
+      "expected": 1000
+    }
+  ]
+}

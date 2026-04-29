@@ -1,0 +1,841 @@
+{
+  "slug": "course-schedule",
+  "title": "Course Schedule",
+  "number": 207,
+  "difficulty": "Medium",
+  "category": "Graph",
+  "url": "https://leetcode.com/problems/course-schedule/",
+  "statement": "You are given a number of courses labeled from 0 to numCourses - 1 and a list of prerequisite pairs. Each pair [a, b] indicates that you must take course b before you can take course a.\n\nDetermine if it is possible to finish all courses. Return true if you can finish all courses, and false otherwise.",
+  "constraints": [
+    "1 <= numCourses <= 2000",
+    "0 <= prerequisites.length <= 5000",
+    "prerequisites[i].length == 2",
+    "0 <= ai, bi < numCourses",
+    "All the pairs prerequisites[i] are unique"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "canFinish",
+    "params": [
+      {
+        "name": "numCourses",
+        "pyType": "int",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "prerequisites",
+        "pyType": "list[list[int]]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def canFinish(self, numCourses: int, prerequisites: list[list[int]]) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "numCourses": 2,
+        "prerequisites": [
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "output": true,
+      "explanation": "Take course 0 first, then course 1. No cycle exists."
+    },
+    {
+      "input": {
+        "numCourses": 2,
+        "prerequisites": [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      },
+      "output": false,
+      "explanation": "Circular dependency: course 0 requires 1, and course 1 requires 0."
+    },
+    {
+      "input": {
+        "numCourses": 3,
+        "prerequisites": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "output": true,
+      "explanation": "Take course 2 first, then 1, then 0. No cycle exists."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_no_prereqs",
+      "input": {
+        "numCourses": 1,
+        "prerequisites": []
+      },
+      "expected": true
+    },
+    {
+      "name": "minimal_single_prereq",
+      "input": {
+        "numCourses": 2,
+        "prerequisites": [
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "minimal_cycle",
+      "input": {
+        "numCourses": 2,
+        "prerequisites": [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "three_courses_chain",
+      "input": {
+        "numCourses": 3,
+        "prerequisites": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            1
+          ]
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "three_courses_dag",
+      "input": {
+        "numCourses": 3,
+        "prerequisites": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "three_courses_cycle",
+      "input": {
+        "numCourses": 3,
+        "prerequisites": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            0
+          ]
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "four_courses_linear",
+      "input": {
+        "numCourses": 4,
+        "prerequisites": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "four_courses_diamond",
+      "input": {
+        "numCourses": 4,
+        "prerequisites": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "four_courses_two_cycle",
+      "input": {
+        "numCourses": 4,
+        "prerequisites": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "five_courses_complex_dag",
+      "input": {
+        "numCourses": 5,
+        "prerequisites": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "five_courses_self_loop",
+      "input": {
+        "numCourses": 5,
+        "prerequisites": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "ten_courses_linear",
+      "input": {
+        "numCourses": 10,
+        "prerequisites": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            7,
+            6
+          ],
+          [
+            8,
+            7
+          ],
+          [
+            9,
+            8
+          ]
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "ten_courses_dense_dag",
+      "input": {
+        "numCourses": 10,
+        "prerequisites": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            6,
+            5
+          ]
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "ten_courses_two_components",
+      "input": {
+        "numCourses": 10,
+        "prerequisites": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            5,
+            4
+          ]
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "isolate_nodes_only",
+      "input": {
+        "numCourses": 5,
+        "prerequisites": []
+      },
+      "expected": true
+    },
+    {
+      "name": "single_edge_large",
+      "input": {
+        "numCourses": 100,
+        "prerequisites": [
+          [
+            99,
+            0
+          ]
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "long_chain_large",
+      "input": {
+        "numCourses": 100,
+        "prerequisites": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            7,
+            6
+          ],
+          [
+            8,
+            7
+          ],
+          [
+            9,
+            8
+          ],
+          [
+            10,
+            9
+          ]
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "cycle_at_end_large",
+      "input": {
+        "numCourses": 100,
+        "prerequisites": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            7,
+            6
+          ],
+          [
+            8,
+            7
+          ],
+          [
+            9,
+            8
+          ],
+          [
+            5,
+            9
+          ]
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "many_prerequisites_one_course",
+      "input": {
+        "numCourses": 20,
+        "prerequisites": [
+          [
+            19,
+            0
+          ],
+          [
+            19,
+            1
+          ],
+          [
+            19,
+            2
+          ],
+          [
+            19,
+            3
+          ],
+          [
+            19,
+            4
+          ],
+          [
+            19,
+            5
+          ],
+          [
+            19,
+            6
+          ],
+          [
+            19,
+            7
+          ],
+          [
+            19,
+            8
+          ],
+          [
+            19,
+            9
+          ]
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "reverse_order_chain",
+      "input": {
+        "numCourses": 6,
+        "prerequisites": [
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            1
+          ]
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "dense_cycle",
+      "input": {
+        "numCourses": 6,
+        "prerequisites": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            0
+          ]
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "max_constraints",
+      "input": {
+        "numCourses": 2000,
+        "prerequisites": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            5,
+            4
+          ]
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "sparse_large",
+      "input": {
+        "numCourses": 1000,
+        "prerequisites": [
+          [
+            500,
+            100
+          ],
+          [
+            750,
+            200
+          ],
+          [
+            999,
+            500
+          ]
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "near_max_edges",
+      "input": {
+        "numCourses": 50,
+        "prerequisites": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            6,
+            5
+          ]
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "hidden_cycle_middle",
+      "input": {
+        "numCourses": 10,
+        "prerequisites": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            7,
+            8
+          ],
+          [
+            8,
+            9
+          ]
+        ]
+      },
+      "expected": false
+    }
+  ]
+}

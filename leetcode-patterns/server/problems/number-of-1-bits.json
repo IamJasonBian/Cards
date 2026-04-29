@@ -1,0 +1,227 @@
+{
+  "slug": "number-of-1-bits",
+  "title": "Number of 1 Bits",
+  "number": 191,
+  "difficulty": "Easy",
+  "category": "Binary",
+  "url": "https://leetcode.com/problems/number-of-1-bits/",
+  "statement": "Write a function that takes a positive integer and returns the number of 1-bits it has in its binary representation (also known as the Hamming weight).\n\nFor example, the binary representation of 11 is 1011, which has three 1-bits.",
+  "constraints": [
+    "1 <= n <= 2^31 - 1",
+    "The input must be a positive integer"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "hammingWeight",
+    "params": [
+      {
+        "name": "n",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def hammingWeight(self, n: int) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "n": 11
+      },
+      "output": 3,
+      "explanation": "The binary representation of 11 is 1011, which has three 1-bits."
+    },
+    {
+      "input": {
+        "n": 128
+      },
+      "output": 1,
+      "explanation": "The binary representation of 128 is 10000000, which has one 1-bit."
+    },
+    {
+      "input": {
+        "n": 2147483645
+      },
+      "output": 30,
+      "explanation": "The binary representation has 30 ones."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_input",
+      "input": {
+        "n": 1
+      },
+      "expected": 1
+    },
+    {
+      "name": "minimal_all_zeros_except_msb",
+      "input": {
+        "n": 2
+      },
+      "expected": 1
+    },
+    {
+      "name": "small_three",
+      "input": {
+        "n": 3
+      },
+      "expected": 2
+    },
+    {
+      "name": "small_power_of_two",
+      "input": {
+        "n": 4
+      },
+      "expected": 1
+    },
+    {
+      "name": "small_seven",
+      "input": {
+        "n": 7
+      },
+      "expected": 3
+    },
+    {
+      "name": "small_fifteen",
+      "input": {
+        "n": 15
+      },
+      "expected": 4
+    },
+    {
+      "name": "small_sixteen",
+      "input": {
+        "n": 16
+      },
+      "expected": 1
+    },
+    {
+      "name": "small_31",
+      "input": {
+        "n": 31
+      },
+      "expected": 5
+    },
+    {
+      "name": "small_32",
+      "input": {
+        "n": 32
+      },
+      "expected": 1
+    },
+    {
+      "name": "mid_range_255",
+      "input": {
+        "n": 255
+      },
+      "expected": 8
+    },
+    {
+      "name": "mid_range_256",
+      "input": {
+        "n": 256
+      },
+      "expected": 1
+    },
+    {
+      "name": "mid_range_511",
+      "input": {
+        "n": 511
+      },
+      "expected": 9
+    },
+    {
+      "name": "mid_range_1023",
+      "input": {
+        "n": 1023
+      },
+      "expected": 10
+    },
+    {
+      "name": "mid_range_65535",
+      "input": {
+        "n": 65535
+      },
+      "expected": 16
+    },
+    {
+      "name": "mid_range_65536",
+      "input": {
+        "n": 65536
+      },
+      "expected": 1
+    },
+    {
+      "name": "mid_range_1048575",
+      "input": {
+        "n": 1048575
+      },
+      "expected": 20
+    },
+    {
+      "name": "mid_range_1048576",
+      "input": {
+        "n": 1048576
+      },
+      "expected": 1
+    },
+    {
+      "name": "alternating_pattern_low",
+      "input": {
+        "n": 85
+      },
+      "expected": 4
+    },
+    {
+      "name": "alternating_pattern_high",
+      "input": {
+        "n": 170
+      },
+      "expected": 4
+    },
+    {
+      "name": "sparse_bits",
+      "input": {
+        "n": 262144
+      },
+      "expected": 1
+    },
+    {
+      "name": "dense_bits_low",
+      "input": {
+        "n": 536870911
+      },
+      "expected": 29
+    },
+    {
+      "name": "near_max_value",
+      "input": {
+        "n": 2147483646
+      },
+      "expected": 30
+    },
+    {
+      "name": "max_value",
+      "input": {
+        "n": 2147483647
+      },
+      "expected": 31
+    },
+    {
+      "name": "single_high_bit",
+      "input": {
+        "n": 1073741824
+      },
+      "expected": 1
+    },
+    {
+      "name": "all_ones_31_bits",
+      "input": {
+        "n": 2147483647
+      },
+      "expected": 31
+    }
+  ]
+}

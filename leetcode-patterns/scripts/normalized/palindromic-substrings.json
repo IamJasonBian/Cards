@@ -1,0 +1,53 @@
+{
+  "slug": "palindromic-substrings",
+  "number": 647,
+  "title": "Palindromic Substrings",
+  "difficulty": "Medium",
+  "category": "String",
+  "url": "https://leetcode.com/problems/palindromic-substrings/",
+  "statement": "Given a string s, return the number of palindromic substrings in it.\n\nA palindromic substring is a contiguous sequence of characters that reads the same forwards and backwards.",
+  "constraints": [
+    "1 <= s.length <= 1000",
+    "s consists of lowercase English letters"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "countSubstrings",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def countSubstrings(self, s: str) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "abc"
+      },
+      "output": 3,
+      "explanation": "Three palindromes: 'a', 'b', 'c' (all single characters)"
+    },
+    {
+      "input": {
+        "s": "abba"
+      },
+      "output": 6,
+      "explanation": "Six palindromes: 'a', 'b', 'b', 'a', 'bb', 'abba'"
+    },
+    {
+      "input": {
+        "s": "aaa"
+      },
+      "output": 6,
+      "explanation": "Six palindromes: 'a' (3 times), 'aa' (2 times), 'aaa' (1 time)"
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": "All parameters and return type are primitive JSON types",
+  "referenceCode": "class Solution:\n    def countSubstrings(self, s: str) -> int:\n        res = 0\n\n        for i in range(len(s)):\n            res += self.countPali(s, i, i)\n            res += self.countPali(s, i, i + 1)\n        return res\n\n    def countPali(self, s: str, l: int, r: int) -> int:\n        res = 0\n        while l >= 0 and r < len(s) and s[l] == s[r]:\n            res += 1\n            l -= 1\n            r += 1\n        return res\n"
+}

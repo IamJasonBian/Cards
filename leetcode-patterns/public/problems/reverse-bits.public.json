@@ -1,0 +1,50 @@
+{
+  "slug": "reverse-bits",
+  "title": "Reverse Bits",
+  "number": 190,
+  "difficulty": "Easy",
+  "category": "Binary",
+  "url": "https://leetcode.com/problems/reverse-bits/",
+  "statement": "Given a 32-bit unsigned integer, reverse the bits and return the resulting integer.\n\nFor example, if the input is 00000010100101000001111010011100 (decimal 43261596), the output should be 00111001011110000010100101000000 (decimal 964176192).",
+  "constraints": [
+    "The input is a 32-bit unsigned integer",
+    "0 <= n < 2^32"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "reverseBits",
+    "params": [
+      {
+        "name": "n",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def reverseBits(self, n: int) -> int:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "n": 43261596
+      },
+      "output": 964176192,
+      "explanation": "The binary representation of 43261596 is 00000010100101000001111010011100, and reversing it gives 00111001011110000010100101000000, which is 964176192."
+    },
+    {
+      "input": {
+        "n": 4294967295
+      },
+      "output": 4294967295,
+      "explanation": "The binary representation of 4294967295 (all 1s) remains the same when reversed: 11111111111111111111111111111111."
+    },
+    {
+      "input": {
+        "n": 1
+      },
+      "output": 2147483648,
+      "explanation": "The binary representation of 1 is 00000000000000000000000000000001, and reversing it gives 10000000000000000000000000000000, which is 2147483648."
+    }
+  ],
+  "hiddenCount": 25
+}

@@ -1,0 +1,69 @@
+{
+  "slug": "missing-number",
+  "title": "Missing Number",
+  "number": 268,
+  "difficulty": "Easy",
+  "category": "Binary",
+  "url": "https://leetcode.com/problems/missing-number/",
+  "statement": "Given an array nums containing n distinct numbers in the range [0, n], return the only number in the range that is missing from the array.\n\nFollow-up: Could you implement a solution using only O(1) extra space complexity and O(n) time complexity?",
+  "constraints": [
+    "n == len(nums)",
+    "1 <= n <= 10^4",
+    "0 <= nums[i] <= n",
+    "All the numbers in nums are unique"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "missingNumber",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def missingNumber(self, nums: list[int]) -> int:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          3,
+          0,
+          1
+        ]
+      },
+      "output": 2,
+      "explanation": "Array contains numbers 0, 1, 3. The missing number in range [0, 3] is 2."
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          1
+        ]
+      },
+      "output": 2,
+      "explanation": "Array contains numbers 0, 1. The missing number in range [0, 2] is 2."
+    },
+    {
+      "input": {
+        "nums": [
+          9,
+          6,
+          4,
+          2,
+          3,
+          5,
+          7,
+          0,
+          1
+        ]
+      },
+      "output": 8,
+      "explanation": "Array is missing 8 from the range [0, 9]."
+    }
+  ],
+  "hiddenCount": 25
+}

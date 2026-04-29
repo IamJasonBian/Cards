@@ -1,0 +1,104 @@
+{
+  "slug": "graph-valid-tree",
+  "title": "Graph Valid Tree",
+  "number": 261,
+  "difficulty": "Medium",
+  "category": "Graph",
+  "url": "https://leetcode.com/problems/graph-valid-tree/",
+  "statement": "Given an integer n representing the number of nodes in a graph and a list of edges, determine whether the given edges form a valid tree.\n\nA valid tree must satisfy two conditions:\n1. It is a connected graph (all nodes are reachable from any node)\n2. It contains no cycles (it is acyclic)\n\nEquivalently, a tree with n nodes has exactly n-1 edges and is fully connected.",
+  "constraints": [
+    "1 <= n <= 10^4",
+    "0 <= edges.length <= 10^4",
+    "edges[i].length == 2",
+    "0 <= edges[i][0], edges[i][1] < n",
+    "edges[i][0] != edges[i][1]"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "validTree",
+    "params": [
+      {
+        "name": "n",
+        "pyType": "int",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "edges",
+        "pyType": "list[list[int]]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def validTree(self, n: int, edges: list[list[int]]) -> bool:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "n": 5,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            4
+          ]
+        ]
+      },
+      "output": true,
+      "explanation": "The edges form a connected tree with 5 nodes and 4 edges."
+    },
+    {
+      "input": {
+        "n": 5,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ]
+        ]
+      },
+      "output": false,
+      "explanation": "The edges form a cycle (0-1-2-3-1), so it is not a valid tree."
+    },
+    {
+      "input": {
+        "n": 2,
+        "edges": [
+          [
+            0,
+            1
+          ]
+        ]
+      },
+      "output": true,
+      "explanation": "Two nodes connected by a single edge form a valid tree."
+    }
+  ],
+  "hiddenCount": 23
+}

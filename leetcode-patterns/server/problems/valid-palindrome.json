@@ -1,0 +1,262 @@
+{
+  "slug": "valid-palindrome",
+  "title": "Valid Palindrome",
+  "number": 125,
+  "difficulty": "Easy",
+  "category": "String",
+  "url": "https://leetcode.com/problems/valid-palindrome/",
+  "statement": "Given a string s, determine if it is a valid palindrome, considering only alphanumeric characters and ignoring cases.\n\nA palindrome is a word, phrase, number, or other sequence of characters that reads the same forward and backward (ignoring spaces, punctuation, and capitalization).",
+  "constraints": [
+    "1 <= s.length <= 2 * 10^5",
+    "s consists of printable ASCII characters"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "isPalindrome",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def isPalindrome(self, s: str) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "A man, a plan, a canal: Panama"
+      },
+      "output": true,
+      "explanation": "After removing non-alphanumeric characters and converting to lowercase: 'amanaplanacanalpanama' is a palindrome."
+    },
+    {
+      "input": {
+        "s": "race a car"
+      },
+      "output": false,
+      "explanation": "After processing: 'raceacar' is not a palindrome."
+    },
+    {
+      "input": {
+        "s": " "
+      },
+      "output": true,
+      "explanation": "An empty string (after removing spaces) is considered a valid palindrome."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_single_char",
+      "input": {
+        "s": "a"
+      },
+      "expected": true
+    },
+    {
+      "name": "minimal_single_digit",
+      "input": {
+        "s": "5"
+      },
+      "expected": true
+    },
+    {
+      "name": "minimal_space_only",
+      "input": {
+        "s": " "
+      },
+      "expected": true
+    },
+    {
+      "name": "minimal_special_char",
+      "input": {
+        "s": "!"
+      },
+      "expected": true
+    },
+    {
+      "name": "simple_palindrome_2chars",
+      "input": {
+        "s": "aa"
+      },
+      "expected": true
+    },
+    {
+      "name": "simple_palindrome_3chars",
+      "input": {
+        "s": "aba"
+      },
+      "expected": true
+    },
+    {
+      "name": "simple_non_palindrome",
+      "input": {
+        "s": "ab"
+      },
+      "expected": false
+    },
+    {
+      "name": "mixed_case_palindrome",
+      "input": {
+        "s": "Aa"
+      },
+      "expected": true
+    },
+    {
+      "name": "with_spaces_and_punctuation",
+      "input": {
+        "s": "a.b.a"
+      },
+      "expected": true
+    },
+    {
+      "name": "all_digits_palindrome",
+      "input": {
+        "s": "12321"
+      },
+      "expected": true
+    },
+    {
+      "name": "all_digits_non_palindrome",
+      "input": {
+        "s": "12345"
+      },
+      "expected": false
+    },
+    {
+      "name": "mixed_with_special_chars",
+      "input": {
+        "s": "a!@#a"
+      },
+      "expected": true
+    },
+    {
+      "name": "only_special_chars",
+      "input": {
+        "s": "!@#$%"
+      },
+      "expected": true
+    },
+    {
+      "name": "uppercase_palindrome",
+      "input": {
+        "s": "ABA"
+      },
+      "expected": true
+    },
+    {
+      "name": "repeated_chars",
+      "input": {
+        "s": "aaaa"
+      },
+      "expected": true
+    },
+    {
+      "name": "alternating_pattern",
+      "input": {
+        "s": "ababababa"
+      },
+      "expected": true
+    },
+    {
+      "name": "long_palindrome_numeric",
+      "input": {
+        "s": "1234567654321"
+      },
+      "expected": true
+    },
+    {
+      "name": "long_palindrome_alpha",
+      "input": {
+        "s": "abcdefedcba"
+      },
+      "expected": true
+    },
+    {
+      "name": "long_non_palindrome",
+      "input": {
+        "s": "abcdefghijklmnop"
+      },
+      "expected": false
+    },
+    {
+      "name": "many_spaces_between",
+      "input": {
+        "s": "a       a"
+      },
+      "expected": true
+    },
+    {
+      "name": "many_punctuation",
+      "input": {
+        "s": "a!!!!!!a"
+      },
+      "expected": true
+    },
+    {
+      "name": "mixed_case_with_spaces",
+      "input": {
+        "s": "A b C b A"
+      },
+      "expected": true
+    },
+    {
+      "name": "numeric_with_special",
+      "input": {
+        "s": "1!2@3@2!1"
+      },
+      "expected": true
+    },
+    {
+      "name": "near_palindrome_end_mismatch",
+      "input": {
+        "s": "abcba1"
+      },
+      "expected": false
+    },
+    {
+      "name": "near_palindrome_start_mismatch",
+      "input": {
+        "s": "1abcba"
+      },
+      "expected": false
+    },
+    {
+      "name": "sentence_like_palindrome",
+      "input": {
+        "s": "Was it a car or a cat I saw?"
+      },
+      "expected": true
+    },
+    {
+      "name": "sentence_like_non_palindrome",
+      "input": {
+        "s": "Hello, World!"
+      },
+      "expected": false
+    },
+    {
+      "name": "long_repeated_single_char_palindrome",
+      "input": {
+        "s": "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
+      },
+      "expected": true
+    },
+    {
+      "name": "alternating_two_chars_even",
+      "input": {
+        "s": "ababababababababababababababababababababababababab"
+      },
+      "expected": false
+    },
+    {
+      "name": "alphanumeric_palindrome",
+      "input": {
+        "s": "a1b1a"
+      },
+      "expected": true
+    }
+  ]
+}

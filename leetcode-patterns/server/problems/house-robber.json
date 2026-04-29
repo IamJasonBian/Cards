@@ -1,0 +1,479 @@
+{
+  "slug": "house-robber",
+  "title": "House Robber",
+  "number": 198,
+  "difficulty": "Medium",
+  "category": "DP",
+  "url": "https://leetcode.com/problems/house-robber/",
+  "statement": "You are a professional thief planning to rob houses along a street. Each house has a certain amount of money stashed. You cannot rob two adjacent houses because an alarm system will trigger. Given an integer array nums where nums[i] represents the amount of money in the i-th house, return the maximum amount of money you can rob without alerting the police.",
+  "constraints": [
+    "1 <= nums.length <= 100",
+    "0 <= nums[i] <= 400"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "rob",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def rob(self, nums: list[int]) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          1
+        ]
+      },
+      "output": 4,
+      "explanation": "Rob house 1 (money = 1) and house 3 (money = 3). Total = 1 + 3 = 4."
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          7,
+          9,
+          3,
+          1
+        ]
+      },
+      "output": 12,
+      "explanation": "Rob house 1 (money = 2), house 3 (money = 9) and house 5 (money = 1). Total = 2 + 9 + 1 = 12."
+    },
+    {
+      "input": {
+        "nums": [
+          5
+        ]
+      },
+      "output": 5,
+      "explanation": "Only one house, rob it for 5."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_single",
+      "input": {
+        "nums": [
+          0
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "name": "minimal_single_positive",
+      "input": {
+        "nums": [
+          5
+        ]
+      },
+      "expected": 5
+    },
+    {
+      "name": "minimal_pair_ascending",
+      "input": {
+        "nums": [
+          1,
+          2
+        ]
+      },
+      "expected": 2
+    },
+    {
+      "name": "minimal_pair_descending",
+      "input": {
+        "nums": [
+          10,
+          1
+        ]
+      },
+      "expected": 10
+    },
+    {
+      "name": "minimal_pair_equal",
+      "input": {
+        "nums": [
+          5,
+          5
+        ]
+      },
+      "expected": 5
+    },
+    {
+      "name": "all_zeros",
+      "input": {
+        "nums": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "name": "single_max_value",
+      "input": {
+        "nums": [
+          400
+        ]
+      },
+      "expected": 400
+    },
+    {
+      "name": "two_max_values_adjacent",
+      "input": {
+        "nums": [
+          400,
+          400
+        ]
+      },
+      "expected": 400
+    },
+    {
+      "name": "two_max_values_separated",
+      "input": {
+        "nums": [
+          400,
+          0,
+          400
+        ]
+      },
+      "expected": 800
+    },
+    {
+      "name": "ascending_sequence",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ]
+      },
+      "expected": 20
+    },
+    {
+      "name": "descending_sequence",
+      "input": {
+        "nums": [
+          8,
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      "expected": 20
+    },
+    {
+      "name": "all_duplicates_small",
+      "input": {
+        "nums": [
+          5,
+          5,
+          5,
+          5,
+          5
+        ]
+      },
+      "expected": 15
+    },
+    {
+      "name": "all_duplicates_large",
+      "input": {
+        "nums": [
+          100,
+          100,
+          100,
+          100,
+          100,
+          100
+        ]
+      },
+      "expected": 300
+    },
+    {
+      "name": "alternating_high_low",
+      "input": {
+        "nums": [
+          100,
+          1,
+          100,
+          1,
+          100,
+          1,
+          100
+        ]
+      },
+      "expected": 400
+    },
+    {
+      "name": "alternating_low_high",
+      "input": {
+        "nums": [
+          1,
+          100,
+          1,
+          100,
+          1,
+          100,
+          1
+        ]
+      },
+      "expected": 300
+    },
+    {
+      "name": "pyramid_shape",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      "expected": 13
+    },
+    {
+      "name": "spike_pattern",
+      "input": {
+        "nums": [
+          0,
+          0,
+          400,
+          0,
+          0
+        ]
+      },
+      "expected": 400
+    },
+    {
+      "name": "two_spikes",
+      "input": {
+        "nums": [
+          0,
+          400,
+          0,
+          400,
+          0
+        ]
+      },
+      "expected": 800
+    },
+    {
+      "name": "long_ascending",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ]
+      },
+      "expected": 64
+    },
+    {
+      "name": "long_descending",
+      "input": {
+        "nums": [
+          15,
+          14,
+          13,
+          12,
+          11,
+          10,
+          9,
+          8,
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      "expected": 64
+    },
+    {
+      "name": "large_small_large",
+      "input": {
+        "nums": [
+          300,
+          1,
+          2,
+          3,
+          1,
+          1,
+          1,
+          1,
+          300
+        ]
+      },
+      "expected": 604
+    },
+    {
+      "name": "mixed_pattern_size_20",
+      "input": {
+        "nums": [
+          10,
+          5,
+          20,
+          15,
+          3,
+          25,
+          8,
+          12,
+          30,
+          1,
+          5,
+          15,
+          2,
+          20,
+          10,
+          5,
+          8,
+          3,
+          25,
+          15
+        ]
+      },
+      "expected": 153
+    },
+    {
+      "name": "many_zeros_with_peaks",
+      "input": {
+        "nums": [
+          0,
+          0,
+          100,
+          0,
+          0,
+          100,
+          0,
+          0,
+          100,
+          0,
+          0
+        ]
+      },
+      "expected": 300
+    },
+    {
+      "name": "medium_size_random",
+      "input": {
+        "nums": [
+          7,
+          23,
+          5,
+          19,
+          8,
+          12,
+          31,
+          2,
+          15,
+          27,
+          9,
+          14,
+          6,
+          20,
+          3
+        ]
+      },
+      "expected": 134
+    },
+    {
+      "name": "max_size_alternating",
+      "input": {
+        "nums": [
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0,
+          200,
+          0
+        ]
+      },
+      "expected": 5000
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "slug": "reverse-bits",
+  "title": "Reverse Bits",
+  "number": 190,
+  "difficulty": "Easy",
+  "category": "Binary",
+  "url": "https://leetcode.com/problems/reverse-bits/",
+  "statement": "Given a 32-bit unsigned integer, reverse the bits and return the resulting integer.\n\nFor example, if the input is 00000010100101000001111010011100 (decimal 43261596), the output should be 00111001011110000010100101000000 (decimal 964176192).",
+  "constraints": [
+    "The input is a 32-bit unsigned integer",
+    "0 <= n < 2^32"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "reverseBits",
+    "params": [
+      {
+        "name": "n",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def reverseBits(self, n: int) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "n": 43261596
+      },
+      "output": 964176192,
+      "explanation": "The binary representation of 43261596 is 00000010100101000001111010011100, and reversing it gives 00111001011110000010100101000000, which is 964176192."
+    },
+    {
+      "input": {
+        "n": 4294967295
+      },
+      "output": 4294967295,
+      "explanation": "The binary representation of 4294967295 (all 1s) remains the same when reversed: 11111111111111111111111111111111."
+    },
+    {
+      "input": {
+        "n": 1
+      },
+      "output": 2147483648,
+      "explanation": "The binary representation of 1 is 00000000000000000000000000000001, and reversing it gives 10000000000000000000000000000000, which is 2147483648."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "zero",
+      "input": {
+        "n": 0
+      },
+      "expected": 0
+    },
+    {
+      "name": "one",
+      "input": {
+        "n": 1
+      },
+      "expected": 2147483648
+    },
+    {
+      "name": "two",
+      "input": {
+        "n": 2
+      },
+      "expected": 1073741824
+    },
+    {
+      "name": "max_32bit",
+      "input": {
+        "n": 4294967295
+      },
+      "expected": 4294967295
+    },
+    {
+      "name": "power_of_two_1",
+      "input": {
+        "n": 1073741824
+      },
+      "expected": 2
+    },
+    {
+      "name": "power_of_two_2",
+      "input": {
+        "n": 536870912
+      },
+      "expected": 4
+    },
+    {
+      "name": "power_of_two_3",
+      "input": {
+        "n": 268435456
+      },
+      "expected": 8
+    },
+    {
+      "name": "all_ones_lower_16bits",
+      "input": {
+        "n": 65535
+      },
+      "expected": 4294901760
+    },
+    {
+      "name": "all_ones_upper_16bits",
+      "input": {
+        "n": 4294901760
+      },
+      "expected": 65535
+    },
+    {
+      "name": "alternating_1",
+      "input": {
+        "n": 2863311530
+      },
+      "expected": 1431655765
+    },
+    {
+      "name": "alternating_2",
+      "input": {
+        "n": 1431655765
+      },
+      "expected": 2863311530
+    },
+    {
+      "name": "single_bit_pos_0",
+      "input": {
+        "n": 1
+      },
+      "expected": 2147483648
+    },
+    {
+      "name": "single_bit_pos_31",
+      "input": {
+        "n": 2147483648
+      },
+      "expected": 1
+    },
+    {
+      "name": "single_bit_pos_16",
+      "input": {
+        "n": 65536
+      },
+      "expected": 32768
+    },
+    {
+      "name": "single_bit_pos_15",
+      "input": {
+        "n": 32768
+      },
+      "expected": 65536
+    },
+    {
+      "name": "mid_range_1",
+      "input": {
+        "n": 2147483647
+      },
+      "expected": 4294967294
+    },
+    {
+      "name": "mid_range_2",
+      "input": {
+        "n": 1073741823
+      },
+      "expected": 4294967292
+    },
+    {
+      "name": "example_case",
+      "input": {
+        "n": 43261596
+      },
+      "expected": 964176192
+    },
+    {
+      "name": "three",
+      "input": {
+        "n": 3
+      },
+      "expected": 3221225472
+    },
+    {
+      "name": "255",
+      "input": {
+        "n": 255
+      },
+      "expected": 4278190080
+    },
+    {
+      "name": "256",
+      "input": {
+        "n": 256
+      },
+      "expected": 8388608
+    },
+    {
+      "name": "65536",
+      "input": {
+        "n": 65536
+      },
+      "expected": 32768
+    },
+    {
+      "name": "16777216",
+      "input": {
+        "n": 16777216
+      },
+      "expected": 128
+    },
+    {
+      "name": "3735928559",
+      "input": {
+        "n": 3735928559
+      },
+      "expected": 4152210811
+    },
+    {
+      "name": "2155872256",
+      "input": {
+        "n": 2155872256
+      },
+      "expected": 257
+    }
+  ]
+}

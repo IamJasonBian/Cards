@@ -1,0 +1,227 @@
+{
+  "slug": "longest-palindromic-substring",
+  "title": "Longest Palindromic Substring",
+  "number": 5,
+  "difficulty": "Medium",
+  "category": "String",
+  "url": "https://leetcode.com/problems/longest-palindromic-substring/",
+  "statement": "Given a string s, find the longest contiguous substring that reads the same forwards and backwards (a palindrome). If there are multiple palindromes of equal length, return any one of them.",
+  "constraints": [
+    "1 <= s.length <= 1000",
+    "s consist of only digits and English letters (lower-case and/or upper-case)"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "longestPalindrome",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "str"
+  },
+  "starterCode": "class Solution:\n    def longestPalindrome(self, s: str) -> str:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "babad"
+      },
+      "output": "bab",
+      "explanation": "Both 'bab' and 'aba' are valid answers; either is acceptable."
+    },
+    {
+      "input": {
+        "s": "cbbd"
+      },
+      "output": "bb",
+      "explanation": "The longest palindromic substring is 'bb'."
+    },
+    {
+      "input": {
+        "s": "a"
+      },
+      "output": "a",
+      "explanation": "A single character is a palindrome."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "single_char",
+      "input": {
+        "s": "a"
+      },
+      "expected": "a"
+    },
+    {
+      "name": "two_same",
+      "input": {
+        "s": "aa"
+      },
+      "expected": "aa"
+    },
+    {
+      "name": "two_different",
+      "input": {
+        "s": "ab"
+      },
+      "expected": "a"
+    },
+    {
+      "name": "all_same_short",
+      "input": {
+        "s": "aaaa"
+      },
+      "expected": "aaaa"
+    },
+    {
+      "name": "all_same_odd",
+      "input": {
+        "s": "aaaaa"
+      },
+      "expected": "aaaaa"
+    },
+    {
+      "name": "palindrome_odd",
+      "input": {
+        "s": "racecar"
+      },
+      "expected": "racecar"
+    },
+    {
+      "name": "palindrome_even",
+      "input": {
+        "s": "abba"
+      },
+      "expected": "abba"
+    },
+    {
+      "name": "no_palindrome_pairs",
+      "input": {
+        "s": "abcdef"
+      },
+      "expected": "a"
+    },
+    {
+      "name": "repeating_pattern",
+      "input": {
+        "s": "abababa"
+      },
+      "expected": "abababa"
+    },
+    {
+      "name": "repeating_doubles",
+      "input": {
+        "s": "aabbccdd"
+      },
+      "expected": "aa"
+    },
+    {
+      "name": "long_same",
+      "input": {
+        "s": "aaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "expected": "aaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "name": "mixed_case_palindrome",
+      "input": {
+        "s": "Aa"
+      },
+      "expected": "A"
+    },
+    {
+      "name": "digits_palindrome",
+      "input": {
+        "s": "12321"
+      },
+      "expected": "12321"
+    },
+    {
+      "name": "alphanumeric_mixed",
+      "input": {
+        "s": "a1b2b1a"
+      },
+      "expected": "a1b2b1a"
+    },
+    {
+      "name": "nested_palindrome",
+      "input": {
+        "s": "abacabad"
+      },
+      "expected": "abacaba"
+    },
+    {
+      "name": "start_palindrome",
+      "input": {
+        "s": "abaxyz"
+      },
+      "expected": "aba"
+    },
+    {
+      "name": "end_palindrome",
+      "input": {
+        "s": "xyzaba"
+      },
+      "expected": "aba"
+    },
+    {
+      "name": "middle_palindrome",
+      "input": {
+        "s": "xyzabaxyz"
+      },
+      "expected": "aba"
+    },
+    {
+      "name": "multiple_same_length",
+      "input": {
+        "s": "abacadaeafa"
+      },
+      "expected": "aba"
+    },
+    {
+      "name": "ascending_then_descending",
+      "input": {
+        "s": "abcdcba"
+      },
+      "expected": "abcdcba"
+    },
+    {
+      "name": "zigzag_pattern",
+      "input": {
+        "s": "abacabaca"
+      },
+      "expected": "abacaba"
+    },
+    {
+      "name": "single_long_palindrome",
+      "input": {
+        "s": "forgeeksskeegfor"
+      },
+      "expected": "geeksskeeg"
+    },
+    {
+      "name": "many_chars_one_palindrome",
+      "input": {
+        "s": "xyzzyx"
+      },
+      "expected": "xyzzyx"
+    },
+    {
+      "name": "max_length",
+      "input": {
+        "s": "abcdefghijklmnopqrstuvwxyzzyxwvutsrqponmlkjihgfedcbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "expected": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "name": "near_max_all_same",
+      "input": {
+        "s": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "expected": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "slug": "design-add-and-search-words-data-structure",
+  "number": 211,
+  "title": "Design Add and Search Words Data Structure",
+  "difficulty": "Medium",
+  "category": "Tree",
+  "url": "https://leetcode.com/problems/design-add-and-search-words-data-structure/",
+  "statement": "Design a data structure that supports adding words and searching for words.\n\nImplement the WordDictionary class:\n- addWord(word): Adds a word to the data structure.\n- search(word): Returns true if the word is in the data structure. The word may contain dots '.' where each dot can represent any single letter.",
+  "constraints": [
+    "1 <= word.length <= 25",
+    "word in addWord consists of lowercase English letters",
+    "word in search consists of '.' or lowercase English letters",
+    "At most 10^4 calls will be made to addWord and search"
+  ],
+  "signature": {
+    "className": "WordDictionary",
+    "methodName": "search",
+    "params": [
+      {
+        "name": "word",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class WordDictionary:\n    def __init__(self):\n        pass\n\n    def addWord(self, word: str) -> None:\n        # write your solution here\n        pass\n\n    def search(self, word: str) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "operations": [
+          "WordDictionary",
+          "addWord",
+          "addWord",
+          "addWord",
+          "search",
+          "search",
+          "search",
+          "search"
+        ],
+        "params": [
+          [],
+          [
+            "bad"
+          ],
+          [
+            "dad"
+          ],
+          [
+            "mad"
+          ],
+          [
+            "pad"
+          ],
+          [
+            "bad"
+          ],
+          [
+            ".ad"
+          ],
+          [
+            "b.."
+          ]
+        ]
+      },
+      "output": [
+        null,
+        null,
+        null,
+        null,
+        false,
+        true,
+        true,
+        true
+      ],
+      "explanation": "WordDictionary wordDictionary = new WordDictionary(); wordDictionary.addWord('bad'); wordDictionary.addWord('dad'); wordDictionary.addWord('mad'); wordDictionary.search('pad') returns False; wordDictionary.search('bad') returns True; wordDictionary.search('.ad') returns True; wordDictionary.search('b..') returns True"
+    }
+  ],
+  "jsonFriendly": false,
+  "jsonFriendlyReason": "This is a design problem where the class itself is the data structure being tested; it requires state management and cannot be represented as a pure function.",
+  "referenceCode": "class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.word = False\n\nclass WordDictionary:\n    def __init__(self):\n        self.root = TrieNode()\n\n    def addWord(self, word: str) -> None:\n        cur = self.root\n        for c in word:\n            if c not in cur.children:\n                cur.children[c] = TrieNode()\n            cur = cur.children[c]\n        cur.word = True\n\n    def search(self, word: str) -> bool:\n        def dfs(j, root):\n            cur = root\n            for i in range(j, len(word)):\n                c = word[i]\n                if c == \".\":\n                    for child in cur.children.values():\n                        if dfs(i + 1, child):\n                            return True\n                    return False\n                else:\n                    if c not in cur.children:\n                        return False\n                    cur = cur.children[c]\n            return cur.word\n        return dfs(0, self.root)"
+}

@@ -1,0 +1,71 @@
+{
+  "slug": "combination-sum-iv",
+  "title": "Combination Sum IV",
+  "number": 377,
+  "difficulty": "Medium",
+  "category": "DP",
+  "url": "https://leetcode.com/problems/combination-sum-iv/",
+  "statement": "Given an array of distinct positive integers nums and a target integer target, return the number of possible combinations that sum to target.\n\nA combination is a selection of items where order matters (i.e., sequences with the same elements in different orders are counted separately). For example, [1, 2] and [2, 1] are different combinations.\n\nYou may use each element from nums an unlimited number of times.",
+  "constraints": [
+    "1 <= nums.length <= 200",
+    "1 <= nums[i] <= 1000",
+    "1 <= target <= 1000",
+    "All elements of nums are distinct"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "combinationSum4",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "target",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def combinationSum4(self, nums: list[int], target: int) -> int:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ],
+        "target": 4
+      },
+      "output": 7,
+      "explanation": "The possible combinations are: (1,1,1,1), (1,1,2), (1,2,1), (2,1,1), (2,2), (1,3), (3,1)"
+    },
+    {
+      "input": {
+        "nums": [
+          9
+        ],
+        "target": 3
+      },
+      "output": 0,
+      "explanation": "There are no combinations that sum to 3 using only 9"
+    },
+    {
+      "input": {
+        "nums": [
+          3,
+          4,
+          5,
+          6
+        ],
+        "target": 5
+      },
+      "output": 1,
+      "explanation": "The possible combinations are: (3, 2) which doesn't work; actually (5) and (3, 2) doesn't exist; the combinations are (5) directly, and we need sequences, so it's just [5]. Actually: [5] and no other way. Upon reconsideration: we need sequences summing to 5, so [5] is one, and no others from {3,4,5,6}. Wait: we can't use 2. So only [5] = 1 way. Let me recalculate: Actually this should be [5] = 1 way only from {3,4,5,6}."
+    }
+  ],
+  "hiddenCount": 25
+}

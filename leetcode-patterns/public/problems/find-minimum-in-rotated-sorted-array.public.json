@@ -1,0 +1,68 @@
+{
+  "slug": "find-minimum-in-rotated-sorted-array",
+  "title": "Find Minimum in Rotated Sorted Array",
+  "number": 153,
+  "difficulty": "Medium",
+  "category": "Array",
+  "url": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/",
+  "statement": "Suppose an array of length n sorted in ascending order is rotated between 1 and n times. For example, the array nums = [0,1,2,4,5,6,7] might become [4,5,6,7,0,1,2] after rotating 4 times.\n\nGiven the rotated sorted array nums of unique elements, return the minimum element of this array.\n\nYou must write an algorithm that runs in O(log n) time.",
+  "constraints": [
+    "n == nums.length",
+    "1 <= n <= 5000",
+    "−5000 <= nums[i] <= 5000",
+    "All the integers of nums are unique.",
+    "nums is sorted and rotated between 1 and n times."
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "findMin",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def findMin(self, nums: list[int]) -> int:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          3,
+          4,
+          5,
+          1,
+          2
+        ]
+      },
+      "output": 1,
+      "explanation": "The array is rotated. The minimum element is 1."
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          1
+        ]
+      },
+      "output": 1,
+      "explanation": "The array is rotated once. The minimum element is 1."
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "output": 1,
+      "explanation": "The array is not rotated. The minimum element is 1."
+    }
+  ],
+  "hiddenCount": 25
+}

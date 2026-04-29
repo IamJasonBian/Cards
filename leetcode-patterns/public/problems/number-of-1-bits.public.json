@@ -1,0 +1,50 @@
+{
+  "slug": "number-of-1-bits",
+  "title": "Number of 1 Bits",
+  "number": 191,
+  "difficulty": "Easy",
+  "category": "Binary",
+  "url": "https://leetcode.com/problems/number-of-1-bits/",
+  "statement": "Write a function that takes a positive integer and returns the number of 1-bits it has in its binary representation (also known as the Hamming weight).\n\nFor example, the binary representation of 11 is 1011, which has three 1-bits.",
+  "constraints": [
+    "1 <= n <= 2^31 - 1",
+    "The input must be a positive integer"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "hammingWeight",
+    "params": [
+      {
+        "name": "n",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def hammingWeight(self, n: int) -> int:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "n": 11
+      },
+      "output": 3,
+      "explanation": "The binary representation of 11 is 1011, which has three 1-bits."
+    },
+    {
+      "input": {
+        "n": 128
+      },
+      "output": 1,
+      "explanation": "The binary representation of 128 is 10000000, which has one 1-bit."
+    },
+    {
+      "input": {
+        "n": 2147483645
+      },
+      "output": 30,
+      "explanation": "The binary representation has 30 ones."
+    }
+  ],
+  "hiddenCount": 25
+}

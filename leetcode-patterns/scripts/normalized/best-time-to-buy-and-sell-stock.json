@@ -1,0 +1,73 @@
+{
+  "slug": "best-time-to-buy-and-sell-stock",
+  "number": 121,
+  "title": "Best Time to Buy and Sell Stock",
+  "difficulty": "Easy",
+  "category": "Array",
+  "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+  "statement": "You are given an array of integers where each element represents the stock price on a given day. You may complete at most one transaction (buy once and sell once). You must buy before you sell.\n\nFind and return the maximum profit you can achieve. If you cannot make any profit, return 0.",
+  "constraints": [
+    "1 <= prices.length <= 10^5",
+    "0 <= prices[i] <= 10^4"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "maxProfit",
+    "params": [
+      {
+        "name": "prices",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def maxProfit(self, prices: list[int]) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "prices": [
+          7,
+          1,
+          5,
+          3,
+          6,
+          4
+        ]
+      },
+      "output": 5,
+      "explanation": "Buy at price 1 and sell at price 6, profit = 6 - 1 = 5."
+    },
+    {
+      "input": {
+        "prices": [
+          7,
+          6,
+          4,
+          3,
+          1
+        ]
+      },
+      "output": 0,
+      "explanation": "Prices are in descending order, so no profit can be made."
+    },
+    {
+      "input": {
+        "prices": [
+          2,
+          4,
+          1,
+          7,
+          5,
+          11
+        ]
+      },
+      "output": 10,
+      "explanation": "Buy at price 1 and sell at price 11, profit = 11 - 1 = 10."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": "",
+  "referenceCode": "class Solution:\n    def maxProfit(self, prices: list[int]) -> int:\n        res = 0\n        lowest = prices[0]\n        for price in prices:\n            if price < lowest:\n                lowest = price\n            res = max(res, price - lowest)\n        return res\n"
+}

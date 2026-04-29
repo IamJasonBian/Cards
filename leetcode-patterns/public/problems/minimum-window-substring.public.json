@@ -1,0 +1,59 @@
+{
+  "slug": "minimum-window-substring",
+  "title": "Minimum Window Substring",
+  "number": 76,
+  "difficulty": "Hard",
+  "category": "String",
+  "url": "https://leetcode.com/problems/minimum-window-substring/",
+  "statement": "Given two strings s and t, find the minimum window substring of s that contains all the characters in t (including duplicates). If no such window exists, return an empty string.\n\nA window substring is a contiguous sequence of characters from s. The characters in t can appear in any order within the window.",
+  "constraints": [
+    "1 <= s.length <= 10^5",
+    "1 <= t.length <= 10^5",
+    "s and t consist of uppercase and lowercase English letters"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "minWindow",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "t",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "str"
+  },
+  "starterCode": "class Solution:\n    def minWindow(self, s: str, t: str) -> str:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "ADOBECODEBANC",
+        "t": "ABC"
+      },
+      "output": "BANC",
+      "explanation": "The minimum window substring is \"BANC\" which contains all characters in \"ABC\"."
+    },
+    {
+      "input": {
+        "s": "a",
+        "t": "a"
+      },
+      "output": "a",
+      "explanation": "The entire string \"a\" is the minimum window."
+    },
+    {
+      "input": {
+        "s": "a",
+        "t": "aa"
+      },
+      "output": "",
+      "explanation": "No window can contain two 'a's from the string \"a\"."
+    }
+  ],
+  "hiddenCount": 25
+}

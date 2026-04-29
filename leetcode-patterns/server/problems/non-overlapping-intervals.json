@@ -1,0 +1,895 @@
+{
+  "slug": "non-overlapping-intervals",
+  "title": "Non-overlapping Intervals",
+  "number": 435,
+  "difficulty": "Medium",
+  "category": "Interval",
+  "url": "https://leetcode.com/problems/non-overlapping-intervals/",
+  "statement": "Given an array of intervals where each interval is represented as [start, end], determine the minimum number of intervals you need to remove to make the remaining intervals non-overlapping.\n\nTwo intervals are considered overlapping if they share any point in common. You need to find the minimum number of intervals to erase such that the remaining intervals do not overlap with each other.",
+  "constraints": [
+    "1 <= intervals.length <= 10^5",
+    "-5 * 10^4 <= start_i < end_i <= 5 * 10^4"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "eraseOverlapIntervals",
+    "params": [
+      {
+        "name": "intervals",
+        "pyType": "list[list[int]]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def eraseOverlapIntervals(self, intervals: list[list[int]]) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      },
+      "output": 1,
+      "explanation": "We can remove [1, 3] to get [[1, 2], [2, 3], [3, 4]] where no intervals overlap."
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "output": 2,
+      "explanation": "All three intervals overlap; we need to remove two of them."
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            6
+          ]
+        ]
+      },
+      "output": 2,
+      "explanation": "We can keep [0, 2], [2, 4], [4, 6] by removing [1, 3] and [3, 5]."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "single_interval",
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "name": "two_non_overlapping",
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "name": "two_overlapping",
+      "input": {
+        "intervals": [
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            4
+          ]
+        ]
+      },
+      "expected": 1
+    },
+    {
+      "name": "all_identical",
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "expected": 3
+    },
+    {
+      "name": "nested_intervals",
+      "input": {
+        "intervals": [
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
+      "expected": 1
+    },
+    {
+      "name": "chain_overlap",
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "name": "reverse_sorted",
+      "input": {
+        "intervals": [
+          [
+            10,
+            11
+          ],
+          [
+            8,
+            9
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "name": "descending_overlap",
+      "input": {
+        "intervals": [
+          [
+            5,
+            10
+          ],
+          [
+            4,
+            8
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "expected": 2
+    },
+    {
+      "name": "negative_ranges",
+      "input": {
+        "intervals": [
+          [
+            -10,
+            -5
+          ],
+          [
+            -7,
+            -3
+          ],
+          [
+            -2,
+            1
+          ],
+          [
+            0,
+            5
+          ]
+        ]
+      },
+      "expected": 2
+    },
+    {
+      "name": "zero_crossing",
+      "input": {
+        "intervals": [
+          [
+            -5,
+            0
+          ],
+          [
+            -2,
+            3
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            9
+          ]
+        ]
+      },
+      "expected": 2
+    },
+    {
+      "name": "all_negative",
+      "input": {
+        "intervals": [
+          [
+            -50000,
+            -49999
+          ],
+          [
+            -49999,
+            -49998
+          ],
+          [
+            -49998,
+            -49997
+          ]
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "name": "max_range_positive",
+      "input": {
+        "intervals": [
+          [
+            50000,
+            50001
+          ],
+          [
+            49999,
+            50000
+          ]
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "name": "wide_intervals",
+      "input": {
+        "intervals": [
+          [
+            -50000,
+            50000
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            -100,
+            100
+          ]
+        ]
+      },
+      "expected": 2
+    },
+    {
+      "name": "single_point_gaps",
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            7,
+            8
+          ],
+          [
+            9,
+            10
+          ]
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "name": "dense_overlap",
+      "input": {
+        "intervals": [
+          [
+            1,
+            10
+          ],
+          [
+            2,
+            9
+          ],
+          [
+            3,
+            8
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            6
+          ]
+        ]
+      },
+      "expected": 4
+    },
+    {
+      "name": "many_duplicates",
+      "input": {
+        "intervals": [
+          [
+            5,
+            10
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "expected": 3
+    },
+    {
+      "name": "near_duplicates",
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ]
+        ]
+      },
+      "expected": 3
+    },
+    {
+      "name": "alternating_short_long",
+      "input": {
+        "intervals": [
+          [
+            1,
+            100
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            50,
+            51
+          ],
+          [
+            60,
+            70
+          ],
+          [
+            75,
+            76
+          ]
+        ]
+      },
+      "expected": 1
+    },
+    {
+      "name": "random_unsorted_50",
+      "input": {
+        "intervals": [
+          [
+            12,
+            28
+          ],
+          [
+            5,
+            18
+          ],
+          [
+            23,
+            34
+          ],
+          [
+            1,
+            8
+          ],
+          [
+            31,
+            45
+          ],
+          [
+            19,
+            22
+          ],
+          [
+            35,
+            42
+          ],
+          [
+            10,
+            15
+          ],
+          [
+            47,
+            50
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            25,
+            30
+          ],
+          [
+            40,
+            44
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            20,
+            26
+          ],
+          [
+            38,
+            43
+          ],
+          [
+            17,
+            21
+          ],
+          [
+            33,
+            39
+          ],
+          [
+            9,
+            14
+          ],
+          [
+            29,
+            36
+          ],
+          [
+            46,
+            49
+          ],
+          [
+            4,
+            11
+          ],
+          [
+            24,
+            27
+          ],
+          [
+            41,
+            48
+          ],
+          [
+            16,
+            19
+          ],
+          [
+            37,
+            41
+          ],
+          [
+            6,
+            13
+          ],
+          [
+            26,
+            32
+          ],
+          [
+            39,
+            46
+          ],
+          [
+            8,
+            12
+          ],
+          [
+            18,
+            25
+          ],
+          [
+            30,
+            37
+          ],
+          [
+            44,
+            51
+          ],
+          [
+            7,
+            16
+          ],
+          [
+            21,
+            29
+          ],
+          [
+            35,
+            40
+          ],
+          [
+            11,
+            17
+          ],
+          [
+            27,
+            33
+          ],
+          [
+            42,
+            47
+          ],
+          [
+            13,
+            20
+          ],
+          [
+            19,
+            24
+          ],
+          [
+            28,
+            34
+          ],
+          [
+            43,
+            50
+          ],
+          [
+            10,
+            19
+          ],
+          [
+            22,
+            28
+          ],
+          [
+            36,
+            44
+          ],
+          [
+            14,
+            22
+          ],
+          [
+            32,
+            38
+          ],
+          [
+            45,
+            49
+          ],
+          [
+            15,
+            23
+          ],
+          [
+            40,
+            46
+          ]
+        ]
+      },
+      "expected": 41
+    },
+    {
+      "name": "large_scattered",
+      "input": {
+        "intervals": [
+          [
+            1,
+            5
+          ],
+          [
+            100,
+            105
+          ],
+          [
+            50,
+            55
+          ],
+          [
+            200,
+            205
+          ],
+          [
+            150,
+            155
+          ],
+          [
+            75,
+            80
+          ],
+          [
+            125,
+            130
+          ],
+          [
+            175,
+            180
+          ],
+          [
+            25,
+            30
+          ],
+          [
+            225,
+            230
+          ]
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "name": "edge_case_start_equals_prev_end",
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            6
+          ]
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "name": "all_contain_origin",
+      "input": {
+        "intervals": [
+          [
+            -10,
+            10
+          ],
+          [
+            -5,
+            5
+          ],
+          [
+            -2,
+            2
+          ],
+          [
+            -1,
+            1
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      },
+      "expected": 4
+    },
+    {
+      "name": "single_long_with_many_short",
+      "input": {
+        "intervals": [
+          [
+            1,
+            100
+          ],
+          [
+            10,
+            20
+          ],
+          [
+            30,
+            40
+          ],
+          [
+            50,
+            60
+          ],
+          [
+            70,
+            80
+          ]
+        ]
+      },
+      "expected": 1
+    },
+    {
+      "name": "strictly_nested_pyramid",
+      "input": {
+        "intervals": [
+          [
+            1,
+            10
+          ],
+          [
+            2,
+            9
+          ],
+          [
+            3,
+            8
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            3,
+            8
+          ],
+          [
+            2,
+            9
+          ],
+          [
+            1,
+            10
+          ]
+        ]
+      },
+      "expected": 8
+    }
+  ]
+}

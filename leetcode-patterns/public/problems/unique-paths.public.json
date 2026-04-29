@@ -1,0 +1,58 @@
+{
+  "slug": "unique-paths",
+  "title": "Unique Paths",
+  "number": 62,
+  "difficulty": "Medium",
+  "category": "DP",
+  "url": "https://leetcode.com/problems/unique-paths/",
+  "statement": "A robot is located at the top-left corner of an m x n grid. The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid.\n\nHow many distinct paths are there for the robot to reach the bottom-right corner?",
+  "constraints": [
+    "1 <= m, n <= 100",
+    "The answer is guaranteed to fit in a 32-bit signed integer"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "uniquePaths",
+    "params": [
+      {
+        "name": "m",
+        "pyType": "int",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "n",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def uniquePaths(self, m: int, n: int) -> int:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "m": 3,
+        "n": 7
+      },
+      "output": 28,
+      "explanation": "A 3x7 grid has 28 unique paths from top-left to bottom-right"
+    },
+    {
+      "input": {
+        "m": 3,
+        "n": 2
+      },
+      "output": 3,
+      "explanation": "A 3x2 grid has 3 unique paths"
+    },
+    {
+      "input": {
+        "m": 1,
+        "n": 1
+      },
+      "output": 1,
+      "explanation": "A 1x1 grid has 1 path (already at destination)"
+    }
+  ],
+  "hiddenCount": 25
+}

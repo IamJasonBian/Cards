@@ -1,0 +1,354 @@
+{
+  "slug": "encode-and-decode-strings",
+  "title": "Encode and Decode Strings",
+  "number": 271,
+  "difficulty": "Medium",
+  "category": "String",
+  "url": "https://leetcode.com/problems/encode-and-decode-strings/",
+  "statement": "Design an algorithm to encode a list of strings into a single string, and decode the single string back into the original list of strings.\n\nThe encode function takes a list of strings and returns a single encoded string. The decode function takes the encoded string and returns the original list of strings. The encoding scheme must be able to handle strings that may contain special characters and preserve all information needed for exact reconstruction.",
+  "constraints": [
+    "1 <= len(strs) <= 200",
+    "0 <= len(strs[i]) <= 200",
+    "strs[i] contains any possible characters in an 8-bit range (0-255)"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "encode",
+    "params": [
+      {
+        "name": "strs",
+        "pyType": "list[str]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "str"
+  },
+  "starterCode": "class Solution:\n    def encode(self, strs: list[str]) -> str:\n        # write your solution here\n        pass\n\n    def decode(self, s: str) -> list[str]:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "strs": [
+          "Hello",
+          "World"
+        ]
+      },
+      "output": "5#Hello5#World",
+      "explanation": "The string 'Hello' has length 5, 'World' has length 5. Encoded as '5#Hello5#World'."
+    },
+    {
+      "input": {
+        "strs": [
+          "a",
+          ""
+        ]
+      },
+      "output": "1#a0#",
+      "explanation": "The string 'a' has length 1, empty string has length 0. Encoded as '1#a0#'."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_single_empty",
+      "input": {
+        "strs": [
+          ""
+        ]
+      },
+      "expected": "0#"
+    },
+    {
+      "name": "minimal_single_char",
+      "input": {
+        "strs": [
+          "a"
+        ]
+      },
+      "expected": "1#a"
+    },
+    {
+      "name": "minimal_two_empty",
+      "input": {
+        "strs": [
+          "",
+          ""
+        ]
+      },
+      "expected": "0#0#"
+    },
+    {
+      "name": "typical_two_strings",
+      "input": {
+        "strs": [
+          "hello",
+          "world"
+        ]
+      },
+      "expected": "5#hello5#world"
+    },
+    {
+      "name": "typical_three_strings",
+      "input": {
+        "strs": [
+          "abc",
+          "def",
+          "ghi"
+        ]
+      },
+      "expected": "3#abc3#def3#ghi"
+    },
+    {
+      "name": "duplicates_all_same",
+      "input": {
+        "strs": [
+          "test",
+          "test",
+          "test"
+        ]
+      },
+      "expected": "4#test4#test4#test"
+    },
+    {
+      "name": "duplicates_empty",
+      "input": {
+        "strs": [
+          "",
+          "",
+          ""
+        ]
+      },
+      "expected": "0#0#0#"
+    },
+    {
+      "name": "duplicates_mixed",
+      "input": {
+        "strs": [
+          "a",
+          "b",
+          "a",
+          "b",
+          "a"
+        ]
+      },
+      "expected": "1#a1#b1#a1#b1#a"
+    },
+    {
+      "name": "empty_at_start",
+      "input": {
+        "strs": [
+          "",
+          "x",
+          "y"
+        ]
+      },
+      "expected": "0#1#x1#y"
+    },
+    {
+      "name": "empty_at_end",
+      "input": {
+        "strs": [
+          "x",
+          "y",
+          ""
+        ]
+      },
+      "expected": "1#x1#y0#"
+    },
+    {
+      "name": "empty_in_middle",
+      "input": {
+        "strs": [
+          "x",
+          "",
+          "y"
+        ]
+      },
+      "expected": "1#x0#1#y"
+    },
+    {
+      "name": "special_chars_tab",
+      "input": {
+        "strs": [
+          "hello\tworld"
+        ]
+      },
+      "expected": "11#hello\tworld"
+    },
+    {
+      "name": "special_chars_newline",
+      "input": {
+        "strs": [
+          "line1\nline2"
+        ]
+      },
+      "expected": "11#line1\nline2"
+    },
+    {
+      "name": "special_chars_mixed",
+      "input": {
+        "strs": [
+          "a\nb\tc",
+          "d:e#f"
+        ]
+      },
+      "expected": "5#a\nb\tc5#d:e#f"
+    },
+    {
+      "name": "binary_null_byte",
+      "input": {
+        "strs": [
+          "a\u0000b",
+          "c"
+        ]
+      },
+      "expected": "3#a\u0000b1#c"
+    },
+    {
+      "name": "binary_high_bytes",
+      "input": {
+        "strs": [
+          "ÿþ",
+          ""
+        ]
+      },
+      "expected": "2#ÿþ1#"
+    },
+    {
+      "name": "colon_delimiter_collision",
+      "input": {
+        "strs": [
+          "5:hello",
+          "hello"
+        ]
+      },
+      "expected": "7#5:hello5#hello"
+    },
+    {
+      "name": "length_prefix_collision",
+      "input": {
+        "strs": [
+          "10hello",
+          "1",
+          "0hello"
+        ]
+      },
+      "expected": "7#10hello1#16#0hello"
+    },
+    {
+      "name": "repeated_length_values",
+      "input": {
+        "strs": [
+          "a",
+          "bb",
+          "ccc",
+          "a",
+          "bb",
+          "ccc"
+        ]
+      },
+      "expected": "1#a2#bb3#ccc1#a2#bb3#ccc"
+    },
+    {
+      "name": "sorted_ascending",
+      "input": {
+        "strs": [
+          "aaa",
+          "bb",
+          "c"
+        ]
+      },
+      "expected": "3#aaa2#bb1#c"
+    },
+    {
+      "name": "sorted_descending",
+      "input": {
+        "strs": [
+          "zzz",
+          "yy",
+          "x"
+        ]
+      },
+      "expected": "3#zzz2#yy1#x"
+    },
+    {
+      "name": "single_long_string",
+      "input": {
+        "strs": [
+          "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
+        ]
+      },
+      "expected": "104#abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
+    },
+    {
+      "name": "many_short_strings",
+      "input": {
+        "strs": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+          "k",
+          "l",
+          "m",
+          "n",
+          "o",
+          "p",
+          "q",
+          "r",
+          "s",
+          "t",
+          "u",
+          "v",
+          "w",
+          "x",
+          "y",
+          "z"
+        ]
+      },
+      "expected": "1#a1#b1#c1#d1#e1#f1#g1#h1#i1#j1#k1#l1#m1#n1#o1#p1#q1#r1#s1#t1#u1#v1#w1#x1#y1#z"
+    },
+    {
+      "name": "many_empty_strings",
+      "input": {
+        "strs": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ]
+      },
+      "expected": "0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#"
+    },
+    {
+      "name": "max_length_string",
+      "input": {
+        "strs": [
+          "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ]
+      },
+      "expected": "742#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

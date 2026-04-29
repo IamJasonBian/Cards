@@ -1,0 +1,62 @@
+{
+  "slug": "sum-of-two-integers",
+  "number": 371,
+  "title": "Sum of Two Integers",
+  "difficulty": "Medium",
+  "category": "Binary",
+  "url": "https://leetcode.com/problems/sum-of-two-integers/",
+  "statement": "Given two integers a and b, return their sum without using the + or - operators.\n\nYou must implement the addition using only bitwise operations (XOR, AND, bit shift). The solution should handle both positive and negative integers correctly.",
+  "constraints": [
+    "-2^31 <= a, b <= 2^31 - 1",
+    "You cannot use the + or - operators",
+    "You must use bitwise operations to perform addition"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "getSum",
+    "params": [
+      {
+        "name": "a",
+        "pyType": "int",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "b",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def getSum(self, a: int, b: int) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "a": 1,
+        "b": 2
+      },
+      "output": 3,
+      "explanation": "Simple addition: 1 + 2 = 3"
+    },
+    {
+      "input": {
+        "a": -2,
+        "b": 3
+      },
+      "output": 1,
+      "explanation": "Mixed signs: -2 + 3 = 1"
+    },
+    {
+      "input": {
+        "a": -1,
+        "b": -1
+      },
+      "output": -2,
+      "explanation": "Both negative: -1 + (-1) = -2"
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": "All parameters and return type are primitive integers, JSON-representable.",
+  "referenceCode": "class Solution:\n    def getSum(self, a: int, b: int) -> int:\n        def add(a, b):\n            if not a or not b:\n                return a or b\n            return add(a ^ b, (a & b) << 1)\n\n        if a * b < 0:\n            if a > 0:\n                return self.getSum(b, a)\n            if add(~a, 1) == b:\n                return 0\n            if add(~a, 1) < b:\n                return add(~add(add(~a, 1), add(~b, 1)), 1)\n\n        return add(a, b)\n"
+}

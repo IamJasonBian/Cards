@@ -1,0 +1,228 @@
+{
+  "slug": "decode-ways",
+  "title": "Decode Ways",
+  "number": 91,
+  "difficulty": "Medium",
+  "category": "DP",
+  "url": "https://leetcode.com/problems/decode-ways/",
+  "statement": "A message containing letters from A-Z can be encoded into numbers using the following mapping:\n'A' -> \"1\"\n'B' -> \"2\"\n...\n'Z' -> \"26\"\n\nTo decode an encoded message, all digits must be grouped into valid single-digit (1-9) or two-digit (10-26) numbers. Given a string s containing only digits, return the number of ways to decode it.",
+  "constraints": [
+    "1 <= s.length <= 100",
+    "s contains only digits and may contain leading zero(s)",
+    "The encoded string will not start with '0' in the test cases"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "numDecodings",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def numDecodings(self, s: str) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "12"
+      },
+      "output": 2,
+      "explanation": "\"12\" can be decoded as \"AB\" (1,2) or \"L\" (12)"
+    },
+    {
+      "input": {
+        "s": "226"
+      },
+      "output": 3,
+      "explanation": "\"226\" can be decoded as \"BZ\" (2,26), \"VF\" (22,6), or \"BBF\" (2,2,6)"
+    },
+    {
+      "input": {
+        "s": "06"
+      },
+      "output": 0,
+      "explanation": "\"06\" cannot be decoded because '0' cannot map to any letter"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_single_digit",
+      "input": {
+        "s": "1"
+      },
+      "expected": 1
+    },
+    {
+      "name": "minimal_valid_multi",
+      "input": {
+        "s": "12"
+      },
+      "expected": 2
+    },
+    {
+      "name": "all_ones",
+      "input": {
+        "s": "1111"
+      },
+      "expected": 5
+    },
+    {
+      "name": "all_twos",
+      "input": {
+        "s": "2222"
+      },
+      "expected": 5
+    },
+    {
+      "name": "single_char_zero_invalid",
+      "input": {
+        "s": "0"
+      },
+      "expected": 0
+    },
+    {
+      "name": "leading_zero_pair",
+      "input": {
+        "s": "10"
+      },
+      "expected": 1
+    },
+    {
+      "name": "double_zero_invalid",
+      "input": {
+        "s": "00"
+      },
+      "expected": 0
+    },
+    {
+      "name": "zero_in_middle",
+      "input": {
+        "s": "101"
+      },
+      "expected": 1
+    },
+    {
+      "name": "multiple_zeros",
+      "input": {
+        "s": "1001"
+      },
+      "expected": 0
+    },
+    {
+      "name": "twentysix_boundary",
+      "input": {
+        "s": "26"
+      },
+      "expected": 2
+    },
+    {
+      "name": "twentyseven_boundary",
+      "input": {
+        "s": "27"
+      },
+      "expected": 1
+    },
+    {
+      "name": "ascending_123456",
+      "input": {
+        "s": "123456"
+      },
+      "expected": 3
+    },
+    {
+      "name": "descending_654321",
+      "input": {
+        "s": "654321"
+      },
+      "expected": 2
+    },
+    {
+      "name": "all_nines",
+      "input": {
+        "s": "9999"
+      },
+      "expected": 1
+    },
+    {
+      "name": "max_valid_pairs",
+      "input": {
+        "s": "262626"
+      },
+      "expected": 8
+    },
+    {
+      "name": "max_invalid_pairs",
+      "input": {
+        "s": "272727"
+      },
+      "expected": 1
+    },
+    {
+      "name": "alternating_12",
+      "input": {
+        "s": "121212"
+      },
+      "expected": 13
+    },
+    {
+      "name": "long_ones_string",
+      "input": {
+        "s": "11111111111111111111"
+      },
+      "expected": 10946
+    },
+    {
+      "name": "challenging_mixed",
+      "input": {
+        "s": "2226"
+      },
+      "expected": 5
+    },
+    {
+      "name": "high_digit_string",
+      "input": {
+        "s": "9999999999"
+      },
+      "expected": 1
+    },
+    {
+      "name": "single_nine",
+      "input": {
+        "s": "9"
+      },
+      "expected": 1
+    },
+    {
+      "name": "three_digit_zero_trap",
+      "input": {
+        "s": "1020"
+      },
+      "expected": 1
+    },
+    {
+      "name": "consecutive_valid_pairs",
+      "input": {
+        "s": "1111111111"
+      },
+      "expected": 89
+    },
+    {
+      "name": "medium_length_complex",
+      "input": {
+        "s": "1234567"
+      },
+      "expected": 3
+    },
+    {
+      "name": "max_constraint_length",
+      "input": {
+        "s": "11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+      },
+      "expected": 927372692193079000000
+    }
+  ]
+}

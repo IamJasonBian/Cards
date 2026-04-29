@@ -1,0 +1,62 @@
+{
+  "slug": "longest-repeating-character-replacement",
+  "number": 424,
+  "title": "Longest Repeating Character Replacement",
+  "difficulty": "Medium",
+  "category": "String",
+  "url": "https://leetcode.com/problems/longest-repeating-character-replacement/",
+  "statement": "You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times.\n\nReturn the length of the longest substring containing the same letter you can get after performing the above operations.",
+  "constraints": [
+    "1 <= s.length <= 10^5",
+    "s consists of only uppercase English letters",
+    "0 <= k <= s.length"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "characterReplacement",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "k",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def characterReplacement(self, s: str, k: int) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "ABAB",
+        "k": 2
+      },
+      "output": 4,
+      "explanation": "Replace the two 'A's with two 'B's or vice versa."
+    },
+    {
+      "input": {
+        "s": "ABBB",
+        "k": 2
+      },
+      "output": 4,
+      "explanation": "Replace the 'A' and one 'B' with two 'B's to get \"BBBB\"."
+    },
+    {
+      "input": {
+        "s": "AAAB",
+        "k": 0
+      },
+      "output": 3,
+      "explanation": "With k=0, you cannot change any characters, so the longest substring is \"AAA\"."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": null,
+  "referenceCode": "class Solution:\n    def characterReplacement(self, s: str, k: int) -> int:\n        count = {}\n        \n        l = 0\n        maxf = 0\n        for r in range(len(s)):\n            count[s[r]] = 1 + count.get(s[r], 0)\n            maxf = max(maxf, count[s[r]])\n\n            if (r - l + 1) - maxf > k:\n                count[s[l]] -= 1\n                l += 1\n\n        return (r - l + 1)\n"
+}

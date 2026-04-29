@@ -1,0 +1,63 @@
+{
+  "slug": "lowest-common-ancestor-of-a-binary-search-tree",
+  "number": 235,
+  "title": "Lowest Common Ancestor of a Binary Search Tree",
+  "difficulty": "Medium",
+  "category": "Tree",
+  "url": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/",
+  "statement": "Given a binary search tree (BST) and two nodes in the tree, find the lowest common ancestor (LCA) of the two nodes.\n\nThe lowest common ancestor of two nodes in a BST is the deepest node that is an ancestor of both nodes. A node can be its own ancestor.",
+  "constraints": [
+    "The number of nodes in the tree is in the range [2, 10^5]",
+    "-10^9 <= Node.val <= 10^9",
+    "All Node.val are unique",
+    "p != q",
+    "Both p and q exist in the BST"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "lowestCommonAncestor",
+    "params": [
+      {
+        "name": "root",
+        "pyType": "TreeNode",
+        "inputKind": "TreeNode"
+      },
+      {
+        "name": "p",
+        "pyType": "TreeNode",
+        "inputKind": "TreeNode"
+      },
+      {
+        "name": "q",
+        "pyType": "TreeNode",
+        "inputKind": "TreeNode"
+      }
+    ],
+    "returns": "TreeNode"
+  },
+  "starterCode": "class Solution:\n    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "root": "[6,2,8,0,4,7,9,null,null,3,5]",
+        "p": 2,
+        "q": 8
+      },
+      "output": 6,
+      "explanation": "The LCA of nodes 2 and 8 is 6."
+    },
+    {
+      "input": {
+        "root": "[6,2,8,0,4,7,9,null,null,3,5]",
+        "p": 2,
+        "q": 4
+      },
+      "output": 2,
+      "explanation": "The LCA of nodes 2 and 4 is 2, since a node can be its own ancestor."
+    }
+  ],
+  "jsonFriendly": false,
+  "jsonFriendlyReason": "Requires TreeNode adapter for root, p, and q parameters; return type is TreeNode",
+  "referenceCode": "class Solution:\n    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:\n        while True:\n            if root.val < p.val and root.val < q.val:\n                root = root.right\n            elif root.val > p.val and root.val > q.val:\n                root = root.left\n            else:\n                return root\n"
+}

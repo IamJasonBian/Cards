@@ -1,0 +1,53 @@
+{
+  "slug": "valid-parentheses",
+  "number": 20,
+  "title": "Valid Parentheses",
+  "difficulty": "Easy",
+  "category": "String",
+  "url": "https://leetcode.com/problems/valid-parentheses/",
+  "statement": "Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.\n\nAn input string is valid if:\n1. Open brackets must be closed by the same type of closing bracket.\n2. Open brackets must be closed in the correct order.\n3. Every close bracket has a corresponding open bracket of the same type.",
+  "constraints": [
+    "1 <= s.length <= 10^4",
+    "s consists of parentheses only '()[]{}'"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "isValid",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def isValid(self, s: str) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "()"
+      },
+      "output": true,
+      "explanation": "The string contains a single matching pair of parentheses."
+    },
+    {
+      "input": {
+        "s": "()[]{}"
+      },
+      "output": true,
+      "explanation": "All brackets are properly opened and closed in correct order."
+    },
+    {
+      "input": {
+        "s": "(]"
+      },
+      "output": false,
+      "explanation": "Closing bracket does not match the corresponding opening bracket."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": "",
+  "referenceCode": "class Solution:\n    def isValid(self, s: str) -> bool:\n        bracketMap = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}\n        stack = []\n\n        for c in s:\n            if c not in bracketMap:\n                stack.append(c)\n                continue\n            if not stack or stack[-1] != bracketMap[c]:\n                return False\n            stack.pop()\n\n        return not stack\n"
+}

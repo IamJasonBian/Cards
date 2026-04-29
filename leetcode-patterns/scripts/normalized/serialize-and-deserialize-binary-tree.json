@@ -1,0 +1,46 @@
+{
+  "slug": "serialize-and-deserialize-binary-tree",
+  "number": 297,
+  "title": "Serialize and Deserialize Binary Tree",
+  "difficulty": "Hard",
+  "category": "Tree",
+  "url": "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/",
+  "statement": "Design a codec to serialize and deserialize a binary tree. Your codec should be able to convert a binary tree into a string representation and back to the original tree structure. The serialization format should be unambiguous so that the deserialized tree matches the original.",
+  "constraints": [
+    "The number of nodes in the tree is in the range [0, 10^4]",
+    "−1000 ≤ Node.val ≤ 1000"
+  ],
+  "signature": {
+    "className": "Codec",
+    "methodName": "serialize",
+    "params": [
+      {
+        "name": "root",
+        "pyType": "TreeNode | None",
+        "inputKind": "TreeNode"
+      }
+    ],
+    "returns": "str"
+  },
+  "starterCode": "class Codec:\n    def serialize(self, root: TreeNode | None) -> str:\n        # write your solution here\n        pass\n\n    def deserialize(self, data: str) -> TreeNode | None:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "root": "[1,2,3,null,null,4,5]"
+      },
+      "output": "1,2,N,N,3,4,N,N,5,N,N",
+      "explanation": "The tree is serialized using pre-order traversal with 'N' representing null nodes."
+    },
+    {
+      "input": {
+        "root": "[]"
+      },
+      "output": "N",
+      "explanation": "An empty tree serializes to a single null marker."
+    }
+  ],
+  "jsonFriendly": false,
+  "jsonFriendlyReason": "The serialize method takes a TreeNode (requires custom adapter) and returns a string; the deserialize method takes a string and returns a TreeNode (requires custom adapter).",
+  "referenceCode": "class TreeNode:\n    def __init__(self, x):\n        self.val = x\n        self.left = None\n        self.right = None\n\nclass Codec:\n    def serialize(self, root: TreeNode | None) -> str:\n        res = []\n\n        def dfs(node):\n            if not node:\n                res.append(\"N\")\n                return\n            res.append(str(node.val))\n            dfs(node.left)\n            dfs(node.right)\n\n        dfs(root)\n        return \",\".join(res)\n\n    def deserialize(self, data: str) -> TreeNode | None:\n        vals = data.split(\",\")\n\n        def dfs():\n            val = vals.pop(0)\n            if val == \"N\":\n                return None\n            node = TreeNode(int(val))\n            node.left = dfs()\n            node.right = dfs()\n            return node\n\n        return dfs()\n"
+}

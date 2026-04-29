@@ -1,0 +1,93 @@
+{
+  "slug": "find-median-from-data-stream",
+  "number": 295,
+  "title": "Find Median from Data Stream",
+  "difficulty": "Hard",
+  "category": "Heap",
+  "url": "https://leetcode.com/problems/find-median-from-data-stream/",
+  "statement": "Design a data structure that supports adding integers and finding the median of all numbers added so far.\n\nThe median is the middle value in an ordered integer list. If the list has an even number of elements, the median is the average of the two middle numbers.",
+  "constraints": [
+    "addNum(int num) will be called before findMedian() is called",
+    "-10^5 <= num <= 10^5",
+    "There will be at most 5 * 10^4 calls to addNum and findMedian"
+  ],
+  "signature": {
+    "className": "MedianFinder",
+    "methodName": "addNum",
+    "params": [
+      {
+        "name": "num",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "None"
+  },
+  "starterCode": "class MedianFinder:\n\n    def __init__(self):\n        pass\n\n    def addNum(self, num: int) -> None:\n        pass\n\n    def findMedian(self) -> float:\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "operations": [
+          "MedianFinder",
+          "addNum",
+          "findMedian",
+          "addNum",
+          "findMedian",
+          "addNum",
+          "findMedian"
+        ],
+        "values": [
+          [],
+          [
+            1
+          ],
+          [],
+          [
+            2
+          ],
+          [],
+          [
+            3
+          ],
+          []
+        ]
+      },
+      "output": [
+        null,
+        null,
+        1,
+        null,
+        1.5,
+        null,
+        2
+      ],
+      "explanation": "After adding 1, median is 1.0. After adding 2, median is (1+2)/2=1.5. After adding 3, median is 2.0."
+    },
+    {
+      "input": {
+        "operations": [
+          "MedianFinder",
+          "addNum",
+          "findMedian"
+        ],
+        "values": [
+          [],
+          [
+            5
+          ],
+          []
+        ]
+      },
+      "output": [
+        null,
+        null,
+        5
+      ],
+      "explanation": "Single element has median equal to itself."
+    }
+  ],
+  "jsonFriendly": false,
+  "jsonFriendlyReason": "This is a design problem where the class itself is the solution; it requires maintaining mutable state across multiple method calls rather than being a pure function.",
+  "referenceCode": "import heapq\n\nclass MedianFinder:\n    def __init__(self):\n        self.small = []\n        self.large = []\n\n    def addNum(self, num: int) -> None:\n        if self.large and num > self.large[0]:\n            heapq.heappush(self.large, num)\n        else:\n            heapq.heappush(self.small, -1 * num)\n\n        if len(self.small) > len(self.large) + 1:\n            val = -1 * heapq.heappop(self.small)\n            heapq.heappush(self.large, val)\n        if len(self.large) > len(self.small) + 1:\n            val = heapq.heappop(self.large)\n            heapq.heappush(self.small, -1 * val)\n\n    def findMedian(self) -> float:\n        if len(self.small) > len(self.large):\n            return -1 * self.small[0]\n        elif len(self.large) > len(self.small):\n            return self.large[0]\n        return (-1 * self.small[0] + self.large[0]) / 2.0"
+}

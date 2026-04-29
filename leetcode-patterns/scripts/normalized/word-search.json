@@ -1,0 +1,119 @@
+{
+  "slug": "word-search",
+  "number": 79,
+  "title": "Word Search",
+  "difficulty": "Medium",
+  "category": "Matrix",
+  "url": "https://leetcode.com/problems/word-search/",
+  "statement": "Given an m x n board of characters and a string word, determine if the word exists in the board. The word must be constructed from letters of sequentially adjacent cells, where adjacent cells are those horizontally or vertically neighboring. The same cell may not be used more than once in a word.",
+  "constraints": [
+    "1 <= board.length, board[i].length <= 6",
+    "1 <= word.length <= 15",
+    "board and word consist of only lowercase and uppercase English letters"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "exist",
+    "params": [
+      {
+        "name": "board",
+        "pyType": "list[list[str]]",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "word",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def exist(self, board: list[list[str]], word: str) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "word": "ABCCED"
+      },
+      "output": true,
+      "explanation": "The word ABCCED can be found by starting at A and moving through adjacent cells."
+    },
+    {
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "word": "SEE"
+      },
+      "output": true,
+      "explanation": "The word SEE can be found by starting at S and moving through adjacent cells."
+    },
+    {
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "word": "ABCB"
+      },
+      "output": false,
+      "explanation": "The word ABCB cannot be found because the cell with B cannot be reused."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": null,
+  "referenceCode": "from collections import Counter\n\nclass Solution:\n    def exist(self, board: list[list[str]], word: str) -> bool:\n        ROWS, COLS = len(board), len(board[0])\n        path = set()\n\n        def dfs(r, c, i):\n            if i == len(word):\n                return True\n            if (\n                min(r, c) < 0\n                or r >= ROWS\n                or c >= COLS\n                or word[i] != board[r][c]\n                or (r, c) in path\n            ):\n                return False\n            path.add((r, c))\n            res = (\n                dfs(r + 1, c, i + 1)\n                or dfs(r - 1, c, i + 1)\n                or dfs(r, c + 1, i + 1)\n                or dfs(r, c - 1, i + 1)\n            )\n            path.remove((r, c))\n            return res\n\n        count = sum(map(Counter, board), Counter())\n        if count[word[0]] > count[word[-1]]:\n            word = word[::-1]\n\n        for r in range(ROWS):\n            for c in range(COLS):\n                if dfs(r, c, 0):\n                    return True\n        return False\n"
+}

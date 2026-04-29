@@ -1,0 +1,234 @@
+{
+  "slug": "valid-parentheses",
+  "title": "Valid Parentheses",
+  "number": 20,
+  "difficulty": "Easy",
+  "category": "String",
+  "url": "https://leetcode.com/problems/valid-parentheses/",
+  "statement": "Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.\n\nAn input string is valid if:\n1. Open brackets must be closed by the same type of closing bracket.\n2. Open brackets must be closed in the correct order.\n3. Every close bracket has a corresponding open bracket of the same type.",
+  "constraints": [
+    "1 <= s.length <= 10^4",
+    "s consists of parentheses only '()[]{}'"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "isValid",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def isValid(self, s: str) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "()"
+      },
+      "output": true,
+      "explanation": "The string contains a single matching pair of parentheses."
+    },
+    {
+      "input": {
+        "s": "()[]{}"
+      },
+      "output": true,
+      "explanation": "All brackets are properly opened and closed in correct order."
+    },
+    {
+      "input": {
+        "s": "(]"
+      },
+      "output": false,
+      "explanation": "Closing bracket does not match the corresponding opening bracket."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_valid_pair",
+      "input": {
+        "s": "()"
+      },
+      "expected": true
+    },
+    {
+      "name": "minimal_valid_braces",
+      "input": {
+        "s": "{}"
+      },
+      "expected": true
+    },
+    {
+      "name": "minimal_valid_brackets",
+      "input": {
+        "s": "[]"
+      },
+      "expected": true
+    },
+    {
+      "name": "single_open_paren",
+      "input": {
+        "s": "("
+      },
+      "expected": false
+    },
+    {
+      "name": "single_close_paren",
+      "input": {
+        "s": ")"
+      },
+      "expected": false
+    },
+    {
+      "name": "mismatched_close_first",
+      "input": {
+        "s": ")("
+      },
+      "expected": false
+    },
+    {
+      "name": "nested_valid_three_types",
+      "input": {
+        "s": "([{}])"
+      },
+      "expected": true
+    },
+    {
+      "name": "deeply_nested_valid",
+      "input": {
+        "s": "(((())))"
+      },
+      "expected": true
+    },
+    {
+      "name": "deeply_nested_valid_mixed",
+      "input": {
+        "s": "([{([{}])}])"
+      },
+      "expected": true
+    },
+    {
+      "name": "multiple_separate_pairs",
+      "input": {
+        "s": "()()()"
+      },
+      "expected": true
+    },
+    {
+      "name": "mixed_separate_pairs",
+      "input": {
+        "s": "()[]{}()[]{}"
+      },
+      "expected": true
+    },
+    {
+      "name": "all_same_type_valid",
+      "input": {
+        "s": "()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()("
+      },
+      "expected": false
+    },
+    {
+      "name": "mismatched_bracket_types",
+      "input": {
+        "s": "([)]"
+      },
+      "expected": false
+    },
+    {
+      "name": "extra_closing_bracket",
+      "input": {
+        "s": "()()())"
+      },
+      "expected": false
+    },
+    {
+      "name": "extra_opening_bracket",
+      "input": {
+        "s": "((()()"
+      },
+      "expected": false
+    },
+    {
+      "name": "only_opening_brackets",
+      "input": {
+        "s": "((({{{[[["
+      },
+      "expected": false
+    },
+    {
+      "name": "only_closing_brackets",
+      "input": {
+        "s": ")]]}"
+      },
+      "expected": false
+    },
+    {
+      "name": "alternating_open_close_wrong_type",
+      "input": {
+        "s": "([)][}"
+      },
+      "expected": false
+    },
+    {
+      "name": "reversed_pairs",
+      "input": {
+        "s": ")()}{][("
+      },
+      "expected": false
+    },
+    {
+      "name": "complex_nested_invalid",
+      "input": {
+        "s": "([{]})"
+      },
+      "expected": false
+    },
+    {
+      "name": "empty_like_double_close",
+      "input": {
+        "s": "()))"
+      },
+      "expected": false
+    },
+    {
+      "name": "long_valid_nested",
+      "input": {
+        "s": "({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[({[})]}])]}])]}])]}])]}])]}])]}])]}])]}])]}])]}])]}])]}])]}])]}])]}])]}])]}])]}])]}])]}])]}])"
+      },
+      "expected": false
+    },
+    {
+      "name": "single_char_unmatched",
+      "input": {
+        "s": "a"
+      },
+      "expected": false
+    },
+    {
+      "name": "bracket_with_char",
+      "input": {
+        "s": "(a)"
+      },
+      "expected": false
+    },
+    {
+      "name": "valid_three_nesting_levels",
+      "input": {
+        "s": "([{}])"
+      },
+      "expected": true
+    },
+    {
+      "name": "asymmetric_depth",
+      "input": {
+        "s": "(((()))[]"
+      },
+      "expected": false
+    }
+  ]
+}

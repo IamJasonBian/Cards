@@ -1,0 +1,261 @@
+{
+  "slug": "longest-repeating-character-replacement",
+  "title": "Longest Repeating Character Replacement",
+  "number": 424,
+  "difficulty": "Medium",
+  "category": "String",
+  "url": "https://leetcode.com/problems/longest-repeating-character-replacement/",
+  "statement": "You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times.\n\nReturn the length of the longest substring containing the same letter you can get after performing the above operations.",
+  "constraints": [
+    "1 <= s.length <= 10^5",
+    "s consists of only uppercase English letters",
+    "0 <= k <= s.length"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "characterReplacement",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "k",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def characterReplacement(self, s: str, k: int) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "ABAB",
+        "k": 2
+      },
+      "output": 4,
+      "explanation": "Replace the two 'A's with two 'B's or vice versa."
+    },
+    {
+      "input": {
+        "s": "ABBB",
+        "k": 2
+      },
+      "output": 4,
+      "explanation": "Replace the 'A' and one 'B' with two 'B's to get \"BBBB\"."
+    },
+    {
+      "input": {
+        "s": "AAAB",
+        "k": 0
+      },
+      "output": 3,
+      "explanation": "With k=0, you cannot change any characters, so the longest substring is \"AAA\"."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_single_char",
+      "input": {
+        "s": "A",
+        "k": 0
+      },
+      "expected": 1
+    },
+    {
+      "name": "minimal_single_char_with_k",
+      "input": {
+        "s": "A",
+        "k": 1
+      },
+      "expected": 1
+    },
+    {
+      "name": "two_same_chars",
+      "input": {
+        "s": "AA",
+        "k": 0
+      },
+      "expected": 2
+    },
+    {
+      "name": "two_diff_chars_k1",
+      "input": {
+        "s": "AB",
+        "k": 1
+      },
+      "expected": 2
+    },
+    {
+      "name": "k_zero_all_same",
+      "input": {
+        "s": "AAAAAAA",
+        "k": 0
+      },
+      "expected": 7
+    },
+    {
+      "name": "k_zero_all_diff",
+      "input": {
+        "s": "ABCDEFG",
+        "k": 0
+      },
+      "expected": 1
+    },
+    {
+      "name": "k_exceeds_length",
+      "input": {
+        "s": "ABC",
+        "k": 10
+      },
+      "expected": 3
+    },
+    {
+      "name": "k_equals_length",
+      "input": {
+        "s": "ABCD",
+        "k": 4
+      },
+      "expected": 4
+    },
+    {
+      "name": "alternating_pattern",
+      "input": {
+        "s": "ABABABABAB",
+        "k": 2
+      },
+      "expected": 5
+    },
+    {
+      "name": "alternating_pattern_large_k",
+      "input": {
+        "s": "ABABABABAB",
+        "k": 10
+      },
+      "expected": 10
+    },
+    {
+      "name": "sorted_ascending",
+      "input": {
+        "s": "AABBCCDDEE",
+        "k": 2
+      },
+      "expected": 4
+    },
+    {
+      "name": "sorted_descending",
+      "input": {
+        "s": "EEDDCCBBAA",
+        "k": 2
+      },
+      "expected": 4
+    },
+    {
+      "name": "mostly_one_char",
+      "input": {
+        "s": "AAAAAAAAB",
+        "k": 1
+      },
+      "expected": 9
+    },
+    {
+      "name": "mostly_one_char_scattered",
+      "input": {
+        "s": "AAABAAACAAA",
+        "k": 2
+      },
+      "expected": 11
+    },
+    {
+      "name": "all_same_large",
+      "input": {
+        "s": "AAAAAAAAAAAAAAAAAAAAAA",
+        "k": 5
+      },
+      "expected": 22
+    },
+    {
+      "name": "repeating_blocks",
+      "input": {
+        "s": "AABBCCAABBCC",
+        "k": 3
+      },
+      "expected": 5
+    },
+    {
+      "name": "three_char_rotation",
+      "input": {
+        "s": "ABCABCABCABC",
+        "k": 2
+      },
+      "expected": 4
+    },
+    {
+      "name": "trailing_different",
+      "input": {
+        "s": "AAAAAAAAAAAB",
+        "k": 1
+      },
+      "expected": 12
+    },
+    {
+      "name": "leading_different",
+      "input": {
+        "s": "BAAAAAAAAAAAA",
+        "k": 1
+      },
+      "expected": 13
+    },
+    {
+      "name": "middle_different",
+      "input": {
+        "s": "AAABAAAAAAA",
+        "k": 1
+      },
+      "expected": 11
+    },
+    {
+      "name": "long_with_k_zero",
+      "input": {
+        "s": "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "k": 0
+      },
+      "expected": 1
+    },
+    {
+      "name": "long_alternating_k_large",
+      "input": {
+        "s": "ABABABABABABABABABABABABABABABABABABABABABABABABAB",
+        "k": 25
+      },
+      "expected": 50
+    },
+    {
+      "name": "many_singles",
+      "input": {
+        "s": "AABBCCDDAABBCCDD",
+        "k": 8
+      },
+      "expected": 12
+    },
+    {
+      "name": "increasing_frequency",
+      "input": {
+        "s": "AABBBBCCCCCCDDDDDDDD",
+        "k": 3
+      },
+      "expected": 11
+    },
+    {
+      "name": "max_length_constraint",
+      "input": {
+        "s": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "k": 50
+      },
+      "expected": 100
+    }
+  ]
+}

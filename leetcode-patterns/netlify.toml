@@ -6,6 +6,9 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+  # Bundle the full problem JSONs (with hidden cases) into the function deploy.
+  # These never reach the client — only the function reads them.
+  included_files = ["server/problems/**"]
 
 [dev]
   command = "npm run dev -- --port 5180 --strictPort"

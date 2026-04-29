@@ -1,0 +1,417 @@
+{
+  "slug": "jump-game",
+  "title": "Jump Game",
+  "number": 55,
+  "difficulty": "Medium",
+  "category": "DP",
+  "url": "https://leetcode.com/problems/jump-game/",
+  "statement": "Given an array of non-negative integers nums where you are initially positioned at the first index of the array, each element in the array represents your maximum jump length from that position.\n\nDetermine if you can reach the last index of the array. Return true if you can reach the last index, and false otherwise.",
+  "constraints": [
+    "1 <= nums.length <= 10^4",
+    "0 <= nums[i] <= 10^5"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "canJump",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def canJump(self, nums: list[int]) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          2,
+          3,
+          1,
+          1,
+          4
+        ]
+      },
+      "output": true,
+      "explanation": "Jump 1 step from index 0 to 1, then 3 steps to the last index."
+    },
+    {
+      "input": {
+        "nums": [
+          3,
+          2,
+          1,
+          0,
+          4
+        ]
+      },
+      "output": false,
+      "explanation": "You will always arrive at index 3; its maximum jump length is 0, which makes it impossible to reach the last index."
+    },
+    {
+      "input": {
+        "nums": [
+          0
+        ]
+      },
+      "output": true,
+      "explanation": "Already at the last index."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_single_element",
+      "input": {
+        "nums": [
+          0
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "minimal_two_elements_reachable",
+      "input": {
+        "nums": [
+          1,
+          0
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "minimal_two_elements_unreachable",
+      "input": {
+        "nums": [
+          0,
+          1
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "all_zeros_except_start",
+      "input": {
+        "nums": [
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "large_jump_at_start",
+      "input": {
+        "nums": [
+          10,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "gradual_decrease",
+      "input": {
+        "nums": [
+          5,
+          4,
+          3,
+          2,
+          1,
+          0
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "all_ones",
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "all_same_large_value",
+      "input": {
+        "nums": [
+          100,
+          100,
+          100,
+          100
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "alternating_high_low",
+      "input": {
+        "nums": [
+          5,
+          0,
+          5,
+          0,
+          5,
+          0
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "zero_in_middle_unreachable",
+      "input": {
+        "nums": [
+          2,
+          0,
+          0,
+          1,
+          4
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "zero_in_middle_reachable",
+      "input": {
+        "nums": [
+          3,
+          0,
+          0,
+          1,
+          4
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "ascending_order",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "descending_order",
+      "input": {
+        "nums": [
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "max_value_array",
+      "input": {
+        "nums": [
+          100000,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "many_zeros",
+      "input": {
+        "nums": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "trap_unreachable",
+      "input": {
+        "nums": [
+          0,
+          2,
+          3
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "barely_reachable",
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "jump_over_gap",
+      "input": {
+        "nums": [
+          2,
+          0,
+          0,
+          1
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "large_middle_value",
+      "input": {
+        "nums": [
+          1,
+          2,
+          0,
+          0,
+          5,
+          0
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "single_large_jump",
+      "input": {
+        "nums": [
+          50,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "reverse_sorted_long",
+      "input": {
+        "nums": [
+          10,
+          9,
+          8,
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1,
+          0
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "two_large_then_trapped",
+      "input": {
+        "nums": [
+          2,
+          2,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "medium_jumps_decreasing",
+      "input": {
+        "nums": [
+          4,
+          3,
+          2,
+          1,
+          1,
+          1
+        ]
+      },
+      "expected": true
+    },
+    {
+      "name": "small_fluctuations",
+      "input": {
+        "nums": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ]
+      },
+      "expected": false
+    },
+    {
+      "name": "large_array_all_sufficient",
+      "input": {
+        "nums": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ]
+      },
+      "expected": true
+    }
+  ]
+}
