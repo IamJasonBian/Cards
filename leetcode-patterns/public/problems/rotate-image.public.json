@@ -1,0 +1,69 @@
+{
+  "slug": "rotate-image",
+  "title": "Rotate Image",
+  "number": 48,
+  "difficulty": "Medium",
+  "category": "Matrix",
+  "url": "https://leetcode.com/problems/rotate-image/",
+  "statement": "You are given an n × n 2D matrix representing an image. Rotate the image 90 degrees clockwise in-place.\n\nYou must modify the matrix directly without using extra space for another 2D matrix (though you may use O(1) extra space for variables).",
+  "constraints": [
+    "1 <= n <= 300",
+    "matrix.length == matrix[i].length == n",
+    "-1000 <= matrix[i][j] <= 1000"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "rotate",
+    "params": [
+      {
+        "name": "matrix",
+        "pyType": "list[list[int]]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "None"
+  },
+  "starterCode": "class Solution:\n    def rotate(self, matrix: list[list[int]]) -> None:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ]
+        ]
+      },
+      "output": null,
+      "explanation": "After rotating 90 degrees clockwise, the matrix becomes [[7,4,1],[8,5,2],[9,6,3]]. The matrix is modified in-place."
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
+      "output": null,
+      "explanation": "After rotating 90 degrees clockwise, the matrix becomes [[3,1],[4,2]]. The matrix is modified in-place."
+    }
+  ],
+  "hiddenCount": 24
+}

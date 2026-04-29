@@ -1,0 +1,261 @@
+{
+  "slug": "sum-of-two-integers",
+  "title": "Sum of Two Integers",
+  "number": 371,
+  "difficulty": "Medium",
+  "category": "Binary",
+  "url": "https://leetcode.com/problems/sum-of-two-integers/",
+  "statement": "Given two integers a and b, return their sum without using the + or - operators.\n\nYou must implement the addition using only bitwise operations (XOR, AND, bit shift). The solution should handle both positive and negative integers correctly.",
+  "constraints": [
+    "-2^31 <= a, b <= 2^31 - 1",
+    "You cannot use the + or - operators",
+    "You must use bitwise operations to perform addition"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "getSum",
+    "params": [
+      {
+        "name": "a",
+        "pyType": "int",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "b",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def getSum(self, a: int, b: int) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "a": 1,
+        "b": 2
+      },
+      "output": 3,
+      "explanation": "Simple addition: 1 + 2 = 3"
+    },
+    {
+      "input": {
+        "a": -2,
+        "b": 3
+      },
+      "output": 1,
+      "explanation": "Mixed signs: -2 + 3 = 1"
+    },
+    {
+      "input": {
+        "a": -1,
+        "b": -1
+      },
+      "output": -2,
+      "explanation": "Both negative: -1 + (-1) = -2"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "zero_zero",
+      "input": {
+        "a": 0,
+        "b": 0
+      },
+      "expected": 0
+    },
+    {
+      "name": "zero_positive",
+      "input": {
+        "a": 0,
+        "b": 5
+      },
+      "expected": 5
+    },
+    {
+      "name": "zero_negative",
+      "input": {
+        "a": 0,
+        "b": -5
+      },
+      "expected": -5
+    },
+    {
+      "name": "one_one",
+      "input": {
+        "a": 1,
+        "b": 1
+      },
+      "expected": 2
+    },
+    {
+      "name": "one_negative_one",
+      "input": {
+        "a": 1,
+        "b": -1
+      },
+      "expected": 0
+    },
+    {
+      "name": "negative_one_negative_one",
+      "input": {
+        "a": -1,
+        "b": -1
+      },
+      "expected": -2
+    },
+    {
+      "name": "small_positive_small_positive",
+      "input": {
+        "a": 3,
+        "b": 7
+      },
+      "expected": 10
+    },
+    {
+      "name": "small_positive_small_negative",
+      "input": {
+        "a": 10,
+        "b": -3
+      },
+      "expected": 7
+    },
+    {
+      "name": "small_negative_small_negative",
+      "input": {
+        "a": -5,
+        "b": -8
+      },
+      "expected": -13
+    },
+    {
+      "name": "large_positive_large_positive",
+      "input": {
+        "a": 1000000,
+        "b": 2000000
+      },
+      "expected": 3000000
+    },
+    {
+      "name": "large_positive_large_negative",
+      "input": {
+        "a": 1000000,
+        "b": -500000
+      },
+      "expected": 500000
+    },
+    {
+      "name": "large_negative_large_negative",
+      "input": {
+        "a": -1000000,
+        "b": -2000000
+      },
+      "expected": -3000000
+    },
+    {
+      "name": "max_int_minus_one",
+      "input": {
+        "a": 2147483646,
+        "b": 1
+      },
+      "expected": 2147483647
+    },
+    {
+      "name": "min_int_plus_one",
+      "input": {
+        "a": -2147483648,
+        "b": 1
+      },
+      "expected": -2147483647
+    },
+    {
+      "name": "max_int_max_int",
+      "input": {
+        "a": 2147483647,
+        "b": 2147483647
+      },
+      "expected": 4294967294
+    },
+    {
+      "name": "min_int_min_int",
+      "input": {
+        "a": -2147483648,
+        "b": -2147483648
+      },
+      "expected": -4294967296
+    },
+    {
+      "name": "max_int_negative_max_int",
+      "input": {
+        "a": 2147483647,
+        "b": -2147483647
+      },
+      "expected": 0
+    },
+    {
+      "name": "cancel_to_zero",
+      "input": {
+        "a": 100,
+        "b": -100
+      },
+      "expected": 0
+    },
+    {
+      "name": "power_of_two_addition",
+      "input": {
+        "a": 16,
+        "b": 32
+      },
+      "expected": 48
+    },
+    {
+      "name": "power_of_two_negative",
+      "input": {
+        "a": -16,
+        "b": -32
+      },
+      "expected": -48
+    },
+    {
+      "name": "alternating_bits",
+      "input": {
+        "a": 85,
+        "b": 170
+      },
+      "expected": 255
+    },
+    {
+      "name": "negative_greater_magnitude",
+      "input": {
+        "a": 5,
+        "b": -20
+      },
+      "expected": -15
+    },
+    {
+      "name": "mixed_medium_values",
+      "input": {
+        "a": 12345,
+        "b": -6789
+      },
+      "expected": 5556
+    },
+    {
+      "name": "same_value_positive",
+      "input": {
+        "a": 999,
+        "b": 999
+      },
+      "expected": 1998
+    },
+    {
+      "name": "same_value_negative",
+      "input": {
+        "a": -999,
+        "b": -999
+      },
+      "expected": -1998
+    }
+  ]
+}

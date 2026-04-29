@@ -1,0 +1,69 @@
+{
+  "slug": "binary-tree-level-order-traversal",
+  "number": 102,
+  "title": "Binary Tree Level Order Traversal",
+  "difficulty": "Medium",
+  "category": "Tree",
+  "url": "https://leetcode.com/problems/binary-tree-level-order-traversal/",
+  "statement": "Given the root of a binary tree, return its level order traversal (breadth-first search). Each level's values should be collected in a separate list, with levels ordered from top to bottom.",
+  "constraints": [
+    "The number of nodes in the tree is in the range [0, 100]",
+    "-100 <= Node.val <= 100"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "levelOrder",
+    "params": [
+      {
+        "name": "root",
+        "pyType": "Optional[TreeNode]",
+        "inputKind": "TreeNode"
+      }
+    ],
+    "returns": "list[list[int]]"
+  },
+  "starterCode": "class Solution:\n    def levelOrder(self, root: Optional[TreeNode]) -> list[list[int]]:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "root": "[3,9,20,null,null,15,7]"
+      },
+      "output": [
+        [
+          3
+        ],
+        [
+          9,
+          20
+        ],
+        [
+          15,
+          7
+        ]
+      ],
+      "explanation": "Tree structure: 3 as root, 9 and 20 as children, 15 and 7 as children of 20. BFS visits by level."
+    },
+    {
+      "input": {
+        "root": "[1]"
+      },
+      "output": [
+        [
+          1
+        ]
+      ],
+      "explanation": "Single node tree returns one level."
+    },
+    {
+      "input": {
+        "root": "[]"
+      },
+      "output": [],
+      "explanation": "Empty tree returns empty result."
+    }
+  ],
+  "jsonFriendly": false,
+  "jsonFriendlyReason": "The root parameter is a TreeNode pointer, which requires a custom tree adapter and cannot be represented as a JSON primitive.",
+  "referenceCode": "from collections import deque\n\nclass Solution:\n    def levelOrder(self, root):\n        res = []\n        q = deque()\n        if root:\n            q.append(root)\n\n        while q:\n            val = []\n            for i in range(len(q)):\n                node = q.popleft()\n                val.append(node.val)\n                if node.left:\n                    q.append(node.left)\n                if node.right:\n                    q.append(node.right)\n            res.append(val)\n        return res\n"
+}

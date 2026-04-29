@@ -1,0 +1,67 @@
+{
+  "slug": "coin-change",
+  "title": "Coin Change",
+  "number": 322,
+  "difficulty": "Medium",
+  "category": "DP",
+  "url": "https://leetcode.com/problems/coin-change/",
+  "statement": "You are given an integer array coins representing coin denominations and an integer amount representing a target amount of money. Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.\n\nYou may assume that you have an infinite number of each kind of coin.",
+  "constraints": [
+    "1 <= coins.length <= 12",
+    "1 <= coins[i] <= 2^31 - 1",
+    "0 <= amount <= 10^4"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "coinChange",
+    "params": [
+      {
+        "name": "coins",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "amount",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def coinChange(self, coins: list[int], amount: int) -> int:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "coins": [
+          1,
+          2,
+          5
+        ],
+        "amount": 5
+      },
+      "output": 1,
+      "explanation": "5 = 5 (one coin)"
+    },
+    {
+      "input": {
+        "coins": [
+          2
+        ],
+        "amount": 3
+      },
+      "output": -1,
+      "explanation": "Cannot make amount 3 with coin of denomination 2"
+    },
+    {
+      "input": {
+        "coins": [
+          10
+        ],
+        "amount": 10
+      },
+      "output": 1,
+      "explanation": "10 = 10 (one coin)"
+    }
+  ],
+  "hiddenCount": 25
+}

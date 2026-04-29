@@ -1,0 +1,90 @@
+{
+  "slug": "number-of-connected-components-in-an-undirected-graph",
+  "title": "Number of Connected Components in an Undirected Graph",
+  "number": 323,
+  "difficulty": "Medium",
+  "category": "Graph",
+  "url": "https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/",
+  "statement": "Given an undirected graph represented as n nodes (numbered 0 to n-1) and a list of edges, determine the number of connected components in the graph.\n\nA connected component is a maximal set of nodes where there is a path between any two nodes in that set.",
+  "constraints": [
+    "1 <= n <= 2000",
+    "0 <= edges.length <= 2000",
+    "0 <= a < b < n (where a, b are nodes in each edge)",
+    "No duplicate edges; no self-loops"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "countComponents",
+    "params": [
+      {
+        "name": "n",
+        "pyType": "int",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "edges",
+        "pyType": "list[list[int]]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def countComponents(self, n: int, edges: list[list[int]]) -> int:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "n": 5,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
+      "output": 2,
+      "explanation": "Nodes 0, 1, 2 form one connected component. Nodes 3, 4 form another."
+    },
+    {
+      "input": {
+        "n": 5,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
+      "output": 1,
+      "explanation": "All nodes are connected in a single component."
+    },
+    {
+      "input": {
+        "n": 3,
+        "edges": []
+      },
+      "output": 3,
+      "explanation": "No edges means each node is its own connected component."
+    }
+  ],
+  "hiddenCount": 23
+}

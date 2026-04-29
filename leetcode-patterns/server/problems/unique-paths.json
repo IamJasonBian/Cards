@@ -1,0 +1,260 @@
+{
+  "slug": "unique-paths",
+  "title": "Unique Paths",
+  "number": 62,
+  "difficulty": "Medium",
+  "category": "DP",
+  "url": "https://leetcode.com/problems/unique-paths/",
+  "statement": "A robot is located at the top-left corner of an m x n grid. The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid.\n\nHow many distinct paths are there for the robot to reach the bottom-right corner?",
+  "constraints": [
+    "1 <= m, n <= 100",
+    "The answer is guaranteed to fit in a 32-bit signed integer"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "uniquePaths",
+    "params": [
+      {
+        "name": "m",
+        "pyType": "int",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "n",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def uniquePaths(self, m: int, n: int) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "m": 3,
+        "n": 7
+      },
+      "output": 28,
+      "explanation": "A 3x7 grid has 28 unique paths from top-left to bottom-right"
+    },
+    {
+      "input": {
+        "m": 3,
+        "n": 2
+      },
+      "output": 3,
+      "explanation": "A 3x2 grid has 3 unique paths"
+    },
+    {
+      "input": {
+        "m": 1,
+        "n": 1
+      },
+      "output": 1,
+      "explanation": "A 1x1 grid has 1 path (already at destination)"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_1x1",
+      "input": {
+        "m": 1,
+        "n": 1
+      },
+      "expected": 1
+    },
+    {
+      "name": "minimal_1x2",
+      "input": {
+        "m": 1,
+        "n": 2
+      },
+      "expected": 1
+    },
+    {
+      "name": "minimal_2x1",
+      "input": {
+        "m": 2,
+        "n": 1
+      },
+      "expected": 1
+    },
+    {
+      "name": "small_2x2",
+      "input": {
+        "m": 2,
+        "n": 2
+      },
+      "expected": 2
+    },
+    {
+      "name": "small_2x3",
+      "input": {
+        "m": 2,
+        "n": 3
+      },
+      "expected": 3
+    },
+    {
+      "name": "small_3x3",
+      "input": {
+        "m": 3,
+        "n": 3
+      },
+      "expected": 6
+    },
+    {
+      "name": "small_4x4",
+      "input": {
+        "m": 4,
+        "n": 4
+      },
+      "expected": 20
+    },
+    {
+      "name": "small_5x5",
+      "input": {
+        "m": 5,
+        "n": 5
+      },
+      "expected": 70
+    },
+    {
+      "name": "rectangular_2x10",
+      "input": {
+        "m": 2,
+        "n": 10
+      },
+      "expected": 10
+    },
+    {
+      "name": "rectangular_10x2",
+      "input": {
+        "m": 10,
+        "n": 2
+      },
+      "expected": 10
+    },
+    {
+      "name": "rectangular_3x20",
+      "input": {
+        "m": 3,
+        "n": 20
+      },
+      "expected": 210
+    },
+    {
+      "name": "rectangular_20x3",
+      "input": {
+        "m": 20,
+        "n": 3
+      },
+      "expected": 210
+    },
+    {
+      "name": "mid_size_10x10",
+      "input": {
+        "m": 10,
+        "n": 10
+      },
+      "expected": 48620
+    },
+    {
+      "name": "mid_size_15x15",
+      "input": {
+        "m": 15,
+        "n": 15
+      },
+      "expected": 40116600
+    },
+    {
+      "name": "mid_size_12x25",
+      "input": {
+        "m": 12,
+        "n": 25
+      },
+      "expected": 417225900
+    },
+    {
+      "name": "mid_size_25x12",
+      "input": {
+        "m": 25,
+        "n": 12
+      },
+      "expected": 417225900
+    },
+    {
+      "name": "large_30x30",
+      "input": {
+        "m": 30,
+        "n": 30
+      },
+      "expected": 30067266499541040
+    },
+    {
+      "name": "large_40x40",
+      "input": {
+        "m": 40,
+        "n": 40
+      },
+      "expected": 2.721701486919903e+22
+    },
+    {
+      "name": "large_50x50",
+      "input": {
+        "m": 50,
+        "n": 50
+      },
+      "expected": 2.547761225898086e+28
+    },
+    {
+      "name": "large_100x1",
+      "input": {
+        "m": 100,
+        "n": 1
+      },
+      "expected": 1
+    },
+    {
+      "name": "large_1x100",
+      "input": {
+        "m": 1,
+        "n": 100
+      },
+      "expected": 1
+    },
+    {
+      "name": "large_100x2",
+      "input": {
+        "m": 100,
+        "n": 2
+      },
+      "expected": 100
+    },
+    {
+      "name": "large_2x100",
+      "input": {
+        "m": 2,
+        "n": 100
+      },
+      "expected": 100
+    },
+    {
+      "name": "max_range_100x100",
+      "input": {
+        "m": 100,
+        "n": 100
+      },
+      "expected": 2.2750883079422935e+58
+    },
+    {
+      "name": "edge_99x99",
+      "input": {
+        "m": 99,
+        "n": 99
+      },
+      "expected": 5.7165924488905345e+57
+    }
+  ]
+}

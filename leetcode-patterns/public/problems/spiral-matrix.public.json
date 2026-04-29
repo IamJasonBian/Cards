@@ -1,0 +1,114 @@
+{
+  "slug": "spiral-matrix",
+  "title": "Spiral Matrix",
+  "number": 54,
+  "difficulty": "Medium",
+  "category": "Matrix",
+  "url": "https://leetcode.com/problems/spiral-matrix/",
+  "statement": "Given an m x n matrix, return all elements of the matrix in spiral order.\n\nSpiral order means traversing the matrix starting from the top-left, moving right along the top row, then down the right column, then left along the bottom row, then up the left column, and repeating this pattern inward until all elements are visited.",
+  "constraints": [
+    "1 <= m, n <= 10",
+    "matrix[i][j] is an integer between -100 and 100"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "spiralOrder",
+    "params": [
+      {
+        "name": "matrix",
+        "pyType": "list[list[int]]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "list[int]"
+  },
+  "starterCode": "class Solution:\n    def spiralOrder(self, matrix: list[list[int]]) -> list[int]:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ]
+        ]
+      },
+      "output": [
+        1,
+        2,
+        3,
+        6,
+        9,
+        8,
+        7,
+        4,
+        5
+      ],
+      "explanation": "Traverse right along top row, down right column, left along bottom row, up left column, then center element."
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            5,
+            6,
+            7,
+            8
+          ],
+          [
+            9,
+            10,
+            11,
+            12
+          ]
+        ]
+      },
+      "output": [
+        1,
+        2,
+        3,
+        4,
+        8,
+        12,
+        11,
+        10,
+        9,
+        5,
+        6,
+        7
+      ],
+      "explanation": "Spiral traversal of a 3x4 matrix."
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1
+          ]
+        ]
+      },
+      "output": [
+        1
+      ],
+      "explanation": "Single element matrix."
+    }
+  ],
+  "hiddenCount": 25
+}

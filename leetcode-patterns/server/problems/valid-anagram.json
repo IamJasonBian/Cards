@@ -1,0 +1,268 @@
+{
+  "slug": "valid-anagram",
+  "title": "Valid Anagram",
+  "number": 242,
+  "difficulty": "Easy",
+  "category": "String",
+  "url": "https://leetcode.com/problems/valid-anagram/",
+  "statement": "Given two strings s and t, determine if they are anagrams of each other. An anagram is a word or phrase formed by rearranging the letters of another, typically using all the original letters exactly once.",
+  "constraints": [
+    "1 <= s.length, t.length <= 5 * 10^4",
+    "s and t consist of lowercase English letters"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "isAnagram",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "t",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def isAnagram(self, s: str, t: str) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "anagram",
+        "t": "nagaram"
+      },
+      "output": true,
+      "explanation": "Both strings contain the same characters with the same frequencies."
+    },
+    {
+      "input": {
+        "s": "rat",
+        "t": "car"
+      },
+      "output": false,
+      "explanation": "The strings contain different characters, so they are not anagrams."
+    },
+    {
+      "input": {
+        "s": "ab",
+        "t": "ba"
+      },
+      "output": true,
+      "explanation": "The strings contain the same characters in different order."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_equal",
+      "input": {
+        "s": "a",
+        "t": "a"
+      },
+      "expected": true
+    },
+    {
+      "name": "minimal_unequal",
+      "input": {
+        "s": "a",
+        "t": "b"
+      },
+      "expected": false
+    },
+    {
+      "name": "length_mismatch",
+      "input": {
+        "s": "ab",
+        "t": "abc"
+      },
+      "expected": false
+    },
+    {
+      "name": "empty_like_single",
+      "input": {
+        "s": "a",
+        "t": "b"
+      },
+      "expected": false
+    },
+    {
+      "name": "two_char_anagram",
+      "input": {
+        "s": "ab",
+        "t": "ba"
+      },
+      "expected": true
+    },
+    {
+      "name": "two_char_same",
+      "input": {
+        "s": "aa",
+        "t": "aa"
+      },
+      "expected": true
+    },
+    {
+      "name": "two_char_different",
+      "input": {
+        "s": "ab",
+        "t": "cd"
+      },
+      "expected": false
+    },
+    {
+      "name": "repeated_chars",
+      "input": {
+        "s": "aaa",
+        "t": "aaa"
+      },
+      "expected": true
+    },
+    {
+      "name": "repeated_diff_count",
+      "input": {
+        "s": "aaa",
+        "t": "aaaa"
+      },
+      "expected": false
+    },
+    {
+      "name": "all_same_letter_long",
+      "input": {
+        "s": "aaaaaaaaaa",
+        "t": "aaaaaaaaaa"
+      },
+      "expected": true
+    },
+    {
+      "name": "all_same_letter_mismatch",
+      "input": {
+        "s": "aaaaaaaaaa",
+        "t": "aaaaaaaaaab"
+      },
+      "expected": false
+    },
+    {
+      "name": "reverse_order",
+      "input": {
+        "s": "abcdefghij",
+        "t": "jihgfedcba"
+      },
+      "expected": true
+    },
+    {
+      "name": "sorted_ascending",
+      "input": {
+        "s": "abcdefghij",
+        "t": "abcdefghij"
+      },
+      "expected": true
+    },
+    {
+      "name": "sorted_descending",
+      "input": {
+        "s": "jihgfedcba",
+        "t": "jihgfedcba"
+      },
+      "expected": true
+    },
+    {
+      "name": "multiple_duplicates_true",
+      "input": {
+        "s": "aabbcc",
+        "t": "cabcab"
+      },
+      "expected": true
+    },
+    {
+      "name": "multiple_duplicates_false",
+      "input": {
+        "s": "aabbcc",
+        "t": "aabbcd"
+      },
+      "expected": false
+    },
+    {
+      "name": "single_dup_vs_no_dup",
+      "input": {
+        "s": "aa",
+        "t": "ab"
+      },
+      "expected": false
+    },
+    {
+      "name": "long_anagram_50000",
+      "input": {
+        "s": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz",
+        "t": "zyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcbazyxwvutsrqponmlkjihgfedcba"
+      },
+      "expected": false
+    },
+    {
+      "name": "long_no_anagram_50000",
+      "input": {
+        "s": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzaa",
+        "t": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab"
+      },
+      "expected": false
+    },
+    {
+      "name": "off_by_one_char",
+      "input": {
+        "s": "abcdefg",
+        "t": "abcdefh"
+      },
+      "expected": false
+    },
+    {
+      "name": "extra_char_end",
+      "input": {
+        "s": "abcdef",
+        "t": "abcdefg"
+      },
+      "expected": false
+    },
+    {
+      "name": "extra_char_start",
+      "input": {
+        "s": "abcdef",
+        "t": "gabcdef"
+      },
+      "expected": false
+    },
+    {
+      "name": "char_frequency_swap",
+      "input": {
+        "s": "aabb",
+        "t": "abab"
+      },
+      "expected": true
+    },
+    {
+      "name": "anagram_with_z",
+      "input": {
+        "s": "zzzaaa",
+        "t": "aaazzz"
+      },
+      "expected": true
+    },
+    {
+      "name": "only_z",
+      "input": {
+        "s": "z",
+        "t": "z"
+      },
+      "expected": true
+    },
+    {
+      "name": "z_mismatch",
+      "input": {
+        "s": "z",
+        "t": "y"
+      },
+      "expected": false
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "slug": "construct-binary-tree-from-preorder-and-inorder-traversal",
+  "number": 105,
+  "title": "Construct Binary Tree from Preorder and Inorder Traversal",
+  "difficulty": "Medium",
+  "category": "Tree",
+  "url": "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/",
+  "statement": "Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.\n\nNote: You may assume that duplicates do not exist in the tree.",
+  "constraints": [
+    "1 <= preorder.length <= 3000",
+    "inorder.length == preorder.length",
+    "-3000 <= preorder[i], inorder[i] <= 3000",
+    "preorder and inorder consist of unique values"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "buildTree",
+    "params": [
+      {
+        "name": "preorder",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "inorder",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "Optional[TreeNode]"
+  },
+  "starterCode": "class Solution:\n    def buildTree(self, preorder: list[int], inorder: list[int]) -> Optional[TreeNode]:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "preorder": [
+          3,
+          9,
+          20,
+          15,
+          7
+        ],
+        "inorder": [
+          9,
+          3,
+          15,
+          20,
+          7
+        ]
+      },
+      "output": "TreeNode",
+      "explanation": "Returns the root of the constructed binary tree. Preorder starts with root (3), inorder has left subtree (9) and right subtree (15,20,7)."
+    },
+    {
+      "input": {
+        "preorder": [
+          -1
+        ],
+        "inorder": [
+          -1
+        ]
+      },
+      "output": "TreeNode",
+      "explanation": "Single node tree with value -1."
+    }
+  ],
+  "jsonFriendly": false,
+  "jsonFriendlyReason": "Return type is Optional[TreeNode], which requires a custom TreeNode adapter for serialization.",
+  "referenceCode": "class Solution:\n    def buildTree(self, preorder: list[int], inorder: list[int]) -> Optional[TreeNode]:\n        if not preorder or not inorder:\n            return None\n\n        root = TreeNode(preorder[0])\n        mid = inorder.index(preorder[0])\n        root.left = self.buildTree(preorder[1 : mid + 1], inorder[:mid])\n        root.right = self.buildTree(preorder[mid + 1 :], inorder[mid + 1 :])\n        return root\n"
+}

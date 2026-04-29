@@ -1,0 +1,72 @@
+{
+  "slug": "implement-trie-prefix-tree",
+  "number": 208,
+  "title": "Implement Trie (Prefix Tree)",
+  "difficulty": "Medium",
+  "category": "Tree",
+  "url": "https://leetcode.com/problems/implement-trie-prefix-tree/",
+  "statement": "Implement a Trie (prefix tree) data structure that supports the following operations:\n\n1. Insert a word into the trie\n2. Search for an exact word in the trie\n3. Check if any word in the trie starts with a given prefix\n\nAll inputs consist of lowercase English letters.",
+  "constraints": [
+    "1 <= word.length <= 2000",
+    "1 <= prefix.length <= 2000",
+    "word and prefix consist of lowercase English letters only",
+    "At most 3 * 10^4 calls will be made to insert, search, and startsWith in total"
+  ],
+  "signature": {
+    "className": "Trie",
+    "methodName": "__init__",
+    "params": [],
+    "returns": "None"
+  },
+  "starterCode": "class Trie:\n    def __init__(self):\n        # Initialize your data structure here\n        pass\n\n    def insert(self, word: str) -> None:\n        # Inserts a word into the trie\n        pass\n\n    def search(self, word: str) -> bool:\n        # Returns if the word is in the trie\n        pass\n\n    def startsWith(self, prefix: str) -> bool:\n        # Returns if there is any word in the trie that starts with the given prefix\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "operations": [
+          "Trie",
+          "insert",
+          "search",
+          "search",
+          "startsWith",
+          "insert",
+          "search"
+        ],
+        "params": [
+          [],
+          [
+            "apple"
+          ],
+          [
+            "apple"
+          ],
+          [
+            "app"
+          ],
+          [
+            "app"
+          ],
+          [
+            "app"
+          ],
+          [
+            "app"
+          ]
+        ]
+      },
+      "output": [
+        null,
+        null,
+        true,
+        false,
+        true,
+        null,
+        true
+      ],
+      "explanation": "Create a Trie, insert 'apple', search for exact matches and prefixes, then insert 'app' and search again."
+    }
+  ],
+  "jsonFriendly": false,
+  "jsonFriendlyReason": "Trie is a design problem where the class itself is the solution; it requires a custom adapter to handle class instantiation and method calls.",
+  "referenceCode": "class TrieNode:\n    def __init__(self):\n        self.children = [None] * 26\n        self.end = False\n\n\nclass Trie:\n    def __init__(self):\n        self.root = TrieNode()\n\n    def insert(self, word: str) -> None:\n        curr = self.root\n        for c in word:\n            i = ord(c) - ord(\"a\")\n            if curr.children[i] is None:\n                curr.children[i] = TrieNode()\n            curr = curr.children[i]\n        curr.end = True\n\n    def search(self, word: str) -> bool:\n        curr = self.root\n        for c in word:\n            i = ord(c) - ord(\"a\")\n            if curr.children[i] is None:\n                return False\n            curr = curr.children[i]\n        return curr.end\n\n    def startsWith(self, prefix: str) -> bool:\n        curr = self.root\n        for c in prefix:\n            i = ord(c) - ord(\"a\")\n            if curr.children[i] is None:\n                return False\n            curr = curr.children[i]\n        return True\n"
+}

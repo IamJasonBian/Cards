@@ -1,0 +1,61 @@
+{
+  "slug": "valid-anagram",
+  "number": 242,
+  "title": "Valid Anagram",
+  "difficulty": "Easy",
+  "category": "String",
+  "url": "https://leetcode.com/problems/valid-anagram/",
+  "statement": "Given two strings s and t, determine if they are anagrams of each other. An anagram is a word or phrase formed by rearranging the letters of another, typically using all the original letters exactly once.",
+  "constraints": [
+    "1 <= s.length, t.length <= 5 * 10^4",
+    "s and t consist of lowercase English letters"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "isAnagram",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "t",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def isAnagram(self, s: str, t: str) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "anagram",
+        "t": "nagaram"
+      },
+      "output": true,
+      "explanation": "Both strings contain the same characters with the same frequencies."
+    },
+    {
+      "input": {
+        "s": "rat",
+        "t": "car"
+      },
+      "output": false,
+      "explanation": "The strings contain different characters, so they are not anagrams."
+    },
+    {
+      "input": {
+        "s": "ab",
+        "t": "ba"
+      },
+      "output": true,
+      "explanation": "The strings contain the same characters in different order."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": "All parameters and return type are primitives (str and bool).",
+  "referenceCode": "class Solution:\n    def isAnagram(self, s: str, t: str) -> bool:\n        if len(s) != len(t):\n            return False\n\n        countS, countT = {}, {}\n\n        for i in range(len(s)):\n            countS[s[i]] = 1 + countS.get(s[i], 0)\n            countT[t[i]] = 1 + countT.get(t[i], 0)\n        return countS == countT\n"
+}

@@ -1,0 +1,226 @@
+{
+  "slug": "climbing-stairs",
+  "title": "Climbing Stairs",
+  "number": 70,
+  "difficulty": "Easy",
+  "category": "DP",
+  "url": "https://leetcode.com/problems/climbing-stairs/",
+  "statement": "You are climbing a staircase that has n steps. Each time you can climb either 1 or 2 steps. In how many distinct ways can you climb to the top?",
+  "constraints": [
+    "1 <= n <= 45"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "climbStairs",
+    "params": [
+      {
+        "name": "n",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def climbStairs(self, n: int) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "n": 2
+      },
+      "output": 2,
+      "explanation": "There are 2 ways to climb to the top: (1) 1 step + 1 step, (2) 2 steps"
+    },
+    {
+      "input": {
+        "n": 3
+      },
+      "output": 3,
+      "explanation": "There are 3 ways to climb to the top: (1) 1 step + 1 step + 1 step, (2) 1 step + 2 steps, (3) 2 steps + 1 step"
+    },
+    {
+      "input": {
+        "n": 5
+      },
+      "output": 8,
+      "explanation": "There are 8 distinct ways to climb to the top"
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_valid",
+      "input": {
+        "n": 1
+      },
+      "expected": 1
+    },
+    {
+      "name": "small_2",
+      "input": {
+        "n": 2
+      },
+      "expected": 2
+    },
+    {
+      "name": "small_3",
+      "input": {
+        "n": 3
+      },
+      "expected": 3
+    },
+    {
+      "name": "small_4",
+      "input": {
+        "n": 4
+      },
+      "expected": 5
+    },
+    {
+      "name": "small_5",
+      "input": {
+        "n": 5
+      },
+      "expected": 8
+    },
+    {
+      "name": "small_6",
+      "input": {
+        "n": 6
+      },
+      "expected": 13
+    },
+    {
+      "name": "small_7",
+      "input": {
+        "n": 7
+      },
+      "expected": 21
+    },
+    {
+      "name": "small_8",
+      "input": {
+        "n": 8
+      },
+      "expected": 34
+    },
+    {
+      "name": "small_10",
+      "input": {
+        "n": 10
+      },
+      "expected": 89
+    },
+    {
+      "name": "mid_15",
+      "input": {
+        "n": 15
+      },
+      "expected": 987
+    },
+    {
+      "name": "mid_20",
+      "input": {
+        "n": 20
+      },
+      "expected": 10946
+    },
+    {
+      "name": "mid_25",
+      "input": {
+        "n": 25
+      },
+      "expected": 121393
+    },
+    {
+      "name": "mid_30",
+      "input": {
+        "n": 30
+      },
+      "expected": 1346269
+    },
+    {
+      "name": "mid_35",
+      "input": {
+        "n": 35
+      },
+      "expected": 14930352
+    },
+    {
+      "name": "mid_40",
+      "input": {
+        "n": 40
+      },
+      "expected": 165580141
+    },
+    {
+      "name": "max_range_45",
+      "input": {
+        "n": 45
+      },
+      "expected": 1836311903
+    },
+    {
+      "name": "large_44",
+      "input": {
+        "n": 44
+      },
+      "expected": 1134903170
+    },
+    {
+      "name": "large_43",
+      "input": {
+        "n": 43
+      },
+      "expected": 701408733
+    },
+    {
+      "name": "power_of_2_16",
+      "input": {
+        "n": 16
+      },
+      "expected": 1597
+    },
+    {
+      "name": "power_of_2_32",
+      "input": {
+        "n": 32
+      },
+      "expected": 3524578
+    },
+    {
+      "name": "fibonacci_index_12",
+      "input": {
+        "n": 12
+      },
+      "expected": 233
+    },
+    {
+      "name": "fibonacci_index_13",
+      "input": {
+        "n": 13
+      },
+      "expected": 377
+    },
+    {
+      "name": "edge_11",
+      "input": {
+        "n": 11
+      },
+      "expected": 144
+    },
+    {
+      "name": "edge_9",
+      "input": {
+        "n": 9
+      },
+      "expected": 55
+    },
+    {
+      "name": "edge_21",
+      "input": {
+        "n": 21
+      },
+      "expected": 17711
+    }
+  ]
+}

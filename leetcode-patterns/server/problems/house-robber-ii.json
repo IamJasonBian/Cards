@@ -1,0 +1,681 @@
+{
+  "slug": "house-robber-ii",
+  "title": "House Robber II",
+  "number": 213,
+  "difficulty": "Medium",
+  "category": "DP",
+  "url": "https://leetcode.com/problems/house-robber-ii/",
+  "statement": "You are a thief planning to rob houses arranged in a circle. Each house has a certain amount of money stashed. You cannot rob two adjacent houses, and you also cannot rob both the first and last house in the same night (since they are adjacent in the circular arrangement). Given an integer array nums where nums[i] is the amount of money in the ith house, return the maximum amount of money you can rob without alerting the police.",
+  "constraints": [
+    "1 <= nums.length <= 100",
+    "0 <= nums[i] <= 1000"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "rob",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def rob(self, nums: list[int]) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          1
+        ]
+      },
+      "output": 4,
+      "explanation": "Rob house 1 (money = 1) and then rob house 3 (money = 3). Total = 1 + 3 = 4."
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          3,
+          2
+        ]
+      },
+      "output": 3,
+      "explanation": "You cannot rob house 1 and 3 together (they are adjacent in circle). Maximum is to rob house 2 (money = 3)."
+    },
+    {
+      "input": {
+        "nums": [
+          5,
+          3,
+          4,
+          11,
+          2
+        ]
+      },
+      "output": 16,
+      "explanation": "Rob houses 1, 3, and 4 for a total of 5 + 4 + 11 = 20? No, cannot rob 1 and 4 (adjacent in circle). Rob 3 and 4: 4 + 11 = 15. Or rob 1 and 3: 5 + 4 = 9. Or rob all non-circular: check both cases."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "single_house",
+      "input": {
+        "nums": [
+          5
+        ]
+      },
+      "expected": 5
+    },
+    {
+      "name": "two_houses_first_larger",
+      "input": {
+        "nums": [
+          10,
+          1
+        ]
+      },
+      "expected": 10
+    },
+    {
+      "name": "two_houses_second_larger",
+      "input": {
+        "nums": [
+          1,
+          10
+        ]
+      },
+      "expected": 10
+    },
+    {
+      "name": "three_houses_equal",
+      "input": {
+        "nums": [
+          5,
+          5,
+          5
+        ]
+      },
+      "expected": 5
+    },
+    {
+      "name": "three_houses_ascending",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": 3
+    },
+    {
+      "name": "three_houses_descending",
+      "input": {
+        "nums": [
+          3,
+          2,
+          1
+        ]
+      },
+      "expected": 3
+    },
+    {
+      "name": "four_houses_alternating",
+      "input": {
+        "nums": [
+          1,
+          10,
+          1,
+          10
+        ]
+      },
+      "expected": 20
+    },
+    {
+      "name": "five_houses_peak_middle",
+      "input": {
+        "nums": [
+          1,
+          2,
+          100,
+          2,
+          1
+        ]
+      },
+      "expected": 101
+    },
+    {
+      "name": "five_houses_all_zeros",
+      "input": {
+        "nums": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": 0
+    },
+    {
+      "name": "five_houses_single_nonzero",
+      "input": {
+        "nums": [
+          0,
+          0,
+          1000,
+          0,
+          0
+        ]
+      },
+      "expected": 1000
+    },
+    {
+      "name": "six_houses_alternating_large",
+      "input": {
+        "nums": [
+          100,
+          1,
+          100,
+          1,
+          100,
+          1
+        ]
+      },
+      "expected": 300
+    },
+    {
+      "name": "seven_houses_ascending",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      },
+      "expected": 15
+    },
+    {
+      "name": "seven_houses_descending",
+      "input": {
+        "nums": [
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      "expected": 15
+    },
+    {
+      "name": "eight_houses_duplicates",
+      "input": {
+        "nums": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ]
+      },
+      "expected": 20
+    },
+    {
+      "name": "ten_houses_mixed",
+      "input": {
+        "nums": [
+          2,
+          1,
+          1,
+          2,
+          2,
+          1,
+          1,
+          2,
+          2,
+          1
+        ]
+      },
+      "expected": 8
+    },
+    {
+      "name": "ten_houses_all_max",
+      "input": {
+        "nums": [
+          1000,
+          1000,
+          1000,
+          1000,
+          1000,
+          1000,
+          1000,
+          1000,
+          1000,
+          1000
+        ]
+      },
+      "expected": 5000
+    },
+    {
+      "name": "ten_houses_sparse",
+      "input": {
+        "nums": [
+          1000,
+          0,
+          0,
+          0,
+          1000,
+          0,
+          0,
+          0,
+          1000,
+          0
+        ]
+      },
+      "expected": 3000
+    },
+    {
+      "name": "fifteen_houses_random",
+      "input": {
+        "nums": [
+          3,
+          7,
+          2,
+          9,
+          1,
+          5,
+          4,
+          8,
+          2,
+          6,
+          3,
+          1,
+          7,
+          2,
+          8
+        ]
+      },
+      "expected": 50
+    },
+    {
+      "name": "twenty_houses_mostly_zeros",
+      "input": {
+        "nums": [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          3,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          5
+        ]
+      },
+      "expected": 15
+    },
+    {
+      "name": "thirty_houses_geometric",
+      "input": {
+        "nums": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64,
+          128,
+          256,
+          512,
+          256,
+          128,
+          64,
+          32,
+          16,
+          8,
+          4,
+          2,
+          1,
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64,
+          128,
+          256,
+          512,
+          256
+        ]
+      },
+      "expected": 1534
+    },
+    {
+      "name": "fifty_houses_sawtooth",
+      "input": {
+        "nums": [
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0,
+          10,
+          0
+        ]
+      },
+      "expected": 250
+    },
+    {
+      "name": "hundred_houses_all_ones",
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "expected": 50
+    },
+    {
+      "name": "hundred_houses_endpoints_large",
+      "input": {
+        "nums": [
+          1000,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1000
+        ]
+      },
+      "expected": 1049
+    },
+    {
+      "name": "greedy_trap",
+      "input": {
+        "nums": [
+          4,
+          1,
+          3,
+          9
+        ]
+      },
+      "expected": 10
+    },
+    {
+      "name": "circular_constraint_critical",
+      "input": {
+        "nums": [
+          100,
+          5,
+          1,
+          10
+        ]
+      },
+      "expected": 101
+    }
+  ]
+}

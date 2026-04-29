@@ -1,0 +1,66 @@
+{
+  "slug": "contains-duplicate",
+  "number": 217,
+  "title": "Contains Duplicate",
+  "difficulty": "Easy",
+  "category": "Array",
+  "url": "https://leetcode.com/problems/contains-duplicate/",
+  "statement": "Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.",
+  "constraints": [
+    "1 <= nums.length <= 10^5",
+    "-10^9 <= nums[i] <= 10^9"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "containsDuplicate",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def containsDuplicate(self, nums: list[int]) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          1
+        ]
+      },
+      "output": true,
+      "explanation": "The value 1 appears twice in the array."
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "output": false,
+      "explanation": "All elements are distinct."
+    },
+    {
+      "input": {
+        "nums": [
+          99,
+          99
+        ]
+      },
+      "output": true,
+      "explanation": "The value 99 appears twice."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": null,
+  "referenceCode": "class Solution:\n    def containsDuplicate(self, nums: list[int]) -> bool:\n        hashset = set()\n        for n in nums:\n            if n in hashset:\n                return True\n            hashset.add(n)\n        return False\n"
+}

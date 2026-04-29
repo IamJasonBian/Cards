@@ -1,0 +1,56 @@
+{
+  "slug": "clone-graph",
+  "number": 133,
+  "title": "Clone Graph",
+  "difficulty": "Medium",
+  "category": "Graph",
+  "url": "https://leetcode.com/problems/clone-graph/",
+  "statement": "Given a reference of a node in a connected undirected graph, return a deep copy (clone) of the graph. Each node in the graph contains a value and a list of its neighbors.",
+  "constraints": [
+    "The number of nodes in the graph is in the range [0, 100]",
+    "1 <= Node.val <= 100",
+    "Node.val is unique for each node",
+    "There are no duplicate edges and no self-loops in the graph",
+    "The graph may not be connected, and there may be multiple connected components"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "cloneGraph",
+    "params": [
+      {
+        "name": "node",
+        "pyType": "Optional[Node]",
+        "inputKind": "complex"
+      }
+    ],
+    "returns": "Optional[Node]"
+  },
+  "starterCode": "class Solution:\n    def cloneGraph(self, node: \"Node\") -> \"Node\":\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "node": "[[2,3],[1,3],[1,2]]"
+      },
+      "output": "[[2,3],[1,3],[1,2]]",
+      "explanation": "The graph has 4 nodes with values 1, 2, 3, 4. Node 1 connects to 2 and 3. Node 2 connects to 1 and 3. Node 3 connects to 1 and 2. The clone should have the same structure."
+    },
+    {
+      "input": {
+        "node": "[[]]"
+      },
+      "output": "[[]]",
+      "explanation": "Single node with no neighbors."
+    },
+    {
+      "input": {
+        "node": null
+      },
+      "output": null,
+      "explanation": "Empty graph (null node)."
+    }
+  ],
+  "jsonFriendly": false,
+  "jsonFriendlyReason": "Requires a custom Node class adapter for the undirected graph structure; cannot be represented as primitive JSON types.",
+  "referenceCode": "class Solution:\n    def cloneGraph(self, node: \"Node\") -> \"Node\":\n        oldToNew = {}\n\n        def dfs(node):\n            if node in oldToNew:\n                return oldToNew[node]\n\n            copy = Node(node.val)\n            oldToNew[node] = copy\n            for nei in node.neighbors:\n                copy.neighbors.append(dfs(nei))\n            return copy\n\n        return dfs(node) if node else None\n"
+}

@@ -1,0 +1,832 @@
+{
+  "slug": "rotate-image",
+  "title": "Rotate Image",
+  "number": 48,
+  "difficulty": "Medium",
+  "category": "Matrix",
+  "url": "https://leetcode.com/problems/rotate-image/",
+  "statement": "You are given an n × n 2D matrix representing an image. Rotate the image 90 degrees clockwise in-place.\n\nYou must modify the matrix directly without using extra space for another 2D matrix (though you may use O(1) extra space for variables).",
+  "constraints": [
+    "1 <= n <= 300",
+    "matrix.length == matrix[i].length == n",
+    "-1000 <= matrix[i][j] <= 1000"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "rotate",
+    "params": [
+      {
+        "name": "matrix",
+        "pyType": "list[list[int]]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "None"
+  },
+  "starterCode": "class Solution:\n    def rotate(self, matrix: list[list[int]]) -> None:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ]
+        ]
+      },
+      "output": null,
+      "explanation": "After rotating 90 degrees clockwise, the matrix becomes [[7,4,1],[8,5,2],[9,6,3]]. The matrix is modified in-place."
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
+      "output": null,
+      "explanation": "After rotating 90 degrees clockwise, the matrix becomes [[3,1],[4,2]]. The matrix is modified in-place."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_1x1",
+      "input": {
+        "matrix": [
+          [
+            1
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "minimal_1x1_zero",
+      "input": {
+        "matrix": [
+          [
+            0
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "minimal_1x1_negative",
+      "input": {
+        "matrix": [
+          [
+            -1
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "2x2_simple",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "2x2_all_zeros",
+      "input": {
+        "matrix": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "2x2_negatives",
+      "input": {
+        "matrix": [
+          [
+            -1,
+            -2
+          ],
+          [
+            -3,
+            -4
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "2x2_mixed_signs",
+      "input": {
+        "matrix": [
+          [
+            -1,
+            2
+          ],
+          [
+            -3,
+            4
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "3x3_simple",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "3x3_all_same",
+      "input": {
+        "matrix": [
+          [
+            5,
+            5,
+            5
+          ],
+          [
+            5,
+            5,
+            5
+          ],
+          [
+            5,
+            5,
+            5
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "3x3_max_values",
+      "input": {
+        "matrix": [
+          [
+            1000,
+            1000,
+            1000
+          ],
+          [
+            1000,
+            1000,
+            1000
+          ],
+          [
+            1000,
+            1000,
+            1000
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "3x3_min_values",
+      "input": {
+        "matrix": [
+          [
+            -1000,
+            -1000,
+            -1000
+          ],
+          [
+            -1000,
+            -1000,
+            -1000
+          ],
+          [
+            -1000,
+            -1000,
+            -1000
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "3x3_zeros",
+      "input": {
+        "matrix": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "3x3_sorted_asc",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "3x3_sorted_desc",
+      "input": {
+        "matrix": [
+          [
+            9,
+            8,
+            7
+          ],
+          [
+            6,
+            5,
+            4
+          ],
+          [
+            3,
+            2,
+            1
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "3x3_alternating",
+      "input": {
+        "matrix": [
+          [
+            1,
+            -1,
+            1
+          ],
+          [
+            -1,
+            1,
+            -1
+          ],
+          [
+            1,
+            -1,
+            1
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "4x4_simple",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            5,
+            6,
+            7,
+            8
+          ],
+          [
+            9,
+            10,
+            11,
+            12
+          ],
+          [
+            13,
+            14,
+            15,
+            16
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "4x4_zeros",
+      "input": {
+        "matrix": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "4x4_boundary_values",
+      "input": {
+        "matrix": [
+          [
+            1000,
+            1000,
+            1000,
+            1000
+          ],
+          [
+            1000,
+            -1000,
+            -1000,
+            1000
+          ],
+          [
+            1000,
+            -1000,
+            -1000,
+            1000
+          ],
+          [
+            1000,
+            1000,
+            1000,
+            1000
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "5x5_identity_diagonal",
+      "input": {
+        "matrix": [
+          [
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "5x5_anti_diagonal",
+      "input": {
+        "matrix": [
+          [
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "5x5_all_negatives",
+      "input": {
+        "matrix": [
+          [
+            -5,
+            -4,
+            -3,
+            -2,
+            -1
+          ],
+          [
+            -10,
+            -9,
+            -8,
+            -7,
+            -6
+          ],
+          [
+            -15,
+            -14,
+            -13,
+            -12,
+            -11
+          ],
+          [
+            -20,
+            -19,
+            -18,
+            -17,
+            -16
+          ],
+          [
+            -25,
+            -24,
+            -23,
+            -22,
+            -21
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "large_6x6_range",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ],
+          [
+            19,
+            20,
+            21,
+            22,
+            23,
+            24
+          ],
+          [
+            25,
+            26,
+            27,
+            28,
+            29,
+            30
+          ],
+          [
+            31,
+            32,
+            33,
+            34,
+            35,
+            36
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "large_10x10_zeros",
+      "input": {
+        "matrix": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "expected": null
+    },
+    {
+      "name": "odd_size_7x7_pattern",
+      "input": {
+        "matrix": [
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          [
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7
+          ]
+        ]
+      },
+      "expected": null
+    }
+  ]
+}

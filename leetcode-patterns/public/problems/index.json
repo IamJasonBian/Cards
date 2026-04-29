@@ -1,0 +1,384 @@
+{
+  "version": 1,
+  "generatedAt": "2026-04-29T04:49:05.493Z",
+  "problems": [
+    {
+      "slug": "two-sum",
+      "title": "Two Sum",
+      "number": 1,
+      "difficulty": "Easy",
+      "category": "Array"
+    },
+    {
+      "slug": "longest-substring-without-repeating-characters",
+      "title": "Longest Substring Without Repeating Characters",
+      "number": 3,
+      "difficulty": "Medium",
+      "category": "String"
+    },
+    {
+      "slug": "longest-palindromic-substring",
+      "title": "Longest Palindromic Substring",
+      "number": 5,
+      "difficulty": "Medium",
+      "category": "String"
+    },
+    {
+      "slug": "container-with-most-water",
+      "title": "Container With Most Water",
+      "number": 11,
+      "difficulty": "Medium",
+      "category": "Array"
+    },
+    {
+      "slug": "3sum",
+      "title": "3Sum",
+      "number": 15,
+      "difficulty": "Medium",
+      "category": "Array"
+    },
+    {
+      "slug": "valid-parentheses",
+      "title": "Valid Parentheses",
+      "number": 20,
+      "difficulty": "Easy",
+      "category": "String"
+    },
+    {
+      "slug": "search-in-rotated-sorted-array",
+      "title": "Search in Rotated Sorted Array",
+      "number": 33,
+      "difficulty": "Medium",
+      "category": "Array"
+    },
+    {
+      "slug": "rotate-image",
+      "title": "Rotate Image",
+      "number": 48,
+      "difficulty": "Medium",
+      "category": "Matrix"
+    },
+    {
+      "slug": "group-anagrams",
+      "title": "Group Anagrams",
+      "number": 49,
+      "difficulty": "Medium",
+      "category": "String"
+    },
+    {
+      "slug": "maximum-subarray",
+      "title": "Maximum Subarray",
+      "number": 53,
+      "difficulty": "Medium",
+      "category": "Array"
+    },
+    {
+      "slug": "spiral-matrix",
+      "title": "Spiral Matrix",
+      "number": 54,
+      "difficulty": "Medium",
+      "category": "Matrix"
+    },
+    {
+      "slug": "jump-game",
+      "title": "Jump Game",
+      "number": 55,
+      "difficulty": "Medium",
+      "category": "DP"
+    },
+    {
+      "slug": "merge-intervals",
+      "title": "Merge Intervals",
+      "number": 56,
+      "difficulty": "Medium",
+      "category": "Interval"
+    },
+    {
+      "slug": "insert-interval",
+      "title": "Insert Interval",
+      "number": 57,
+      "difficulty": "Medium",
+      "category": "Interval"
+    },
+    {
+      "slug": "unique-paths",
+      "title": "Unique Paths",
+      "number": 62,
+      "difficulty": "Medium",
+      "category": "DP"
+    },
+    {
+      "slug": "climbing-stairs",
+      "title": "Climbing Stairs",
+      "number": 70,
+      "difficulty": "Easy",
+      "category": "DP"
+    },
+    {
+      "slug": "set-matrix-zeroes",
+      "title": "Set Matrix Zeroes",
+      "number": 73,
+      "difficulty": "Medium",
+      "category": "Matrix"
+    },
+    {
+      "slug": "minimum-window-substring",
+      "title": "Minimum Window Substring",
+      "number": 76,
+      "difficulty": "Hard",
+      "category": "String"
+    },
+    {
+      "slug": "word-search",
+      "title": "Word Search",
+      "number": 79,
+      "difficulty": "Medium",
+      "category": "Matrix"
+    },
+    {
+      "slug": "decode-ways",
+      "title": "Decode Ways",
+      "number": 91,
+      "difficulty": "Medium",
+      "category": "DP"
+    },
+    {
+      "slug": "best-time-to-buy-and-sell-stock",
+      "title": "Best Time to Buy and Sell Stock",
+      "number": 121,
+      "difficulty": "Easy",
+      "category": "Array"
+    },
+    {
+      "slug": "valid-palindrome",
+      "title": "Valid Palindrome",
+      "number": 125,
+      "difficulty": "Easy",
+      "category": "String"
+    },
+    {
+      "slug": "longest-consecutive-sequence",
+      "title": "Longest Consecutive Sequence",
+      "number": 128,
+      "difficulty": "Medium",
+      "category": "Graph"
+    },
+    {
+      "slug": "word-break",
+      "title": "Word Break",
+      "number": 139,
+      "difficulty": "Medium",
+      "category": "DP"
+    },
+    {
+      "slug": "maximum-product-subarray",
+      "title": "Maximum Product Subarray",
+      "number": 152,
+      "difficulty": "Medium",
+      "category": "Array"
+    },
+    {
+      "slug": "find-minimum-in-rotated-sorted-array",
+      "title": "Find Minimum in Rotated Sorted Array",
+      "number": 153,
+      "difficulty": "Medium",
+      "category": "Array"
+    },
+    {
+      "slug": "reverse-bits",
+      "title": "Reverse Bits",
+      "number": 190,
+      "difficulty": "Easy",
+      "category": "Binary"
+    },
+    {
+      "slug": "number-of-1-bits",
+      "title": "Number of 1 Bits",
+      "number": 191,
+      "difficulty": "Easy",
+      "category": "Binary"
+    },
+    {
+      "slug": "house-robber",
+      "title": "House Robber",
+      "number": 198,
+      "difficulty": "Medium",
+      "category": "DP"
+    },
+    {
+      "slug": "number-of-islands",
+      "title": "Number of Islands",
+      "number": 200,
+      "difficulty": "Medium",
+      "category": "Graph"
+    },
+    {
+      "slug": "course-schedule",
+      "title": "Course Schedule",
+      "number": 207,
+      "difficulty": "Medium",
+      "category": "Graph"
+    },
+    {
+      "slug": "word-search-ii",
+      "title": "Word Search II",
+      "number": 212,
+      "difficulty": "Hard",
+      "category": "Tree"
+    },
+    {
+      "slug": "house-robber-ii",
+      "title": "House Robber II",
+      "number": 213,
+      "difficulty": "Medium",
+      "category": "DP"
+    },
+    {
+      "slug": "contains-duplicate",
+      "title": "Contains Duplicate",
+      "number": 217,
+      "difficulty": "Easy",
+      "category": "Array"
+    },
+    {
+      "slug": "product-of-array-except-self",
+      "title": "Product of Array Except Self",
+      "number": 238,
+      "difficulty": "Medium",
+      "category": "Array"
+    },
+    {
+      "slug": "valid-anagram",
+      "title": "Valid Anagram",
+      "number": 242,
+      "difficulty": "Easy",
+      "category": "String"
+    },
+    {
+      "slug": "meeting-rooms",
+      "title": "Meeting Rooms",
+      "number": 252,
+      "difficulty": "Easy",
+      "category": "Interval"
+    },
+    {
+      "slug": "meeting-rooms-ii",
+      "title": "Meeting Rooms II",
+      "number": 253,
+      "difficulty": "Medium",
+      "category": "Interval"
+    },
+    {
+      "slug": "graph-valid-tree",
+      "title": "Graph Valid Tree",
+      "number": 261,
+      "difficulty": "Medium",
+      "category": "Graph"
+    },
+    {
+      "slug": "missing-number",
+      "title": "Missing Number",
+      "number": 268,
+      "difficulty": "Easy",
+      "category": "Binary"
+    },
+    {
+      "slug": "alien-dictionary",
+      "title": "Alien Dictionary",
+      "number": 269,
+      "difficulty": "Hard",
+      "category": "Graph"
+    },
+    {
+      "slug": "encode-and-decode-strings",
+      "title": "Encode and Decode Strings",
+      "number": 271,
+      "difficulty": "Medium",
+      "category": "String"
+    },
+    {
+      "slug": "longest-increasing-subsequence",
+      "title": "Longest Increasing Subsequence",
+      "number": 300,
+      "difficulty": "Medium",
+      "category": "DP"
+    },
+    {
+      "slug": "coin-change",
+      "title": "Coin Change",
+      "number": 322,
+      "difficulty": "Medium",
+      "category": "DP"
+    },
+    {
+      "slug": "number-of-connected-components-in-an-undirected-graph",
+      "title": "Number of Connected Components in an Undirected Graph",
+      "number": 323,
+      "difficulty": "Medium",
+      "category": "Graph"
+    },
+    {
+      "slug": "counting-bits",
+      "title": "Counting Bits",
+      "number": 338,
+      "difficulty": "Easy",
+      "category": "Binary"
+    },
+    {
+      "slug": "top-k-frequent-elements",
+      "title": "Top K Frequent Elements",
+      "number": 347,
+      "difficulty": "Medium",
+      "category": "Heap"
+    },
+    {
+      "slug": "sum-of-two-integers",
+      "title": "Sum of Two Integers",
+      "number": 371,
+      "difficulty": "Medium",
+      "category": "Binary"
+    },
+    {
+      "slug": "combination-sum-iv",
+      "title": "Combination Sum IV",
+      "number": 377,
+      "difficulty": "Medium",
+      "category": "DP"
+    },
+    {
+      "slug": "pacific-atlantic-water-flow",
+      "title": "Pacific Atlantic Water Flow",
+      "number": 417,
+      "difficulty": "Medium",
+      "category": "Graph"
+    },
+    {
+      "slug": "longest-repeating-character-replacement",
+      "title": "Longest Repeating Character Replacement",
+      "number": 424,
+      "difficulty": "Medium",
+      "category": "String"
+    },
+    {
+      "slug": "non-overlapping-intervals",
+      "title": "Non-overlapping Intervals",
+      "number": 435,
+      "difficulty": "Medium",
+      "category": "Interval"
+    },
+    {
+      "slug": "palindromic-substrings",
+      "title": "Palindromic Substrings",
+      "number": 647,
+      "difficulty": "Medium",
+      "category": "String"
+    },
+    {
+      "slug": "longest-common-subsequence",
+      "title": "Longest Common Subsequence",
+      "number": 1143,
+      "difficulty": "Medium",
+      "category": "DP"
+    }
+  ]
+}

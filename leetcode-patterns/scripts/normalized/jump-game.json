@@ -1,0 +1,67 @@
+{
+  "slug": "jump-game",
+  "number": 55,
+  "title": "Jump Game",
+  "difficulty": "Medium",
+  "category": "DP",
+  "url": "https://leetcode.com/problems/jump-game/",
+  "statement": "Given an array of non-negative integers nums where you are initially positioned at the first index of the array, each element in the array represents your maximum jump length from that position.\n\nDetermine if you can reach the last index of the array. Return true if you can reach the last index, and false otherwise.",
+  "constraints": [
+    "1 <= nums.length <= 10^4",
+    "0 <= nums[i] <= 10^5"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "canJump",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def canJump(self, nums: list[int]) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          2,
+          3,
+          1,
+          1,
+          4
+        ]
+      },
+      "output": true,
+      "explanation": "Jump 1 step from index 0 to 1, then 3 steps to the last index."
+    },
+    {
+      "input": {
+        "nums": [
+          3,
+          2,
+          1,
+          0,
+          4
+        ]
+      },
+      "output": false,
+      "explanation": "You will always arrive at index 3; its maximum jump length is 0, which makes it impossible to reach the last index."
+    },
+    {
+      "input": {
+        "nums": [
+          0
+        ]
+      },
+      "output": true,
+      "explanation": "Already at the last index."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": "",
+  "referenceCode": "class Solution:\n    def canJump(self, nums: list[int]) -> bool:\n        goal = len(nums) - 1\n\n        for i in range(len(nums) - 2, -1, -1):\n            if i + nums[i] >= goal:\n                goal = i\n        return goal == 0\n"
+}

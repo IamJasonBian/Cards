@@ -1,0 +1,50 @@
+{
+  "slug": "encode-and-decode-strings",
+  "title": "Encode and Decode Strings",
+  "number": 271,
+  "difficulty": "Medium",
+  "category": "String",
+  "url": "https://leetcode.com/problems/encode-and-decode-strings/",
+  "statement": "Design an algorithm to encode a list of strings into a single string, and decode the single string back into the original list of strings.\n\nThe encode function takes a list of strings and returns a single encoded string. The decode function takes the encoded string and returns the original list of strings. The encoding scheme must be able to handle strings that may contain special characters and preserve all information needed for exact reconstruction.",
+  "constraints": [
+    "1 <= len(strs) <= 200",
+    "0 <= len(strs[i]) <= 200",
+    "strs[i] contains any possible characters in an 8-bit range (0-255)"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "encode",
+    "params": [
+      {
+        "name": "strs",
+        "pyType": "list[str]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "str"
+  },
+  "starterCode": "class Solution:\n    def encode(self, strs: list[str]) -> str:\n        # write your solution here\n        pass\n\n    def decode(self, s: str) -> list[str]:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "strs": [
+          "Hello",
+          "World"
+        ]
+      },
+      "output": "5#Hello5#World",
+      "explanation": "The string 'Hello' has length 5, 'World' has length 5. Encoded as '5#Hello5#World'."
+    },
+    {
+      "input": {
+        "strs": [
+          "a",
+          ""
+        ]
+      },
+      "output": "1#a0#",
+      "explanation": "The string 'a' has length 1, empty string has length 0. Encoded as '1#a0#'."
+    }
+  ],
+  "hiddenCount": 25
+}

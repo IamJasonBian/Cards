@@ -1,0 +1,73 @@
+{
+  "slug": "meeting-rooms",
+  "title": "Meeting Rooms",
+  "number": 252,
+  "difficulty": "Easy",
+  "category": "Interval",
+  "url": "https://leetcode.com/problems/meeting-rooms/",
+  "statement": "Given an array of meeting time intervals where each interval is represented as [start, end], determine if a person could attend all meetings. Two meetings overlap if one meeting ends after another begins.",
+  "constraints": [
+    "0 <= len(intervals) <= 10,000",
+    "0 <= start < end <= 1,000,000 for each interval",
+    "intervals may not be sorted"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "canAttendMeetings",
+    "params": [
+      {
+        "name": "intervals",
+        "pyType": "list[list[int]]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def canAttendMeetings(self, intervals: list[list[int]]) -> bool:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "intervals": [
+          [
+            0,
+            30
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            15,
+            20
+          ]
+        ]
+      },
+      "output": false,
+      "explanation": "Meeting [0, 30] overlaps with [5, 10] because 5 < 30"
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            7,
+            10
+          ],
+          [
+            2,
+            4
+          ]
+        ]
+      },
+      "output": true,
+      "explanation": "No meetings overlap; they are non-overlapping"
+    },
+    {
+      "input": {
+        "intervals": []
+      },
+      "output": true,
+      "explanation": "Empty schedule means no conflicts"
+    }
+  ],
+  "hiddenCount": 25
+}

@@ -1,0 +1,54 @@
+{
+  "slug": "subtree-of-another-tree",
+  "number": 572,
+  "title": "Subtree of Another Tree",
+  "difficulty": "Easy",
+  "category": "Tree",
+  "url": "https://leetcode.com/problems/subtree-of-another-tree/",
+  "statement": "Given two binary trees root and subRoot, return true if there is a subtree of root with the same structure and node values as subRoot, and false otherwise.\n\nA subtree of a binary tree is a tree that consists of a node in the original tree and all of this node's descendants.",
+  "constraints": [
+    "1 <= root node count <= 2000",
+    "1 <= subRoot node count <= 1000",
+    "-10^4 <= Node.val <= 10^4"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "isSubtree",
+    "params": [
+      {
+        "name": "root",
+        "pyType": "Optional[TreeNode]",
+        "inputKind": "TreeNode"
+      },
+      {
+        "name": "subRoot",
+        "pyType": "Optional[TreeNode]",
+        "inputKind": "TreeNode"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "root": "[3,4,5,1,2]",
+        "subRoot": "[4,1,2]"
+      },
+      "output": true,
+      "explanation": "The tree rooted at node 4 is a subtree of root and has the same structure and values as subRoot."
+    },
+    {
+      "input": {
+        "root": "[3,4,5,1,2,null,null,null,null,0]",
+        "subRoot": "[4,1,2]"
+      },
+      "output": false,
+      "explanation": "The tree rooted at node 4 has an additional child node 0, so it is not the same as subRoot."
+    }
+  ],
+  "jsonFriendly": false,
+  "jsonFriendlyReason": "Requires TreeNode adapter for root and subRoot parameters.",
+  "referenceCode": "class Solution:\n    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:\n        if not subRoot:\n            return True\n        if not root:\n            return False\n\n        if self.isSameTree(root, subRoot):\n            return True\n        return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)\n\n    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:\n        if not p and not q:\n            return True\n        if p and q and p.val == q.val:\n            return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)\n        else:\n            return False\n"
+}

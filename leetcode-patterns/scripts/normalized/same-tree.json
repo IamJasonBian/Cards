@@ -1,0 +1,61 @@
+{
+  "slug": "same-tree",
+  "number": 100,
+  "title": "Same Tree",
+  "difficulty": "Easy",
+  "category": "Tree",
+  "url": "https://leetcode.com/problems/same-tree/",
+  "statement": "Given two binary trees, determine if they are the same. Two trees are the same if they are structurally identical and the nodes have the same values.",
+  "constraints": [
+    "The number of nodes in each tree is in the range [0, 100]",
+    "-10^4 <= Node.val <= 10^4"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "isSameTree",
+    "params": [
+      {
+        "name": "p",
+        "pyType": "Optional[TreeNode]",
+        "inputKind": "TreeNode"
+      },
+      {
+        "name": "q",
+        "pyType": "Optional[TreeNode]",
+        "inputKind": "TreeNode"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "p": "[1,2,3]",
+        "q": "[1,2,3]"
+      },
+      "output": true,
+      "explanation": "Both trees have the same structure and node values"
+    },
+    {
+      "input": {
+        "p": "[1,2]",
+        "q": "[1,null,2]"
+      },
+      "output": false,
+      "explanation": "The trees differ in structure"
+    },
+    {
+      "input": {
+        "p": "[1,2,1]",
+        "q": "[1,1,2]"
+      },
+      "output": false,
+      "explanation": "The trees have the same structure but different node values"
+    }
+  ],
+  "jsonFriendly": false,
+  "jsonFriendlyReason": "Parameters p and q are TreeNode pointers, which require a custom tree adapter to serialize/deserialize.",
+  "referenceCode": "class Solution:\n    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:\n        if not p and not q:\n            return True\n        if p and q and p.val == q.val:\n            return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)\n        else:\n            return False\n"
+}

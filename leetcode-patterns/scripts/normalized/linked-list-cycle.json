@@ -1,0 +1,54 @@
+{
+  "slug": "linked-list-cycle",
+  "number": 141,
+  "title": "Linked List Cycle",
+  "difficulty": "Easy",
+  "category": "Linked List",
+  "url": "https://leetcode.com/problems/linked-list-cycle/",
+  "statement": "Given the head of a linked list, determine if the linked list has a cycle in it.\n\nA cycle exists in a linked list if there is some node in the list that can be reached again by continuously following the next pointer. Internally, pos is used to denote the index of the node that the tail's next pointer points to (where 0 means the tail connects back to the head). Note that pos is not passed as a parameter.\n\nReturn true if there is a cycle in the linked list. Otherwise, return false.",
+  "constraints": [
+    "The number of the nodes in the list is in the range [0, 10^4].",
+    "-10^5 <= Node.val <= 10^5",
+    "pos is -1 or a valid index in the linked list."
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "hasCycle",
+    "params": [
+      {
+        "name": "head",
+        "pyType": "Optional[ListNode]",
+        "inputKind": "ListNode"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, x):\n#         self.val = x\n#         self.next = None\n\nclass Solution:\n    def hasCycle(self, head: Optional[ListNode]) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "head": "[3,2,0,-4]"
+      },
+      "output": true,
+      "explanation": "There is a cycle in the linked list, where the tail connects to node at index 1 (value 2)."
+    },
+    {
+      "input": {
+        "head": "[1,2]"
+      },
+      "output": true,
+      "explanation": "There is a cycle in the linked list, where the tail connects to node at index 0 (value 1)."
+    },
+    {
+      "input": {
+        "head": "[1]"
+      },
+      "output": false,
+      "explanation": "There is no cycle in the linked list."
+    }
+  ],
+  "jsonFriendly": false,
+  "jsonFriendlyReason": "The head parameter is a ListNode pointer, which requires a custom adapter to convert between JSON and LinkedList node objects.",
+  "referenceCode": "class Solution:\n    def hasCycle(self, head: Optional[ListNode]) -> bool:\n        slow, fast = head, head\n        \n        while fast and fast.next:\n            slow = slow.next\n            fast = fast.next.next\n            if slow == fast:\n                return True\n        return False\n"
+}

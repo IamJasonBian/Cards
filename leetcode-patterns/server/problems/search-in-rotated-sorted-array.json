@@ -1,0 +1,504 @@
+{
+  "slug": "search-in-rotated-sorted-array",
+  "title": "Search in Rotated Sorted Array",
+  "number": 33,
+  "difficulty": "Medium",
+  "category": "Array",
+  "url": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+  "statement": "You are given an integer array nums sorted in ascending order that has been rotated at some unknown pivot. The array may contain duplicates. Find the index of a given target value in the array. If the target is not found, return -1.\n\nYou must solve this with O(log n) time complexity.",
+  "constraints": [
+    "1 <= nums.length <= 5000",
+    "-10^4 <= nums[i] <= 10^4",
+    "nums is guaranteed to be rotated at some pivot",
+    "-10^4 <= target <= 10^4"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "search",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "target",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def search(self, nums: list[int], target: int) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          4,
+          5,
+          6,
+          7,
+          0,
+          1,
+          2
+        ],
+        "target": 0
+      },
+      "output": 4,
+      "explanation": "Target 0 is found at index 4 in the rotated array."
+    },
+    {
+      "input": {
+        "nums": [
+          4,
+          5,
+          6,
+          7,
+          0,
+          1,
+          2
+        ],
+        "target": 3
+      },
+      "output": -1,
+      "explanation": "Target 3 is not present in the array."
+    },
+    {
+      "input": {
+        "nums": [
+          1
+        ],
+        "target": 1
+      },
+      "output": 0,
+      "explanation": "Single element array containing the target."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_single_element_found",
+      "input": {
+        "nums": [
+          1
+        ],
+        "target": 1
+      },
+      "expected": 0
+    },
+    {
+      "name": "minimal_single_element_not_found",
+      "input": {
+        "nums": [
+          1
+        ],
+        "target": 2
+      },
+      "expected": -1
+    },
+    {
+      "name": "two_elements_rotated",
+      "input": {
+        "nums": [
+          2,
+          1
+        ],
+        "target": 1
+      },
+      "expected": 1
+    },
+    {
+      "name": "two_elements_not_rotated",
+      "input": {
+        "nums": [
+          1,
+          2
+        ],
+        "target": 2
+      },
+      "expected": 1
+    },
+    {
+      "name": "target_not_found_small",
+      "input": {
+        "nums": [
+          3,
+          1,
+          2
+        ],
+        "target": 4
+      },
+      "expected": -1
+    },
+    {
+      "name": "target_at_pivot",
+      "input": {
+        "nums": [
+          4,
+          5,
+          6,
+          7,
+          0,
+          1,
+          2
+        ],
+        "target": 0
+      },
+      "expected": 4
+    },
+    {
+      "name": "target_in_right_half",
+      "input": {
+        "nums": [
+          4,
+          5,
+          6,
+          7,
+          0,
+          1,
+          2
+        ],
+        "target": 2
+      },
+      "expected": 6
+    },
+    {
+      "name": "target_in_left_half",
+      "input": {
+        "nums": [
+          4,
+          5,
+          6,
+          7,
+          0,
+          1,
+          2
+        ],
+        "target": 5
+      },
+      "expected": 1
+    },
+    {
+      "name": "all_duplicates",
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "target": 2
+      },
+      "expected": -1
+    },
+    {
+      "name": "many_duplicates_target_found",
+      "input": {
+        "nums": [
+          1,
+          3,
+          1,
+          1,
+          1
+        ],
+        "target": 3
+      },
+      "expected": -1
+    },
+    {
+      "name": "duplicates_at_boundaries",
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "target": 1
+      },
+      "expected": 9
+    },
+    {
+      "name": "negative_numbers_target_found",
+      "input": {
+        "nums": [
+          -5,
+          -3,
+          -1,
+          0,
+          2,
+          4,
+          6
+        ],
+        "target": -3
+      },
+      "expected": 1
+    },
+    {
+      "name": "negative_numbers_target_not_found",
+      "input": {
+        "nums": [
+          -5,
+          -3,
+          -1,
+          0,
+          2,
+          4,
+          6
+        ],
+        "target": -2
+      },
+      "expected": -1
+    },
+    {
+      "name": "mixed_negative_positive_rotated",
+      "input": {
+        "nums": [
+          3,
+          4,
+          5,
+          -2,
+          -1,
+          0,
+          1,
+          2
+        ],
+        "target": -1
+      },
+      "expected": 4
+    },
+    {
+      "name": "zero_as_target",
+      "input": {
+        "nums": [
+          4,
+          5,
+          6,
+          7,
+          0,
+          1,
+          2
+        ],
+        "target": 0
+      },
+      "expected": 4
+    },
+    {
+      "name": "zero_in_array_not_target",
+      "input": {
+        "nums": [
+          -3,
+          -2,
+          -1,
+          0,
+          1,
+          2
+        ],
+        "target": -2
+      },
+      "expected": 1
+    },
+    {
+      "name": "max_range_positive",
+      "input": {
+        "nums": [
+          9999,
+          10000,
+          -10000,
+          -9999
+        ],
+        "target": 10000
+      },
+      "expected": 1
+    },
+    {
+      "name": "min_range_negative",
+      "input": {
+        "nums": [
+          100,
+          200,
+          -10000,
+          -9999,
+          -9998
+        ],
+        "target": -10000
+      },
+      "expected": 2
+    },
+    {
+      "name": "large_array_left_half",
+      "input": {
+        "nums": [
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          10,
+          20,
+          30,
+          40
+        ],
+        "target": 52
+      },
+      "expected": 2
+    },
+    {
+      "name": "large_array_right_half",
+      "input": {
+        "nums": [
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          10,
+          20,
+          30,
+          40
+        ],
+        "target": 5
+      },
+      "expected": 15
+    },
+    {
+      "name": "large_array_not_found",
+      "input": {
+        "nums": [
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          10,
+          20,
+          30,
+          40
+        ],
+        "target": 100
+      },
+      "expected": -1
+    },
+    {
+      "name": "rotation_at_start",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "target": 5
+      },
+      "expected": 4
+    },
+    {
+      "name": "rotation_at_end",
+      "input": {
+        "nums": [
+          3,
+          4,
+          5,
+          1,
+          2
+        ],
+        "target": 1
+      },
+      "expected": 3
+    },
+    {
+      "name": "duplicates_surrounding_pivot",
+      "input": {
+        "nums": [
+          3,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "target": 1
+      },
+      "expected": 4
+    },
+    {
+      "name": "single_rotation_small",
+      "input": {
+        "nums": [
+          2,
+          1
+        ],
+        "target": 2
+      },
+      "expected": 0
+    }
+  ]
+}

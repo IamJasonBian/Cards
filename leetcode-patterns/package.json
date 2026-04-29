@@ -8,7 +8,12 @@
     "server": "tsx watch server/index.ts",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "fetch-problems": "tsx scripts/fetch-problems.ts",
+    "normalize-references": "tsx scripts/normalize-references.ts",
+    "gen-hidden-tests": "tsx scripts/gen-hidden-tests.ts",
+    "rebuild-manifest": "tsx scripts/rebuild-manifest.ts",
+    "build-problems": "npm run fetch-problems && npm run normalize-references && npm run gen-hidden-tests && npm run rebuild-manifest"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",

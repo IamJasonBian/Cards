@@ -1,0 +1,392 @@
+{
+  "slug": "combination-sum-iv",
+  "title": "Combination Sum IV",
+  "number": 377,
+  "difficulty": "Medium",
+  "category": "DP",
+  "url": "https://leetcode.com/problems/combination-sum-iv/",
+  "statement": "Given an array of distinct positive integers nums and a target integer target, return the number of possible combinations that sum to target.\n\nA combination is a selection of items where order matters (i.e., sequences with the same elements in different orders are counted separately). For example, [1, 2] and [2, 1] are different combinations.\n\nYou may use each element from nums an unlimited number of times.",
+  "constraints": [
+    "1 <= nums.length <= 200",
+    "1 <= nums[i] <= 1000",
+    "1 <= target <= 1000",
+    "All elements of nums are distinct"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "combinationSum4",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "target",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def combinationSum4(self, nums: list[int], target: int) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ],
+        "target": 4
+      },
+      "output": 7,
+      "explanation": "The possible combinations are: (1,1,1,1), (1,1,2), (1,2,1), (2,1,1), (2,2), (1,3), (3,1)"
+    },
+    {
+      "input": {
+        "nums": [
+          9
+        ],
+        "target": 3
+      },
+      "output": 0,
+      "explanation": "There are no combinations that sum to 3 using only 9"
+    },
+    {
+      "input": {
+        "nums": [
+          3,
+          4,
+          5,
+          6
+        ],
+        "target": 5
+      },
+      "output": 1,
+      "explanation": "The possible combinations are: (3, 2) which doesn't work; actually (5) and (3, 2) doesn't exist; the combinations are (5) directly, and we need sequences, so it's just [5]. Actually: [5] and no other way. Upon reconsideration: we need sequences summing to 5, so [5] is one, and no others from {3,4,5,6}. Wait: we can't use 2. So only [5] = 1 way. Let me recalculate: Actually this should be [5] = 1 way only from {3,4,5,6}."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_single_element",
+      "input": {
+        "nums": [
+          1
+        ],
+        "target": 1
+      },
+      "expected": 1
+    },
+    {
+      "name": "minimal_two_elements",
+      "input": {
+        "nums": [
+          1,
+          2
+        ],
+        "target": 2
+      },
+      "expected": 2
+    },
+    {
+      "name": "impossible_target",
+      "input": {
+        "nums": [
+          9
+        ],
+        "target": 3
+      },
+      "expected": 0
+    },
+    {
+      "name": "single_element_larger_target",
+      "input": {
+        "nums": [
+          2
+        ],
+        "target": 10
+      },
+      "expected": 1
+    },
+    {
+      "name": "target_equals_single_num",
+      "input": {
+        "nums": [
+          5
+        ],
+        "target": 5
+      },
+      "expected": 1
+    },
+    {
+      "name": "small_target_multiple_ways",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ],
+        "target": 4
+      },
+      "expected": 7
+    },
+    {
+      "name": "three_elements_target_ten",
+      "input": {
+        "nums": [
+          2,
+          3,
+          5
+        ],
+        "target": 10
+      },
+      "expected": 14
+    },
+    {
+      "name": "large_nums_small_target",
+      "input": {
+        "nums": [
+          100,
+          200,
+          300
+        ],
+        "target": 50
+      },
+      "expected": 0
+    },
+    {
+      "name": "all_ones_target_one",
+      "input": {
+        "nums": [
+          1
+        ],
+        "target": 1
+      },
+      "expected": 1
+    },
+    {
+      "name": "all_ones_target_large",
+      "input": {
+        "nums": [
+          1
+        ],
+        "target": 100
+      },
+      "expected": 1
+    },
+    {
+      "name": "consecutive_sequence",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "target": 5
+      },
+      "expected": 16
+    },
+    {
+      "name": "descending_order",
+      "input": {
+        "nums": [
+          10,
+          8,
+          6,
+          4,
+          2
+        ],
+        "target": 12
+      },
+      "expected": 31
+    },
+    {
+      "name": "ascending_order",
+      "input": {
+        "nums": [
+          1,
+          3,
+          5,
+          7,
+          9
+        ],
+        "target": 15
+      },
+      "expected": 595
+    },
+    {
+      "name": "large_target_small_nums",
+      "input": {
+        "nums": [
+          1,
+          2
+        ],
+        "target": 100
+      },
+      "expected": 573147844013817100000
+    },
+    {
+      "name": "target_1000_single_num",
+      "input": {
+        "nums": [
+          1
+        ],
+        "target": 1000
+      },
+      "expected": 1
+    },
+    {
+      "name": "target_equals_sum_of_two",
+      "input": {
+        "nums": [
+          7,
+          13
+        ],
+        "target": 20
+      },
+      "expected": 2
+    },
+    {
+      "name": "many_small_nums",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "target": 20
+      },
+      "expected": 521472
+    },
+    {
+      "name": "sparse_large_nums",
+      "input": {
+        "nums": [
+          50,
+          100,
+          200,
+          500,
+          1000
+        ],
+        "target": 250
+      },
+      "expected": 10
+    },
+    {
+      "name": "target_twice_single_num",
+      "input": {
+        "nums": [
+          7
+        ],
+        "target": 14
+      },
+      "expected": 1
+    },
+    {
+      "name": "prime_numbers",
+      "input": {
+        "nums": [
+          2,
+          3,
+          5,
+          7,
+          11
+        ],
+        "target": 15
+      },
+      "expected": 103
+    },
+    {
+      "name": "powers_of_two",
+      "input": {
+        "nums": [
+          1,
+          2,
+          4,
+          8,
+          16
+        ],
+        "target": 32
+      },
+      "expected": 47350055
+    },
+    {
+      "name": "medium_complex",
+      "input": {
+        "nums": [
+          3,
+          6,
+          9,
+          12
+        ],
+        "target": 30
+      },
+      "expected": 401
+    },
+    {
+      "name": "fractional_target",
+      "input": {
+        "nums": [
+          11,
+          22,
+          33
+        ],
+        "target": 55
+      },
+      "expected": 13
+    },
+    {
+      "name": "target_one_hundred",
+      "input": {
+        "nums": [
+          5,
+          10,
+          25,
+          50
+        ],
+        "target": 100
+      },
+      "expected": 27517
+    },
+    {
+      "name": "boundary_max_arrays",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "target": 50
+      },
+      "expected": 562941631929088
+    }
+  ]
+}

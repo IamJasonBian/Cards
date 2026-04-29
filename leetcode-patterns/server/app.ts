@@ -2,6 +2,12 @@ import Anthropic from "@anthropic-ai/sdk";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { schedule, type Grade, type Storage } from "./storage.ts";
+import { getProblem } from "./problemLoader.ts";
+import { buildProgram } from "./judgeHarness.ts";
+import { runPython, Judge0Unavailable, JUDGE0_STATUS } from "./judge0Client.ts";
+import { getOrSetUserId } from "./userId.ts";
+import { preflight, recordSuccess, recordFailure, CircuitOpen } from "./circuit.ts";
+import type { CaseReport, RunReport } from "./problemSchema.ts";
 
 const anthropic = new Anthropic();
 
@@ -15,6 +21,20 @@ const PARSE_PROMPTS = {
 const RATE_LIMIT = 10;          // max parses per IP
 const RATE_WINDOW_MS = 60 * 60 * 1000; // per hour
 const MAX_IMAGE_BYTES = 1.5 * 1024 * 1024; // 1.5 MB base64 (~1 MB raw)
+
+const SUBMIT_RATE_LIMIT = 120;           // max submission writes per IP
+const SUBMIT_RATE_WINDOW_MS = 60 * 60 * 1000;
+
+// Layered limits for /api/submissions/run:
+//   global per-user/hour       — overall budget
+//   per-user/per-problem/5s    — kills compile-error storms + auto-retry loops
+//   per-IP/hour                — coarse fence behind cookie clearing
+const RUN_RATE_LIMIT_USER = 60;          // submissions/hour/user (cookie)
+const RUN_RATE_LIMIT_IP = 200;           // submissions/hour/IP (NAT-tolerant)
+const RUN_RATE_WINDOW_MS = 60 * 60 * 1000;
+const RUN_PAIR_LIMIT = 3;                // submissions per problem in 5s
+const RUN_PAIR_WINDOW_MS = 5_000;
+const MAX_CODE_BYTES = 32 * 1024;
 
 const DEFAULT_USER = "local";
 
@@ -94,6 +114,177 @@ export function buildApp(store: Storage): Hono {
     return c.json({ text });
   });
 
+  // Run user code against a problem's hidden + visible tests via Judge0.
+  // Hidden cases live in server/problems/{slug}.json — never sent to the client.
+  app.post("/api/submissions/run", async (c) => {
+    const body = (await c.req.json().catch(() => null)) as
+      | { problemId?: string; code?: string }
+      | null;
+    if (!body || typeof body.problemId !== "string" || typeof body.code !== "string") {
+      return c.json({ error: "problemId and code are required" }, 400);
+    }
+    if (body.code.length > MAX_CODE_BYTES) {
+      return c.json({ error: `code too large (max ${MAX_CODE_BYTES} bytes)` }, 413);
+    }
+
+    const { userId, ip } = getOrSetUserId(c);
+    const now = Date.now();
+
+    // Layered rate limits. Run all three buckets (we want every offender to
+    // burn quota in every dimension), then short-circuit if any exceeds.
+    const [perUser, perIp, perPair] = await Promise.all([
+      store.incrementRateLimit(`run:user:${userId}`, RUN_RATE_WINDOW_MS, now),
+      store.incrementRateLimit(`run:ip:${ip}`, RUN_RATE_WINDOW_MS, now),
+      store.incrementRateLimit(`run:pair:${userId}:${body.problemId}`, RUN_PAIR_WINDOW_MS, now),
+    ]);
+    if (perUser.count > RUN_RATE_LIMIT_USER) {
+      return c.json({ error: `Rate limit: max ${RUN_RATE_LIMIT_USER} runs/hour per user.` }, 429);
+    }
+    if (perIp.count > RUN_RATE_LIMIT_IP) {
+      return c.json({ error: `Rate limit: max ${RUN_RATE_LIMIT_IP} runs/hour from this network.` }, 429);
+    }
+    if (perPair.count > RUN_PAIR_LIMIT) {
+      return c.json(
+        { error: `Slow down — max ${RUN_PAIR_LIMIT} submissions per problem in ${RUN_PAIR_WINDOW_MS / 1000}s.` },
+        429
+      );
+    }
+
+    const problem = await getProblem(body.problemId);
+    if (!problem) {
+      return c.json({ error: `unknown problemId '${body.problemId}'` }, 404);
+    }
+
+    // Circuit breaker — fail fast if Judge0 has been failing repeatedly so we
+    // don't pile request after request onto an already-broken backend.
+    try {
+      await preflight(store, now);
+    } catch (e) {
+      if (e instanceof CircuitOpen) {
+        return c.json(
+          {
+            passed: 0,
+            total: problem.visibleExamples.length + problem.hiddenCases.length,
+            visiblePassed: 0,
+            visibleTotal: problem.visibleExamples.length,
+            hiddenPassed: 0,
+            hiddenTotal: problem.hiddenCases.length,
+            durationMs: 0,
+            cases: [],
+            fatal: `Judge cooling down — try again in ~${Math.ceil(e.retryAfterMs / 1000)}s.`,
+            status: "judge-unavailable",
+          } satisfies RunReport,
+          503
+        );
+      }
+      throw e;
+    }
+
+    const program = buildProgram(problem, body.code);
+    const startedAt = Date.now();
+    let report: RunReport;
+    try {
+      const judgeResult = await runPython({ sourceCode: program });
+      report = parseJudge0Result(problem, judgeResult, Date.now() - startedAt);
+      await recordSuccess(store);
+    } catch (e) {
+      if (e instanceof Judge0Unavailable) {
+        await recordFailure(store, Date.now());
+        return c.json(
+          {
+            passed: 0,
+            total: problem.visibleExamples.length + problem.hiddenCases.length,
+            visiblePassed: 0,
+            visibleTotal: problem.visibleExamples.length,
+            hiddenPassed: 0,
+            hiddenTotal: problem.hiddenCases.length,
+            durationMs: Date.now() - startedAt,
+            cases: [],
+            fatal: `Judge unavailable: ${e.cause}. Set JUDGE0_URL and start your Judge0 instance.`,
+            status: "judge-unavailable",
+          } satisfies RunReport,
+          503
+        );
+      }
+      throw e;
+    }
+
+    void store
+      .saveSubmission?.(userId, {
+        problemId: problem.slug,
+        passed: report.passed,
+        total: report.total,
+        durationMs: report.durationMs,
+        codeHash: null,
+        ts: Date.now(),
+      })
+      .catch(() => {});
+
+    return c.json(report);
+  });
+
+  // Submissions endpoint is now history-only (the run endpoint persists internally).
+  app.post("/api/submissions", async (c) => {
+    const body = (await c.req.json().catch(() => null)) as
+      | {
+          problemId?: string;
+          passed?: number;
+          total?: number;
+          durationMs?: number;
+          codeHash?: string;
+          codeBlob?: string;
+          saveCode?: boolean;
+          user?: string;
+        }
+      | null;
+    if (
+      !body ||
+      typeof body.problemId !== "string" ||
+      typeof body.passed !== "number" ||
+      typeof body.total !== "number"
+    ) {
+      return c.json(
+        { error: "problemId, passed, total are required" },
+        400
+      );
+    }
+
+    const ip =
+      c.req.header("x-nf-client-connection-ip") ??
+      c.req.header("x-forwarded-for")?.split(",")[0].trim() ??
+      "unknown";
+    const bucket = await store.incrementRateLimit(
+      `submit:${ip}`,
+      SUBMIT_RATE_WINDOW_MS,
+      Date.now()
+    );
+    if (bucket.count > SUBMIT_RATE_LIMIT) {
+      return c.json({ error: "Rate limit exceeded." }, 429);
+    }
+
+    const user = body.user ?? DEFAULT_USER;
+    const submission = {
+      problemId: body.problemId,
+      passed: body.passed,
+      total: body.total,
+      durationMs: body.durationMs ?? 0,
+      codeHash: body.codeHash ?? null,
+      ts: Date.now(),
+    };
+    await store.saveSubmission?.(user, submission);
+    if (body.saveCode && body.codeBlob && body.codeHash) {
+      await store.saveCodeBlob?.(body.codeHash, body.codeBlob);
+    }
+    return c.json({ ok: true, submission });
+  });
+
+  app.get("/api/submissions", async (c) => {
+    const user = c.req.query("user") ?? DEFAULT_USER;
+    const problemId = c.req.query("problemId") ?? undefined;
+    const items = (await store.listSubmissions?.(user, problemId, 50)) ?? [];
+    return c.json({ submissions: items });
+  });
+
   app.get("/api/stats", async (c) => {
     const user = c.req.query("user") ?? DEFAULT_USER;
     const reviews = await store.listAllReviews(user);
@@ -106,4 +297,125 @@ export function buildApp(store: Storage): Hono {
   });
 
   return app;
+}
+
+import type { ServerProblem } from "./problemSchema.ts";
+import type { Judge0Result } from "./judge0Client.ts";
+
+function parseJudge0Result(
+  problem: ServerProblem,
+  judge: Judge0Result,
+  durationMs: number
+): RunReport {
+  const visibleTotal = problem.visibleExamples.length;
+  const hiddenTotal = problem.hiddenCases.length;
+
+  // Compile error → no test cases ran.
+  if (judge.status.id === JUDGE0_STATUS.COMPILE_ERROR || judge.compileOutput) {
+    return {
+      passed: 0,
+      total: visibleTotal + hiddenTotal,
+      visiblePassed: 0,
+      visibleTotal,
+      hiddenPassed: 0,
+      hiddenTotal,
+      durationMs,
+      cases: [],
+      fatal: (judge.compileOutput ?? judge.message ?? "Compile error").trim().slice(0, 2000),
+      status: "compile-error",
+    };
+  }
+
+  // Time limit hit before harness could finish printing all cases.
+  if (judge.status.id === JUDGE0_STATUS.TIME_LIMIT) {
+    return {
+      passed: 0,
+      total: visibleTotal + hiddenTotal,
+      visiblePassed: 0,
+      visibleTotal,
+      hiddenPassed: 0,
+      hiddenTotal,
+      durationMs,
+      cases: [],
+      fatal: "Time limit exceeded.",
+      status: "time-limit",
+    };
+  }
+
+  // Parse one JSON line per case from stdout. The harness emits __fatal for
+  // missing-method / can't-instantiate-Solution scenarios.
+  const stdout = judge.stdout ?? "";
+  const cases: CaseReport[] = [];
+  let fatal: string | undefined;
+  for (const line of stdout.split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    try {
+      const obj = JSON.parse(trimmed) as Record<string, unknown>;
+      if (typeof obj.__fatal === "string") {
+        fatal = obj.__fatal;
+        continue;
+      }
+      cases.push({
+        name: String(obj.name ?? ""),
+        visible: Boolean(obj.visible),
+        passed: Boolean(obj.passed),
+        durationMs: Number(obj.durationMs ?? 0),
+        input: obj.input as Record<string, unknown> | undefined,
+        expected: obj.expected,
+        actual: obj.actual,
+        error: typeof obj.error === "string" ? obj.error : undefined,
+      });
+    } catch {
+      // ignore non-JSON lines (e.g. accidental prints in user code)
+    }
+  }
+
+  if (!fatal && cases.length === 0) {
+    fatal = (judge.stderr ?? judge.message ?? "Judge produced no output.").trim().slice(0, 2000);
+    return {
+      passed: 0,
+      total: visibleTotal + hiddenTotal,
+      visiblePassed: 0,
+      visibleTotal,
+      hiddenPassed: 0,
+      hiddenTotal,
+      durationMs,
+      cases: [],
+      fatal,
+      status: "runtime-error",
+    };
+  }
+
+  const visibleResults = cases.filter((c) => c.visible);
+  const hiddenResults = cases.filter((c) => !c.visible);
+  const visiblePassed = visibleResults.filter((c) => c.passed).length;
+  const hiddenPassed = hiddenResults.filter((c) => c.passed).length;
+  const passed = visiblePassed + hiddenPassed;
+  const total = visibleTotal + hiddenTotal;
+
+  // Reveal only the FIRST failing hidden case to the client.
+  const firstFailingHidden = hiddenResults.find((c) => !c.passed);
+  const reportedCases: CaseReport[] = [
+    ...visibleResults,
+    ...(firstFailingHidden ? [firstFailingHidden] : []),
+  ];
+
+  let status: RunReport["status"] = "accepted";
+  if (fatal || cases.some((c) => c.error)) status = "runtime-error";
+  if (passed < total) status = "wrong-answer";
+  if (passed === total && !fatal) status = "accepted";
+
+  return {
+    passed,
+    total,
+    visiblePassed,
+    visibleTotal,
+    hiddenPassed,
+    hiddenTotal,
+    durationMs,
+    cases: reportedCases,
+    fatal,
+    status,
+  };
 }

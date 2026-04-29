@@ -1,0 +1,88 @@
+{
+  "slug": "course-schedule",
+  "title": "Course Schedule",
+  "number": 207,
+  "difficulty": "Medium",
+  "category": "Graph",
+  "url": "https://leetcode.com/problems/course-schedule/",
+  "statement": "You are given a number of courses labeled from 0 to numCourses - 1 and a list of prerequisite pairs. Each pair [a, b] indicates that you must take course b before you can take course a.\n\nDetermine if it is possible to finish all courses. Return true if you can finish all courses, and false otherwise.",
+  "constraints": [
+    "1 <= numCourses <= 2000",
+    "0 <= prerequisites.length <= 5000",
+    "prerequisites[i].length == 2",
+    "0 <= ai, bi < numCourses",
+    "All the pairs prerequisites[i] are unique"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "canFinish",
+    "params": [
+      {
+        "name": "numCourses",
+        "pyType": "int",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "prerequisites",
+        "pyType": "list[list[int]]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def canFinish(self, numCourses: int, prerequisites: list[list[int]]) -> bool:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "numCourses": 2,
+        "prerequisites": [
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "output": true,
+      "explanation": "Take course 0 first, then course 1. No cycle exists."
+    },
+    {
+      "input": {
+        "numCourses": 2,
+        "prerequisites": [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      },
+      "output": false,
+      "explanation": "Circular dependency: course 0 requires 1, and course 1 requires 0."
+    },
+    {
+      "input": {
+        "numCourses": 3,
+        "prerequisites": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "output": true,
+      "explanation": "Take course 2 first, then 1, then 0. No cycle exists."
+    }
+  ],
+  "hiddenCount": 25
+}

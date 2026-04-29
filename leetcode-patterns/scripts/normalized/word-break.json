@@ -1,0 +1,76 @@
+{
+  "slug": "word-break",
+  "number": 139,
+  "title": "Word Break",
+  "difficulty": "Medium",
+  "category": "DP",
+  "url": "https://leetcode.com/problems/word-break/",
+  "statement": "Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words.\n\nEach word in the dictionary may be reused multiple times in the segmentation.",
+  "constraints": [
+    "1 <= s.length <= 300",
+    "1 <= wordDict.length <= 1000",
+    "1 <= wordDict[i].length <= 20",
+    "s and wordDict[i] consist of only lowercase English letters",
+    "All the strings of wordDict are unique"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "wordBreak",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "wordDict",
+        "pyType": "list[str]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def wordBreak(self, s: str, wordDict: list[str]) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "leetcode",
+        "wordDict": [
+          "leet",
+          "code"
+        ]
+      },
+      "output": true,
+      "explanation": "Return true because \"leetcode\" can be segmented as \"leet\" + \"code\"."
+    },
+    {
+      "input": {
+        "s": "applepenapple",
+        "wordDict": [
+          "apple",
+          "pen"
+        ]
+      },
+      "output": true,
+      "explanation": "Return true because \"applepenapple\" can be segmented as \"apple\" + \"pen\" + \"apple\"."
+    },
+    {
+      "input": {
+        "s": "catsandog",
+        "wordDict": [
+          "cat",
+          "cats",
+          "and",
+          "sand",
+          "dog"
+        ]
+      },
+      "output": false,
+      "explanation": "Return false because \"catsandog\" cannot be segmented into words from wordDict."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": "All parameters are primitives (str, list[str]) and return type is bool, all JSON-representable.",
+  "referenceCode": "class Solution:\n    def wordBreak(self, s: str, wordDict: list[str]) -> bool:\n        dp = [False] * (len(s) + 1)\n        dp[len(s)] = True\n\n        for i in range(len(s) - 1, -1, -1):\n            for w in wordDict:\n                if (i + len(w)) <= len(s) and s[i : i + len(w)] == w:\n                    dp[i] = dp[i + len(w)]\n                if dp[i]:\n                    break\n\n        return dp[0]"
+}

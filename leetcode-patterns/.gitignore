@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 
 server/.data/
+
+# Build pipeline secrets + raw seeds (we commit normalized + final outputs only)
+.env
+.env.local
+scripts/seed/

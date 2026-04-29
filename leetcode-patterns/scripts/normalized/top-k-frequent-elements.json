@@ -1,0 +1,86 @@
+{
+  "slug": "top-k-frequent-elements",
+  "number": 347,
+  "title": "Top K Frequent Elements",
+  "difficulty": "Medium",
+  "category": "Heap",
+  "url": "https://leetcode.com/problems/top-k-frequent-elements/",
+  "statement": "Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.\n\nYou are required to solve the problem in better than O(n log n) time complexity.",
+  "constraints": [
+    "1 <= nums.length <= 10^5",
+    "k is in the range [1, the number of unique elements in the array]",
+    "-10^4 <= nums[i] <= 10^4"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "topKFrequent",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "k",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "list[int]"
+  },
+  "starterCode": "class Solution:\n    def topKFrequent(self, nums: list[int], k: int) -> list[int]:\n        # write your solution here\n        pass\n",
+  "equality": "set",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          2,
+          2,
+          3
+        ],
+        "k": 2
+      },
+      "output": [
+        1,
+        2
+      ],
+      "explanation": "The element 1 appears 3 times, 2 appears 2 times, and 3 appears 1 time. The two most frequent elements are 1 and 2."
+    },
+    {
+      "input": {
+        "nums": [
+          4,
+          1,
+          1,
+          1,
+          2,
+          2,
+          3
+        ],
+        "k": 1
+      },
+      "output": [
+        1
+      ],
+      "explanation": "The element 1 appears 3 times, which is the most frequent. Return [1]."
+    },
+    {
+      "input": {
+        "nums": [
+          1
+        ],
+        "k": 1
+      },
+      "output": [
+        1
+      ],
+      "explanation": "There is only one element with frequency 1, so the answer is [1]."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": "All parameters and return type are JSON-representable primitives.",
+  "referenceCode": "class Solution:\n    def topKFrequent(self, nums: list[int], k: int) -> list[int]:\n        count = {}\n        freq = [[] for i in range(len(nums) + 1)]\n\n        for n in nums:\n            count[n] = 1 + count.get(n, 0)\n        for n, c in count.items():\n            freq[c].append(n)\n\n        res = []\n        for i in range(len(freq) - 1, 0, -1):\n            res += freq[i]\n            if len(res) == k:\n                return res\n        return res\n"
+}

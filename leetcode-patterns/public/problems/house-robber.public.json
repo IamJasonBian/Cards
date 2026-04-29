@@ -1,0 +1,63 @@
+{
+  "slug": "house-robber",
+  "title": "House Robber",
+  "number": 198,
+  "difficulty": "Medium",
+  "category": "DP",
+  "url": "https://leetcode.com/problems/house-robber/",
+  "statement": "You are a professional thief planning to rob houses along a street. Each house has a certain amount of money stashed. You cannot rob two adjacent houses because an alarm system will trigger. Given an integer array nums where nums[i] represents the amount of money in the i-th house, return the maximum amount of money you can rob without alerting the police.",
+  "constraints": [
+    "1 <= nums.length <= 100",
+    "0 <= nums[i] <= 400"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "rob",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def rob(self, nums: list[int]) -> int:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          1
+        ]
+      },
+      "output": 4,
+      "explanation": "Rob house 1 (money = 1) and house 3 (money = 3). Total = 1 + 3 = 4."
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          7,
+          9,
+          3,
+          1
+        ]
+      },
+      "output": 12,
+      "explanation": "Rob house 1 (money = 2), house 3 (money = 9) and house 5 (money = 1). Total = 2 + 9 + 1 = 12."
+    },
+    {
+      "input": {
+        "nums": [
+          5
+        ]
+      },
+      "output": 5,
+      "explanation": "Only one house, rob it for 5."
+    }
+  ],
+  "hiddenCount": 25
+}

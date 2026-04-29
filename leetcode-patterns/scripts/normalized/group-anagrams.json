@@ -1,0 +1,84 @@
+{
+  "slug": "group-anagrams",
+  "number": 49,
+  "title": "Group Anagrams",
+  "difficulty": "Medium",
+  "category": "String",
+  "url": "https://leetcode.com/problems/group-anagrams/",
+  "statement": "Given an array of strings, group the anagrams together. An anagram is a word or phrase formed by rearranging the letters of another. The order of the groups in the result and the order of strings within each group does not matter.",
+  "constraints": [
+    "1 <= strs.length <= 10^4",
+    "0 <= strs[i].length <= 100",
+    "strs[i] consists of lowercase English letters"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "groupAnagrams",
+    "params": [
+      {
+        "name": "strs",
+        "pyType": "list[str]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "list[list[str]]"
+  },
+  "starterCode": "class Solution:\n    def groupAnagrams(self, strs: list[str]) -> list[list[str]]:\n        # write your solution here\n        pass\n",
+  "equality": "set-of-sets",
+  "visibleExamples": [
+    {
+      "input": {
+        "strs": [
+          "eat",
+          "tea",
+          "ate",
+          "nat",
+          "tan",
+          "bat"
+        ]
+      },
+      "output": [
+        [
+          "eat",
+          "tea",
+          "ate"
+        ],
+        [
+          "nat",
+          "tan"
+        ],
+        [
+          "bat"
+        ]
+      ],
+      "explanation": "Strings that are anagrams of each other are grouped together."
+    },
+    {
+      "input": {
+        "strs": [
+          ""
+        ]
+      },
+      "output": [
+        [
+          ""
+        ]
+      ]
+    },
+    {
+      "input": {
+        "strs": [
+          "a"
+        ]
+      },
+      "output": [
+        [
+          "a"
+        ]
+      ]
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": "",
+  "referenceCode": "class Solution:\n    def groupAnagrams(self, strs: list[str]) -> list[list[str]]:\n        ans = {}\n        \n        for s in strs:\n            count = [0] * 26\n            for c in s:\n                count[ord(c) - ord('a')] += 1\n            key = tuple(count)\n            if key not in ans:\n                ans[key] = []\n            ans[key].append(s)\n        \n        return list(ans.values())"
+}

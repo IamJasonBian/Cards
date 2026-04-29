@@ -1,0 +1,104 @@
+{
+  "slug": "non-overlapping-intervals",
+  "number": 435,
+  "title": "Non-overlapping Intervals",
+  "difficulty": "Medium",
+  "category": "Interval",
+  "url": "https://leetcode.com/problems/non-overlapping-intervals/",
+  "statement": "Given an array of intervals where each interval is represented as [start, end], determine the minimum number of intervals you need to remove to make the remaining intervals non-overlapping.\n\nTwo intervals are considered overlapping if they share any point in common. You need to find the minimum number of intervals to erase such that the remaining intervals do not overlap with each other.",
+  "constraints": [
+    "1 <= intervals.length <= 10^5",
+    "-5 * 10^4 <= start_i < end_i <= 5 * 10^4"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "eraseOverlapIntervals",
+    "params": [
+      {
+        "name": "intervals",
+        "pyType": "list[list[int]]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def eraseOverlapIntervals(self, intervals: list[list[int]]) -> int:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      },
+      "output": 1,
+      "explanation": "We can remove [1, 3] to get [[1, 2], [2, 3], [3, 4]] where no intervals overlap."
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "output": 2,
+      "explanation": "All three intervals overlap; we need to remove two of them."
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            4,
+            6
+          ]
+        ]
+      },
+      "output": 2,
+      "explanation": "We can keep [0, 2], [2, 4], [4, 6] by removing [1, 3] and [3, 5]."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": "All parameters and return type are JSON-representable (list[list[int]] and int).",
+  "referenceCode": "class Solution:\n    def eraseOverlapIntervals(self, intervals: list[list[int]]) -> int:\n        intervals.sort()\n        res = 0\n        prevEnd = intervals[0][1]\n        for start, end in intervals[1:]:\n            if start >= prevEnd:\n                prevEnd = end\n            else:\n                res += 1\n                prevEnd = min(end, prevEnd)\n        return res\n"
+}

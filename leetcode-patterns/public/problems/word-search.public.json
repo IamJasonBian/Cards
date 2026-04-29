@@ -1,0 +1,116 @@
+{
+  "slug": "word-search",
+  "title": "Word Search",
+  "number": 79,
+  "difficulty": "Medium",
+  "category": "Matrix",
+  "url": "https://leetcode.com/problems/word-search/",
+  "statement": "Given an m x n board of characters and a string word, determine if the word exists in the board. The word must be constructed from letters of sequentially adjacent cells, where adjacent cells are those horizontally or vertically neighboring. The same cell may not be used more than once in a word.",
+  "constraints": [
+    "1 <= board.length, board[i].length <= 6",
+    "1 <= word.length <= 15",
+    "board and word consist of only lowercase and uppercase English letters"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "exist",
+    "params": [
+      {
+        "name": "board",
+        "pyType": "list[list[str]]",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "word",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def exist(self, board: list[list[str]], word: str) -> bool:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "word": "ABCCED"
+      },
+      "output": true,
+      "explanation": "The word ABCCED can be found by starting at A and moving through adjacent cells."
+    },
+    {
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "word": "SEE"
+      },
+      "output": true,
+      "explanation": "The word SEE can be found by starting at S and moving through adjacent cells."
+    },
+    {
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "word": "ABCB"
+      },
+      "output": false,
+      "explanation": "The word ABCB cannot be found because the cell with B cannot be reused."
+    }
+  ],
+  "hiddenCount": 26
+}

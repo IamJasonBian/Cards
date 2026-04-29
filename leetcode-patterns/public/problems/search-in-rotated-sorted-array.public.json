@@ -1,0 +1,78 @@
+{
+  "slug": "search-in-rotated-sorted-array",
+  "title": "Search in Rotated Sorted Array",
+  "number": 33,
+  "difficulty": "Medium",
+  "category": "Array",
+  "url": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+  "statement": "You are given an integer array nums sorted in ascending order that has been rotated at some unknown pivot. The array may contain duplicates. Find the index of a given target value in the array. If the target is not found, return -1.\n\nYou must solve this with O(log n) time complexity.",
+  "constraints": [
+    "1 <= nums.length <= 5000",
+    "-10^4 <= nums[i] <= 10^4",
+    "nums is guaranteed to be rotated at some pivot",
+    "-10^4 <= target <= 10^4"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "search",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "target",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "int"
+  },
+  "starterCode": "class Solution:\n    def search(self, nums: list[int], target: int) -> int:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          4,
+          5,
+          6,
+          7,
+          0,
+          1,
+          2
+        ],
+        "target": 0
+      },
+      "output": 4,
+      "explanation": "Target 0 is found at index 4 in the rotated array."
+    },
+    {
+      "input": {
+        "nums": [
+          4,
+          5,
+          6,
+          7,
+          0,
+          1,
+          2
+        ],
+        "target": 3
+      },
+      "output": -1,
+      "explanation": "Target 3 is not present in the array."
+    },
+    {
+      "input": {
+        "nums": [
+          1
+        ],
+        "target": 1
+      },
+      "output": 0,
+      "explanation": "Single element array containing the target."
+    }
+  ],
+  "hiddenCount": 25
+}

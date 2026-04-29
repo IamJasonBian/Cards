@@ -1,0 +1,53 @@
+{
+  "slug": "valid-palindrome",
+  "number": 125,
+  "title": "Valid Palindrome",
+  "difficulty": "Easy",
+  "category": "String",
+  "url": "https://leetcode.com/problems/valid-palindrome/",
+  "statement": "Given a string s, determine if it is a valid palindrome, considering only alphanumeric characters and ignoring cases.\n\nA palindrome is a word, phrase, number, or other sequence of characters that reads the same forward and backward (ignoring spaces, punctuation, and capitalization).",
+  "constraints": [
+    "1 <= s.length <= 2 * 10^5",
+    "s consists of printable ASCII characters"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "isPalindrome",
+    "params": [
+      {
+        "name": "s",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def isPalindrome(self, s: str) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "s": "A man, a plan, a canal: Panama"
+      },
+      "output": true,
+      "explanation": "After removing non-alphanumeric characters and converting to lowercase: 'amanaplanacanalpanama' is a palindrome."
+    },
+    {
+      "input": {
+        "s": "race a car"
+      },
+      "output": false,
+      "explanation": "After processing: 'raceacar' is not a palindrome."
+    },
+    {
+      "input": {
+        "s": " "
+      },
+      "output": true,
+      "explanation": "An empty string (after removing spaces) is considered a valid palindrome."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": "",
+  "referenceCode": "class Solution:\n    def isPalindrome(self, s: str) -> bool:\n        new = ''\n        for a in s:\n            if a.isalpha() or a.isdigit():\n                new += a.lower()\n        return (new == new[::-1])\n"
+}

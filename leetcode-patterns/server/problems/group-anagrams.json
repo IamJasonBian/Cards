@@ -1,0 +1,708 @@
+{
+  "slug": "group-anagrams",
+  "title": "Group Anagrams",
+  "number": 49,
+  "difficulty": "Medium",
+  "category": "String",
+  "url": "https://leetcode.com/problems/group-anagrams/",
+  "statement": "Given an array of strings, group the anagrams together. An anagram is a word or phrase formed by rearranging the letters of another. The order of the groups in the result and the order of strings within each group does not matter.",
+  "constraints": [
+    "1 <= strs.length <= 10^4",
+    "0 <= strs[i].length <= 100",
+    "strs[i] consists of lowercase English letters"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "groupAnagrams",
+    "params": [
+      {
+        "name": "strs",
+        "pyType": "list[str]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "list[list[str]]"
+  },
+  "starterCode": "class Solution:\n    def groupAnagrams(self, strs: list[str]) -> list[list[str]]:\n        # write your solution here\n        pass\n",
+  "equality": "set-of-sets",
+  "visibleExamples": [
+    {
+      "input": {
+        "strs": [
+          "eat",
+          "tea",
+          "ate",
+          "nat",
+          "tan",
+          "bat"
+        ]
+      },
+      "output": [
+        [
+          "eat",
+          "tea",
+          "ate"
+        ],
+        [
+          "nat",
+          "tan"
+        ],
+        [
+          "bat"
+        ]
+      ],
+      "explanation": "Strings that are anagrams of each other are grouped together."
+    },
+    {
+      "input": {
+        "strs": [
+          ""
+        ]
+      },
+      "output": [
+        [
+          ""
+        ]
+      ]
+    },
+    {
+      "input": {
+        "strs": [
+          "a"
+        ]
+      },
+      "output": [
+        [
+          "a"
+        ]
+      ]
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "single_empty_string",
+      "input": {
+        "strs": [
+          ""
+        ]
+      },
+      "expected": [
+        [
+          ""
+        ]
+      ]
+    },
+    {
+      "name": "single_char",
+      "input": {
+        "strs": [
+          "a"
+        ]
+      },
+      "expected": [
+        [
+          "a"
+        ]
+      ]
+    },
+    {
+      "name": "two_same_chars",
+      "input": {
+        "strs": [
+          "a",
+          "a"
+        ]
+      },
+      "expected": [
+        [
+          "a",
+          "a"
+        ]
+      ]
+    },
+    {
+      "name": "two_anagrams",
+      "input": {
+        "strs": [
+          "ab",
+          "ba"
+        ]
+      },
+      "expected": [
+        [
+          "ab",
+          "ba"
+        ]
+      ]
+    },
+    {
+      "name": "all_same_word",
+      "input": {
+        "strs": [
+          "cat",
+          "cat",
+          "cat"
+        ]
+      },
+      "expected": [
+        [
+          "cat",
+          "cat",
+          "cat"
+        ]
+      ]
+    },
+    {
+      "name": "no_anagrams",
+      "input": {
+        "strs": [
+          "abc",
+          "def",
+          "ghi"
+        ]
+      },
+      "expected": [
+        [
+          "abc"
+        ],
+        [
+          "def"
+        ],
+        [
+          "ghi"
+        ]
+      ]
+    },
+    {
+      "name": "mixed_lengths",
+      "input": {
+        "strs": [
+          "a",
+          "ab",
+          "abc",
+          "ba",
+          "cab"
+        ]
+      },
+      "expected": [
+        [
+          "a"
+        ],
+        [
+          "ab",
+          "ba"
+        ],
+        [
+          "abc",
+          "cab"
+        ]
+      ]
+    },
+    {
+      "name": "all_empty_strings",
+      "input": {
+        "strs": [
+          "",
+          "",
+          ""
+        ]
+      },
+      "expected": [
+        [
+          "",
+          "",
+          ""
+        ]
+      ]
+    },
+    {
+      "name": "single_long_word",
+      "input": {
+        "strs": [
+          "abcdefghijklmnopqrstuvwxyz"
+        ]
+      },
+      "expected": [
+        [
+          "abcdefghijklmnopqrstuvwxyz"
+        ]
+      ]
+    },
+    {
+      "name": "two_long_anagrams",
+      "input": {
+        "strs": [
+          "abcdefghijklmnopqrstuvwxyz",
+          "zyxwvutsrqponmlkjihgfedcba"
+        ]
+      },
+      "expected": [
+        [
+          "abcdefghijklmnopqrstuvwxyz",
+          "zyxwvutsrqponmlkjihgfedcba"
+        ]
+      ]
+    },
+    {
+      "name": "many_single_chars",
+      "input": {
+        "strs": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f"
+        ]
+      },
+      "expected": [
+        [
+          "a"
+        ],
+        [
+          "b"
+        ],
+        [
+          "c"
+        ],
+        [
+          "d"
+        ],
+        [
+          "e"
+        ],
+        [
+          "f"
+        ]
+      ]
+    },
+    {
+      "name": "many_repeated_chars",
+      "input": {
+        "strs": [
+          "aaa",
+          "aaa",
+          "aaa",
+          "aaa"
+        ]
+      },
+      "expected": [
+        [
+          "aaa",
+          "aaa",
+          "aaa",
+          "aaa"
+        ]
+      ]
+    },
+    {
+      "name": "sorted_ascending",
+      "input": {
+        "strs": [
+          "aab",
+          "abc",
+          "acd",
+          "bcd",
+          "zzz"
+        ]
+      },
+      "expected": [
+        [
+          "aab"
+        ],
+        [
+          "abc"
+        ],
+        [
+          "acd"
+        ],
+        [
+          "bcd"
+        ],
+        [
+          "zzz"
+        ]
+      ]
+    },
+    {
+      "name": "sorted_descending",
+      "input": {
+        "strs": [
+          "zzz",
+          "bcd",
+          "acd",
+          "abc",
+          "aab"
+        ]
+      },
+      "expected": [
+        [
+          "zzz"
+        ],
+        [
+          "bcd"
+        ],
+        [
+          "acd"
+        ],
+        [
+          "abc"
+        ],
+        [
+          "aab"
+        ]
+      ]
+    },
+    {
+      "name": "anagrams_scattered",
+      "input": {
+        "strs": [
+          "eat",
+          "xyz",
+          "tea",
+          "abc",
+          "ate",
+          "def"
+        ]
+      },
+      "expected": [
+        [
+          "eat",
+          "tea",
+          "ate"
+        ],
+        [
+          "xyz"
+        ],
+        [
+          "abc"
+        ],
+        [
+          "def"
+        ]
+      ]
+    },
+    {
+      "name": "large_group_of_anagrams",
+      "input": {
+        "strs": [
+          "listen",
+          "silent",
+          "enlist",
+          "tinsel",
+          "inlets"
+        ]
+      },
+      "expected": [
+        [
+          "listen",
+          "silent",
+          "enlist",
+          "tinsel",
+          "inlets"
+        ]
+      ]
+    },
+    {
+      "name": "mixed_empty_and_chars",
+      "input": {
+        "strs": [
+          "",
+          "a",
+          "",
+          "b",
+          ""
+        ]
+      },
+      "expected": [
+        [
+          "",
+          "",
+          ""
+        ],
+        [
+          "a"
+        ],
+        [
+          "b"
+        ]
+      ]
+    },
+    {
+      "name": "duplicate_anagrams",
+      "input": {
+        "strs": [
+          "ab",
+          "ba",
+          "ab",
+          "ba",
+          "ab"
+        ]
+      },
+      "expected": [
+        [
+          "ab",
+          "ba",
+          "ab",
+          "ba",
+          "ab"
+        ]
+      ]
+    },
+    {
+      "name": "two_char_all_perms",
+      "input": {
+        "strs": [
+          "ab",
+          "ba",
+          "ab",
+          "ba"
+        ]
+      },
+      "expected": [
+        [
+          "ab",
+          "ba",
+          "ab",
+          "ba"
+        ]
+      ]
+    },
+    {
+      "name": "three_char_perms",
+      "input": {
+        "strs": [
+          "abc",
+          "bca",
+          "cab",
+          "acb",
+          "bac",
+          "cba"
+        ]
+      },
+      "expected": [
+        [
+          "abc",
+          "bca",
+          "cab",
+          "acb",
+          "bac",
+          "cba"
+        ]
+      ]
+    },
+    {
+      "name": "max_size_many_groups",
+      "input": {
+        "strs": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+          "k",
+          "l",
+          "m",
+          "n",
+          "o",
+          "p",
+          "q",
+          "r",
+          "s",
+          "t",
+          "u",
+          "v",
+          "w",
+          "x",
+          "y",
+          "z"
+        ]
+      },
+      "expected": [
+        [
+          "a"
+        ],
+        [
+          "b"
+        ],
+        [
+          "c"
+        ],
+        [
+          "d"
+        ],
+        [
+          "e"
+        ],
+        [
+          "f"
+        ],
+        [
+          "g"
+        ],
+        [
+          "h"
+        ],
+        [
+          "i"
+        ],
+        [
+          "j"
+        ],
+        [
+          "k"
+        ],
+        [
+          "l"
+        ],
+        [
+          "m"
+        ],
+        [
+          "n"
+        ],
+        [
+          "o"
+        ],
+        [
+          "p"
+        ],
+        [
+          "q"
+        ],
+        [
+          "r"
+        ],
+        [
+          "s"
+        ],
+        [
+          "t"
+        ],
+        [
+          "u"
+        ],
+        [
+          "v"
+        ],
+        [
+          "w"
+        ],
+        [
+          "x"
+        ],
+        [
+          "y"
+        ],
+        [
+          "z"
+        ]
+      ]
+    },
+    {
+      "name": "many_identical_short",
+      "input": {
+        "strs": [
+          "x",
+          "x",
+          "x",
+          "x",
+          "x",
+          "x",
+          "x",
+          "x",
+          "x",
+          "x"
+        ]
+      },
+      "expected": [
+        [
+          "x",
+          "x",
+          "x",
+          "x",
+          "x",
+          "x",
+          "x",
+          "x",
+          "x",
+          "x"
+        ]
+      ]
+    },
+    {
+      "name": "large_input_same_anagrams",
+      "input": {
+        "strs": [
+          "abcd",
+          "dcba",
+          "badc",
+          "acdb",
+          "cbad",
+          "adbc"
+        ]
+      },
+      "expected": [
+        [
+          "abcd",
+          "dcba",
+          "badc",
+          "acdb",
+          "cbad",
+          "adbc"
+        ]
+      ]
+    },
+    {
+      "name": "two_groups_large",
+      "input": {
+        "strs": [
+          "abc",
+          "bca",
+          "cab",
+          "xyz",
+          "zyx",
+          "yxz"
+        ]
+      },
+      "expected": [
+        [
+          "abc",
+          "bca",
+          "cab"
+        ],
+        [
+          "xyz",
+          "zyx",
+          "yxz"
+        ]
+      ]
+    },
+    {
+      "name": "max_length_word",
+      "input": {
+        "strs": [
+          "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuv",
+          "vwutsrqponmlkjihgfedcbazyx",
+          "zyxwvutsrqponmlkjihgfedcbazyx"
+        ]
+      },
+      "expected": [
+        [
+          "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuv"
+        ],
+        [
+          "vwutsrqponmlkjihgfedcbazyx"
+        ],
+        [
+          "zyxwvutsrqponmlkjihgfedcbazyx"
+        ]
+      ]
+    }
+  ]
+}

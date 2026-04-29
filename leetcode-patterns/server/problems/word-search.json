@@ -1,0 +1,687 @@
+{
+  "slug": "word-search",
+  "title": "Word Search",
+  "number": 79,
+  "difficulty": "Medium",
+  "category": "Matrix",
+  "url": "https://leetcode.com/problems/word-search/",
+  "statement": "Given an m x n board of characters and a string word, determine if the word exists in the board. The word must be constructed from letters of sequentially adjacent cells, where adjacent cells are those horizontally or vertically neighboring. The same cell may not be used more than once in a word.",
+  "constraints": [
+    "1 <= board.length, board[i].length <= 6",
+    "1 <= word.length <= 15",
+    "board and word consist of only lowercase and uppercase English letters"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "exist",
+    "params": [
+      {
+        "name": "board",
+        "pyType": "list[list[str]]",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "word",
+        "pyType": "str",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "bool"
+  },
+  "starterCode": "class Solution:\n    def exist(self, board: list[list[str]], word: str) -> bool:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "word": "ABCCED"
+      },
+      "output": true,
+      "explanation": "The word ABCCED can be found by starting at A and moving through adjacent cells."
+    },
+    {
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "word": "SEE"
+      },
+      "output": true,
+      "explanation": "The word SEE can be found by starting at S and moving through adjacent cells."
+    },
+    {
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "word": "ABCB"
+      },
+      "output": false,
+      "explanation": "The word ABCB cannot be found because the cell with B cannot be reused."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_single_cell_match",
+      "input": {
+        "board": [
+          [
+            "A"
+          ]
+        ],
+        "word": "A"
+      },
+      "expected": true
+    },
+    {
+      "name": "minimal_single_cell_no_match",
+      "input": {
+        "board": [
+          [
+            "A"
+          ]
+        ],
+        "word": "B"
+      },
+      "expected": false
+    },
+    {
+      "name": "minimal_two_cell_horizontal",
+      "input": {
+        "board": [
+          [
+            "A",
+            "B"
+          ]
+        ],
+        "word": "AB"
+      },
+      "expected": true
+    },
+    {
+      "name": "minimal_two_cell_vertical",
+      "input": {
+        "board": [
+          [
+            "A"
+          ],
+          [
+            "B"
+          ]
+        ],
+        "word": "AB"
+      },
+      "expected": true
+    },
+    {
+      "name": "minimal_no_path",
+      "input": {
+        "board": [
+          [
+            "A"
+          ],
+          [
+            "B"
+          ]
+        ],
+        "word": "BA"
+      },
+      "expected": true
+    },
+    {
+      "name": "small_grid_simple_path",
+      "input": {
+        "board": [
+          [
+            "C",
+            "A"
+          ],
+          [
+            "T",
+            "A"
+          ]
+        ],
+        "word": "CAT"
+      },
+      "expected": false
+    },
+    {
+      "name": "small_grid_reuse_attempt",
+      "input": {
+        "board": [
+          [
+            "A",
+            "A"
+          ],
+          [
+            "A",
+            "A"
+          ]
+        ],
+        "word": "AAA"
+      },
+      "expected": true
+    },
+    {
+      "name": "small_grid_all_same_char",
+      "input": {
+        "board": [
+          [
+            "X",
+            "X"
+          ],
+          [
+            "X",
+            "X"
+          ]
+        ],
+        "word": "XXXX"
+      },
+      "expected": true
+    },
+    {
+      "name": "small_grid_all_same_too_long",
+      "input": {
+        "board": [
+          [
+            "X",
+            "X"
+          ],
+          [
+            "X",
+            "X"
+          ]
+        ],
+        "word": "XXXXX"
+      },
+      "expected": false
+    },
+    {
+      "name": "medium_grid_spiral_path",
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C"
+          ],
+          [
+            "D",
+            "E",
+            "F"
+          ],
+          [
+            "G",
+            "H",
+            "I"
+          ]
+        ],
+        "word": "ABCFIHGD"
+      },
+      "expected": true
+    },
+    {
+      "name": "medium_grid_dead_end",
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C"
+          ],
+          [
+            "D",
+            "E",
+            "F"
+          ],
+          [
+            "G",
+            "H",
+            "I"
+          ]
+        ],
+        "word": "ABCFX"
+      },
+      "expected": false
+    },
+    {
+      "name": "medium_grid_backtrack_required",
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "A"
+          ],
+          [
+            "C",
+            "D",
+            "C"
+          ],
+          [
+            "E",
+            "F",
+            "E"
+          ]
+        ],
+        "word": "ACDA"
+      },
+      "expected": false
+    },
+    {
+      "name": "duplicates_many_collisions",
+      "input": {
+        "board": [
+          [
+            "A",
+            "A",
+            "A"
+          ],
+          [
+            "A",
+            "B",
+            "A"
+          ],
+          [
+            "A",
+            "A",
+            "A"
+          ]
+        ],
+        "word": "AAABA"
+      },
+      "expected": true
+    },
+    {
+      "name": "duplicates_diagonal_impossible",
+      "input": {
+        "board": [
+          [
+            "A",
+            "A"
+          ],
+          [
+            "A",
+            "A"
+          ]
+        ],
+        "word": "AAAB"
+      },
+      "expected": false
+    },
+    {
+      "name": "single_row_long",
+      "input": {
+        "board": [
+          [
+            "H",
+            "E",
+            "L",
+            "L",
+            "O",
+            "W",
+            "O",
+            "R",
+            "L",
+            "D"
+          ]
+        ],
+        "word": "HELLOWORLD"
+      },
+      "expected": true
+    },
+    {
+      "name": "single_column_long",
+      "input": {
+        "board": [
+          [
+            "H"
+          ],
+          [
+            "E"
+          ],
+          [
+            "L"
+          ],
+          [
+            "L"
+          ],
+          [
+            "O"
+          ],
+          [
+            "W"
+          ],
+          [
+            "O"
+          ],
+          [
+            "R"
+          ],
+          [
+            "L"
+          ],
+          [
+            "D"
+          ]
+        ],
+        "word": "HELLOWORLD"
+      },
+      "expected": true
+    },
+    {
+      "name": "max_grid_size",
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F"
+          ],
+          [
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L"
+          ],
+          [
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R"
+          ],
+          [
+            "S",
+            "T",
+            "U",
+            "V",
+            "W",
+            "X"
+          ],
+          [
+            "Y",
+            "Z",
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          [
+            "e",
+            "f",
+            "g",
+            "h",
+            "i",
+            "j"
+          ]
+        ],
+        "word": "ABCDEFGHIJKLMNOPQRST"
+      },
+      "expected": false
+    },
+    {
+      "name": "case_sensitive_uppercase",
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C"
+          ],
+          [
+            "D",
+            "E",
+            "F"
+          ],
+          [
+            "G",
+            "H",
+            "I"
+          ]
+        ],
+        "word": "ABCDEFGHI"
+      },
+      "expected": false
+    },
+    {
+      "name": "case_sensitive_lowercase",
+      "input": {
+        "board": [
+          [
+            "a",
+            "b",
+            "c"
+          ],
+          [
+            "d",
+            "e",
+            "f"
+          ],
+          [
+            "g",
+            "h",
+            "i"
+          ]
+        ],
+        "word": "abcdefghi"
+      },
+      "expected": false
+    },
+    {
+      "name": "case_sensitive_mismatch",
+      "input": {
+        "board": [
+          [
+            "A",
+            "B",
+            "C"
+          ],
+          [
+            "D",
+            "E",
+            "F"
+          ],
+          [
+            "G",
+            "H",
+            "I"
+          ]
+        ],
+        "word": "abcdefghi"
+      },
+      "expected": false
+    },
+    {
+      "name": "mixed_case_match",
+      "input": {
+        "board": [
+          [
+            "A",
+            "b",
+            "C"
+          ],
+          [
+            "d",
+            "E",
+            "f"
+          ],
+          [
+            "G",
+            "h",
+            "I"
+          ]
+        ],
+        "word": "AbCdEfGhI"
+      },
+      "expected": false
+    },
+    {
+      "name": "word_longer_than_cells",
+      "input": {
+        "board": [
+          [
+            "A",
+            "B"
+          ],
+          [
+            "C",
+            "D"
+          ]
+        ],
+        "word": "ABCDA"
+      },
+      "expected": false
+    },
+    {
+      "name": "snaking_path_valid",
+      "input": {
+        "board": [
+          [
+            "S",
+            "N",
+            "O"
+          ],
+          [
+            "U",
+            "E",
+            "K"
+          ],
+          [
+            "Q",
+            "C",
+            "T"
+          ]
+        ],
+        "word": "SNOQUENCEKT"
+      },
+      "expected": false
+    },
+    {
+      "name": "zigzag_path_short",
+      "input": {
+        "board": [
+          [
+            "A",
+            "X",
+            "B"
+          ],
+          [
+            "C",
+            "X",
+            "D"
+          ]
+        ],
+        "word": "ACBD"
+      },
+      "expected": false
+    },
+    {
+      "name": "single_char_word_found",
+      "input": {
+        "board": [
+          [
+            "P",
+            "Q",
+            "R"
+          ],
+          [
+            "S",
+            "T",
+            "U"
+          ],
+          [
+            "V",
+            "W",
+            "X"
+          ]
+        ],
+        "word": "T"
+      },
+      "expected": true
+    },
+    {
+      "name": "single_char_word_not_found",
+      "input": {
+        "board": [
+          [
+            "P",
+            "Q",
+            "R"
+          ],
+          [
+            "S",
+            "T",
+            "U"
+          ],
+          [
+            "V",
+            "W",
+            "X"
+          ]
+        ],
+        "word": "Z"
+      },
+      "expected": false
+    }
+  ]
+}

@@ -1,0 +1,493 @@
+{
+  "slug": "two-sum",
+  "title": "Two Sum",
+  "number": 1,
+  "difficulty": "Easy",
+  "category": "Array",
+  "url": "https://leetcode.com/problems/two-sum/",
+  "statement": "Given an array of integers nums and an integer target, return the indices of the two numbers that add up to the target.\n\nYou may assume that each input has exactly one solution, and you may not use the same element twice. You can return the answer in any order.",
+  "constraints": [
+    "2 <= nums.length <= 10^4",
+    "-10^9 <= nums[i] <= 10^9",
+    "-10^9 <= target <= 10^9",
+    "Only one valid answer exists."
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "twoSum",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "target",
+        "pyType": "int",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "list[int]"
+  },
+  "starterCode": "class Solution:\n    def twoSum(self, nums: list[int], target: int) -> list[int]:\n        # write your solution here\n        pass\n",
+  "equality": "two-sum-pair",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          2,
+          7,
+          11,
+          15
+        ],
+        "target": 9
+      },
+      "output": [
+        0,
+        1
+      ],
+      "explanation": "nums[0] + nums[1] = 2 + 7 = 9, so we return [0, 1]."
+    },
+    {
+      "input": {
+        "nums": [
+          3,
+          2,
+          4
+        ],
+        "target": 6
+      },
+      "output": [
+        1,
+        2
+      ],
+      "explanation": "nums[1] + nums[2] = 2 + 4 = 6, so we return [1, 2]."
+    },
+    {
+      "input": {
+        "nums": [
+          3,
+          3
+        ],
+        "target": 6
+      },
+      "output": [
+        0,
+        1
+      ],
+      "explanation": "nums[0] + nums[1] = 3 + 3 = 6, so we return [0, 1]."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_basic",
+      "input": {
+        "nums": [
+          2,
+          7
+        ],
+        "target": 9
+      },
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "minimal_negative",
+      "input": {
+        "nums": [
+          -1,
+          1
+        ],
+        "target": 0
+      },
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "minimal_large",
+      "input": {
+        "nums": [
+          1000000000,
+          1000000000
+        ],
+        "target": 2000000000
+      },
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "duplicates_same_value",
+      "input": {
+        "nums": [
+          5,
+          5,
+          5,
+          5
+        ],
+        "target": 10
+      },
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "duplicates_multiple_pairs",
+      "input": {
+        "nums": [
+          1,
+          1,
+          2,
+          2,
+          3
+        ],
+        "target": 3
+      },
+      "expected": [
+        1,
+        2
+      ]
+    },
+    {
+      "name": "sorted_ascending",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "target": 17
+      },
+      "expected": [
+        7,
+        8
+      ]
+    },
+    {
+      "name": "sorted_descending",
+      "input": {
+        "nums": [
+          9,
+          8,
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1
+        ],
+        "target": 10
+      },
+      "expected": [
+        3,
+        5
+      ]
+    },
+    {
+      "name": "all_negative",
+      "input": {
+        "nums": [
+          -5,
+          -4,
+          -3,
+          -2,
+          -1
+        ],
+        "target": -6
+      },
+      "expected": [
+        1,
+        3
+      ]
+    },
+    {
+      "name": "mixed_sign_zero",
+      "input": {
+        "nums": [
+          -10,
+          0,
+          10
+        ],
+        "target": 0
+      },
+      "expected": [
+        0,
+        2
+      ]
+    },
+    {
+      "name": "zero_with_positive",
+      "input": {
+        "nums": [
+          0,
+          5,
+          10,
+          15
+        ],
+        "target": 5
+      },
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "zero_with_negative",
+      "input": {
+        "nums": [
+          -15,
+          0,
+          15
+        ],
+        "target": 0
+      },
+      "expected": [
+        0,
+        2
+      ]
+    },
+    {
+      "name": "target_zero_negatives",
+      "input": {
+        "nums": [
+          -100,
+          100
+        ],
+        "target": 0
+      },
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "large_target_sum",
+      "input": {
+        "nums": [
+          999999999,
+          1
+        ],
+        "target": 1000000000
+      },
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "large_negative_target",
+      "input": {
+        "nums": [
+          -1000000000,
+          -1
+        ],
+        "target": -1000000001
+      },
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "answer_at_start",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "target": 3
+      },
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "answer_at_end",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "target": 9
+      },
+      "expected": [
+        3,
+        4
+      ]
+    },
+    {
+      "name": "answer_middle",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "target": 6
+      },
+      "expected": [
+        1,
+        3
+      ]
+    },
+    {
+      "name": "close_values_different_target",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          100
+        ],
+        "target": 103
+      },
+      "expected": [
+        2,
+        3
+      ]
+    },
+    {
+      "name": "many_duplicates",
+      "input": {
+        "nums": [
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          2
+        ],
+        "target": 1
+      },
+      "expected": [
+        2,
+        3
+      ]
+    },
+    {
+      "name": "large_array_sparse",
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          100
+        ],
+        "target": 102
+      },
+      "expected": [
+        8,
+        9
+      ]
+    },
+    {
+      "name": "alternating_pattern",
+      "input": {
+        "nums": [
+          1,
+          -1,
+          2,
+          -2,
+          3,
+          -3
+        ],
+        "target": 0
+      },
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "near_max_values",
+      "input": {
+        "nums": [
+          999999998,
+          999999999,
+          -999999999
+        ],
+        "target": 1999999997
+      },
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "negative_near_min",
+      "input": {
+        "nums": [
+          -1000000000,
+          -999999999,
+          1
+        ],
+        "target": -1999999999
+      },
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "single_large_pair",
+      "input": {
+        "nums": [
+          500000000,
+          -500000000,
+          1000000000
+        ],
+        "target": 500000000
+      },
+      "expected": [
+        1,
+        2
+      ]
+    },
+    {
+      "name": "repeated_element_solution",
+      "input": {
+        "nums": [
+          7,
+          7,
+          7,
+          7,
+          1
+        ],
+        "target": 14
+      },
+      "expected": [
+        0,
+        1
+      ]
+    }
+  ]
+}

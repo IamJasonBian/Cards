@@ -1,0 +1,1021 @@
+{
+  "slug": "spiral-matrix",
+  "title": "Spiral Matrix",
+  "number": 54,
+  "difficulty": "Medium",
+  "category": "Matrix",
+  "url": "https://leetcode.com/problems/spiral-matrix/",
+  "statement": "Given an m x n matrix, return all elements of the matrix in spiral order.\n\nSpiral order means traversing the matrix starting from the top-left, moving right along the top row, then down the right column, then left along the bottom row, then up the left column, and repeating this pattern inward until all elements are visited.",
+  "constraints": [
+    "1 <= m, n <= 10",
+    "matrix[i][j] is an integer between -100 and 100"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "spiralOrder",
+    "params": [
+      {
+        "name": "matrix",
+        "pyType": "list[list[int]]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "list[int]"
+  },
+  "starterCode": "class Solution:\n    def spiralOrder(self, matrix: list[list[int]]) -> list[int]:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ]
+        ]
+      },
+      "output": [
+        1,
+        2,
+        3,
+        6,
+        9,
+        8,
+        7,
+        4,
+        5
+      ],
+      "explanation": "Traverse right along top row, down right column, left along bottom row, up left column, then center element."
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            5,
+            6,
+            7,
+            8
+          ],
+          [
+            9,
+            10,
+            11,
+            12
+          ]
+        ]
+      },
+      "output": [
+        1,
+        2,
+        3,
+        4,
+        8,
+        12,
+        11,
+        10,
+        9,
+        5,
+        6,
+        7
+      ],
+      "explanation": "Spiral traversal of a 3x4 matrix."
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1
+          ]
+        ]
+      },
+      "output": [
+        1
+      ],
+      "explanation": "Single element matrix."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal 1x1",
+      "input": {
+        "matrix": [
+          [
+            0
+          ]
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "name": "minimal 1x2",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2
+      ]
+    },
+    {
+      "name": "minimal 2x1",
+      "input": {
+        "matrix": [
+          [
+            1
+          ],
+          [
+            2
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2
+      ]
+    },
+    {
+      "name": "2x2 square",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        4,
+        3
+      ]
+    },
+    {
+      "name": "3x3 square",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        6,
+        9,
+        8,
+        7,
+        4,
+        5
+      ]
+    },
+    {
+      "name": "4x4 square",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            5,
+            6,
+            7,
+            8
+          ],
+          [
+            9,
+            10,
+            11,
+            12
+          ],
+          [
+            13,
+            14,
+            15,
+            16
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        8,
+        12,
+        16,
+        15,
+        14,
+        13,
+        9,
+        5,
+        6,
+        7,
+        11,
+        10
+      ]
+    },
+    {
+      "name": "1x10 single row",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "name": "10x1 single column",
+      "input": {
+        "matrix": [
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ],
+          [
+            5
+          ],
+          [
+            6
+          ],
+          [
+            7
+          ],
+          [
+            8
+          ],
+          [
+            9
+          ],
+          [
+            10
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "name": "2x5 wide rectangle",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          [
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        10,
+        9,
+        8,
+        7,
+        6
+      ]
+    },
+    {
+      "name": "5x2 tall rectangle",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            7,
+            8
+          ],
+          [
+            9,
+            10
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        4,
+        6,
+        8,
+        10,
+        9,
+        7,
+        5,
+        3
+      ]
+    },
+    {
+      "name": "3x4 rectangle",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            5,
+            6,
+            7,
+            8
+          ],
+          [
+            9,
+            10,
+            11,
+            12
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        8,
+        12,
+        11,
+        10,
+        9,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "name": "4x3 rectangle",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ],
+          [
+            10,
+            11,
+            12
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        6,
+        9,
+        12,
+        11,
+        10,
+        7,
+        4,
+        5,
+        8
+      ]
+    },
+    {
+      "name": "all zeros",
+      "input": {
+        "matrix": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "all same positive",
+      "input": {
+        "matrix": [
+          [
+            5,
+            5,
+            5
+          ],
+          [
+            5,
+            5,
+            5
+          ],
+          [
+            5,
+            5,
+            5
+          ]
+        ]
+      },
+      "expected": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "name": "all same negative",
+      "input": {
+        "matrix": [
+          [
+            -7,
+            -7,
+            -7
+          ],
+          [
+            -7,
+            -7,
+            -7
+          ],
+          [
+            -7,
+            -7,
+            -7
+          ]
+        ]
+      },
+      "expected": [
+        -7,
+        -7,
+        -7,
+        -7,
+        -7,
+        -7,
+        -7,
+        -7,
+        -7
+      ]
+    },
+    {
+      "name": "negative values mixed",
+      "input": {
+        "matrix": [
+          [
+            -1,
+            -2,
+            -3
+          ],
+          [
+            -4,
+            -5,
+            -6
+          ],
+          [
+            -7,
+            -8,
+            -9
+          ]
+        ]
+      },
+      "expected": [
+        -1,
+        -2,
+        -3,
+        -6,
+        -9,
+        -8,
+        -7,
+        -4,
+        -5
+      ]
+    },
+    {
+      "name": "extreme negative",
+      "input": {
+        "matrix": [
+          [
+            -100,
+            -100,
+            -100
+          ],
+          [
+            -100,
+            -100,
+            -100
+          ],
+          [
+            -100,
+            -100,
+            -100
+          ]
+        ]
+      },
+      "expected": [
+        -100,
+        -100,
+        -100,
+        -100,
+        -100,
+        -100,
+        -100,
+        -100,
+        -100
+      ]
+    },
+    {
+      "name": "extreme positive",
+      "input": {
+        "matrix": [
+          [
+            100,
+            100,
+            100
+          ],
+          [
+            100,
+            100,
+            100
+          ],
+          [
+            100,
+            100,
+            100
+          ]
+        ]
+      },
+      "expected": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ]
+    },
+    {
+      "name": "mixed extreme range",
+      "input": {
+        "matrix": [
+          [
+            -100,
+            0,
+            100
+          ],
+          [
+            -50,
+            50,
+            25
+          ],
+          [
+            75,
+            -75,
+            1
+          ]
+        ]
+      },
+      "expected": [
+        -100,
+        0,
+        100,
+        25,
+        1,
+        -75,
+        75,
+        -50,
+        50
+      ]
+    },
+    {
+      "name": "ascending order",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          [
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          [
+            11,
+            12,
+            13,
+            14,
+            15
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        10,
+        15,
+        14,
+        13,
+        12,
+        11,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "name": "descending order",
+      "input": {
+        "matrix": [
+          [
+            15,
+            14,
+            13,
+            12,
+            11
+          ],
+          [
+            10,
+            9,
+            8,
+            7,
+            6
+          ],
+          [
+            5,
+            4,
+            3,
+            2,
+            1
+          ]
+        ]
+      },
+      "expected": [
+        15,
+        14,
+        13,
+        12,
+        11,
+        6,
+        1,
+        2,
+        3,
+        4,
+        5,
+        10,
+        9,
+        8,
+        7
+      ]
+    },
+    {
+      "name": "duplicates scattered",
+      "input": {
+        "matrix": [
+          [
+            1,
+            1,
+            2
+          ],
+          [
+            2,
+            3,
+            3
+          ],
+          [
+            4,
+            4,
+            4
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        1,
+        2,
+        3,
+        4,
+        4,
+        4,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "2x10 wide edge",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          [
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        20,
+        19,
+        18,
+        17,
+        16,
+        15,
+        14,
+        13,
+        12,
+        11
+      ]
+    },
+    {
+      "name": "10x2 tall edge",
+      "input": {
+        "matrix": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            7,
+            8
+          ],
+          [
+            9,
+            10
+          ],
+          [
+            11,
+            12
+          ],
+          [
+            13,
+            14
+          ],
+          [
+            15,
+            16
+          ],
+          [
+            17,
+            18
+          ],
+          [
+            19,
+            20
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14,
+        16,
+        18,
+        20,
+        19,
+        17,
+        15,
+        13,
+        11,
+        9,
+        7,
+        5,
+        3
+      ]
+    },
+    {
+      "name": "checkerboard pattern",
+      "input": {
+        "matrix": [
+          [
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            1
+          ]
+        ]
+      },
+      "expected": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "slug": "product-of-array-except-self",
+  "title": "Product of Array Except Self",
+  "number": 238,
+  "difficulty": "Medium",
+  "category": "Array",
+  "url": "https://leetcode.com/problems/product-of-array-except-self/",
+  "statement": "Given an integer array nums, return an array output where output[i] is equal to the product of all elements of nums except nums[i].\n\nYou must write an algorithm that runs in O(n) time and without using the division operation.",
+  "constraints": [
+    "2 <= nums.length <= 10^5",
+    "-30 <= nums[i] <= 30",
+    "The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "productExceptSelf",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "list[int]"
+  },
+  "starterCode": "class Solution:\n    def productExceptSelf(self, nums: list[int]) -> list[int]:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "output": [
+        24,
+        12,
+        8,
+        6
+      ],
+      "explanation": "output[0] = 2*3*4 = 24; output[1] = 1*3*4 = 12; output[2] = 1*2*4 = 8; output[3] = 1*2*3 = 6"
+    },
+    {
+      "input": {
+        "nums": [
+          -1,
+          1,
+          0,
+          -3,
+          3
+        ]
+      },
+      "output": [
+        0,
+        0,
+        9,
+        0,
+        0
+      ],
+      "explanation": "output[2] = (-1)*1*(-3)*3 = 9; all other indices involve a zero product"
+    }
+  ],
+  "hiddenCount": 25
+}

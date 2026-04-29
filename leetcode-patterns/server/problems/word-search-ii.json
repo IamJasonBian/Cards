@@ -1,0 +1,1228 @@
+{
+  "slug": "word-search-ii",
+  "title": "Word Search II",
+  "number": 212,
+  "difficulty": "Hard",
+  "category": "Tree",
+  "url": "https://leetcode.com/problems/word-search-ii/",
+  "statement": "Given an m x n board of characters and a list of strings words, return all words on the board.\n\nEach word must be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once in a word.",
+  "constraints": [
+    "m == board.length",
+    "n == board[i].length",
+    "1 <= m, n <= 12",
+    "board[i][j] is a lowercase English letter",
+    "1 <= words.length <= 3 * 10^4",
+    "1 <= words[i].length <= 10",
+    "words[i] consists of lowercase English letters",
+    "All strings of words are unique"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "findWords",
+    "params": [
+      {
+        "name": "board",
+        "pyType": "list[list[str]]",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "words",
+        "pyType": "list[str]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "list[str]"
+  },
+  "starterCode": "class Solution:\n    def findWords(self, board: list[list[str]], words: list[str]) -> list[str]:\n        # write your solution here\n        pass\n",
+  "equality": "set",
+  "visibleExamples": [
+    {
+      "input": {
+        "board": [
+          [
+            "o",
+            "a",
+            "a",
+            "n"
+          ],
+          [
+            "e",
+            "t",
+            "a",
+            "e"
+          ],
+          [
+            "i",
+            "h",
+            "k",
+            "r"
+          ],
+          [
+            "i",
+            "f",
+            "l",
+            "v"
+          ]
+        ],
+        "words": [
+          "oath",
+          "pea",
+          "eat",
+          "rain"
+        ]
+      },
+      "output": [
+        "eat",
+        "oath"
+      ],
+      "explanation": "These words can be traced on the board using adjacent cells."
+    },
+    {
+      "input": {
+        "board": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "c",
+            "d"
+          ]
+        ],
+        "words": [
+          "abcb"
+        ]
+      },
+      "output": [],
+      "explanation": "The word 'abcb' cannot be formed without reusing the cell 'b'."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_single_cell_single_word",
+      "input": {
+        "board": [
+          [
+            "a"
+          ]
+        ],
+        "words": [
+          "a"
+        ]
+      },
+      "expected": [
+        "a"
+      ]
+    },
+    {
+      "name": "minimal_single_cell_no_match",
+      "input": {
+        "board": [
+          [
+            "a"
+          ]
+        ],
+        "words": [
+          "b"
+        ]
+      },
+      "expected": []
+    },
+    {
+      "name": "minimal_2x2_simple",
+      "input": {
+        "board": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "c",
+            "d"
+          ]
+        ],
+        "words": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ]
+      },
+      "expected": [
+        "c",
+        "a",
+        "b",
+        "d"
+      ]
+    },
+    {
+      "name": "minimal_1x3_linear",
+      "input": {
+        "board": [
+          [
+            "a",
+            "b",
+            "c"
+          ]
+        ],
+        "words": [
+          "ab",
+          "bc",
+          "abc"
+        ]
+      },
+      "expected": [
+        "ab",
+        "bc",
+        "abc"
+      ]
+    },
+    {
+      "name": "minimal_3x1_linear",
+      "input": {
+        "board": [
+          [
+            "a"
+          ],
+          [
+            "b"
+          ],
+          [
+            "c"
+          ]
+        ],
+        "words": [
+          "ab",
+          "bc",
+          "abc"
+        ]
+      },
+      "expected": [
+        "ab",
+        "bc",
+        "abc"
+      ]
+    },
+    {
+      "name": "single_word_found",
+      "input": {
+        "board": [
+          [
+            "c",
+            "a",
+            "t"
+          ],
+          [
+            "a",
+            "p",
+            "e"
+          ],
+          [
+            "r",
+            "b",
+            "d"
+          ]
+        ],
+        "words": [
+          "cat"
+        ]
+      },
+      "expected": [
+        "cat"
+      ]
+    },
+    {
+      "name": "multiple_words_all_found",
+      "input": {
+        "board": [
+          [
+            "m",
+            "a",
+            "d"
+          ],
+          [
+            "a",
+            "n",
+            "t"
+          ],
+          [
+            "d",
+            "t",
+            "e"
+          ]
+        ],
+        "words": [
+          "man",
+          "and",
+          "ant",
+          "mad"
+        ]
+      },
+      "expected": [
+        "man",
+        "ant",
+        "mad"
+      ]
+    },
+    {
+      "name": "no_words_found",
+      "input": {
+        "board": [
+          [
+            "a",
+            "b",
+            "c"
+          ],
+          [
+            "d",
+            "e",
+            "f"
+          ],
+          [
+            "g",
+            "h",
+            "i"
+          ]
+        ],
+        "words": [
+          "xyz",
+          "uvw",
+          "pqr"
+        ]
+      },
+      "expected": []
+    },
+    {
+      "name": "word_too_long_for_board",
+      "input": {
+        "board": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "c",
+            "d"
+          ]
+        ],
+        "words": [
+          "abcdefghij"
+        ]
+      },
+      "expected": []
+    },
+    {
+      "name": "repeated_letters_in_word",
+      "input": {
+        "board": [
+          [
+            "a",
+            "b",
+            "a"
+          ],
+          [
+            "b",
+            "a",
+            "b"
+          ],
+          [
+            "a",
+            "b",
+            "a"
+          ]
+        ],
+        "words": [
+          "aba",
+          "bab",
+          "aaa"
+        ]
+      },
+      "expected": [
+        "aba",
+        "bab"
+      ]
+    },
+    {
+      "name": "board_all_same_letter",
+      "input": {
+        "board": [
+          [
+            "a",
+            "a",
+            "a"
+          ],
+          [
+            "a",
+            "a",
+            "a"
+          ],
+          [
+            "a",
+            "a",
+            "a"
+          ]
+        ],
+        "words": [
+          "aaa",
+          "aaaa",
+          "aa"
+        ]
+      },
+      "expected": [
+        "aa",
+        "aaa",
+        "aaaa"
+      ]
+    },
+    {
+      "name": "board_all_same_letter_no_match",
+      "input": {
+        "board": [
+          [
+            "a",
+            "a"
+          ],
+          [
+            "a",
+            "a"
+          ]
+        ],
+        "words": [
+          "b",
+          "ba",
+          "ab"
+        ]
+      },
+      "expected": []
+    },
+    {
+      "name": "single_letter_words",
+      "input": {
+        "board": [
+          [
+            "x",
+            "y",
+            "z"
+          ],
+          [
+            "a",
+            "b",
+            "c"
+          ],
+          [
+            "m",
+            "n",
+            "o"
+          ]
+        ],
+        "words": [
+          "x",
+          "y",
+          "z",
+          "a",
+          "b",
+          "c",
+          "m",
+          "n",
+          "o"
+        ]
+      },
+      "expected": [
+        "z",
+        "x",
+        "y",
+        "b",
+        "c",
+        "o",
+        "a",
+        "n",
+        "m"
+      ]
+    },
+    {
+      "name": "spiral_path_5x5",
+      "input": {
+        "board": [
+          [
+            "s",
+            "p",
+            "i",
+            "r",
+            "a"
+          ],
+          [
+            "x",
+            "x",
+            "x",
+            "x",
+            "l"
+          ],
+          [
+            "x",
+            "x",
+            "x",
+            "x",
+            "x"
+          ],
+          [
+            "x",
+            "x",
+            "x",
+            "x",
+            "x"
+          ],
+          [
+            "x",
+            "x",
+            "x",
+            "x",
+            "x"
+          ]
+        ],
+        "words": [
+          "spiral"
+        ]
+      },
+      "expected": [
+        "spiral"
+      ]
+    },
+    {
+      "name": "diagonal_not_allowed",
+      "input": {
+        "board": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "c",
+            "d"
+          ]
+        ],
+        "words": [
+          "ac",
+          "bd",
+          "ad",
+          "bc"
+        ]
+      },
+      "expected": [
+        "bd",
+        "ac"
+      ]
+    },
+    {
+      "name": "backtracking_required",
+      "input": {
+        "board": [
+          [
+            "a",
+            "a",
+            "a"
+          ],
+          [
+            "a",
+            "a",
+            "a"
+          ],
+          [
+            "a",
+            "a",
+            "a"
+          ]
+        ],
+        "words": [
+          "aaaa",
+          "aaaaa",
+          "aaaaaa"
+        ]
+      },
+      "expected": [
+        "aaaaa",
+        "aaaaaa",
+        "aaaa"
+      ]
+    },
+    {
+      "name": "prefix_collision",
+      "input": {
+        "board": [
+          [
+            "c",
+            "a",
+            "t"
+          ],
+          [
+            "r",
+            "e",
+            "d"
+          ],
+          [
+            "s",
+            "u",
+            "m"
+          ]
+        ],
+        "words": [
+          "car",
+          "care",
+          "card",
+          "cat",
+          "red",
+          "reed"
+        ]
+      },
+      "expected": [
+        "red",
+        "cat"
+      ]
+    },
+    {
+      "name": "large_word_list_few_matches",
+      "input": {
+        "board": [
+          [
+            "a",
+            "b",
+            "c"
+          ],
+          [
+            "d",
+            "e",
+            "f"
+          ],
+          [
+            "g",
+            "h",
+            "i"
+          ]
+        ],
+        "words": [
+          "ae",
+          "bd",
+          "ce",
+          "abde",
+          "xyz",
+          "qrs",
+          "tuv",
+          "ijk",
+          "lmn",
+          "opq",
+          "uv",
+          "wx",
+          "yz"
+        ]
+      },
+      "expected": []
+    },
+    {
+      "name": "10x10_board_max_size",
+      "input": {
+        "board": [
+          [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            "h",
+            "i",
+            "j"
+          ],
+          [
+            "k",
+            "l",
+            "m",
+            "n",
+            "o",
+            "p",
+            "q",
+            "r",
+            "s",
+            "t"
+          ],
+          [
+            "u",
+            "v",
+            "w",
+            "x",
+            "y",
+            "z",
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          [
+            "e",
+            "f",
+            "g",
+            "h",
+            "i",
+            "j",
+            "k",
+            "l",
+            "m",
+            "n"
+          ],
+          [
+            "o",
+            "p",
+            "q",
+            "r",
+            "s",
+            "t",
+            "u",
+            "v",
+            "w",
+            "x"
+          ],
+          [
+            "y",
+            "z",
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            "h"
+          ],
+          [
+            "i",
+            "j",
+            "k",
+            "l",
+            "m",
+            "n",
+            "o",
+            "p",
+            "q",
+            "r"
+          ],
+          [
+            "s",
+            "t",
+            "u",
+            "v",
+            "w",
+            "x",
+            "y",
+            "z",
+            "a",
+            "b"
+          ],
+          [
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            "h",
+            "i",
+            "j",
+            "k",
+            "l"
+          ],
+          [
+            "m",
+            "n",
+            "o",
+            "p",
+            "q",
+            "r",
+            "s",
+            "t",
+            "u",
+            "v"
+          ]
+        ],
+        "words": [
+          "abc",
+          "lmn",
+          "vwx",
+          "stu"
+        ]
+      },
+      "expected": [
+        "lmn",
+        "abc",
+        "vwx",
+        "stu"
+      ]
+    },
+    {
+      "name": "12x12_max_board_minimal_words",
+      "input": {
+        "board": [
+          [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            "h",
+            "i",
+            "j",
+            "k",
+            "l"
+          ],
+          [
+            "m",
+            "n",
+            "o",
+            "p",
+            "q",
+            "r",
+            "s",
+            "t",
+            "u",
+            "v",
+            "w",
+            "x"
+          ],
+          [
+            "y",
+            "z",
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            "h",
+            "i",
+            "j"
+          ],
+          [
+            "k",
+            "l",
+            "m",
+            "n",
+            "o",
+            "p",
+            "q",
+            "r",
+            "s",
+            "t",
+            "u",
+            "v"
+          ],
+          [
+            "w",
+            "x",
+            "y",
+            "z",
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            "h"
+          ],
+          [
+            "i",
+            "j",
+            "k",
+            "l",
+            "m",
+            "n",
+            "o",
+            "p",
+            "q",
+            "r",
+            "s",
+            "t"
+          ],
+          [
+            "u",
+            "v",
+            "w",
+            "x",
+            "y",
+            "z",
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f"
+          ],
+          [
+            "g",
+            "h",
+            "i",
+            "j",
+            "k",
+            "l",
+            "m",
+            "n",
+            "o",
+            "p",
+            "q",
+            "r"
+          ],
+          [
+            "s",
+            "t",
+            "u",
+            "v",
+            "w",
+            "x",
+            "y",
+            "z",
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          [
+            "e",
+            "f",
+            "g",
+            "h",
+            "i",
+            "j",
+            "k",
+            "l",
+            "m",
+            "n",
+            "o",
+            "p"
+          ],
+          [
+            "q",
+            "r",
+            "s",
+            "t",
+            "u",
+            "v",
+            "w",
+            "x",
+            "y",
+            "z",
+            "a",
+            "b"
+          ],
+          [
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            "h",
+            "i",
+            "j",
+            "k",
+            "l",
+            "m",
+            "n"
+          ]
+        ],
+        "words": [
+          "abc"
+        ]
+      },
+      "expected": [
+        "abc"
+      ]
+    },
+    {
+      "name": "30000_word_list_max",
+      "input": {
+        "board": [
+          [
+            "a",
+            "b",
+            "c"
+          ],
+          [
+            "d",
+            "e",
+            "f"
+          ],
+          [
+            "g",
+            "h",
+            "i"
+          ]
+        ],
+        "words": [
+          "aaa",
+          "aab",
+          "aac",
+          "aad",
+          "aae",
+          "aaf",
+          "aag",
+          "aah",
+          "aai",
+          "aaj",
+          "aak",
+          "aal",
+          "aam",
+          "aan",
+          "aao",
+          "aap",
+          "aaq",
+          "aar",
+          "aas",
+          "aat",
+          "aau",
+          "aav",
+          "aaw",
+          "aax",
+          "aay",
+          "aaz",
+          "aba",
+          "abb",
+          "abc",
+          "abd",
+          "abe",
+          "abf",
+          "abg",
+          "abh",
+          "abi",
+          "abj",
+          "abk",
+          "abl",
+          "abm",
+          "abn",
+          "abo",
+          "abp",
+          "abq",
+          "abr",
+          "abs",
+          "abt",
+          "abu",
+          "abv",
+          "abw",
+          "abx",
+          "aby",
+          "abz",
+          "aca",
+          "acb",
+          "acc",
+          "acd",
+          "ace",
+          "acf",
+          "acg",
+          "ach",
+          "aci",
+          "acj",
+          "ack",
+          "acl",
+          "acm",
+          "acn",
+          "aco",
+          "acp",
+          "acq",
+          "acr",
+          "acs",
+          "act",
+          "acu",
+          "acv",
+          "acw",
+          "acx",
+          "acy",
+          "acz",
+          "ada",
+          "adb",
+          "adc",
+          "add",
+          "ade",
+          "adf",
+          "adg",
+          "adh",
+          "adi",
+          "adj",
+          "adk",
+          "adl",
+          "adm",
+          "adn",
+          "ado",
+          "adp",
+          "adq",
+          "adr",
+          "ads",
+          "adt",
+          "adu",
+          "adv",
+          "adw",
+          "adx",
+          "ady",
+          "adz"
+        ]
+      },
+      "expected": [
+        "abc",
+        "ade",
+        "adg",
+        "abe"
+      ]
+    },
+    {
+      "name": "path_revisit_prevention",
+      "input": {
+        "board": [
+          [
+            "a",
+            "b",
+            "a"
+          ],
+          [
+            "b",
+            "a",
+            "b"
+          ],
+          [
+            "a",
+            "b",
+            "a"
+          ]
+        ],
+        "words": [
+          "aba",
+          "bab",
+          "abab",
+          "baba"
+        ]
+      },
+      "expected": [
+        "abab",
+        "aba",
+        "baba",
+        "bab"
+      ]
+    },
+    {
+      "name": "corner_start_positions",
+      "input": {
+        "board": [
+          [
+            "a",
+            "b",
+            "c"
+          ],
+          [
+            "d",
+            "e",
+            "f"
+          ],
+          [
+            "g",
+            "h",
+            "i"
+          ]
+        ],
+        "words": [
+          "adf",
+          "adg",
+          "ade",
+          "cfi",
+          "cfh",
+          "cfe",
+          "ghe",
+          "ghd",
+          "gha",
+          "ibh",
+          "ibe",
+          "ibc"
+        ]
+      },
+      "expected": [
+        "ghe",
+        "cfe",
+        "cfi",
+        "ade",
+        "adg"
+      ]
+    },
+    {
+      "name": "maximum_word_length_10",
+      "input": {
+        "board": [
+          [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            "h",
+            "i",
+            "j"
+          ],
+          [
+            "k",
+            "l",
+            "m",
+            "n",
+            "o",
+            "p",
+            "q",
+            "r",
+            "s",
+            "t"
+          ]
+        ],
+        "words": [
+          "abcdefghij",
+          "klmnopqrst",
+          "abcdefghija"
+        ]
+      },
+      "expected": [
+        "klmnopqrst",
+        "abcdefghij"
+      ]
+    },
+    {
+      "name": "all_permutations_of_three_letters",
+      "input": {
+        "board": [
+          [
+            "a",
+            "b",
+            "c"
+          ],
+          [
+            "d",
+            "e",
+            "f"
+          ]
+        ],
+        "words": [
+          "abc",
+          "acb",
+          "bac",
+          "bca",
+          "cab",
+          "cba",
+          "abd",
+          "adb",
+          "bad",
+          "bda",
+          "dab",
+          "dba"
+        ]
+      },
+      "expected": [
+        "abc",
+        "dab",
+        "cba",
+        "bad"
+      ]
+    }
+  ]
+}

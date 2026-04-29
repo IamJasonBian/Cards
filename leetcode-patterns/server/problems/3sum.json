@@ -1,0 +1,957 @@
+{
+  "slug": "3sum",
+  "title": "3Sum",
+  "number": 15,
+  "difficulty": "Medium",
+  "category": "Array",
+  "url": "https://leetcode.com/problems/3sum/",
+  "statement": "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j != k != i and nums[i] + nums[j] + nums[k] == 0.\n\nThe solution set must not contain duplicate triplets. You may return the solution set in any order.",
+  "constraints": [
+    "3 <= nums.length <= 3000",
+    "-10^5 <= nums[i] <= 10^5"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "threeSum",
+    "params": [
+      {
+        "name": "nums",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "list[list[int]]"
+  },
+  "starterCode": "class Solution:\n    def threeSum(self, nums: list[int]) -> list[list[int]]:\n        # write your solution here\n        pass\n",
+  "equality": "set-of-sets",
+  "visibleExamples": [
+    {
+      "input": {
+        "nums": [
+          -1,
+          0,
+          1,
+          2,
+          -1,
+          -4
+        ]
+      },
+      "output": [
+        [
+          -1,
+          -1,
+          2
+        ],
+        [
+          -1,
+          0,
+          1
+        ]
+      ],
+      "explanation": "nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0 and nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0. The distinct triplets are [-1,0,1] and [-1,-1,2]."
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "output": [
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "explanation": "The only possible triplet is [0,0,0]."
+    },
+    {
+      "input": {
+        "nums": [
+          -2,
+          0,
+          1,
+          1,
+          2
+        ]
+      },
+      "output": [
+        [
+          -2,
+          0,
+          2
+        ],
+        [
+          -2,
+          1,
+          1
+        ]
+      ],
+      "explanation": "The distinct triplets that sum to zero are [-2,0,2] and [-2,1,1]."
+    }
+  ],
+  "hiddenCases": [
+    {
+      "name": "minimal_three_zeros",
+      "input": {
+        "nums": [
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": [
+        [
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "minimal_one_solution",
+      "input": {
+        "nums": [
+          -1,
+          0,
+          1
+        ]
+      },
+      "expected": [
+        [
+          -1,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "minimal_no_solution",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": []
+    },
+    {
+      "name": "all_negatives",
+      "input": {
+        "nums": [
+          -3,
+          -2,
+          -1
+        ]
+      },
+      "expected": []
+    },
+    {
+      "name": "all_positives",
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": []
+    },
+    {
+      "name": "many_zeros",
+      "input": {
+        "nums": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": [
+        [
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "many_duplicates_negatives",
+      "input": {
+        "nums": [
+          -2,
+          -2,
+          -2,
+          -1,
+          -1,
+          0,
+          0,
+          1,
+          1,
+          2,
+          2
+        ]
+      },
+      "expected": [
+        [
+          -2,
+          0,
+          2
+        ],
+        [
+          -2,
+          1,
+          1
+        ],
+        [
+          -1,
+          -1,
+          2
+        ],
+        [
+          -1,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "sorted_ascending",
+      "input": {
+        "nums": [
+          -4,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": [
+        [
+          -4,
+          1,
+          3
+        ],
+        [
+          -2,
+          -1,
+          3
+        ],
+        [
+          -2,
+          0,
+          2
+        ],
+        [
+          -1,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "sorted_descending",
+      "input": {
+        "nums": [
+          5,
+          4,
+          3,
+          2,
+          1,
+          0,
+          -1,
+          -2
+        ]
+      },
+      "expected": [
+        [
+          -2,
+          -1,
+          3
+        ],
+        [
+          -2,
+          0,
+          2
+        ],
+        [
+          -1,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "single_positive_many_negatives",
+      "input": {
+        "nums": [
+          -5,
+          -4,
+          -3,
+          -2,
+          -1,
+          0,
+          1
+        ]
+      },
+      "expected": [
+        [
+          -1,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "single_negative_many_positives",
+      "input": {
+        "nums": [
+          -1,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": [
+        [
+          -1,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "max_range_values",
+      "input": {
+        "nums": [
+          -100000,
+          0,
+          100000
+        ]
+      },
+      "expected": [
+        [
+          -100000,
+          0,
+          100000
+        ]
+      ]
+    },
+    {
+      "name": "max_range_negatives",
+      "input": {
+        "nums": [
+          -100000,
+          -100000,
+          -99999
+        ]
+      },
+      "expected": []
+    },
+    {
+      "name": "max_range_positives",
+      "input": {
+        "nums": [
+          99999,
+          100000,
+          100000
+        ]
+      },
+      "expected": []
+    },
+    {
+      "name": "large_array_sparse",
+      "input": {
+        "nums": [
+          -50000,
+          -25000,
+          0,
+          25000,
+          50000,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": [
+        [
+          -50000,
+          0,
+          50000
+        ],
+        [
+          -25000,
+          0,
+          25000
+        ]
+      ]
+    },
+    {
+      "name": "large_array_mostly_zeros",
+      "input": {
+        "nums": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          -1,
+          -1,
+          -1,
+          2,
+          -2
+        ]
+      },
+      "expected": [
+        [
+          -2,
+          0,
+          2
+        ],
+        [
+          -2,
+          1,
+          1
+        ],
+        [
+          -1,
+          -1,
+          2
+        ],
+        [
+          -1,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "alternating_signs",
+      "input": {
+        "nums": [
+          -10,
+          5,
+          -3,
+          8,
+          -5,
+          2,
+          -7,
+          4
+        ]
+      },
+      "expected": [
+        [
+          -10,
+          2,
+          8
+        ],
+        [
+          -7,
+          2,
+          5
+        ],
+        [
+          -5,
+          -3,
+          8
+        ]
+      ]
+    },
+    {
+      "name": "palindromic_values",
+      "input": {
+        "nums": [
+          -5,
+          -3,
+          0,
+          3,
+          5
+        ]
+      },
+      "expected": [
+        [
+          -5,
+          0,
+          5
+        ],
+        [
+          -3,
+          0,
+          3
+        ]
+      ]
+    },
+    {
+      "name": "clustered_around_zero",
+      "input": {
+        "nums": [
+          -2,
+          -1,
+          -1,
+          0,
+          0,
+          0,
+          1,
+          1,
+          2
+        ]
+      },
+      "expected": [
+        [
+          -2,
+          0,
+          2
+        ],
+        [
+          -2,
+          1,
+          1
+        ],
+        [
+          -1,
+          -1,
+          2
+        ],
+        [
+          -1,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "two_pairs_with_zero",
+      "input": {
+        "nums": [
+          -2,
+          -1,
+          0,
+          1,
+          2
+        ]
+      },
+      "expected": [
+        [
+          -2,
+          0,
+          2
+        ],
+        [
+          -1,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "many_duplicates_large",
+      "input": {
+        "nums": [
+          -1000,
+          -1000,
+          -500,
+          -500,
+          0,
+          0,
+          500,
+          500,
+          1000,
+          1000
+        ]
+      },
+      "expected": [
+        [
+          -1000,
+          0,
+          1000
+        ],
+        [
+          -1000,
+          500,
+          500
+        ],
+        [
+          -500,
+          -500,
+          1000
+        ],
+        [
+          -500,
+          0,
+          500
+        ]
+      ]
+    },
+    {
+      "name": "near_boundary_negatives",
+      "input": {
+        "nums": [
+          -100000,
+          -99999,
+          199999
+        ]
+      },
+      "expected": [
+        [
+          -100000,
+          -99999,
+          199999
+        ]
+      ]
+    },
+    {
+      "name": "all_same_nonzero",
+      "input": {
+        "nums": [
+          5,
+          5,
+          5,
+          5,
+          5
+        ]
+      },
+      "expected": []
+    },
+    {
+      "name": "max_size_random",
+      "input": {
+        "nums": [
+          -100,
+          -50,
+          -25,
+          -10,
+          -5,
+          -3,
+          -1,
+          0,
+          1,
+          3,
+          5,
+          10,
+          25,
+          50,
+          100,
+          -200,
+          200,
+          -150,
+          150,
+          75,
+          -75,
+          60,
+          -60,
+          30,
+          -30,
+          15,
+          -15,
+          8,
+          -8,
+          4,
+          -4,
+          2,
+          -2
+        ]
+      },
+      "expected": [
+        [
+          -200,
+          0,
+          200
+        ],
+        [
+          -200,
+          50,
+          150
+        ],
+        [
+          -150,
+          -50,
+          200
+        ],
+        [
+          -150,
+          0,
+          150
+        ],
+        [
+          -150,
+          50,
+          100
+        ],
+        [
+          -100,
+          -50,
+          150
+        ],
+        [
+          -100,
+          0,
+          100
+        ],
+        [
+          -100,
+          25,
+          75
+        ],
+        [
+          -75,
+          -25,
+          100
+        ],
+        [
+          -75,
+          0,
+          75
+        ],
+        [
+          -75,
+          15,
+          60
+        ],
+        [
+          -75,
+          25,
+          50
+        ],
+        [
+          -60,
+          -15,
+          75
+        ],
+        [
+          -60,
+          0,
+          60
+        ],
+        [
+          -60,
+          10,
+          50
+        ],
+        [
+          -50,
+          -25,
+          75
+        ],
+        [
+          -50,
+          -10,
+          60
+        ],
+        [
+          -50,
+          0,
+          50
+        ],
+        [
+          -30,
+          0,
+          30
+        ],
+        [
+          -30,
+          5,
+          25
+        ],
+        [
+          -25,
+          -5,
+          30
+        ],
+        [
+          -25,
+          0,
+          25
+        ],
+        [
+          -25,
+          10,
+          15
+        ],
+        [
+          -15,
+          -10,
+          25
+        ],
+        [
+          -15,
+          0,
+          15
+        ],
+        [
+          -15,
+          5,
+          10
+        ],
+        [
+          -10,
+          -5,
+          15
+        ],
+        [
+          -10,
+          0,
+          10
+        ],
+        [
+          -10,
+          2,
+          8
+        ],
+        [
+          -8,
+          -2,
+          10
+        ],
+        [
+          -8,
+          0,
+          8
+        ],
+        [
+          -8,
+          3,
+          5
+        ],
+        [
+          -5,
+          -3,
+          8
+        ],
+        [
+          -5,
+          0,
+          5
+        ],
+        [
+          -5,
+          1,
+          4
+        ],
+        [
+          -5,
+          2,
+          3
+        ],
+        [
+          -4,
+          -1,
+          5
+        ],
+        [
+          -4,
+          0,
+          4
+        ],
+        [
+          -4,
+          1,
+          3
+        ],
+        [
+          -3,
+          -2,
+          5
+        ],
+        [
+          -3,
+          -1,
+          4
+        ],
+        [
+          -3,
+          0,
+          3
+        ],
+        [
+          -3,
+          1,
+          2
+        ],
+        [
+          -2,
+          -1,
+          3
+        ],
+        [
+          -2,
+          0,
+          2
+        ],
+        [
+          -1,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "strictly_negative_to_positive_transition",
+      "input": {
+        "nums": [
+          -1000,
+          -999,
+          -1,
+          0,
+          1,
+          999,
+          1000
+        ]
+      },
+      "expected": [
+        [
+          -1000,
+          0,
+          1000
+        ],
+        [
+          -1000,
+          1,
+          999
+        ],
+        [
+          -999,
+          -1,
+          1000
+        ],
+        [
+          -999,
+          0,
+          999
+        ],
+        [
+          -1,
+          0,
+          1
+        ]
+      ]
+    }
+  ]
+}
