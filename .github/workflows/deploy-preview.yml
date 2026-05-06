@@ -1,14 +1,16 @@
-name: Deploy to Netlify
+name: Deploy Netlify Preview
 
 on:
-  workflow_run:
-    workflows: ["Run CI"]
-    types: [completed]
-    branches: [main]
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
-  deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  deploy-preview:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -16,8 +18,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -29,14 +29,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Type check
+        run: npx tsc --noEmit
+
       - name: Build
         run: npm run build
 
-      - name: Deploy to Netlify
+      - name: Deploy preview to Netlify
         uses: nwtgck/actions-netlify@v3
         with:
           publish-dir: leetcode-patterns/dist
-          production-deploy: true
+          production-deploy: false
+          deploy-message: "Deploy Preview from PR #${{ github.event.number }}"
+          alias: pr-${{ github.event.number }}
+          enable-pull-request-comment: true
+          enable-commit-comment: false
+          overwrites-pull-request-comment: true
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 5

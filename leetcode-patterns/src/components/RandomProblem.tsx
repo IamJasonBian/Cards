@@ -17,14 +17,9 @@ for (const p of patterns) {
 }
 
 function pickRandom(difficulty: Difficulty | null): Problem {
-  let pool = allProblems;
-  if (difficulty) {
-    // Rough heuristic: patterns early in the list skew easier
-    const total = allProblems.length;
-    if (difficulty === "Easy") pool = allProblems.slice(0, Math.floor(total * 0.33));
-    else if (difficulty === "Medium") pool = allProblems.slice(Math.floor(total * 0.2), Math.floor(total * 0.75));
-    else pool = allProblems.slice(Math.floor(total * 0.5));
-  }
+  const pool = difficulty
+    ? allProblems.filter((p) => p.difficulty === difficulty)
+    : allProblems;
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
