@@ -68,8 +68,17 @@ export function PracticeSetView({
               href={`https://leetcode.com/problems/${p.slug}/`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs text-gray-600 hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-700 transition-colors"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs text-gray-600 hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-700 transition-colors"
             >
+              <span
+                className={`inline-block w-1.5 h-1.5 rounded-full ${
+                  p.difficulty === "Easy"
+                    ? "bg-green-500"
+                    : p.difficulty === "Medium"
+                    ? "bg-yellow-500"
+                    : "bg-red-500"
+                }`}
+              />
               {p.name}
               <ExternalLink size={10} />
             </a>
@@ -99,8 +108,17 @@ export function PracticeSetView({
                 href={`https://leetcode.com/problems/${p.slug}/`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-violet-50 border border-violet-200 rounded-lg text-xs text-violet-600 hover:bg-violet-100 hover:border-violet-300 transition-colors"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-violet-50 border border-violet-200 rounded-lg text-xs text-violet-600 hover:bg-violet-100 hover:border-violet-300 transition-colors"
               >
+                <span
+                  className={`inline-block w-1.5 h-1.5 rounded-full ${
+                    p.difficulty === "Easy"
+                      ? "bg-green-500"
+                      : p.difficulty === "Medium"
+                      ? "bg-yellow-500"
+                      : "bg-red-500"
+                  }`}
+                />
                 {p.name}
                 <ExternalLink size={10} />
               </a>
