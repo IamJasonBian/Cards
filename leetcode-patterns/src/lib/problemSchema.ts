@@ -55,6 +55,8 @@ export interface RunResult {
   cases: CaseResult[];
   passed: number;
   total: number;
+  visiblePassed: number;
+  visibleTotal: number;
   hiddenPassed: number;
   hiddenTotal: number;
   durationMs?: number;
