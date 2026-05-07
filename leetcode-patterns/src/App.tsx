@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { BookOpen, Code, Filter, Layers, Play, Zap } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { BookOpen, ChevronDown, Code, Filter, FlaskConical, Layers, Play, Zap } from "lucide-react";
 import { patterns, tags } from "./data/patterns";
 import type { Pattern, Problem } from "./data/patterns";
 import { StatsGrid } from "./components/StatsGrid";
@@ -52,10 +52,17 @@ function getRelatedProblems(
   return pool.slice(0, count);
 }
 
+const EXPERIMENTAL_VIEWS = ["submit", "flashcards", "interview-drill"] as const;
+type ExperimentalView = (typeof EXPERIMENTAL_VIEWS)[number];
+const isExperimental = (v: View): v is ExperimentalView =>
+  (EXPERIMENTAL_VIEWS as readonly string[]).includes(v);
+
 function App() {
   // Default landing = the Blind 75 submit view (Two Sum). Explicit hashes still win on mount.
   const [view, setView] = useState<View>("submit");
   const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [experimentalOpen, setExperimentalOpen] = useState(false);
+  const experimentalRef = useRef<HTMLDivElement | null>(null);
   const [selectedPatternId, setSelectedPatternId] = useState<number | null>(
     null
   );
@@ -97,6 +104,25 @@ function App() {
     else if (h === "#submit") setView("submit");
   }, []);
 
+  // Close the Experimental dropdown on outside click / Escape.
+  useEffect(() => {
+    if (!experimentalOpen) return;
+    function onMouseDown(e: MouseEvent) {
+      if (experimentalRef.current && !experimentalRef.current.contains(e.target as Node)) {
+        setExperimentalOpen(false);
+      }
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setExperimentalOpen(false);
+    }
+    document.addEventListener("mousedown", onMouseDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onMouseDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [experimentalOpen]);
+
   // Update URL hash when view changes
   useEffect(() => {
     const hashable: Record<View, string | null> = {
@@ -126,17 +152,6 @@ function App() {
           </h1>
 
           <div className="flex gap-1 ml-6">
-            <button
-              onClick={() => { setView("submit"); clearSelection(); }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
-                view === "submit"
-                  ? "bg-indigo-100 text-indigo-700"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              <Play size={14} />
-              Submit
-            </button>
             <button
               onClick={() => { setView("patterns"); clearSelection(); }}
               className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
@@ -169,28 +184,60 @@ function App() {
               <BookOpen size={14} />
               Popular Lists
             </button>
-            <button
-              onClick={() => { setView("flashcards"); clearSelection(); }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
-                view === "flashcards"
-                  ? "bg-indigo-100 text-indigo-700"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              <Layers size={14} />
-              Flashcards
-            </button>
-            <button
-              onClick={() => { setView("interview-drill"); clearSelection(); }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
-                view === "interview-drill"
-                  ? "bg-indigo-100 text-indigo-700"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              <Code size={14} />
-              Interview Drill
-            </button>
+
+            <div className="relative" ref={experimentalRef}>
+              <button
+                onClick={() => setExperimentalOpen((o) => !o)}
+                aria-haspopup="menu"
+                aria-expanded={experimentalOpen}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
+                  isExperimental(view)
+                    ? "bg-amber-100 text-amber-700"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
+              >
+                <FlaskConical size={14} />
+                Experimental
+                <ChevronDown size={14} className={experimentalOpen ? "rotate-180 transition-transform" : "transition-transform"} />
+              </button>
+              {experimentalOpen && (
+                <div
+                  role="menu"
+                  className="absolute left-0 top-full mt-1 w-48 rounded-lg bg-white border border-gray-200 shadow-lg py-1 z-20"
+                >
+                  <button
+                    role="menuitem"
+                    onClick={() => { setView("submit"); clearSelection(); setExperimentalOpen(false); }}
+                    className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
+                      view === "submit" ? "bg-amber-50 text-amber-700" : "text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    <Play size={14} />
+                    Submit
+                  </button>
+                  <button
+                    role="menuitem"
+                    onClick={() => { setView("flashcards"); clearSelection(); setExperimentalOpen(false); }}
+                    className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
+                      view === "flashcards" ? "bg-amber-50 text-amber-700" : "text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    <Layers size={14} />
+                    Flashcards
+                  </button>
+                  <button
+                    role="menuitem"
+                    onClick={() => { setView("interview-drill"); clearSelection(); setExperimentalOpen(false); }}
+                    className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
+                      view === "interview-drill" ? "bg-amber-50 text-amber-700" : "text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    <Code size={14} />
+                    Interview Drill
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           <span className="ml-auto text-sm text-gray-400">slenderman73</span>
