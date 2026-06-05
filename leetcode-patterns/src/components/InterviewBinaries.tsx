@@ -34,7 +34,7 @@ export function InterviewBinaries() {
             {coderpadProblems.map((problem, idx) => (
               <div
                 key={idx}
-                className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:shadow-md transition-shadow"
+                className="bg-slate-900/45 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:shadow-md transition-shadow"
               >
                 <div className="flex items-start justify-between mb-3">
                   <h3 className="text-lg font-semibold text-slate-100">
@@ -74,7 +74,7 @@ export function InterviewBinaries() {
                         key={partIdx}
                         className="text-sm text-slate-300 flex items-center gap-2"
                       >
-                        <span className="w-5 h-5 rounded-full bg-slate-800/50 text-slate-300 flex items-center justify-center text-xs font-medium">
+                        <span className="w-5 h-5 rounded-full bg-slate-800/40 text-slate-300 flex items-center justify-center text-xs font-medium">
                           {partIdx + 1}
                         </span>
                         {part}

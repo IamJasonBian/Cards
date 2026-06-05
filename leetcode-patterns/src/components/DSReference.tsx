@@ -31,7 +31,7 @@ function DSCard({ entry }: { entry: DSRefEntry }) {
   );
 
   return (
-    <div className={`rounded-2xl border ${borderClass} bg-slate-900/60 backdrop-blur-md`}>
+    <div className={`rounded-2xl border ${borderClass} bg-slate-900/45 backdrop-blur-xl`}>
       <button
         onClick={() => setOpen(!open)}
         className="w-full p-4 flex items-center justify-between text-left cursor-pointer"
@@ -67,7 +67,7 @@ function DSCard({ entry }: { entry: DSRefEntry }) {
 
       {open && (
         <div className="border-t border-white/5 px-4 pb-4 pt-3 space-y-3">
-          <pre className="bg-slate-950/70 text-slate-100 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto">
+          <pre className="bg-slate-950/60 text-slate-100 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto">
             <code>{entry.code}</code>
           </pre>
 

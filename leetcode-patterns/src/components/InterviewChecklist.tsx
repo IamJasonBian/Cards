@@ -256,7 +256,7 @@ function ChecklistSection({ section }: { section: Section }) {
   };
 
   return (
-    <div className={`rounded-2xl border ${borderColor} bg-slate-900/60 backdrop-blur-md`}>
+    <div className={`rounded-2xl border ${borderColor} bg-slate-900/45 backdrop-blur-xl`}>
       <button
         onClick={() => setOpen(!open)}
         className="w-full p-5 flex items-center justify-between text-left cursor-pointer"
@@ -273,7 +273,7 @@ function ChecklistSection({ section }: { section: Section }) {
               <span className="text-xs text-slate-400">
                 {checkedCount} / {allItems} items
               </span>
-              <div className="w-24 h-1.5 bg-slate-800/50 rounded-full overflow-hidden">
+              <div className="w-24 h-1.5 bg-slate-800/40 rounded-full overflow-hidden">
                 <div
                   className={`h-full ${progressBg} rounded-full transition-all`}
                   style={{

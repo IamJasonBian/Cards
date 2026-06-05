@@ -41,7 +41,7 @@ export function RandomProblem() {
   }, [difficulty]);
 
   return (
-    <div className="mb-8 rounded-2xl border border-cyan-400/30 bg-cyan-500/10 backdrop-blur-md p-5">
+    <div className="mb-8 rounded-2xl border border-cyan-400/30 bg-cyan-500/10 backdrop-blur-xl p-5">
       <div className="flex flex-wrap items-center gap-3">
         <Shuffle size={20} className="text-cyan-400" />
         <h2 className="text-base font-bold text-slate-100">Random Problem</h2>
@@ -54,7 +54,7 @@ export function RandomProblem() {
               className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
                 difficulty === d
                   ? diffStyles[d]
-                  : "bg-slate-800/50 text-slate-400 border-white/10 hover:bg-white/5"
+                  : "bg-slate-800/40 text-slate-400 border-white/10 hover:bg-white/5"
               }`}
             >
               {d}
@@ -77,7 +77,7 @@ export function RandomProblem() {
             href={`https://leetcode.com/problems/${problem.slug}/`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-900/60 backdrop-blur-md border border-cyan-400/30 text-cyan-300 font-medium text-sm hover:bg-cyan-500/10 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-900/45 backdrop-blur-xl border border-cyan-400/30 text-cyan-300 font-medium text-sm hover:bg-cyan-500/10 transition-colors"
           >
             {problem.name}
             <ExternalLink size={14} />
