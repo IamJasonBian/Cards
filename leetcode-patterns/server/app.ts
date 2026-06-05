@@ -1,6 +1,9 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { Hono } from "hono";
+import { bodyLimit } from "hono/body-limit";
 import { cors } from "hono/cors";
+import { logger } from "hono/logger";
+import { secureHeaders } from "hono/secure-headers";
 import { schedule, type Grade, type Storage } from "./storage.ts";
 import { getProblem } from "./problemLoader.ts";
 import { buildProgram } from "./judgeHarness.ts";
@@ -54,6 +57,17 @@ function allowedOrigins(): string[] {
 export function buildApp(store: Storage): Hono {
   const app = new Hono();
 
+  // Request logging — surfaces method/path/status/latency in Render & Netlify
+  // function logs. Registered first so every request (including preflights and
+  // rejections) is logged.
+  app.use("*", logger());
+
+  // Safe response headers (X-Content-Type-Options: nosniff, X-Frame-Options,
+  // Referrer-Policy, etc.). Defaults only — the default Strict-Transport-Security
+  // header is ignored by browsers over plain http://, so local development is
+  // unaffected, and it only takes effect once served over https in production.
+  app.use("*", secureHeaders());
+
   // CORS for the API surface only. We use credentialed requests (the anonymous
   // user cookie), so we reflect the request origin only when it is in the
   // allowlist — never a wildcard. Same-origin requests carry no Origin header
@@ -96,6 +110,17 @@ export function buildApp(store: Storage): Hono {
     await store.saveReview(user, next);
     return c.json({ state: next });
   });
+
+  // parse-image carries base64 image payloads — the only large body in the API.
+  // Cap it before Hono buffers/parses the JSON so oversized uploads are rejected
+  // cheaply. Other routes carry small JSON and are left uncapped.
+  app.use(
+    "/api/parse-image",
+    bodyLimit({
+      maxSize: 10 * 1024 * 1024,
+      onError: (c) => c.json({ error: "payload too large" }, 413),
+    })
+  );
 
   app.post("/api/parse-image", async (c) => {
     const body = (await c.req.json()) as {
