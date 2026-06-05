@@ -15,6 +15,7 @@ import { PopularLists } from "./components/PopularLists";
 import { Flashcards } from "./components/Flashcards";
 import { InterviewDrill } from "./components/InterviewDrill";
 import { Blind75Submit } from "./components/Blind75Submit";
+import { fetchRandomWallpaper } from "./lib/wallpaper";
 
 type View =
   | "submit"
@@ -60,6 +61,7 @@ const isExperimental = (v: View): v is ExperimentalView =>
 function App() {
   // Default landing = the Blind 75 submit view (Two Sum). Explicit hashes still win on mount.
   const [view, setView] = useState<View>("submit");
+  const [wallpaper, setWallpaper] = useState<string | null>(null);
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [experimentalOpen, setExperimentalOpen] = useState(false);
   const experimentalRef = useRef<HTMLDivElement | null>(null);
@@ -67,6 +69,11 @@ function App() {
     null
   );
   const [relatedProblems, setRelatedProblems] = useState<Problem[]>([]);
+
+  // Fetch a random nature wallpaper on startup for the abyss backdrop.
+  useEffect(() => {
+    fetchRandomWallpaper().then(setWallpaper).catch(() => {});
+  }, []);
 
   const filtered = activeTag
     ? patterns.filter((p) => p.tag === activeTag)
@@ -143,21 +150,30 @@ function App() {
   }, [view]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="px-6 py-4 flex items-center gap-3">
-          <Code size={24} className="text-indigo-600" />
-          <h1 className="text-xl font-bold text-gray-900">
-            LeetCode Patterns
-          </h1>
+    <div className="min-h-screen">
+      <div
+        className="fixed inset-0 -z-10 bg-cover bg-center bg-fixed"
+        style={wallpaper ? { backgroundImage: `url(${wallpaper})` } : undefined}
+      />
+      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-slate-950/70 via-slate-950/80 to-slate-950/90" />
 
-          <div className="flex gap-1 ml-6">
+      <nav className="bg-slate-900/60 backdrop-blur-md border-b border-white/10 sticky top-0 z-10">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="flex items-center gap-3 min-w-0">
+            <Code size={24} className="text-cyan-400 shrink-0" />
+            <h1 className="text-lg sm:text-xl font-bold text-slate-100 truncate">
+              LeetCode Patterns
+            </h1>
+            <span className="ml-auto sm:hidden text-sm text-slate-500">slenderman73</span>
+          </div>
+
+          <div className="flex flex-wrap gap-1 sm:ml-6">
             <button
               onClick={() => { setView("patterns"); clearSelection(); }}
               className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
                 view === "patterns"
-                  ? "bg-indigo-100 text-indigo-700"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-cyan-500/15 text-cyan-300"
+                  : "bg-white/5 text-slate-300 hover:bg-white/10"
               }`}
             >
               Patterns
@@ -166,8 +182,8 @@ function App() {
               onClick={() => { setView("speed-apps"); clearSelection(); }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
                 view === "speed-apps"
-                  ? "bg-indigo-100 text-indigo-700"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-cyan-500/15 text-cyan-300"
+                  : "bg-white/5 text-slate-300 hover:bg-white/10"
               }`}
             >
               <Zap size={14} />
@@ -177,8 +193,8 @@ function App() {
               onClick={() => { setView("popular-lists"); clearSelection(); }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
                 view === "popular-lists"
-                  ? "bg-indigo-100 text-indigo-700"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-cyan-500/15 text-cyan-300"
+                  : "bg-white/5 text-slate-300 hover:bg-white/10"
               }`}
             >
               <BookOpen size={14} />
@@ -192,8 +208,8 @@ function App() {
                 aria-expanded={experimentalOpen}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
                   isExperimental(view)
-                    ? "bg-amber-100 text-amber-700"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    ? "bg-amber-500/15 text-amber-300"
+                    : "bg-white/5 text-slate-300 hover:bg-white/10"
                 }`}
               >
                 <FlaskConical size={14} />
@@ -203,13 +219,13 @@ function App() {
               {experimentalOpen && (
                 <div
                   role="menu"
-                  className="absolute left-0 top-full mt-1 w-48 rounded-lg bg-white border border-gray-200 shadow-lg py-1 z-20"
+                  className="absolute left-0 top-full mt-1 w-48 rounded-2xl bg-slate-900/95 backdrop-blur-md border border-white/10 shadow-lg py-1 z-20"
                 >
                   <button
                     role="menuitem"
                     onClick={() => { setView("submit"); clearSelection(); setExperimentalOpen(false); }}
                     className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
-                      view === "submit" ? "bg-amber-50 text-amber-700" : "text-gray-700 hover:bg-gray-50"
+                      view === "submit" ? "bg-cyan-500/10 text-cyan-300" : "text-slate-300 hover:bg-white/5"
                     }`}
                   >
                     <Play size={14} />
@@ -219,7 +235,7 @@ function App() {
                     role="menuitem"
                     onClick={() => { setView("flashcards"); clearSelection(); setExperimentalOpen(false); }}
                     className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
-                      view === "flashcards" ? "bg-amber-50 text-amber-700" : "text-gray-700 hover:bg-gray-50"
+                      view === "flashcards" ? "bg-cyan-500/10 text-cyan-300" : "text-slate-300 hover:bg-white/5"
                     }`}
                   >
                     <Layers size={14} />
@@ -229,7 +245,7 @@ function App() {
                     role="menuitem"
                     onClick={() => { setView("interview-drill"); clearSelection(); setExperimentalOpen(false); }}
                     className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
-                      view === "interview-drill" ? "bg-amber-50 text-amber-700" : "text-gray-700 hover:bg-gray-50"
+                      view === "interview-drill" ? "bg-cyan-500/10 text-cyan-300" : "text-slate-300 hover:bg-white/5"
                     }`}
                   >
                     <Code size={14} />
@@ -240,7 +256,7 @@ function App() {
             </div>
           </div>
 
-          <span className="ml-auto text-sm text-gray-400">slenderman73</span>
+          <span className="hidden sm:block ml-auto text-sm text-slate-500 shrink-0">slenderman73</span>
         </div>
       </nav>
 
@@ -253,7 +269,7 @@ function App() {
           />
         )}
 
-        <main className="flex-1 min-w-0 px-6 py-8">
+        <main className="flex-1 min-w-0 px-4 sm:px-6 py-6 sm:py-8">
           {view === "submit" ? (
             <Blind75Submit />
           ) : view === "speed-apps" ? (
@@ -279,14 +295,14 @@ function App() {
               <StatsGrid />
 
               <div className="flex items-center gap-2 mb-6">
-                <Filter size={16} className="text-gray-400" />
+                <Filter size={16} className="text-slate-400" />
                 <div className="flex gap-1.5 flex-wrap">
                   <button
                     onClick={() => setActiveTag(null)}
                     className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
                       activeTag === null
-                        ? "bg-indigo-100 text-indigo-700"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        ? "bg-cyan-500/15 text-cyan-300"
+                        : "bg-white/5 text-slate-300 hover:bg-white/10"
                     }`}
                   >
                     All
@@ -299,8 +315,8 @@ function App() {
                       }
                       className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
                         activeTag === tag
-                          ? "bg-indigo-100 text-indigo-700"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                          ? "bg-cyan-500/15 text-cyan-300"
+                          : "bg-white/5 text-slate-300 hover:bg-white/10"
                       }`}
                     >
                       {tag}
@@ -319,7 +335,7 @@ function App() {
 
               <InterviewChecklist />
 
-              <footer className="mt-12 pb-8 text-center text-xs text-gray-400">
+              <footer className="mt-12 pb-8 text-center text-xs text-slate-500">
                 639 problems solved | Python3 | Data from LeetCode via
                 alfa-leetcode-api
               </footer>
