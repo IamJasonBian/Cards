@@ -167,38 +167,32 @@ function App() {
       />
       <div className="fixed inset-0 -z-10 bg-gradient-to-b from-white/10 via-white/20 to-white/30" />
 
-      <nav className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl border-b border-slate-900/10 sticky top-0 z-10">
-        <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-3 min-w-0">
+      {view !== "home" && (
+      <nav className="bg-white/85 backdrop-blur-2xl border-b border-slate-900/10 sticky top-0 z-10">
+        <div className="grid grid-cols-2 sm:grid-cols-5 border-l border-t border-slate-900/10">
             <button
               onClick={() => { setView("home"); clearSelection(); }}
-              className="flex items-center gap-3 min-w-0 cursor-pointer"
+              className="flex items-center justify-center gap-1.5 border-r border-b border-slate-900/10 px-3 py-3 text-sm font-medium bg-white/50 text-slate-700 hover:bg-white/80 cursor-pointer transition-colors"
             >
-              <Code size={24} className="text-cyan-600 shrink-0" />
-              <h1 className="text-lg sm:text-xl font-bold text-slate-900 truncate">
-                LeetCode Patterns
-              </h1>
+              <Code size={16} className="text-cyan-700" />
+              Home
             </button>
-            <span className="ml-auto sm:hidden text-sm text-slate-500">slenderman73</span>
-          </div>
-
-          <div className="flex flex-wrap gap-1 sm:ml-6">
             <button
               onClick={() => { setView("patterns"); clearSelection(); }}
-              className={`px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
+              className={`flex items-center justify-center gap-1.5 border-r border-b border-slate-900/10 px-3 py-3 text-sm font-medium transition-colors cursor-pointer ${
                 view === "patterns"
                   ? "bg-cyan-100 text-cyan-700"
-                  : "bg-slate-900/5 text-slate-700 hover:bg-slate-900/10"
+                  : "bg-white/50 text-slate-700 hover:bg-white/80"
               }`}
             >
               Patterns
             </button>
             <button
               onClick={() => { setView("speed-apps"); clearSelection(); }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
+              className={`flex items-center justify-center gap-1.5 border-r border-b border-slate-900/10 px-3 py-3 text-sm font-medium transition-colors cursor-pointer ${
                 view === "speed-apps"
                   ? "bg-cyan-100 text-cyan-700"
-                  : "bg-slate-900/5 text-slate-700 hover:bg-slate-900/10"
+                  : "bg-white/50 text-slate-700 hover:bg-white/80"
               }`}
             >
               <Zap size={14} />
@@ -206,25 +200,25 @@ function App() {
             </button>
             <button
               onClick={() => { setView("popular-lists"); clearSelection(); }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
+              className={`flex items-center justify-center gap-1.5 border-r border-b border-slate-900/10 px-3 py-3 text-sm font-medium transition-colors cursor-pointer ${
                 view === "popular-lists"
                   ? "bg-cyan-100 text-cyan-700"
-                  : "bg-slate-900/5 text-slate-700 hover:bg-slate-900/10"
+                  : "bg-white/50 text-slate-700 hover:bg-white/80"
               }`}
             >
               <BookOpen size={14} />
               Popular Lists
             </button>
 
-            <div className="relative" ref={experimentalRef}>
+            <div className="relative border-r border-b border-slate-900/10" ref={experimentalRef}>
               <button
                 onClick={() => setExperimentalOpen((o) => !o)}
                 aria-haspopup="menu"
                 aria-expanded={experimentalOpen}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
+                className={`flex w-full h-full items-center justify-center gap-1.5 px-3 py-3 text-sm font-medium transition-colors cursor-pointer ${
                   isExperimental(view)
                     ? "bg-amber-50 text-amber-700"
-                    : "bg-slate-900/5 text-slate-700 hover:bg-slate-900/10"
+                    : "bg-white/50 text-slate-700 hover:bg-white/80"
                 }`}
               >
                 <FlaskConical size={14} />
@@ -234,7 +228,7 @@ function App() {
               {experimentalOpen && (
                 <div
                   role="menu"
-                  className="absolute left-0 top-full mt-1 w-48 rounded-none bg-white/95 backdrop-blur-2xl border border-slate-900/10 shadow-lg py-1 z-20"
+                  className="absolute right-0 top-full mt-1 w-48 rounded-none bg-white/95 backdrop-blur-2xl border border-slate-900/10 shadow-lg py-1 z-20"
                 >
                   <button
                     role="menuitem"
@@ -269,11 +263,9 @@ function App() {
                 </div>
               )}
             </div>
-          </div>
-
-          <span className="hidden sm:block ml-auto text-sm text-slate-500 shrink-0">slenderman73</span>
         </div>
       </nav>
+      )}
 
       {view === "home" ? (
         <Landing

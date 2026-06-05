@@ -11,15 +11,15 @@ export function Hero({ onNavigate }: { onNavigate: (view: string) => void }) {
         <SquareStack className="h-8 w-8 text-cyan-700" />
       </div>
 
-      <h1 className="mt-8 text-5xl font-bold tracking-tight text-slate-900 sm:text-7xl [text-shadow:_0_2px_24px_rgb(255_255_255_/_70%)]">
+      <h1 className="mt-8 text-5xl font-bold tracking-tight text-slate-900 sm:text-7xl [text-shadow:_0_2px_4px_rgb(255_255_255),_0_2px_24px_rgb(255_255_255)]">
         One Card a Day
       </h1>
 
-      <p className="mt-2 text-3xl font-light tracking-tight text-slate-600 sm:text-4xl [text-shadow:_0_2px_18px_rgb(255_255_255_/_70%)]">
+      <p className="mt-2 text-3xl font-normal tracking-tight text-slate-700 sm:text-4xl [text-shadow:_0_1px_2px_rgb(255_255_255),_0_2px_18px_rgb(255_255_255)]">
         Transform
       </p>
 
-      <p className="mt-6 max-w-xl text-base text-slate-700 [text-shadow:_0_1px_12px_rgb(255_255_255_/_80%)]">
+      <p className="mt-6 max-w-xl text-base font-medium text-slate-800 [text-shadow:_0_1px_2px_rgb(255_255_255),_0_1px_12px_rgb(255_255_255)]">
         Daily algorithm flashcards, drills, and pattern practice — one card at a time.
       </p>
 
