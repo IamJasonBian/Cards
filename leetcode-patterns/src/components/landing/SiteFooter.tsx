@@ -8,7 +8,7 @@ const headingClass =
 
 export function SiteFooter({ onNavigate }: { onNavigate: (view: string) => void }) {
   return (
-    <footer className="w-full border-t border-slate-900/10 bg-white/60 backdrop-blur-sm rounded-none">
+    <footer className="w-full border-t border-slate-900/10 bg-white/95 sm:bg-white/60 backdrop-blur-sm rounded-none">
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
           <div>

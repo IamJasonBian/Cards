@@ -7,17 +7,19 @@ export function Hero({ onNavigate }: { onNavigate: (view: string) => void }) {
         <SquareStack className="h-8 w-8 text-cyan-700" />
       </div>
 
-      <h1 className="mt-8 text-5xl font-bold tracking-tight text-slate-900 sm:text-7xl [text-shadow:_0_2px_20px_rgb(255_255_255_/_55%)]">
-        One Card a Day
-      </h1>
+      <div className="mt-8 w-full bg-white px-5 py-6 sm:mt-0 sm:bg-transparent sm:p-0">
+        <h1 className="text-5xl font-bold tracking-tight text-slate-900 sm:mt-8 sm:text-7xl sm:[text-shadow:_0_2px_20px_rgb(255_255_255_/_55%)]">
+          One Card a Day
+        </h1>
 
-      <p className="mt-2 text-3xl font-normal tracking-tight text-slate-700 sm:text-4xl [text-shadow:_0_2px_16px_rgb(255_255_255_/_55%)]">
-        Transform
-      </p>
+        <p className="mt-2 text-3xl font-normal tracking-tight text-slate-700 sm:text-4xl sm:[text-shadow:_0_2px_16px_rgb(255_255_255_/_55%)]">
+          Transform
+        </p>
 
-      <p className="mt-6 max-w-xl text-base font-medium text-slate-800 [text-shadow:_0_1px_10px_rgb(255_255_255_/_65%)]">
-        Daily algorithm flashcards, drills, and pattern practice — one card at a time.
-      </p>
+        <p className="mt-6 mx-auto max-w-xl text-base font-bold text-slate-800 sm:[text-shadow:_0_1px_10px_rgb(255_255_255_/_65%)]">
+          Daily algorithm flashcards, drills, and pattern practice — one card at a time.
+        </p>
+      </div>
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         <button
@@ -31,7 +33,7 @@ export function Hero({ onNavigate }: { onNavigate: (view: string) => void }) {
         <button
           type="button"
           onClick={() => onNavigate("patterns")}
-          className="cursor-pointer rounded-none border border-slate-900/15 bg-white/60 px-5 py-2.5 font-medium text-slate-800 backdrop-blur-sm transition-colors hover:bg-white/80"
+          className="cursor-pointer rounded-none border border-slate-900/15 bg-white/95 sm:bg-white/60 px-5 py-2.5 font-medium text-slate-800 backdrop-blur-sm transition-colors hover:bg-white/80"
         >
           Browse patterns
         </button>

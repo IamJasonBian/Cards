@@ -13,7 +13,7 @@ export function StatBand() {
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="border-r border-b border-slate-900/10 bg-white/50 backdrop-blur-sm p-6 sm:p-8 flex flex-col gap-1"
+              className="border-r border-b border-slate-900/10 bg-white/95 sm:bg-white/50 backdrop-blur-sm p-6 sm:p-8 flex flex-col gap-1"
             >
               <span className="text-4xl sm:text-5xl font-bold tracking-tight text-slate-900">
                 {stat.value}
