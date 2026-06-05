@@ -160,7 +160,7 @@ function App() {
         className="fixed inset-0 -z-10 bg-cover bg-center bg-fixed"
         style={wallpaper ? { backgroundImage: `url(${wallpaper})` } : undefined}
       />
-      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-white/55 via-white/65 to-white/80" />
+      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-white/40 via-white/55 to-white/70" />
 
       <nav className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl border-b border-slate-900/10 sticky top-0 z-10">
         <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col gap-3 sm:flex-row sm:items-center">
