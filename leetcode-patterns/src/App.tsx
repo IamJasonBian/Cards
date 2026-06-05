@@ -15,9 +15,11 @@ import { PopularLists } from "./components/PopularLists";
 import { Flashcards } from "./components/Flashcards";
 import { InterviewDrill } from "./components/InterviewDrill";
 import { Blind75Submit } from "./components/Blind75Submit";
+import { Landing } from "./components/Landing";
 import { fetchRandomWallpaper } from "./lib/wallpaper";
 
 type View =
+  | "home"
   | "submit"
   | "patterns"
   | "speed-apps"
@@ -64,6 +66,8 @@ function App() {
   // default Submit view for users who bookmarked the old landing).
   const [view, setView] = useState<View>(() => {
     switch (window.location.hash) {
+      case "#submit":
+        return "submit";
       case "#interview-binaries":
         return "interview-binaries";
       case "#popular-lists":
@@ -75,7 +79,7 @@ function App() {
       case "#patterns":
         return "patterns";
       default:
-        return "submit";
+        return "home";
     }
   });
   const [wallpaper, setWallpaper] = useState<string | null>(null);
@@ -138,7 +142,8 @@ function App() {
   // Update URL hash when view changes
   useEffect(() => {
     const hashable: Record<View, string | null> = {
-      submit: null, // default — leave URL clean
+      home: null, // default — leave URL clean
+      submit: null,
       patterns: null,
       "speed-apps": null,
       "interview-binaries": "#interview-binaries",
@@ -160,15 +165,20 @@ function App() {
         className="fixed inset-0 -z-10 bg-cover bg-center bg-fixed"
         style={wallpaper ? { backgroundImage: `url(${wallpaper})` } : undefined}
       />
-      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-white/40 via-white/55 to-white/70" />
+      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-white/10 via-white/20 to-white/30" />
 
       <nav className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl border-b border-slate-900/10 sticky top-0 z-10">
         <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="flex items-center gap-3 min-w-0">
-            <Code size={24} className="text-cyan-600 shrink-0" />
-            <h1 className="text-lg sm:text-xl font-bold text-slate-900 truncate">
-              LeetCode Patterns
-            </h1>
+            <button
+              onClick={() => { setView("home"); clearSelection(); }}
+              className="flex items-center gap-3 min-w-0 cursor-pointer"
+            >
+              <Code size={24} className="text-cyan-600 shrink-0" />
+              <h1 className="text-lg sm:text-xl font-bold text-slate-900 truncate">
+                LeetCode Patterns
+              </h1>
+            </button>
             <span className="ml-auto sm:hidden text-sm text-slate-500">slenderman73</span>
           </div>
 
@@ -265,6 +275,14 @@ function App() {
         </div>
       </nav>
 
+      {view === "home" ? (
+        <Landing
+          onNavigate={(v) => {
+            setView(v);
+            clearSelection();
+          }}
+        />
+      ) : (
       <div className="flex">
         {view === "patterns" && (
           <PatternSidebar
@@ -348,6 +366,7 @@ function App() {
           )}
         </main>
       </div>
+      )}
     </div>
   );
 }
