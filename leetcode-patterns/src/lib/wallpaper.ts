@@ -24,6 +24,19 @@ function pickRandom<T>(items: T[]): T {
   return items[Math.floor(Math.random() * items.length)];
 }
 
+// Routes a raw image URL through the free wsrv.nl image proxy, which serves a
+// viewport-bucketed, webp-encoded copy. On phones this shrinks a multi-MB JPG
+// to a small webp. Returns the raw URL unchanged when there is no `window`
+// (SSR / non-browser env) so callers can't crash.
+export function proxied(rawUrl: string): string {
+  if (typeof window === "undefined") return rawUrl;
+
+  const effectiveWidth = window.innerWidth * (window.devicePixelRatio || 1);
+  const width = effectiveWidth <= 640 ? 720 : effectiveWidth <= 1024 ? 1280 : 1920;
+
+  return `https://wsrv.nl/?url=${encodeURIComponent(rawUrl)}&w=${width}&output=webp&q=70&we`;
+}
+
 export async function fetchRandomWallpaper(): Promise<string> {
   const results = await Promise.allSettled(
     FOLDERS.map(async (folder) => {
@@ -49,7 +62,7 @@ export async function fetchRandomWallpaper(): Promise<string> {
 
   if (pool.length === 0) {
     console.warn("[wallpaper] API failed, using fallback");
-    return pickRandom(FALLBACK_WALLPAPERS);
+    return proxied(pickRandom(FALLBACK_WALLPAPERS));
   }
 
   // Shuffle before capping so the 50 candidates are drawn from across all folders,
@@ -60,7 +73,7 @@ export async function fetchRandomWallpaper(): Promise<string> {
   }
 
   const candidates = pool.slice(0, 50);
-  const url = pickRandom(candidates);
+  const url = proxied(pickRandom(candidates));
   console.log("[wallpaper] selected", url);
   return url;
 }
