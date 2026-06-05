@@ -14,7 +14,7 @@
 import { mkdir, readFile, writeFile, readdir } from "node:fs/promises";
 import { existsSync, readFileSync } from "node:fs";
 import { spawn } from "node:child_process";
-import Anthropic from "@anthropic-ai/sdk";
+import { complete } from "./llm.ts";
 import { blind75Registry } from "./blind75Registry.ts";
 
 function loadDotenv(): void {
@@ -31,8 +31,6 @@ function loadDotenv(): void {
 }
 loadDotenv();
 
-const anthropic = new Anthropic();
-const MODEL = "claude-haiku-4-5-20251001";
 const NORM_DIR = "scripts/normalized";
 const SERVER_OUT_DIR = "server/problems";
 const PUBLIC_OUT_DIR = "public/problems";
@@ -108,16 +106,11 @@ async function callLLM(p: NormalizedProblem): Promise<{ name: string; input: Rec
   const MAX_ATTEMPTS = 5;
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
     try {
-      const msg = await anthropic.messages.create({
-        model: MODEL,
-        max_tokens: 8000, // 25 cases × ~150 tokens each + JSON overhead can exceed 4000
-        system: [{ type: "text", text: SYSTEM, cache_control: { type: "ephemeral" } }],
-        messages: [{ role: "user", content: buildPrompt(p) }],
+      const text = await complete({
+        system: SYSTEM,
+        user: buildPrompt(p),
+        maxTokens: 8000, // 25 cases × ~150 tokens each + JSON overhead can exceed 4000
       });
-      const text = msg.content
-        .filter((b) => b.type === "text")
-        .map((b) => b.text)
-        .join("\n");
       const arr = parseJSONArrayLoose(text);
       if (arr && arr.length > 0) {
         return arr.filter(
@@ -127,7 +120,7 @@ async function callLLM(p: NormalizedProblem): Promise<{ name: string; input: Rec
       }
       const tail = text.slice(-120).replace(/\n/g, "\\n");
       console.warn(
-        `  [${p.slug}] LLM unparseable (stop=${msg.stop_reason}, len=${text.length}, attempt ${attempt + 1}/${MAX_ATTEMPTS}) — tail: ${tail}`
+        `  [${p.slug}] LLM unparseable (len=${text.length}, attempt ${attempt + 1}/${MAX_ATTEMPTS}) — tail: ${tail}`
       );
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
