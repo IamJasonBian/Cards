@@ -52,6 +52,13 @@ export async function fetchRandomWallpaper(): Promise<string> {
     return pickRandom(FALLBACK_WALLPAPERS);
   }
 
+  // Shuffle before capping so the 50 candidates are drawn from across all folders,
+  // not just the alphabetically-first images of the first folder.
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+
   const candidates = pool.slice(0, 50);
   const url = pickRandom(candidates);
   console.log("[wallpaper] selected", url);

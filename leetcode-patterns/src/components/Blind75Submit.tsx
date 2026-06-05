@@ -192,7 +192,7 @@ export function Blind75Submit() {
 
   if (problemError) {
     return (
-      <div className="max-w-2xl rounded-2xl border border-rose-400/30 bg-rose-500/15 backdrop-blur-md p-4 text-sm text-rose-200">
+      <div className="max-w-2xl rounded-2xl border border-rose-400/30 bg-rose-500/15 backdrop-blur-xl p-4 text-sm text-rose-200">
         <div className="flex items-center gap-2 font-medium mb-1">
           <AlertTriangle size={16} />
           Couldn't load the problem.
@@ -223,7 +223,7 @@ export function Blind75Submit() {
           >
             {problem.difficulty}
           </span>
-          <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-800/50 text-slate-300 border border-white/10">
+          <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-800/40 text-slate-300 border border-white/10">
             {problem.category}
           </span>
           <span className="ml-auto text-[11px] text-slate-400 flex items-center gap-1">
@@ -245,7 +245,7 @@ export function Blind75Submit() {
             <select
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
-              className="ml-auto text-sm border border-white/10 rounded-2xl px-2 py-1 bg-slate-900/60 backdrop-blur-md text-slate-100 focus:ring-2 focus:ring-cyan-400/40 focus:outline-none"
+              className="ml-auto text-sm border border-white/10 rounded-2xl px-2 py-1 bg-slate-900/45 backdrop-blur-xl text-slate-100 focus:ring-2 focus:ring-cyan-400/40 focus:outline-none"
             >
               {sortedManifest.map((p) => (
                 <option key={p.slug} value={p.slug}>
@@ -262,7 +262,7 @@ export function Blind75Submit() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <section className="bg-slate-900/60 backdrop-blur-md rounded-2xl border border-white/10 p-5">
+        <section className="bg-slate-900/45 backdrop-blur-xl rounded-2xl border border-white/10 p-5">
           <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wide mb-3">Problem</h2>
           <p className="text-slate-100 whitespace-pre-line text-sm leading-relaxed mb-4">
             {problem.statement}
@@ -274,7 +274,7 @@ export function Blind75Submit() {
           </h3>
           <div className="space-y-3">
             {problem.visibleExamples.map((ex, i) => (
-              <div key={i} className="rounded-2xl border border-white/10 bg-slate-800/50 p-3 text-xs">
+              <div key={i} className="rounded-2xl border border-white/10 bg-slate-800/40 p-3 text-xs">
                 <div className="font-mono text-slate-300">
                   <span className="text-slate-400">Input:</span> {formatInputCompact(ex.input, 200)}
                 </div>
@@ -303,8 +303,8 @@ export function Blind75Submit() {
         </section>
 
         <section className="space-y-4">
-          <div className="bg-slate-900/60 backdrop-blur-md rounded-2xl border border-white/10 overflow-hidden">
-            <div className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-slate-800/50">
+          <div className="bg-slate-900/45 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-slate-800/40">
               <div className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
                 Solution · Python 3
               </div>
@@ -325,10 +325,10 @@ export function Blind75Submit() {
               }}
               onKeyDown={handleKeyDown}
               spellCheck={false}
-              className="w-full font-mono text-sm bg-slate-950/70 text-slate-100 p-4 outline-none resize-y leading-relaxed focus:ring-2 focus:ring-cyan-400/40"
+              className="w-full font-mono text-sm bg-slate-950/60 text-slate-100 p-4 outline-none resize-y leading-relaxed focus:ring-2 focus:ring-cyan-400/40"
               style={{ minHeight: 360, tabSize: 4 }}
             />
-            <div className="flex items-center justify-between px-4 py-3 bg-slate-800/50 border-t border-white/10">
+            <div className="flex items-center justify-between px-4 py-3 bg-slate-800/40 border-t border-white/10">
               <span className="text-[11px] text-slate-400">Tab indents · ⌘/Ctrl + Enter to submit</span>
               <button
                 onClick={submit}
@@ -354,7 +354,7 @@ function ResultsPanel({ result }: { result: RunResult }) {
   const firstFailingHidden = result.cases.find((c) => !c.visible);
 
   return (
-    <div className="bg-slate-900/60 backdrop-blur-md rounded-2xl border border-white/10 p-5">
+    <div className="bg-slate-900/45 backdrop-blur-xl rounded-2xl border border-white/10 p-5">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           {status.tone === "good" ? (

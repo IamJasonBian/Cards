@@ -7,13 +7,13 @@ export function PatternCard({ pattern }: { pattern: Pattern }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="bg-slate-900/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/10 hover:shadow-md transition-shadow">
+    <div className="bg-slate-900/45 backdrop-blur-xl rounded-2xl shadow-sm border border-white/10 hover:shadow-md transition-shadow">
       <button
         onClick={() => setOpen(!open)}
         className="w-full p-5 flex items-center justify-between text-left cursor-pointer"
       >
         <div className="flex items-center gap-4">
-          <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-slate-800/50 text-slate-400 font-mono text-sm font-bold">
+          <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-slate-800/40 text-slate-400 font-mono text-sm font-bold">
             {pattern.id}
           </div>
           <div>
@@ -22,7 +22,7 @@ export function PatternCard({ pattern }: { pattern: Pattern }) {
             </h3>
             <div className="flex items-center gap-2 mt-1">
               <span
-                className={`px-2 py-0.5 rounded-full text-xs font-medium ${tagColors[pattern.tag] || "bg-slate-800/50 text-slate-300"}`}
+                className={`px-2 py-0.5 rounded-full text-xs font-medium ${tagColors[pattern.tag] || "bg-slate-800/40 text-slate-300"}`}
               >
                 {pattern.tag}
               </span>
@@ -53,15 +53,15 @@ export function PatternCard({ pattern }: { pattern: Pattern }) {
                   href={`https://leetcode.com/problems/${p.slug}/`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-2 py-1 bg-slate-800/50 border border-white/10 rounded text-xs text-slate-300 hover:bg-white/5 hover:border-cyan-400/30 hover:text-cyan-300 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-2 py-1 bg-slate-800/40 border border-white/10 rounded text-xs text-slate-300 hover:bg-white/5 hover:border-cyan-400/30 hover:text-cyan-300 transition-colors"
                 >
                   <span
                     className={`inline-block w-1.5 h-1.5 rounded-full ${
                       p.difficulty === "Easy"
-                        ? "bg-green-500"
+                        ? "bg-emerald-400"
                         : p.difficulty === "Medium"
-                        ? "bg-yellow-500"
-                        : "bg-red-500"
+                        ? "bg-amber-400"
+                        : "bg-rose-400"
                     }`}
                   />
                   {p.name}
@@ -102,7 +102,7 @@ export function PatternCard({ pattern }: { pattern: Pattern }) {
                 {pattern.runtime}
               </span>
             </div>
-            <pre className="bg-slate-950/70 text-slate-100 rounded-lg p-4 text-sm overflow-x-auto font-mono leading-relaxed">
+            <pre className="bg-slate-950/60 text-slate-100 rounded-lg p-4 text-sm overflow-x-auto font-mono leading-relaxed">
               <code>{pattern.code}</code>
             </pre>
           </div>
@@ -117,7 +117,7 @@ export function PatternCard({ pattern }: { pattern: Pattern }) {
               </span>
             </div>
             <p className="text-xs text-slate-400 mb-2 italic">{pattern.optimalNote}</p>
-            <pre className="bg-slate-950/70 text-slate-100 rounded-lg p-4 text-sm overflow-x-auto font-mono leading-relaxed border border-emerald-500/30">
+            <pre className="bg-slate-950/60 text-slate-100 rounded-lg p-4 text-sm overflow-x-auto font-mono leading-relaxed border border-emerald-500/30">
               <code>{pattern.optimalCode}</code>
             </pre>
           </div>

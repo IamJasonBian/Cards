@@ -12,7 +12,7 @@ export function PatternSidebar({
   onSelect: (id: number) => void;
 }) {
   return (
-    <aside className="hidden md:block w-64 shrink-0 sticky top-16 h-[calc(100vh-64px)] overflow-y-auto bg-slate-900/60 backdrop-blur-md border-r border-white/10">
+    <aside className="hidden md:block w-64 shrink-0 sticky top-16 h-[calc(100vh-64px)] overflow-y-auto bg-slate-900/45 backdrop-blur-xl border-r border-white/10">
       <div className="p-4">
         <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">
           Patterns
@@ -36,7 +36,7 @@ export function PatternSidebar({
               </div>
               <div className="flex items-center gap-2 mt-0.5 ml-7">
                 <span
-                  className={`px-1.5 py-0 rounded-full text-[10px] font-medium ${tagColors[p.tag] || "bg-slate-800/50 text-slate-300"}`}
+                  className={`px-1.5 py-0 rounded-full text-[10px] font-medium ${tagColors[p.tag] || "bg-slate-800/40 text-slate-300"}`}
                 >
                   {p.tag}
                 </span>

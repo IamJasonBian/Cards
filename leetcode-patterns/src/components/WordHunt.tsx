@@ -234,7 +234,7 @@ export function WordHunt() {
       ) : (
         <>
           {/* Grid */}
-          <div className="bg-slate-900/60 backdrop-blur-md rounded-2xl border border-white/10 shadow-sm p-6 mb-4">
+          <div className="bg-slate-900/45 backdrop-blur-xl rounded-2xl border border-white/10 shadow-sm p-6 mb-4">
             <div className="grid grid-cols-4 gap-2 max-w-[264px] mx-auto mb-5">
               {letters.map((letter, i) => (
                 <input
@@ -246,7 +246,7 @@ export function WordHunt() {
                   value={letter.toUpperCase()}
                   onChange={(e) => handleInput(i, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(i, e)}
-                  className="w-14 h-14 text-2xl font-bold text-center rounded-lg border-2 border-white/15 text-slate-100 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/40 transition-colors bg-slate-950/70 uppercase"
+                  className="w-14 h-14 text-2xl font-bold text-center rounded-lg border-2 border-white/15 text-slate-100 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/40 transition-colors bg-slate-950/60 uppercase"
                 />
               ))}
             </div>
@@ -262,7 +262,7 @@ export function WordHunt() {
               </button>
               <button
                 onClick={handleClear}
-                className="flex items-center gap-2 px-5 py-2.5 bg-slate-800/50 text-slate-300 rounded-lg font-medium hover:bg-white/5 transition-colors cursor-pointer"
+                className="flex items-center gap-2 px-5 py-2.5 bg-slate-800/40 text-slate-300 rounded-lg font-medium hover:bg-white/5 transition-colors cursor-pointer"
               >
                 <RotateCcw size={16} />
                 Clear
@@ -298,12 +298,12 @@ export function WordHunt() {
                 <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wide">
                   Results — {tries.length} {tries.length === 1 ? "try" : "tries"}
                 </h3>
-                <div className="flex gap-1 bg-slate-800/50 rounded-lg p-0.5">
+                <div className="flex gap-1 bg-slate-800/40 rounded-lg p-0.5">
                   <button
                     onClick={() => setGroupMode("score")}
                     className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                       groupMode === "score"
-                        ? "bg-slate-900/60 text-slate-100 shadow-sm"
+                        ? "bg-slate-900/45 text-slate-100 shadow-sm"
                         : "text-slate-400 hover:text-slate-300"
                     }`}
                   >
@@ -313,7 +313,7 @@ export function WordHunt() {
                     onClick={() => setGroupMode("trie")}
                     className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                       groupMode === "trie"
-                        ? "bg-slate-900/60 text-slate-100 shadow-sm"
+                        ? "bg-slate-900/45 text-slate-100 shadow-sm"
                         : "text-slate-400 hover:text-slate-300"
                     }`}
                   >
@@ -328,7 +328,7 @@ export function WordHunt() {
                 return (
                   <div
                     key={t.id}
-                    className="bg-slate-900/60 backdrop-blur-md rounded-2xl border border-white/10 shadow-sm overflow-hidden"
+                    className="bg-slate-900/45 backdrop-blur-xl rounded-2xl border border-white/10 shadow-sm overflow-hidden"
                   >
                     {/* Try header */}
                     <button
@@ -384,7 +384,7 @@ export function WordHunt() {
                           : groupByPrefix(t.words).map(({ prefix, words }) => (
                               <div key={prefix}>
                                 <div className="flex items-center gap-2 mb-2">
-                                  <span className="px-2 py-0.5 bg-slate-800/50 text-slate-100 rounded text-xs font-mono font-bold">
+                                  <span className="px-2 py-0.5 bg-slate-800/40 text-slate-100 rounded text-xs font-mono font-bold">
                                     {prefix}—
                                   </span>
                                   <span className="text-xs text-slate-400">
