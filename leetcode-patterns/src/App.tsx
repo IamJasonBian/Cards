@@ -59,8 +59,25 @@ const isExperimental = (v: View): v is ExperimentalView =>
   (EXPERIMENTAL_VIEWS as readonly string[]).includes(v);
 
 function App() {
-  // Default landing = the Blind 75 submit view (Two Sum). Explicit hashes still win on mount.
-  const [view, setView] = useState<View>("submit");
+  // Default landing = the Blind 75 submit view (Two Sum). An explicit URL hash
+  // still wins on mount via this lazy initializer (#patterns is a way out of the
+  // default Submit view for users who bookmarked the old landing).
+  const [view, setView] = useState<View>(() => {
+    switch (window.location.hash) {
+      case "#interview-binaries":
+        return "interview-binaries";
+      case "#popular-lists":
+        return "popular-lists";
+      case "#flashcards":
+        return "flashcards";
+      case "#interview-drill":
+        return "interview-drill";
+      case "#patterns":
+        return "patterns";
+      default:
+        return "submit";
+    }
+  });
   const [wallpaper, setWallpaper] = useState<string | null>(null);
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [experimentalOpen, setExperimentalOpen] = useState(false);
@@ -98,18 +115,6 @@ function App() {
     setSelectedPatternId(null);
     setRelatedProblems([]);
   }
-
-  // Check URL hash on mount to enable direct linking. #patterns is a way out of
-  // the new default Submit view for users who bookmarked the old landing.
-  useEffect(() => {
-    const h = window.location.hash;
-    if (h === "#interview-binaries") setView("interview-binaries");
-    else if (h === "#popular-lists") setView("popular-lists");
-    else if (h === "#flashcards") setView("flashcards");
-    else if (h === "#interview-drill") setView("interview-drill");
-    else if (h === "#patterns") setView("patterns");
-    else if (h === "#submit") setView("submit");
-  }, []);
 
   // Close the Experimental dropdown on outside click / Escape.
   useEffect(() => {

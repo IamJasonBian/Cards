@@ -1,5 +1,5 @@
 import { ArrowLeft, ExternalLink, Hash, Clock, Zap, RotateCw } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { tagColors } from "../data/patterns";
 import type { Pattern, Problem } from "../data/patterns";
 
@@ -16,15 +16,15 @@ export function PracticeSetView({
 }) {
   const coreProblems = pattern.problems.slice(0, 10);
   const [spinning, setSpinning] = useState(false);
+  const spinTimer = useRef<number | undefined>(undefined);
 
-  useEffect(() => {
-    setSpinning(true);
-    const t = setTimeout(() => setSpinning(false), 500);
-    return () => clearTimeout(t);
-  }, [relatedProblems]);
-
+  // Spin the rotate icon for 500ms on each rotation. Driven by the click handler
+  // (an event) rather than an effect reacting to the relatedProblems prop.
   function handleRotate() {
     onRotate();
+    setSpinning(true);
+    window.clearTimeout(spinTimer.current);
+    spinTimer.current = window.setTimeout(() => setSpinning(false), 500);
   }
 
   return (
