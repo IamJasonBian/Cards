@@ -262,7 +262,7 @@ async function main(): Promise<void> {
 
   let ok = 0;
   let skippedNonJson = 0;
-  let failed: string[] = [];
+  const failed: string[] = [];
 
   for (const entry of blind75Registry) {
     if (filterArg && filterArg !== entry.slug) continue;
