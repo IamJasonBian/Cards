@@ -223,9 +223,6 @@ export function WordHunt() {
         <Grid3x3 size={28} className="text-cyan-600" />
         <div>
           <h2 className="text-2xl font-bold text-slate-900">Word Hunt</h2>
-          <p className="text-sm text-slate-500">
-            Enter letters into the grid, then solve to find all words (LC 212)
-          </p>
         </div>
       </div>
 
