@@ -47,10 +47,6 @@ export function SiteFooter({ onNavigate }: { onNavigate: (view: string) => void 
             </button>
           </div>
         </div>
-
-        <div className="border-t border-slate-900/10 mt-8 pt-6 text-xs text-slate-500">
-          639 problems solved · Python3 · Data via alfa-leetcode-api
-        </div>
       </div>
     </footer>
   );
