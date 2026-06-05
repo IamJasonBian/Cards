@@ -160,9 +160,9 @@ function App() {
         className="fixed inset-0 -z-10 bg-cover bg-center bg-fixed"
         style={wallpaper ? { backgroundImage: `url(${wallpaper})` } : undefined}
       />
-      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-slate-950/55 via-slate-950/65 to-slate-950/80" />
+      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-slate-950/35 via-slate-950/50 to-slate-950/65" />
 
-      <nav className="bg-slate-900/45 backdrop-blur-xl border-b border-white/10 sticky top-0 z-10">
+      <nav className="bg-slate-900/20 backdrop-blur-2xl border-b border-white/10 sticky top-0 z-10">
         <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="flex items-center gap-3 min-w-0">
             <Code size={24} className="text-cyan-400 shrink-0" />
@@ -224,7 +224,7 @@ function App() {
               {experimentalOpen && (
                 <div
                   role="menu"
-                  className="absolute left-0 top-full mt-1 w-48 rounded-2xl bg-slate-900/95 backdrop-blur-xl border border-white/10 shadow-lg py-1 z-20"
+                  className="absolute left-0 top-full mt-1 w-48 rounded-2xl bg-slate-900/85 backdrop-blur-2xl border border-white/10 shadow-lg py-1 z-20"
                 >
                   <button
                     role="menuitem"

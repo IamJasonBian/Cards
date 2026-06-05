@@ -186,7 +186,7 @@ export function Flashcards() {
         </h1>
         <p className="text-slate-300 text-sm">
           Anki-style spaced-repetition deck. Rate each card to schedule the next
-          review. Linked to local backend at <code className="bg-slate-800/40 px-1 rounded text-xs">/api</code>.
+          review. Linked to local backend at <code className="bg-slate-800/15 px-1 rounded text-xs">/api</code>.
         </p>
       </div>
 
@@ -216,7 +216,7 @@ export function Flashcards() {
           className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors cursor-pointer ${
             mode === "due"
               ? "bg-rose-500/15 text-rose-300 border-rose-400/30"
-              : "bg-slate-800/40 text-slate-300 border-white/10 hover:bg-white/5"
+              : "bg-slate-800/15 text-slate-300 border-white/10 hover:bg-white/5"
           }`}
         >
           {mode === "due" ? "Due only" : "All cards"}
@@ -230,7 +230,7 @@ export function Flashcards() {
           className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
             activeTag === "all"
               ? "bg-cyan-500/15 text-cyan-300 border-cyan-400/30"
-              : "bg-slate-800/40 text-slate-400 border-white/10 hover:bg-white/5"
+              : "bg-slate-800/15 text-slate-400 border-white/10 hover:bg-white/5"
           }`}
         >
           all
@@ -245,7 +245,7 @@ export function Flashcards() {
             className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
               activeTag === t
                 ? tagStyles[t]
-                : "bg-slate-800/40 text-slate-400 border-white/10 hover:bg-white/5"
+                : "bg-slate-800/15 text-slate-400 border-white/10 hover:bg-white/5"
             }`}
           >
             {t}
@@ -271,7 +271,7 @@ export function Flashcards() {
             >
               {/* Front */}
               <div
-                className="absolute inset-0 bg-slate-900/45 backdrop-blur-xl rounded-2xl border border-white/10 shadow-sm flex flex-col items-center justify-center p-8"
+                className="absolute inset-0 bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-sm flex flex-col items-center justify-center p-8"
                 style={{ backfaceVisibility: "hidden" }}
               >
                 <span
@@ -291,7 +291,7 @@ export function Flashcards() {
 
               {/* Back */}
               <div
-                className="absolute inset-0 bg-slate-900/45 backdrop-blur-xl rounded-2xl border border-white/10 shadow-sm p-5 overflow-auto"
+                className="absolute inset-0 bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-sm p-5 overflow-auto"
                 style={{
                   backfaceVisibility: "hidden",
                   transform: "rotateY(180deg)",
@@ -318,7 +318,7 @@ export function Flashcards() {
                     <Eye size={12} className="text-slate-400" />
                   </div>
                 </div>
-                <pre className="bg-slate-950/60 text-slate-100 rounded-lg p-3 text-xs overflow-auto font-mono leading-relaxed border border-white/5">
+                <pre className="bg-slate-950/40 text-slate-100 rounded-lg p-3 text-xs overflow-auto font-mono leading-relaxed border border-white/5">
                   <code>{card.code}</code>
                 </pre>
                 <p className="text-xs text-slate-400 mt-3 italic">{card.note}</p>
@@ -386,7 +386,7 @@ export function Flashcards() {
           </div>
         </>
       ) : (
-        <div className="text-center text-sm text-slate-400 py-12 bg-slate-900/45 backdrop-blur-xl rounded-2xl border border-white/10">
+        <div className="text-center text-sm text-slate-400 py-12 bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10">
           Nothing to review here.{" "}
           <button
             onClick={() => {
@@ -408,7 +408,7 @@ export function Flashcards() {
           onClick={() => setVizOpen(null)}
         >
           <div
-            className="bg-slate-900/45 backdrop-blur-xl rounded-2xl shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden relative border border-white/10"
+            className="bg-slate-900/20 backdrop-blur-2xl rounded-2xl shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden relative border border-white/10"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -436,7 +436,7 @@ export function Flashcards() {
 
 function StatPill({ label, value, color }: { label: string; value: number; color: string }) {
   return (
-    <div className="bg-slate-900/45 backdrop-blur-xl rounded-2xl border border-white/10 px-3 py-2">
+    <div className="bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 px-3 py-2">
       <p className="text-[10px] uppercase tracking-wide text-slate-400 font-medium">
         {label}
       </p>

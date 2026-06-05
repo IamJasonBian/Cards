@@ -90,7 +90,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`bg-slate-900/45 backdrop-blur-xl border border-white/10 rounded-2xl p-5 ${className}`}>
+    <div className={`bg-slate-900/20 backdrop-blur-2xl border border-white/10 rounded-2xl p-5 ${className}`}>
       {children}
     </div>
   );
@@ -146,7 +146,7 @@ export function InterviewDrill() {
 
   const checkIcon = (s: CheckState) => s === "pass" ? "✓" : s === "fail" ? "✗" : "○";
   const checkRow = (s: CheckState) => ({
-    pending: "border-white/10 bg-slate-800/40 hover:bg-white/5 text-slate-300",
+    pending: "border-white/10 bg-slate-800/15 hover:bg-white/5 text-slate-300",
     pass:    "border-emerald-400/30 bg-emerald-500/15 text-emerald-300",
     fail:    "border-rose-400/30 bg-rose-500/15 text-rose-300",
   }[s]);
@@ -174,7 +174,7 @@ export function InterviewDrill() {
               className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
                 phase === id
                   ? "bg-cyan-500/15 text-cyan-300"
-                  : "bg-slate-800/40 text-slate-300 hover:bg-white/5"
+                  : "bg-slate-800/15 text-slate-300 hover:bg-white/5"
               }`}
             >
               {label}
@@ -198,7 +198,7 @@ export function InterviewDrill() {
               Paste the full problem — or capture it from your camera.
             </p>
             <textarea
-              className="w-full bg-slate-950/60 text-slate-100 border border-white/15 rounded-lg p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+              className="w-full bg-slate-950/40 text-slate-100 border border-white/15 rounded-lg p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
               rows={7}
               placeholder="Paste or capture the problem here..."
               value={problemText}
@@ -224,7 +224,7 @@ export function InterviewDrill() {
                       className={`px-2.5 py-1 rounded-full text-xs font-medium border ${
                         detectedPatterns.includes(p)
                           ? "bg-cyan-500/10 border-cyan-400/30 text-cyan-300"
-                          : "bg-slate-800/40 border-white/10 text-slate-400"
+                          : "bg-slate-800/15 border-white/10 text-slate-400"
                       }`}
                     >
                       {p}
@@ -237,7 +237,7 @@ export function InterviewDrill() {
                 <SectionLabel>Brute Force Baseline</SectionLabel>
                 <p className="text-xs text-slate-400 mb-2">Describe the naive solution in plain English — no code. What is its time and space complexity?</p>
                 <textarea
-                  className="w-full bg-slate-950/60 border border-white/15 rounded-lg p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-100"
+                  className="w-full bg-slate-950/40 border border-white/15 rounded-lg p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-100"
                   rows={3}
                   placeholder="e.g. Enumerate all possibilities with nested loops. Time: O(n²). Space: O(1)."
                 />
@@ -247,7 +247,7 @@ export function InterviewDrill() {
                 <SectionLabel>Optimal Algorithm (English only — no code)</SectionLabel>
                 <p className="text-xs text-slate-400 mb-2">Numbered steps. Include data structures, initialization, main loop, and termination.</p>
                 <textarea
-                  className="w-full bg-slate-950/60 border border-white/15 rounded-lg p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-100"
+                  className="w-full bg-slate-950/40 border border-white/15 rounded-lg p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-100"
                   rows={6}
                   placeholder={"1. Initialize ...\n2. Main loop: ...\n3. Return ..."}
                 />
@@ -257,7 +257,7 @@ export function InterviewDrill() {
                 <SectionLabel>Complexity Target</SectionLabel>
                 <div className="grid grid-cols-2 gap-3">
                   {["Time", "Space"].map((label) => (
-                    <div key={label} className="bg-slate-800/40 rounded-lg p-3">
+                    <div key={label} className="bg-slate-800/15 rounded-lg p-3">
                       <div className="text-xs text-slate-400 uppercase tracking-wide mb-1">{label}</div>
                       <input
                         className="w-full bg-transparent font-mono text-base font-bold text-cyan-400 focus:outline-none"
@@ -272,7 +272,7 @@ export function InterviewDrill() {
                 <SectionLabel>Gotchas</SectionLabel>
                 <p className="text-xs text-slate-400 mb-2">List 2-3 things that commonly trip people up on this problem.</p>
                 <textarea
-                  className="w-full bg-slate-950/60 border border-white/15 rounded-lg p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-100"
+                  className="w-full bg-slate-950/40 border border-white/15 rounded-lg p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-100"
                   rows={3}
                   placeholder={"• Off-by-one on boundary\n• Forgetting to handle empty input\n• ..."}
                 />
@@ -304,7 +304,7 @@ export function InterviewDrill() {
               Type your code — or capture handwritten code from your camera.
             </p>
             <textarea
-              className="w-full bg-slate-950/60 text-slate-100 border border-white/15 rounded-lg p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+              className="w-full bg-slate-950/40 text-slate-100 border border-white/15 rounded-lg p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
               rows={12}
               placeholder={"class Solution:\n    def solve(self, ...):\n        # your code here"}
               value={codeText}
@@ -320,14 +320,14 @@ export function InterviewDrill() {
             </p>
             <div className="flex gap-2 mb-3">
               <input
-                className="flex-1 bg-slate-950/60 text-slate-100 border border-white/15 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+                className="flex-1 bg-slate-950/40 text-slate-100 border border-white/15 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
                 placeholder="Test input (e.g. x=2, y=1)"
                 value={dryRunInput}
                 onChange={(e) => setDryRunInput(e.target.value)}
               />
             </div>
             <textarea
-              className="w-full bg-slate-950/60 text-slate-100 border border-white/15 rounded-lg p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+              className="w-full bg-slate-950/40 text-slate-100 border border-white/15 rounded-lg p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
               rows={6}
               placeholder={"Step 1: queue = [(0,0)], visited = {(0,0)}\nStep 2: pop (0,0), enqueue (1,2),(2,1),...\n..."}
               value={dryRunText}
@@ -394,7 +394,7 @@ export function InterviewDrill() {
             </div>
 
             {codeFeedback && (
-              <div className="mt-3 p-3 bg-slate-800/40 rounded-lg text-sm text-slate-300 font-mono whitespace-pre-wrap">
+              <div className="mt-3 p-3 bg-slate-800/15 rounded-lg text-sm text-slate-300 font-mono whitespace-pre-wrap">
                 {codeFeedback}
               </div>
             )}
@@ -408,7 +408,7 @@ export function InterviewDrill() {
           <Card>
             <SectionLabel>Final Solution</SectionLabel>
             <textarea
-              className="w-full bg-slate-950/60 text-slate-100 border border-white/15 rounded-lg p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+              className="w-full bg-slate-950/40 text-slate-100 border border-white/15 rounded-lg p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
               rows={12}
               placeholder="Paste your final solution..."
               value={verifyCode}
@@ -442,11 +442,11 @@ export function InterviewDrill() {
                       <tr key={i} className="border-b border-white/5">
                         {["", "", ""].map((_, j) => (
                           <td key={j} className="py-1 pr-3">
-                            <input className="w-full bg-slate-950/60 text-slate-100 font-mono text-xs border border-white/15 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-cyan-400/40" />
+                            <input className="w-full bg-slate-950/40 text-slate-100 font-mono text-xs border border-white/15 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-cyan-400/40" />
                           </td>
                         ))}
                         <td className="py-1">
-                          <select className="bg-slate-950/60 text-slate-100 text-xs border border-white/15 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-cyan-400/40">
+                          <select className="bg-slate-950/40 text-slate-100 text-xs border border-white/15 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-cyan-400/40">
                             <option>—</option>
                             <option>✓</option>
                             <option>✗</option>
@@ -462,7 +462,7 @@ export function InterviewDrill() {
                 <SectionLabel>Edge Cases</SectionLabel>
                 <p className="text-xs text-slate-400 mb-2">List the edge cases you checked and whether they passed.</p>
                 <textarea
-                  className="w-full bg-slate-950/60 border border-white/15 rounded-lg p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-100"
+                  className="w-full bg-slate-950/40 border border-white/15 rounded-lg p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-100"
                   rows={4}
                   placeholder={"• Empty input → ?\n• Single element → ?\n• Max constraints → ?\n• Negative values → ?"}
                 />
@@ -472,7 +472,7 @@ export function InterviewDrill() {
                 <SectionLabel>Complexity Audit</SectionLabel>
                 <div className="grid grid-cols-2 gap-3">
                   {["Time", "Space"].map((label) => (
-                    <div key={label} className="bg-slate-800/40 rounded-lg p-3">
+                    <div key={label} className="bg-slate-800/15 rounded-lg p-3">
                       <div className="text-xs text-slate-400 uppercase tracking-wide mb-1">{label}</div>
                       <input
                         className="w-full bg-transparent font-mono text-base font-bold text-cyan-400 focus:outline-none"
@@ -495,7 +495,7 @@ export function InterviewDrill() {
                     "Communication — explained approach before coding",
                   ].map((item, i) => (
                     <li key={i} className="flex items-center gap-2">
-                      <select className="bg-slate-950/60 text-slate-100 text-xs border border-white/15 rounded px-1.5 py-0.5 focus:outline-none focus:ring-2 focus:ring-cyan-400/40">
+                      <select className="bg-slate-950/40 text-slate-100 text-xs border border-white/15 rounded px-1.5 py-0.5 focus:outline-none focus:ring-2 focus:ring-cyan-400/40">
                         <option>—</option>
                         <option>✓ Pass</option>
                         <option>⚠ Partial</option>

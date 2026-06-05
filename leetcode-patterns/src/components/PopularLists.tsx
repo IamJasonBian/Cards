@@ -57,7 +57,7 @@ export function PopularLists() {
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer border ${
               activeId === list.id
                 ? "bg-cyan-500 text-slate-950 border-cyan-500"
-                : "bg-slate-900/45 backdrop-blur-xl text-slate-300 border-white/10 hover:bg-white/5"
+                : "bg-slate-900/20 backdrop-blur-2xl text-slate-300 border-white/10 hover:bg-white/5"
             }`}
           >
             {list.name}
@@ -72,7 +72,7 @@ export function PopularLists() {
         ))}
       </div>
 
-      <div className="bg-slate-900/45 backdrop-blur-xl rounded-2xl border border-white/10 p-5 mb-4">
+      <div className="bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 p-5 mb-4">
         <div className="flex items-start justify-between gap-4 mb-3">
           <div>
             <h2 className="text-xl font-bold text-slate-100">{active.name}</h2>
@@ -97,7 +97,7 @@ export function PopularLists() {
             className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
               difficultyFilter === null
                 ? "bg-cyan-500/15 text-cyan-300 border-cyan-400/30"
-                : "bg-slate-800/40 text-slate-400 border-white/10 hover:bg-white/5"
+                : "bg-slate-800/15 text-slate-400 border-white/10 hover:bg-white/5"
             }`}
           >
             All {active.problems.length}
@@ -109,7 +109,7 @@ export function PopularLists() {
               className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
                 difficultyFilter === d
                   ? diffStyles[d]
-                  : "bg-slate-800/40 text-slate-400 border-white/10 hover:bg-white/5"
+                  : "bg-slate-800/15 text-slate-400 border-white/10 hover:bg-white/5"
               }`}
             >
               {d} {counts[d]}
@@ -120,7 +120,7 @@ export function PopularLists() {
 
       <div className="space-y-3">
         {grouped.map(([category, problems]) => (
-          <div key={category} className="bg-slate-900/45 backdrop-blur-xl rounded-2xl border border-white/10 p-5">
+          <div key={category} className="bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 p-5">
             <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-3">
               {category} ({problems.length})
             </p>
@@ -131,7 +131,7 @@ export function PopularLists() {
                   href={`https://leetcode.com/problems/${p.slug}/`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800/40 border border-white/10 rounded-lg text-xs text-slate-300 hover:bg-cyan-500/10 hover:border-cyan-400/30 hover:text-cyan-300 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800/15 border border-white/10 rounded-lg text-xs text-slate-300 hover:bg-cyan-500/10 hover:border-cyan-400/30 hover:text-cyan-300 transition-colors"
                 >
                   <span
                     className={`inline-block w-1.5 h-1.5 rounded-full ${
