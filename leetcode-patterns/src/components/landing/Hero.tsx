@@ -3,23 +3,19 @@ import { SquareStack, ArrowRight } from "lucide-react";
 export function Hero({ onNavigate }: { onNavigate: (view: string) => void }) {
   return (
     <section className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-20 text-center sm:py-28">
-      <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500 [text-shadow:_0_1px_12px_rgb(255_255_255_/_80%)]">
-        Daily algorithm practice
-      </p>
-
-      <div className="mt-6 flex h-16 w-16 items-center justify-center rounded-none border border-slate-900/15 bg-white/60 backdrop-blur-sm">
+      <div className="flex h-16 w-16 items-center justify-center rounded-none border border-slate-900/15 bg-white/60 backdrop-blur-sm">
         <SquareStack className="h-8 w-8 text-cyan-700" />
       </div>
 
-      <h1 className="mt-8 text-5xl font-bold tracking-tight text-slate-900 sm:text-7xl [text-shadow:_0_2px_4px_rgb(255_255_255),_0_2px_24px_rgb(255_255_255)]">
+      <h1 className="mt-8 text-5xl font-bold tracking-tight text-slate-900 sm:text-7xl [text-shadow:_0_2px_20px_rgb(255_255_255_/_55%)]">
         One Card a Day
       </h1>
 
-      <p className="mt-2 text-3xl font-normal tracking-tight text-slate-700 sm:text-4xl [text-shadow:_0_1px_2px_rgb(255_255_255),_0_2px_18px_rgb(255_255_255)]">
+      <p className="mt-2 text-3xl font-normal tracking-tight text-slate-700 sm:text-4xl [text-shadow:_0_2px_16px_rgb(255_255_255_/_55%)]">
         Transform
       </p>
 
-      <p className="mt-6 max-w-xl text-base font-medium text-slate-800 [text-shadow:_0_1px_2px_rgb(255_255_255),_0_1px_12px_rgb(255_255_255)]">
+      <p className="mt-6 max-w-xl text-base font-medium text-slate-800 [text-shadow:_0_1px_10px_rgb(255_255_255_/_65%)]">
         Daily algorithm flashcards, drills, and pattern practice — one card at a time.
       </p>
 

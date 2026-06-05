@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { BookOpen, ChevronDown, Code, Filter, FlaskConical, Layers, Play, Zap } from "lucide-react";
 import { patterns, tags } from "./data/patterns";
 import type { Pattern, Problem } from "./data/patterns";
-import { StatsGrid } from "./components/StatsGrid";
 import { PatternCard } from "./components/PatternCard";
 import { InterviewChecklist } from "./components/InterviewChecklist";
 import { DSReference } from "./components/DSReference";
@@ -307,7 +306,6 @@ function App() {
           ) : (
             <>
               <RandomProblem />
-              <StatsGrid />
 
               <div className="flex items-center gap-2 mb-6">
                 <Filter size={16} className="text-slate-500" />
