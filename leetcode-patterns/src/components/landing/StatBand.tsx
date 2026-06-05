@@ -8,13 +8,7 @@ const stats = [
 export function StatBand() {
   return (
     <section className="w-full">
-      <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 pt-16 sm:pt-24 pb-8 text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500 [text-shadow:_0_1px_12px_rgb(255_255_255_/_80%)]">
-          By the numbers
-        </p>
-      </div>
-
-      <div className="mx-auto w-full max-w-5xl border-l border-t border-slate-900/10">
+      <div className="mx-auto w-full max-w-5xl border-l border-t border-slate-900/10 mt-16 sm:mt-24">
         <div className="grid grid-cols-2 md:grid-cols-4">
           {stats.map((stat) => (
             <div
