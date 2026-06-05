@@ -283,13 +283,6 @@
       "category": "Binary"
     },
     {
-      "slug": "alien-dictionary",
-      "title": "Alien Dictionary",
-      "number": 269,
-      "difficulty": "Hard",
-      "category": "Graph"
-    },
-    {
       "slug": "encode-and-decode-strings",
       "title": "Encode and Decode Strings",
       "number": 271,
