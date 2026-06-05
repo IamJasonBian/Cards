@@ -1,0 +1,1071 @@
+{
+  "3sum": {
+    "category": "Array",
+    "topicTags": [
+      "Array",
+      "Two Pointers",
+      "Sorting"
+    ]
+  },
+  "4sum": {
+    "category": null,
+    "topicTags": []
+  },
+  "accounts-merge": {
+    "category": null,
+    "topicTags": []
+  },
+  "add-two-numbers": {
+    "category": null,
+    "topicTags": []
+  },
+  "alien-dictionary": {
+    "category": "Graph",
+    "topicTags": [
+      "Array",
+      "String",
+      "Depth-First Search",
+      "Breadth-First Search",
+      "Graph Theory",
+      "Topological Sort"
+    ]
+  },
+  "all-paths-from-source-to-target": {
+    "category": null,
+    "topicTags": [
+      "Backtracking",
+      "Depth-First Search",
+      "Breadth-First Search",
+      "Graph Theory"
+    ]
+  },
+  "best-time-to-buy-and-sell-stock": {
+    "category": "Array",
+    "topicTags": [
+      "Array",
+      "Dynamic Programming"
+    ]
+  },
+  "binary-tree-level-order-traversal": {
+    "category": "Tree",
+    "topicTags": [
+      "Tree",
+      "Breadth-First Search",
+      "Binary Tree"
+    ]
+  },
+  "binary-tree-maximum-path-sum": {
+    "category": "Tree",
+    "topicTags": [
+      "Dynamic Programming",
+      "Tree",
+      "Depth-First Search",
+      "Binary Tree"
+    ]
+  },
+  "boats-to-save-people": {
+    "category": null,
+    "topicTags": []
+  },
+  "break-a-palindrome": {
+    "category": null,
+    "topicTags": []
+  },
+  "bricks-falling-when-hit": {
+    "category": null,
+    "topicTags": []
+  },
+  "bus-routes": {
+    "category": null,
+    "topicTags": []
+  },
+  "capacity-to-ship-packages-within-d-days": {
+    "category": null,
+    "topicTags": []
+  },
+  "cheapest-flights-within-k-stops": {
+    "category": null,
+    "topicTags": []
+  },
+  "climbing-stairs": {
+    "category": "DP",
+    "topicTags": [
+      "Math",
+      "Dynamic Programming",
+      "Memoization"
+    ]
+  },
+  "clone-graph": {
+    "category": "Graph",
+    "topicTags": [
+      "Hash Table",
+      "Depth-First Search",
+      "Breadth-First Search",
+      "Graph Theory"
+    ]
+  },
+  "coin-change": {
+    "category": "DP",
+    "topicTags": [
+      "Array",
+      "Dynamic Programming",
+      "Breadth-First Search"
+    ]
+  },
+  "coin-change-ii": {
+    "category": null,
+    "topicTags": []
+  },
+  "combination-sum": {
+    "category": null,
+    "topicTags": []
+  },
+  "combination-sum-ii": {
+    "category": null,
+    "topicTags": []
+  },
+  "combination-sum-iv": {
+    "category": "DP",
+    "topicTags": [
+      "Array",
+      "Dynamic Programming"
+    ]
+  },
+  "construct-binary-tree-from-preorder-and-inorder-traversal": {
+    "category": "Tree",
+    "topicTags": [
+      "Array",
+      "Hash Table",
+      "Divide and Conquer",
+      "Tree",
+      "Binary Tree"
+    ]
+  },
+  "container-with-most-water": {
+    "category": "Array",
+    "topicTags": [
+      "Array",
+      "Two Pointers",
+      "Greedy"
+    ]
+  },
+  "contains-duplicate": {
+    "category": "Array",
+    "topicTags": [
+      "Array",
+      "Hash Table",
+      "Sorting"
+    ]
+  },
+  "count-sub-islands": {
+    "category": null,
+    "topicTags": []
+  },
+  "counting-bits": {
+    "category": "Binary",
+    "topicTags": [
+      "Dynamic Programming",
+      "Bit Manipulation"
+    ]
+  },
+  "course-schedule": {
+    "category": "Graph",
+    "topicTags": [
+      "Depth-First Search",
+      "Breadth-First Search",
+      "Graph Theory",
+      "Topological Sort"
+    ]
+  },
+  "course-schedule-ii": {
+    "category": null,
+    "topicTags": []
+  },
+  "course-schedule-iv": {
+    "category": null,
+    "topicTags": []
+  },
+  "custom-sort-string": {
+    "category": null,
+    "topicTags": []
+  },
+  "daily-temperatures": {
+    "category": null,
+    "topicTags": []
+  },
+  "decode-ways": {
+    "category": "DP",
+    "topicTags": [
+      "String",
+      "Dynamic Programming"
+    ]
+  },
+  "design-add-and-search-words-data-structure": {
+    "category": "Tree",
+    "topicTags": [
+      "String",
+      "Depth-First Search",
+      "Design",
+      "Trie"
+    ]
+  },
+  "design-task-manager": {
+    "category": null,
+    "topicTags": []
+  },
+  "diameter-of-binary-tree": {
+    "category": null,
+    "topicTags": []
+  },
+  "distinct-subsequences": {
+    "category": null,
+    "topicTags": []
+  },
+  "edit-distance": {
+    "category": null,
+    "topicTags": []
+  },
+  "encode-and-decode-strings": {
+    "category": "String",
+    "topicTags": [
+      "Array",
+      "String",
+      "Design"
+    ]
+  },
+  "evaluate-division": {
+    "category": null,
+    "topicTags": []
+  },
+  "find-all-anagrams-in-a-string": {
+    "category": null,
+    "topicTags": []
+  },
+  "find-all-possible-recipes-from-given-supplies": {
+    "category": null,
+    "topicTags": []
+  },
+  "find-median-from-data-stream": {
+    "category": "Heap",
+    "topicTags": [
+      "Two Pointers",
+      "Design",
+      "Sorting",
+      "Heap (Priority Queue)",
+      "Data Stream"
+    ]
+  },
+  "find-minimum-in-rotated-sorted-array": {
+    "category": "Array",
+    "topicTags": [
+      "Array",
+      "Binary Search"
+    ]
+  },
+  "find-peak-element": {
+    "category": null,
+    "topicTags": []
+  },
+  "find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance": {
+    "category": null,
+    "topicTags": []
+  },
+  "find-the-duplicate-number": {
+    "category": null,
+    "topicTags": []
+  },
+  "first-unique-character-in-a-string": {
+    "category": null,
+    "topicTags": []
+  },
+  "flood-fill": {
+    "category": null,
+    "topicTags": []
+  },
+  "fruit-into-baskets": {
+    "category": null,
+    "topicTags": []
+  },
+  "generate-parentheses": {
+    "category": null,
+    "topicTags": []
+  },
+  "graph-valid-tree": {
+    "category": "Graph",
+    "topicTags": [
+      "Depth-First Search",
+      "Breadth-First Search",
+      "Union-Find",
+      "Graph Theory"
+    ]
+  },
+  "group-anagrams": {
+    "category": "String",
+    "topicTags": [
+      "Array",
+      "Hash Table",
+      "String",
+      "Sorting"
+    ]
+  },
+  "grumpy-bookstore-owner": {
+    "category": null,
+    "topicTags": []
+  },
+  "house-robber": {
+    "category": "DP",
+    "topicTags": [
+      "Array",
+      "Dynamic Programming"
+    ]
+  },
+  "house-robber-ii": {
+    "category": "DP",
+    "topicTags": [
+      "Array",
+      "Dynamic Programming"
+    ]
+  },
+  "implement-trie-prefix-tree": {
+    "category": "Tree",
+    "topicTags": []
+  },
+  "insert-interval": {
+    "category": "Interval",
+    "topicTags": [
+      "Array"
+    ]
+  },
+  "interleaving-string": {
+    "category": null,
+    "topicTags": []
+  },
+  "invert-binary-tree": {
+    "category": "Tree",
+    "topicTags": [
+      "Tree",
+      "Depth-First Search",
+      "Breadth-First Search",
+      "Binary Tree"
+    ]
+  },
+  "island-perimeter": {
+    "category": null,
+    "topicTags": []
+  },
+  "jump-game": {
+    "category": "DP",
+    "topicTags": [
+      "Array",
+      "Dynamic Programming",
+      "Greedy"
+    ]
+  },
+  "k-closest-points-to-origin": {
+    "category": null,
+    "topicTags": []
+  },
+  "keys-and-rooms": {
+    "category": null,
+    "topicTags": []
+  },
+  "koko-eating-bananas": {
+    "category": null,
+    "topicTags": []
+  },
+  "kth-largest-element-in-an-array": {
+    "category": null,
+    "topicTags": []
+  },
+  "kth-smallest-element-in-a-bst": {
+    "category": "Tree",
+    "topicTags": []
+  },
+  "largest-component-size-by-common-factor": {
+    "category": null,
+    "topicTags": []
+  },
+  "largest-rectangle-in-histogram": {
+    "category": null,
+    "topicTags": []
+  },
+  "letter-combinations-of-a-phone-number": {
+    "category": null,
+    "topicTags": []
+  },
+  "linked-list-cycle": {
+    "category": "Linked List",
+    "topicTags": [
+      "Hash Table",
+      "Linked List",
+      "Two Pointers"
+    ]
+  },
+  "longest-common-subsequence": {
+    "category": "DP",
+    "topicTags": [
+      "String",
+      "Dynamic Programming"
+    ]
+  },
+  "longest-consecutive-sequence": {
+    "category": "Graph",
+    "topicTags": [
+      "Array",
+      "Hash Table",
+      "Union-Find"
+    ]
+  },
+  "longest-increasing-path-in-a-matrix": {
+    "category": null,
+    "topicTags": []
+  },
+  "longest-increasing-subsequence": {
+    "category": "DP",
+    "topicTags": [
+      "Array",
+      "Binary Search",
+      "Dynamic Programming"
+    ]
+  },
+  "longest-palindrome": {
+    "category": null,
+    "topicTags": []
+  },
+  "longest-palindromic-subsequence": {
+    "category": null,
+    "topicTags": []
+  },
+  "longest-palindromic-substring": {
+    "category": "String",
+    "topicTags": [
+      "Two Pointers",
+      "String",
+      "Dynamic Programming"
+    ]
+  },
+  "longest-repeating-character-replacement": {
+    "category": "String",
+    "topicTags": [
+      "Hash Table",
+      "String",
+      "Sliding Window"
+    ]
+  },
+  "longest-substring-without-repeating-characters": {
+    "category": "String",
+    "topicTags": [
+      "Hash Table",
+      "String",
+      "Sliding Window"
+    ]
+  },
+  "longest-word-in-dictionary": {
+    "category": null,
+    "topicTags": []
+  },
+  "loud-and-rich": {
+    "category": null,
+    "topicTags": []
+  },
+  "lowest-common-ancestor-of-a-binary-search-tree": {
+    "category": "Tree",
+    "topicTags": [
+      "Tree",
+      "Depth-First Search",
+      "Binary Search Tree",
+      "Binary Tree"
+    ]
+  },
+  "lowest-common-ancestor-of-a-binary-tree": {
+    "category": null,
+    "topicTags": []
+  },
+  "lru-cache": {
+    "category": null,
+    "topicTags": []
+  },
+  "making-a-large-island": {
+    "category": null,
+    "topicTags": []
+  },
+  "map-sum-pairs": {
+    "category": null,
+    "topicTags": []
+  },
+  "max-area-of-island": {
+    "category": null,
+    "topicTags": []
+  },
+  "max-consecutive-ones-iii": {
+    "category": null,
+    "topicTags": []
+  },
+  "maximal-rectangle": {
+    "category": null,
+    "topicTags": []
+  },
+  "maximize-greatness-of-an-array": {
+    "category": null,
+    "topicTags": []
+  },
+  "maximum-depth-of-binary-tree": {
+    "category": "Tree",
+    "topicTags": [
+      "Tree",
+      "Depth-First Search",
+      "Breadth-First Search",
+      "Binary Tree"
+    ]
+  },
+  "maximum-product-subarray": {
+    "category": "Array",
+    "topicTags": [
+      "Array",
+      "Dynamic Programming"
+    ]
+  },
+  "maximum-subarray": {
+    "category": "Array",
+    "topicTags": [
+      "Array",
+      "Divide and Conquer",
+      "Dynamic Programming"
+    ]
+  },
+  "median-of-two-sorted-arrays": {
+    "category": null,
+    "topicTags": []
+  },
+  "meeting-rooms": {
+    "category": "Interval",
+    "topicTags": [
+      "Array",
+      "Sorting"
+    ]
+  },
+  "meeting-rooms-ii": {
+    "category": "Interval",
+    "topicTags": [
+      "Array",
+      "Two Pointers",
+      "Greedy",
+      "Sorting",
+      "Heap (Priority Queue)",
+      "Prefix Sum"
+    ]
+  },
+  "merge-intervals": {
+    "category": "Interval",
+    "topicTags": [
+      "Array",
+      "Sorting"
+    ]
+  },
+  "merge-k-sorted-lists": {
+    "category": "Linked List",
+    "topicTags": [
+      "Linked List",
+      "Divide and Conquer",
+      "Heap (Priority Queue)",
+      "Merge Sort"
+    ]
+  },
+  "merge-sorted-array": {
+    "category": null,
+    "topicTags": []
+  },
+  "merge-two-sorted-lists": {
+    "category": "Linked List",
+    "topicTags": [
+      "Linked List",
+      "Recursion"
+    ]
+  },
+  "minimum-cost-to-make-at-least-one-valid-path-in-a-grid": {
+    "category": null,
+    "topicTags": []
+  },
+  "minimum-height-trees": {
+    "category": null,
+    "topicTags": []
+  },
+  "minimum-knight-moves": {
+    "category": null,
+    "topicTags": []
+  },
+  "minimum-path-sum": {
+    "category": null,
+    "topicTags": []
+  },
+  "minimum-size-subarray-sum": {
+    "category": null,
+    "topicTags": []
+  },
+  "minimum-window-substring": {
+    "category": "String",
+    "topicTags": [
+      "Hash Table",
+      "String",
+      "Sliding Window"
+    ]
+  },
+  "missing-number": {
+    "category": "Binary",
+    "topicTags": [
+      "Array",
+      "Hash Table",
+      "Math",
+      "Binary Search",
+      "Bit Manipulation",
+      "Sorting"
+    ]
+  },
+  "most-stones-removed-with-same-row-or-column": {
+    "category": null,
+    "topicTags": []
+  },
+  "n-queens": {
+    "category": null,
+    "topicTags": []
+  },
+  "network-delay-time": {
+    "category": null,
+    "topicTags": []
+  },
+  "next-greater-element-i": {
+    "category": null,
+    "topicTags": []
+  },
+  "non-overlapping-intervals": {
+    "category": "Interval",
+    "topicTags": [
+      "Array",
+      "Dynamic Programming",
+      "Greedy",
+      "Sorting"
+    ]
+  },
+  "number-of-1-bits": {
+    "category": "Binary",
+    "topicTags": [
+      "Divide and Conquer",
+      "Bit Manipulation"
+    ]
+  },
+  "number-of-connected-components-in-an-undirected-graph": {
+    "category": "Graph",
+    "topicTags": [
+      "Depth-First Search",
+      "Breadth-First Search",
+      "Union-Find",
+      "Graph Theory"
+    ]
+  },
+  "number-of-distinct-islands": {
+    "category": null,
+    "topicTags": []
+  },
+  "number-of-islands": {
+    "category": "Graph",
+    "topicTags": [
+      "Array",
+      "Depth-First Search",
+      "Breadth-First Search",
+      "Union-Find",
+      "Matrix"
+    ]
+  },
+  "number-of-provinces": {
+    "category": null,
+    "topicTags": []
+  },
+  "online-stock-span": {
+    "category": null,
+    "topicTags": []
+  },
+  "open-the-lock": {
+    "category": null,
+    "topicTags": []
+  },
+  "pacific-atlantic-water-flow": {
+    "category": "Graph",
+    "topicTags": [
+      "Array",
+      "Depth-First Search",
+      "Breadth-First Search",
+      "Matrix"
+    ]
+  },
+  "palindrome-pairs": {
+    "category": null,
+    "topicTags": []
+  },
+  "palindrome-partitioning": {
+    "category": null,
+    "topicTags": []
+  },
+  "palindromic-substrings": {
+    "category": "String",
+    "topicTags": []
+  },
+  "parallel-courses": {
+    "category": null,
+    "topicTags": []
+  },
+  "partition-equal-subset-sum": {
+    "category": null,
+    "topicTags": []
+  },
+  "path-with-maximum-probability": {
+    "category": null,
+    "topicTags": []
+  },
+  "path-with-minimum-effort": {
+    "category": null,
+    "topicTags": []
+  },
+  "permutation-in-string": {
+    "category": null,
+    "topicTags": []
+  },
+  "permutations": {
+    "category": null,
+    "topicTags": []
+  },
+  "product-of-array-except-self": {
+    "category": "Array",
+    "topicTags": [
+      "Array",
+      "Prefix Sum"
+    ]
+  },
+  "ransom-note": {
+    "category": null,
+    "topicTags": []
+  },
+  "reconstruct-itinerary": {
+    "category": null,
+    "topicTags": []
+  },
+  "redundant-connection": {
+    "category": null,
+    "topicTags": []
+  },
+  "regular-expression-matching": {
+    "category": null,
+    "topicTags": []
+  },
+  "remove-duplicates-from-sorted-array": {
+    "category": null,
+    "topicTags": []
+  },
+  "remove-k-digits": {
+    "category": null,
+    "topicTags": []
+  },
+  "remove-nth-node-from-end-of-list": {
+    "category": "Linked List",
+    "topicTags": [
+      "Linked List",
+      "Two Pointers"
+    ]
+  },
+  "reorder-list": {
+    "category": "Linked List",
+    "topicTags": [
+      "Linked List",
+      "Two Pointers",
+      "Stack",
+      "Recursion"
+    ]
+  },
+  "reorganize-string": {
+    "category": null,
+    "topicTags": []
+  },
+  "replace-words": {
+    "category": null,
+    "topicTags": []
+  },
+  "reverse-bits": {
+    "category": "Binary",
+    "topicTags": [
+      "Divide and Conquer",
+      "Bit Manipulation"
+    ]
+  },
+  "reverse-linked-list": {
+    "category": "Linked List",
+    "topicTags": [
+      "Linked List",
+      "Recursion"
+    ]
+  },
+  "reverse-nodes-in-k-group": {
+    "category": null,
+    "topicTags": []
+  },
+  "rotate-image": {
+    "category": "Matrix",
+    "topicTags": [
+      "Array",
+      "Math",
+      "Matrix"
+    ]
+  },
+  "rotting-oranges": {
+    "category": null,
+    "topicTags": []
+  },
+  "same-tree": {
+    "category": "Tree",
+    "topicTags": [
+      "Tree",
+      "Depth-First Search",
+      "Breadth-First Search",
+      "Binary Tree"
+    ]
+  },
+  "satisfiability-of-equality-equations": {
+    "category": null,
+    "topicTags": []
+  },
+  "search-a-2d-matrix": {
+    "category": null,
+    "topicTags": []
+  },
+  "search-in-rotated-sorted-array": {
+    "category": "Array",
+    "topicTags": [
+      "Array",
+      "Binary Search"
+    ]
+  },
+  "search-suggestions-system": {
+    "category": null,
+    "topicTags": []
+  },
+  "sequence-reconstruction": {
+    "category": null,
+    "topicTags": []
+  },
+  "serialize-and-deserialize-binary-tree": {
+    "category": "Tree",
+    "topicTags": []
+  },
+  "set-matrix-zeroes": {
+    "category": "Matrix",
+    "topicTags": [
+      "Array",
+      "Hash Table",
+      "Matrix"
+    ]
+  },
+  "shortest-palindrome": {
+    "category": null,
+    "topicTags": []
+  },
+  "shortest-path-in-a-grid-with-obstacles-elimination": {
+    "category": null,
+    "topicTags": []
+  },
+  "shortest-path-in-binary-matrix": {
+    "category": null,
+    "topicTags": [
+      "Array",
+      "Breadth-First Search",
+      "Matrix"
+    ]
+  },
+  "smallest-range-covering-elements-from-k-lists": {
+    "category": null,
+    "topicTags": []
+  },
+  "smallest-string-with-swaps": {
+    "category": null,
+    "topicTags": []
+  },
+  "snakes-and-ladders": {
+    "category": null,
+    "topicTags": []
+  },
+  "sort-characters-by-frequency": {
+    "category": null,
+    "topicTags": []
+  },
+  "sort-colors": {
+    "category": null,
+    "topicTags": [
+      "Array",
+      "Two Pointers",
+      "Sorting"
+    ]
+  },
+  "sort-items-by-groups-respecting-dependencies": {
+    "category": null,
+    "topicTags": []
+  },
+  "spiral-matrix": {
+    "category": "Matrix",
+    "topicTags": [
+      "Array",
+      "Matrix",
+      "Simulation"
+    ]
+  },
+  "split-array-largest-sum": {
+    "category": null,
+    "topicTags": []
+  },
+  "squares-of-a-sorted-array": {
+    "category": null,
+    "topicTags": []
+  },
+  "stream-of-characters": {
+    "category": null,
+    "topicTags": []
+  },
+  "subarrays-with-k-different-integers": {
+    "category": null,
+    "topicTags": []
+  },
+  "subsets": {
+    "category": null,
+    "topicTags": []
+  },
+  "subsets-ii": {
+    "category": null,
+    "topicTags": []
+  },
+  "subtree-of-another-tree": {
+    "category": "Tree",
+    "topicTags": []
+  },
+  "sum-of-subarray-minimums": {
+    "category": null,
+    "topicTags": []
+  },
+  "sum-of-two-integers": {
+    "category": "Binary",
+    "topicTags": [
+      "Math",
+      "Bit Manipulation"
+    ]
+  },
+  "surrounded-regions": {
+    "category": null,
+    "topicTags": []
+  },
+  "swim-in-rising-water": {
+    "category": null,
+    "topicTags": []
+  },
+  "target-sum": {
+    "category": null,
+    "topicTags": []
+  },
+  "task-scheduler": {
+    "category": null,
+    "topicTags": []
+  },
+  "the-maze": {
+    "category": null,
+    "topicTags": []
+  },
+  "top-k-frequent-elements": {
+    "category": "Heap",
+    "topicTags": []
+  },
+  "top-k-frequent-words": {
+    "category": null,
+    "topicTags": []
+  },
+  "trapping-rain-water": {
+    "category": null,
+    "topicTags": []
+  },
+  "two-sum": {
+    "category": "Array",
+    "topicTags": [
+      "Array",
+      "Hash Table"
+    ]
+  },
+  "two-sum-ii-input-array-is-sorted": {
+    "category": null,
+    "topicTags": []
+  },
+  "ugly-number-ii": {
+    "category": null,
+    "topicTags": []
+  },
+  "unique-paths": {
+    "category": "DP",
+    "topicTags": [
+      "Math",
+      "Dynamic Programming",
+      "Combinatorics"
+    ]
+  },
+  "valid-anagram": {
+    "category": "String",
+    "topicTags": [
+      "Hash Table",
+      "String",
+      "Sorting"
+    ]
+  },
+  "valid-palindrome": {
+    "category": "String",
+    "topicTags": [
+      "Two Pointers",
+      "String"
+    ]
+  },
+  "valid-palindrome-ii": {
+    "category": null,
+    "topicTags": []
+  },
+  "valid-parentheses": {
+    "category": "String",
+    "topicTags": []
+  },
+  "validate-binary-search-tree": {
+    "category": "Tree",
+    "topicTags": []
+  },
+  "walls-and-gates": {
+    "category": null,
+    "topicTags": []
+  },
+  "word-break": {
+    "category": "DP",
+    "topicTags": [
+      "Array",
+      "Hash Table",
+      "String",
+      "Dynamic Programming",
+      "Trie",
+      "Memoization"
+    ]
+  },
+  "word-ladder": {
+    "category": null,
+    "topicTags": []
+  },
+  "word-search": {
+    "category": "Matrix",
+    "topicTags": [
+      "Array",
+      "String",
+      "Backtracking",
+      "Depth-First Search",
+      "Matrix"
+    ]
+  },
+  "word-search-ii": {
+    "category": "Tree",
+    "topicTags": []
+  }
+}
