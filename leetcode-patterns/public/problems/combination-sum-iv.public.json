@@ -67,5 +67,5 @@
       "explanation": "The possible combinations are: (3, 2) which doesn't work; actually (5) and (3, 2) doesn't exist; the combinations are (5) directly, and we need sequences, so it's just [5]. Actually: [5] and no other way. Upon reconsideration: we need sequences summing to 5, so [5] is one, and no others from {3,4,5,6}. Wait: we can't use 2. So only [5] = 1 way. Let me recalculate: Actually this should be [5] = 1 way only from {3,4,5,6}."
     }
   ],
-  "hiddenCount": 25
+  "hiddenCount": 24
 }

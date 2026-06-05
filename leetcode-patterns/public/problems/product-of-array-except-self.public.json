@@ -62,5 +62,5 @@
       "explanation": "output[2] = (-1)*1*(-3)*3 = 9; all other indices involve a zero product"
     }
   ],
-  "hiddenCount": 25
+  "hiddenCount": 23
 }

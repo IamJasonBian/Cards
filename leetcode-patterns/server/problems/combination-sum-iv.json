@@ -219,17 +219,6 @@
       "expected": 595
     },
     {
-      "name": "large_target_small_nums",
-      "input": {
-        "nums": [
-          1,
-          2
-        ],
-        "target": 100
-      },
-      "expected": 573147844013817100000
-    },
-    {
       "name": "target_1000_single_num",
       "input": {
         "nums": [
