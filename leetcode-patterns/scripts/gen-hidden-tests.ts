@@ -169,6 +169,17 @@ function parseJSONArrayLoose(text: string): unknown[] | null {
   return null;
 }
 
+// Values whose magnitude exceeds Number.MAX_SAFE_INTEGER (2^53 - 1) cannot
+// round-trip through the Node/JSON pipeline — Node's JSON.parse degrades such
+// integers to lossy floats, producing spurious Wrong Answers in the live judge.
+// Reject any case whose input or expected output contains one.
+function hasUnsafeInt(v: unknown): boolean {
+  if (typeof v === "number") return Math.abs(v) > Number.MAX_SAFE_INTEGER;
+  if (Array.isArray(v)) return v.some(hasUnsafeInt);
+  if (v !== null && typeof v === "object") return Object.values(v).some(hasUnsafeInt);
+  return false;
+}
+
 async function runReferenceOnInputs(
   p: NormalizedProblem,
   inputs: { name: string; input: Record<string, unknown> }[]
@@ -225,7 +236,14 @@ print(json.dumps(out))
         >;
         const validCases = arr
           .filter((c): c is { name: string; ok: true; input: Record<string, unknown>; expected: unknown } => c.ok)
-          .map((c) => ({ name: c.name, input: c.input, expected: c.expected }));
+          .map((c) => ({ name: c.name, input: c.input, expected: c.expected }))
+          .filter((c) => {
+            if (hasUnsafeInt(c.input) || hasUnsafeInt(c.expected)) {
+              console.warn(`    [${p.slug}] discarding "${c.name}": value exceeds 2^53 (Number.MAX_SAFE_INTEGER)`);
+              return false;
+            }
+            return true;
+          });
         const rejected = arr.length - validCases.length;
         resolve({ validCases, rejected });
       } catch {
