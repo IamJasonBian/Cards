@@ -20,6 +20,8 @@ const API_BASE = "https://alfa-leetcode-api.onrender.com/select";
 const OUT_PATH = "src/data/topicTags.json";
 const FETCH_TIMEOUT_MS = 15_000;
 const DELAY_MS = 400; // be polite to the public API
+const MAX_RETRIES = 3; // retries on HTTP 429 (rate limiting)
+const BACKOFF_BASE_MS = 5_000; // grows linearly per retry
 
 interface TopicInfo {
   category: string | null;
@@ -61,28 +63,37 @@ async function fetchWithTimeout(url: string, timeoutMs: number): Promise<Respons
   }
 }
 
-// Returns the topic-tag names for a slug, or null on any failure.
+// Returns the topic-tag names for a slug, or null on any failure. Retries with
+// linear backoff on HTTP 429 so the shared public API can recover.
 async function fetchTopicTags(slug: string): Promise<string[] | null> {
   const url = `${API_BASE}?titleSlug=${encodeURIComponent(slug)}`;
-  try {
-    const res = await fetchWithTimeout(url, FETCH_TIMEOUT_MS);
-    if (!res.ok) {
-      console.warn(`  [${slug}] HTTP ${res.status} for ${url}`);
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const res = await fetchWithTimeout(url, FETCH_TIMEOUT_MS);
+      if (res.status === 429 && attempt < MAX_RETRIES) {
+        const wait = BACKOFF_BASE_MS * (attempt + 1);
+        console.warn(`  [${slug}] HTTP 429, backing off ${wait}ms (attempt ${attempt + 1})`);
+        await sleep(wait);
+        continue;
+      }
+      if (!res.ok) {
+        console.warn(`  [${slug}] HTTP ${res.status} for ${url}`);
+        return null;
+      }
+      const data = (await res.json()) as SelectResponse;
+      if (!Array.isArray(data.topicTags)) {
+        console.warn(`  [${slug}] no topicTags in response`);
+        return null;
+      }
+      return data.topicTags
+        .map((t) => t?.name)
+        .filter((n): n is string => typeof n === "string" && n.length > 0);
+    } catch (e) {
+      console.warn(`  [${slug}] fetch error: ${e instanceof Error ? e.message : String(e)}`);
       return null;
     }
-    const data = (await res.json()) as SelectResponse;
-    if (!Array.isArray(data.topicTags)) {
-      console.warn(`  [${slug}] no topicTags in response`);
-      return null;
-    }
-    const names = data.topicTags
-      .map((t) => t?.name)
-      .filter((n): n is string => typeof n === "string" && n.length > 0);
-    return names;
-  } catch (e) {
-    console.warn(`  [${slug}] fetch error: ${e instanceof Error ? e.message : String(e)}`);
-    return null;
   }
+  return null;
 }
 
 // Loads any previously generated file so a re-run only retries slugs that are
