@@ -48,7 +48,16 @@ export async function runPython(opts: Judge0SubmitOptions): Promise<Judge0Result
     redirect_stderr_to_stdout: false,
   };
   const headers: Record<string, string> = { "Content-Type": "application/json" };
-  if (AUTH_TOKEN) headers["X-Auth-Token"] = AUTH_TOKEN;
+  if (AUTH_TOKEN) {
+    // RapidAPI-hosted Judge0 CE authenticates with X-RapidAPI-Key/Host; a
+    // self-hosted instance uses X-Auth-Token. Pick based on the configured URL.
+    if (/rapidapi\.com$/i.test(new URL(DEFAULT_URL).hostname)) {
+      headers["X-RapidAPI-Key"] = AUTH_TOKEN;
+      headers["X-RapidAPI-Host"] = new URL(DEFAULT_URL).hostname;
+    } else {
+      headers["X-Auth-Token"] = AUTH_TOKEN;
+    }
+  }
 
   let res: Response;
   try {
