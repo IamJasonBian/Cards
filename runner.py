@@ -31,8 +31,40 @@ import importlib.util
 import json
 import os
 import sys
+import threading
 from collections import deque
 from typing import Any, List, Optional
+
+# Per-test wall-clock limit (seconds) so a hanging solution can't run forever.
+TEST_TIMEOUT_SECONDS = 10
+
+
+class TestTimeout(Exception):
+    """Raised when a single test case exceeds TEST_TIMEOUT_SECONDS."""
+
+
+def _call_with_timeout(func, args, timeout: float):
+    """
+    Run ``func(*args)`` with a wall-clock limit. Stdlib-only and
+    cross-platform via a worker thread. Raises TestTimeout on timeout and
+    re-raises any exception the callable raised.
+    """
+    result: dict = {}
+
+    def _worker():
+        try:
+            result["value"] = func(*args)
+        except BaseException as exc:  # noqa: BLE001 - propagate to caller
+            result["error"] = exc
+
+    thread = threading.Thread(target=_worker, daemon=True)
+    thread.start()
+    thread.join(timeout)
+    if thread.is_alive():
+        raise TestTimeout(f"exceeded {timeout}s time limit")
+    if "error" in result:
+        raise result["error"]
+    return result.get("value")
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -101,11 +133,13 @@ def _results_equal(actual: Any, expected: Any, unordered: bool) -> bool:
     return actual == expected
 
 
-def run_test_cases(problem: dict, solutions_dir: str, verbose: bool = False) -> tuple[int, int]:
+def run_test_cases(problem: dict, solutions_dir: str, verbose: bool = False) -> tuple[int, int, bool]:
     """
     Execute all test cases for a single problem.
 
-    Returns (passed, total).
+    Returns (passed, total, load_ok). ``load_ok`` is False when the solution
+    module could not be loaded, the Solution class is missing, or the target
+    method is absent -- those are hard failures regardless of test count.
     """
     slug = problem["slug"]
     folder = problem["folder"]
@@ -115,9 +149,15 @@ def run_test_cases(problem: dict, solutions_dir: str, verbose: bool = False) -> 
 
     try:
         SolutionClass = load_solution_class(solutions_dir, folder)
-    except (FileNotFoundError, AttributeError, SyntaxError) as exc:
+    except Exception as exc:  # load/import/syntax errors are all hard failures
         print(f"  x Could not load solution: {exc}")
-        return 0, len(test_cases)
+        return 0, len(test_cases), False
+
+    # Verify the target method exists before running any test case so a missing
+    # method is a hard failure even when there are no test cases defined.
+    if not hasattr(SolutionClass, method_name):
+        print(f"  x Solution class has no method '{method_name}'")
+        return 0, len(test_cases), False
 
     passed = 0
     for i, tc in enumerate(test_cases):
@@ -126,7 +166,10 @@ def run_test_cases(problem: dict, solutions_dir: str, verbose: bool = False) -> 
         try:
             solution = SolutionClass()
             method = getattr(solution, method_name)
-            actual = method(*args)
+            actual = _call_with_timeout(method, args, TEST_TIMEOUT_SECONDS)
+        except TestTimeout as exc:
+            print(f"  x Test {i + 1}: TIMEOUT -- {exc}")
+            continue
         except Exception as exc:
             print(f"  x Test {i + 1}: EXCEPTION -- {exc}")
             if verbose:
@@ -142,7 +185,7 @@ def run_test_cases(problem: dict, solutions_dir: str, verbose: bool = False) -> 
         else:
             print(f"  x Test {i + 1}: {args} -> got {actual!r}, expected {expected!r}")
 
-    return passed, len(test_cases)
+    return passed, len(test_cases), True
 
 
 # ---------------------------------------------------------------------------
@@ -158,7 +201,10 @@ def run_problem(problem: dict, solutions_dir: str, verbose: bool = False) -> boo
     diff_badge = {"Easy": "[Easy]", "Medium": "[Medium]", "Hard": "[Hard]"}.get(difficulty, "[?]")
     print(f"\n{diff_badge} {title} ({slug})")
 
-    passed, total = run_test_cases(problem, solutions_dir, verbose=verbose)
+    passed, total, load_ok = run_test_cases(problem, solutions_dir, verbose=verbose)
+    if not load_ok:
+        print("  FAIL (could not load solution)")
+        return False
     if total == 0:
         print("  ! No test cases defined.")
         return True

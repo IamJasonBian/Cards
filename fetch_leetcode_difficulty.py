@@ -18,8 +18,18 @@ LEVEL_TO_DIFFICULTY = {1: "Easy", 2: "Medium", 3: "Hard"}
 
 def main() -> int:
     req = urllib.request.Request(URL, headers={"User-Agent": "leetcards-validator/1.0"})
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        data = json.loads(resp.read())
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            raw = resp.read()
+    except Exception as exc:  # network/HTTP/timeout errors
+        print(f"ERROR: failed to fetch {URL}: {exc}", file=sys.stderr)
+        return 1
+
+    try:
+        data = json.loads(raw)
+    except (json.JSONDecodeError, ValueError) as exc:
+        print(f"ERROR: invalid JSON from LeetCode API: {exc}", file=sys.stderr)
+        return 1
 
     pairs = data.get("stat_status_pairs", [])
     if not pairs:
@@ -27,13 +37,26 @@ def main() -> int:
         return 1
 
     problems: dict[str, str] = {}
+    skipped = 0
     for entry in pairs:
-        slug = entry["stat"]["question__title_slug"]
-        level = entry["difficulty"]["level"]
+        try:
+            slug = entry["stat"]["question__title_slug"]
+            level = entry["difficulty"]["level"]
+        except (KeyError, TypeError):
+            skipped += 1
+            continue
         difficulty = LEVEL_TO_DIFFICULTY.get(level)
         if difficulty is None:
             continue
         problems[slug] = difficulty
+
+    # A successful response should yield far more than a handful of problems;
+    # a near-empty result means the API returned partial/garbage data.
+    if not problems:
+        print("ERROR: no usable problems parsed from LeetCode API response", file=sys.stderr)
+        return 1
+    if skipped:
+        print(f"WARNING: skipped {skipped} malformed entries", file=sys.stderr)
 
     snapshot = {
         "fetched_at": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),

@@ -27,6 +27,7 @@ import json
 import os
 import sys
 import time
+import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 
@@ -52,16 +53,27 @@ def fetch(path: str, retries: int = 3, delay: int = 5):
             with urllib.request.urlopen(req, timeout=30) as resp:
                 return json.loads(resp.read())
         except urllib.error.HTTPError as e:
-            if e.code == 429 and attempt < retries - 1:
+            # Retry rate limits and transient 5xx server errors with backoff.
+            if (e.code == 429 or 500 <= e.code < 600) and attempt < retries - 1:
                 wait = delay * (2 ** attempt)
-                print(f"  Rate limited, waiting {wait}s...")
+                print(f"  HTTP {e.code} for {path}, waiting {wait}s and retrying...")
                 time.sleep(wait)
                 continue
             print(f"  HTTP {e.code} for {path}, skipping")
             return None
+        except (urllib.error.URLError, TimeoutError, OSError) as exc:
+            # Network errors / timeouts are transient: retry with backoff.
+            if attempt < retries - 1:
+                wait = delay * (2 ** attempt)
+                print(f"  Network error for {path} ({exc}), waiting {wait}s and retrying...")
+                time.sleep(wait)
+                continue
+            print(f"  Error fetching {path}: {exc}, skipping")
+            return None
         except Exception as exc:
             if attempt < retries - 1:
-                time.sleep(delay)
+                wait = delay * (2 ** attempt)
+                time.sleep(wait)
                 continue
             print(f"  Error fetching {path}: {exc}, skipping")
             return None
@@ -115,11 +127,21 @@ def refresh_problem(problem: dict, username: str) -> dict:
     return snapshot
 
 
-def save_snapshot(slug: str, snapshot: dict) -> None:
+def save_snapshot(slug: str, snapshot: dict) -> bool:
+    """
+    Write a per-problem snapshot. Returns True if a non-empty snapshot was
+    saved. If both problem_detail and latest_submission are missing the fetch
+    yielded nothing useful; we log clearly and still save so the refreshed_at
+    timestamp is recorded, but the empty result is not hidden.
+    """
+    has_data = bool(snapshot.get("problem_detail") or snapshot.get("latest_submission"))
+    if not has_data:
+        print(f"  ! WARNING: no data fetched for {slug}; saving empty snapshot")
     os.makedirs(PROBLEMS_DATA_DIR, exist_ok=True)
     path = os.path.join(PROBLEMS_DATA_DIR, f"{slug}.json")
     with open(path, "w") as f:
         json.dump(snapshot, f, indent=2)
+    return has_data
 
 
 def update_status(statuses: list[dict]) -> None:
@@ -188,12 +210,16 @@ def main() -> int:
 
     print(f"Refreshing {len(problems)} key problem(s) for user: {args.username}")
     snapshots: list[dict] = []
+    empty_count = 0
     for problem in problems:
         snapshot = refresh_problem(problem, args.username)
-        save_snapshot(problem["slug"], snapshot)
+        if not save_snapshot(problem["slug"], snapshot):
+            empty_count += 1
         snapshots.append(snapshot)
 
     update_status(snapshots)
+    if empty_count:
+        print(f"WARNING: {empty_count} of {len(problems)} problem(s) returned no data.")
     return 0
 
 

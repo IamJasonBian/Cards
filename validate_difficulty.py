@@ -18,8 +18,12 @@ import sys
 PATTERNS_TS = pathlib.Path("leetcode-patterns/src/data/patterns.ts")
 SNAPSHOT = pathlib.Path("leetcode-difficulty.json")
 
+# Tolerate extra whitespace/newlines between tokens and an optional trailing
+# comma after the difficulty value (e.g. `..., difficulty: "Easy", }`).
 ENTRY_RE = re.compile(
-    r'\{\s*name:\s*"([^"]+)",\s*slug:\s*"([^"]+)",\s*difficulty:\s*"(Easy|Medium|Hard)"\s*\}'
+    r'\{\s*name:\s*"([^"]+)"\s*,\s*'
+    r'slug:\s*"([^"]+)"\s*,\s*'
+    r'difficulty:\s*"(Easy|Medium|Hard)"\s*,?\s*\}'
 )
 
 
@@ -58,6 +62,14 @@ def main() -> int:
     truth = load_snapshot()
     src = PATTERNS_TS.read_text()
     entries = collect_entries(src)
+
+    if not entries:
+        print(
+            f"ERROR: parsed 0 problem entries from {PATTERNS_TS} — the "
+            "{ name, slug, difficulty } format may have drifted from ENTRY_RE.",
+            file=sys.stderr,
+        )
+        sys.exit(2)
 
     seen: set[str] = set()
     matches, mismatches, missing = 0, [], []
