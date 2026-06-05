@@ -69,8 +69,8 @@ export function StackMatch() {
                 width={cellW - 8}
                 height={50}
                 rx={8}
-                fill={isCurrent ? "#7c5cbf" : "#1e2030"}
-                stroke={isCurrent ? "#a78bfa" : "rgba(255,255,255,0.08)"}
+                fill={isCurrent ? "#06b6d4" : "#1e2030"}
+                stroke={isCurrent ? "#22d3ee" : "rgba(255,255,255,0.08)"}
                 style={{ transition: "fill 300ms" }}
               />
               <text
@@ -88,7 +88,7 @@ export function StackMatch() {
         })}
         {frame.i >= 0 && (
           <g transform={`translate(${20 + frame.i * cellW + (cellW - 8) / 2}, 0)`} style={{ transition: "transform 400ms" }}>
-            <text x={0} y={20} textAnchor="middle" fill="#a78bfa" fontSize={12} fontFamily="JetBrains Mono, monospace" fontWeight={600}>
+            <text x={0} y={20} textAnchor="middle" fill="#22d3ee" fontSize={12} fontFamily="JetBrains Mono, monospace" fontWeight={600}>
               ▼
             </text>
           </g>
@@ -117,8 +117,8 @@ export function StackMatch() {
                 width={40}
                 height={36}
                 rx={6}
-                fill="#2d1f4e"
-                stroke="#7c5cbf"
+                fill="#0e3a44"
+                stroke="#06b6d4"
                 style={{ transition: "y 300ms" }}
               />
               <text
@@ -148,7 +148,7 @@ export function StackMatch() {
             x={frame.status === "ok" ? 35 : frame.status === "bad" ? 45 : 40}
             y={15}
             textAnchor="middle"
-            fill={frame.status === "ok" ? "#34d399" : frame.status === "bad" ? "#f87171" : "#a78bfa"}
+            fill={frame.status === "ok" ? "#34d399" : frame.status === "bad" ? "#f87171" : "#22d3ee"}
             fontSize={11}
             fontFamily="JetBrains Mono, monospace"
             fontWeight={600}

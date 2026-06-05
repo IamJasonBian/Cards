@@ -135,14 +135,14 @@ export function BFSLayerOrder() {
           const isCurrent = frame.current === n.id;
           const isVisiting = frame.visiting.has(n.id);
           const fill = isCurrent
-            ? "#7c5cbf"
+            ? "#06b6d4"
             : isVisiting
             ? "#0d9e6e"
             : visited
             ? "#1e2030"
             : "#0e0f14";
           const stroke = isCurrent
-            ? "#a78bfa"
+            ? "#22d3ee"
             : isVisiting
             ? "#34d399"
             : visited
@@ -178,7 +178,7 @@ export function BFSLayerOrder() {
           <text x={10} y={0} fill="#64748b" fontSize={11} fontFamily="JetBrains Mono, monospace">
             queue:
           </text>
-          <text x={60} y={0} fill="#a78bfa" fontSize={12} fontFamily="JetBrains Mono, monospace">
+          <text x={60} y={0} fill="#22d3ee" fontSize={12} fontFamily="JetBrains Mono, monospace">
             [{frame.queue.map((i) => NODES[i].val).join(", ")}]
           </text>
         </g>

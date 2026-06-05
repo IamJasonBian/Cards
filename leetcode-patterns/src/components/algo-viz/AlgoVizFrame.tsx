@@ -56,7 +56,7 @@ export function AlgoVizFrame({
           </button>
           <button
             onClick={onPlayToggle}
-            className="px-3 py-2 rounded-md bg-violet-500/20 border border-violet-400/30 text-violet-200 hover:bg-violet-500/30 flex items-center gap-1.5 text-sm cursor-pointer"
+            className="px-3 py-2 rounded-md bg-cyan-500/20 border border-cyan-400/30 text-cyan-200 hover:bg-cyan-500/30 flex items-center gap-1.5 text-sm cursor-pointer"
           >
             {running ? <Pause size={14} /> : <Play size={14} />}
             {running ? "Pause" : "Play"}

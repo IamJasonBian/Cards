@@ -98,8 +98,8 @@ export function FloydsCycle() {
           const onSlow = frame.slow === i;
           const onFast = frame.fast === i;
           const meet = frame.meet && onSlow && onFast;
-          const fill = meet ? "#10b981" : onSlow ? "#0d9e6e" : onFast ? "#7c5cbf" : "#1e2030";
-          const stroke = meet ? "#34d399" : onSlow ? "#34d399" : onFast ? "#a78bfa" : "rgba(255,255,255,0.1)";
+          const fill = meet ? "#10b981" : onSlow ? "#0d9e6e" : onFast ? "#06b6d4" : "#1e2030";
+          const stroke = meet ? "#34d399" : onSlow ? "#34d399" : onFast ? "#22d3ee" : "rgba(255,255,255,0.1)";
           return (
             <g key={i} style={{ transition: "all 400ms" }}>
               <circle cx={x} cy={y} r={20} fill={fill} stroke={stroke} strokeWidth={2} style={{ transition: "fill 300ms" }} />
@@ -112,7 +112,7 @@ export function FloydsCycle() {
                 </text>
               )}
               {onFast && (
-                <text x={x} y={y + (onSlow ? 42 : -30)} textAnchor="middle" fill="#a78bfa" fontSize={11} fontFamily="JetBrains Mono, monospace" fontWeight={600}>
+                <text x={x} y={y + (onSlow ? 42 : -30)} textAnchor="middle" fill="#22d3ee" fontSize={11} fontFamily="JetBrains Mono, monospace" fontWeight={600}>
                   fast
                 </text>
               )}

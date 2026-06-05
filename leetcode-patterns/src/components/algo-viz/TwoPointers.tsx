@@ -63,8 +63,8 @@ export function TwoPointers() {
                 width={cellW - 8}
                 height={60}
                 rx={8}
-                fill={found ? "#10b981" : active ? "#7c5cbf" : "#1e2030"}
-                stroke={active ? "#a78bfa" : "rgba(255,255,255,0.08)"}
+                fill={found ? "#10b981" : active ? "#06b6d4" : "#1e2030"}
+                stroke={active ? "#22d3ee" : "rgba(255,255,255,0.08)"}
                 strokeWidth={active ? 2 : 1}
                 style={{ transition: "fill 300ms, stroke 300ms" }}
               />
