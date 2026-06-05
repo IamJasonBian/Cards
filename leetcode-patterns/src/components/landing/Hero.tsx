@@ -8,7 +8,7 @@ export function Hero({ onNavigate }: { onNavigate: (view: string) => void }) {
       </div>
 
       <div className="mt-8 w-full bg-white px-5 py-6 sm:mt-0 sm:bg-transparent sm:p-0">
-        <h1 className="text-5xl font-bold tracking-tight text-slate-900 sm:mt-8 sm:text-7xl sm:[text-shadow:_0_2px_20px_rgb(255_255_255_/_55%)]">
+        <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:mt-8 sm:text-7xl sm:[text-shadow:_0_2px_20px_rgb(255_255_255_/_55%)]">
           One Card a Day
         </h1>
 
@@ -21,11 +21,11 @@ export function Hero({ onNavigate }: { onNavigate: (view: string) => void }) {
         </p>
       </div>
 
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+      <div className="mt-8 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
         <button
           type="button"
           onClick={() => onNavigate("submit")}
-          className="inline-flex cursor-pointer items-center gap-2 rounded-none bg-cyan-600 px-5 py-2.5 font-medium text-white transition-colors hover:bg-cyan-700"
+          className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-none bg-cyan-600 px-5 py-2.5 font-medium text-white transition-colors hover:bg-cyan-700"
         >
           Start today's card
           <ArrowRight className="h-4 w-4" />
@@ -33,7 +33,7 @@ export function Hero({ onNavigate }: { onNavigate: (view: string) => void }) {
         <button
           type="button"
           onClick={() => onNavigate("patterns")}
-          className="cursor-pointer rounded-none border border-slate-900/15 bg-white/95 sm:bg-white/60 px-5 py-2.5 font-medium text-slate-800 backdrop-blur-sm transition-colors hover:bg-white/80"
+          className="cursor-pointer rounded-none border border-slate-900/15 bg-white/95 sm:bg-white/60 px-5 py-2.5 text-center font-medium text-slate-800 backdrop-blur-sm transition-colors hover:bg-white/80"
         >
           Browse patterns
         </button>
