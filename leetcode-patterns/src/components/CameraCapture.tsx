@@ -111,19 +111,19 @@ export function CameraCapture({ mode, onResult }: Props) {
         type="button"
         onClick={handleOpen}
         title={`Capture ${label} from camera`}
-        className="flex items-center gap-1 px-2 py-1 text-xs text-indigo-600 border border-indigo-200 rounded-lg hover:bg-indigo-50 transition-colors"
+        className="flex items-center gap-1 px-2 py-1 text-xs text-cyan-400 border border-cyan-400/30 rounded-lg hover:bg-cyan-500/10 transition-colors"
       >
         <Camera size={13} /> Capture
       </button>
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
+          <div className="bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-white/5">
               <div>
-                <p className="font-semibold text-gray-900 text-sm">Capture {label}</p>
-                <p className="text-xs text-gray-400 mt-0.5">
+                <p className="font-semibold text-slate-100 text-sm">Capture {label}</p>
+                <p className="text-xs text-slate-400 mt-0.5">
                   {step === "preview" && "Point at the content, then capture."}
                   {step === "captured" && "Looks good? Parse it, or retake."}
                   {step === "parsing" && "Sending to Claude..."}
@@ -131,7 +131,7 @@ export function CameraCapture({ mode, onResult }: Props) {
                   {step === "idle" && "Starting camera..."}
                 </p>
               </div>
-              <button onClick={handleClose} className="text-gray-400 hover:text-gray-700">
+              <button onClick={handleClose} className="text-slate-400 hover:text-slate-100">
                 <X size={18} />
               </button>
             </div>
@@ -152,7 +152,7 @@ export function CameraCapture({ mode, onResult }: Props) {
               )}
               {step === "parsing" && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white">
-                  <Sparkles size={28} className="animate-pulse text-indigo-400" />
+                  <Sparkles size={28} className="animate-pulse text-cyan-400" />
                   <p className="text-sm">Parsing with Claude...</p>
                 </div>
               )}
@@ -164,11 +164,11 @@ export function CameraCapture({ mode, onResult }: Props) {
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-end gap-2 px-5 py-3 border-t border-gray-100">
+            <div className="flex items-center justify-end gap-2 px-5 py-3 border-t border-white/5">
               {step === "preview" && (
                 <button
                   onClick={capture}
-                  className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition-colors"
+                  className="flex items-center gap-1.5 px-4 py-2 bg-cyan-500 text-slate-950 text-sm font-semibold rounded-lg hover:bg-cyan-400 transition-colors"
                 >
                   <Camera size={14} /> Capture
                 </button>
@@ -177,13 +177,13 @@ export function CameraCapture({ mode, onResult }: Props) {
                 <>
                   <button
                     onClick={retake}
-                    className="flex items-center gap-1.5 px-3 py-2 border border-gray-200 text-gray-600 text-sm rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-2 border border-white/10 text-slate-300 text-sm rounded-lg hover:bg-white/5 transition-colors"
                   >
                     <RotateCcw size={13} /> Retake
                   </button>
                   <button
                     onClick={parse}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition-colors"
+                    className="flex items-center gap-1.5 px-4 py-2 bg-cyan-500 text-slate-950 text-sm font-semibold rounded-lg hover:bg-cyan-400 transition-colors"
                   >
                     <Sparkles size={14} /> Parse with Claude
                   </button>
@@ -192,7 +192,7 @@ export function CameraCapture({ mode, onResult }: Props) {
               {step === "error" && (
                 <button
                   onClick={retake}
-                  className="flex items-center gap-1.5 px-3 py-2 border border-gray-200 text-gray-600 text-sm rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-2 border border-white/10 text-slate-300 text-sm rounded-lg hover:bg-white/5 transition-colors"
                 >
                   <RotateCcw size={13} /> Try again
                 </button>
