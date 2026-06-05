@@ -38,9 +38,37 @@ const MAX_CODE_BYTES = 32 * 1024;
 
 const DEFAULT_USER = "local";
 
+// Origins allowed to make credentialed cross-origin /api/* calls. Configured via
+// the comma-separated ALLOWED_ORIGINS env var (e.g. your Netlify site URL); local
+// dev origins are always allowed so same-origin and `npm run dev` keep working.
+const DEFAULT_ALLOWED_ORIGINS = ["http://localhost:5173", "http://localhost:8888"];
+
+function allowedOrigins(): string[] {
+  const fromEnv = (process.env.ALLOWED_ORIGINS ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return [...new Set([...DEFAULT_ALLOWED_ORIGINS, ...fromEnv])];
+}
+
 export function buildApp(store: Storage): Hono {
   const app = new Hono();
-  app.use("*", cors());
+
+  // CORS for the API surface only. We use credentialed requests (the anonymous
+  // user cookie), so we reflect the request origin only when it is in the
+  // allowlist — never a wildcard. Same-origin requests carry no Origin header
+  // (or a matching one) and are unaffected. Preflight (OPTIONS) is handled by
+  // this middleware.
+  const origins = allowedOrigins();
+  app.use(
+    "/api/*",
+    cors({
+      origin: (origin) => (origins.includes(origin) ? origin : null),
+      credentials: true,
+      allowMethods: ["GET", "POST", "OPTIONS"],
+      allowHeaders: ["Content-Type"],
+    })
+  );
 
   app.get("/api/health", (c) => c.json({ ok: true }));
 

@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { Camera, X, RotateCcw, Sparkles } from "lucide-react";
+import { apiUrl } from "../lib/api";
 
 interface Props {
   mode: "problem" | "code";
@@ -87,9 +88,10 @@ export function CameraCapture({ mode, onResult }: Props) {
   async function parse() {
     setStep("parsing");
     try {
-      const res = await fetch("/api/parse-image", {
+      const res = await fetch(apiUrl("/api/parse-image"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ image: capturedBase64, mimeType: "image/jpeg", mode }),
       });
       if (res.status === 429) throw new Error("Rate limit reached — max 10 parses per hour.");

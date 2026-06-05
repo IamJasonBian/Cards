@@ -30,11 +30,17 @@ export function getOrSetUserId(c: Context): RequestIdentity {
     return { userId: existing, ip, isFresh: false };
   }
 
+  // Cross-site cookie delivery: both Render (backend) and Netlify (frontend) are
+  // https, so the cookie must be `SameSite=None; Secure` to ride along on
+  // cross-origin /api/* requests. Local dev runs over http where browsers reject
+  // `SameSite=None` without Secure (and Secure can't be set over http), so fall
+  // back to `Lax` (non-secure) there. SameSite=None still works same-origin.
+  const local = isLocalRequest(c);
   const fresh = mintId();
   setCookie(c, COOKIE_NAME, fresh, {
     httpOnly: true,
-    sameSite: "Lax",
-    secure: !isLocalRequest(c),
+    sameSite: local ? "Lax" : "None",
+    secure: !local,
     path: "/",
     maxAge: COOKIE_TTL_S,
   });
