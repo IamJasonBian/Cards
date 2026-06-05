@@ -14,7 +14,7 @@ export function StatsGrid() {
       {statItems.map((item) => (
         <div
           key={item.label}
-          className="bg-slate-900/45 backdrop-blur-xl rounded-2xl shadow-sm border border-white/10 p-5 hover:shadow-md transition-shadow"
+          className="bg-slate-900/20 backdrop-blur-2xl rounded-2xl shadow-sm border border-white/10 p-5 hover:shadow-md transition-shadow"
         >
           <div className="flex items-center gap-3">
             <div className={`p-2 rounded-lg ${item.color}`}>

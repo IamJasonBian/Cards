@@ -38,14 +38,14 @@ export function PracticeSetView({
       </button>
 
       <div className="flex items-center gap-3 mb-6">
-        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-800/40 text-slate-400 font-mono text-sm font-bold">
+        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-800/15 text-slate-400 font-mono text-sm font-bold">
           {pattern.id}
         </div>
         <div>
           <h2 className="text-xl font-bold text-slate-100">{pattern.name}</h2>
           <div className="flex items-center gap-2 mt-0.5">
             <span
-              className={`px-2 py-0.5 rounded-full text-xs font-medium ${tagColors[pattern.tag] || "bg-slate-800/40 text-slate-300"}`}
+              className={`px-2 py-0.5 rounded-full text-xs font-medium ${tagColors[pattern.tag] || "bg-slate-800/15 text-slate-300"}`}
             >
               {pattern.tag}
             </span>
@@ -57,7 +57,7 @@ export function PracticeSetView({
         </div>
       </div>
 
-      <div className="bg-slate-900/45 backdrop-blur-xl rounded-2xl border border-white/10 p-5 mb-4">
+      <div className="bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 p-5 mb-4">
         <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-3">
           Core Problems ({coreProblems.length})
         </p>
@@ -68,7 +68,7 @@ export function PracticeSetView({
               href={`https://leetcode.com/problems/${p.slug}/`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800/40 border border-white/10 rounded-lg text-xs text-slate-300 hover:bg-white/5 hover:border-cyan-400/30 hover:text-cyan-300 transition-colors"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800/15 border border-white/10 rounded-lg text-xs text-slate-300 hover:bg-white/5 hover:border-cyan-400/30 hover:text-cyan-300 transition-colors"
             >
               <span
                 className={`inline-block w-1.5 h-1.5 rounded-full ${
@@ -87,7 +87,7 @@ export function PracticeSetView({
       </div>
 
       {relatedProblems.length > 0 && (
-        <div className="bg-slate-900/45 backdrop-blur-xl rounded-2xl border border-white/10 p-5 mb-4">
+        <div className="bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 p-5 mb-4">
           <div className="flex items-center justify-between mb-3">
             <p className="text-xs font-medium text-slate-400 uppercase tracking-wide">
               Related Problems — {pattern.tag} tag ({relatedProblems.length})
@@ -127,7 +127,7 @@ export function PracticeSetView({
         </div>
       )}
 
-      <div className="bg-slate-900/45 backdrop-blur-xl rounded-2xl border border-white/10 p-5 mb-4">
+      <div className="bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 p-5 mb-4">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3">
           <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">
             Techniques
@@ -156,7 +156,7 @@ export function PracticeSetView({
         </div>
       </div>
 
-      <div className="bg-slate-900/45 backdrop-blur-xl rounded-2xl border border-white/10 p-5 mb-4">
+      <div className="bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 p-5 mb-4">
         <div className="flex items-center gap-2 mb-2">
           <p className="text-xs font-medium text-slate-400 uppercase tracking-wide">
             Your Pattern
@@ -166,12 +166,12 @@ export function PracticeSetView({
             {pattern.runtime}
           </span>
         </div>
-        <pre className="bg-slate-950/60 text-slate-100 rounded-lg p-4 text-sm overflow-x-auto font-mono leading-relaxed">
+        <pre className="bg-slate-950/40 text-slate-100 rounded-lg p-4 text-sm overflow-x-auto font-mono leading-relaxed">
           <code>{pattern.code}</code>
         </pre>
       </div>
 
-      <div className="bg-slate-900/45 backdrop-blur-xl rounded-2xl border border-white/10 p-5">
+      <div className="bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 p-5">
         <div className="flex items-center gap-2 mb-2">
           <p className="text-xs font-medium text-slate-400 uppercase tracking-wide">
             Optimal Pattern
@@ -184,7 +184,7 @@ export function PracticeSetView({
         <p className="text-xs text-slate-400 mb-2 italic">
           {pattern.optimalNote}
         </p>
-        <pre className="bg-slate-950/60 text-slate-100 rounded-lg p-4 text-sm overflow-x-auto font-mono leading-relaxed border border-emerald-500/30">
+        <pre className="bg-slate-950/40 text-slate-100 rounded-lg p-4 text-sm overflow-x-auto font-mono leading-relaxed border border-emerald-500/30">
           <code>{pattern.optimalCode}</code>
         </pre>
       </div>
