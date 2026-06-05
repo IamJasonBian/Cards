@@ -17,6 +17,7 @@ import type {
   ProblemManifest,
   RunResult,
 } from "../lib/problemSchema";
+import { apiUrl } from "../lib/api";
 
 const STORAGE_PREFIX = "leetcards:submit:code:";
 const LAST_PROBLEM_KEY = "leetcards:submit:last";
@@ -128,9 +129,10 @@ export function Blind75Submit() {
     setRunning(true);
     setResult(null);
     try {
-      const res = await fetch("/api/submissions/run", {
+      const res = await fetch(apiUrl("/api/submissions/run"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ problemId: problem.slug, code: currentCode }),
       });
       // 503 still carries a JSON RunResult body for "judge-unavailable".

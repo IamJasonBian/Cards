@@ -9,6 +9,7 @@ import {
   type VizKind,
 } from "../data/flashcards";
 import { AlgoViz } from "./algo-viz";
+import { apiUrl } from "../lib/api";
 
 type VizOpen = { kind: "path"; value: string } | { kind: "algo"; value: VizKind } | null;
 
@@ -85,8 +86,8 @@ export function Flashcards() {
   const refreshReviews = useCallback(async () => {
     try {
       const [rRes, sRes] = await Promise.all([
-        fetch("/api/reviews"),
-        fetch("/api/stats"),
+        fetch(apiUrl("/api/reviews"), { credentials: "include" }),
+        fetch(apiUrl("/api/stats"), { credentials: "include" }),
       ]);
       if (!rRes.ok || !sRes.ok) throw new Error("bad status");
       const rData = (await rRes.json()) as { reviews: ReviewState[] };
@@ -133,16 +134,17 @@ export function Flashcards() {
       setFlipped(false);
       setIdx(idx + 1 >= pool.length ? 0 : nextIdx);
       try {
-        const res = await fetch("/api/reviews", {
+        const res = await fetch(apiUrl("/api/reviews"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({ cardId: card.id, grade: g }),
         });
         if (!res.ok) throw new Error("bad");
         const data = (await res.json()) as { state: ReviewState };
         setReviews((prev) => ({ ...prev, [card.id]: data.state }));
         // refresh stats lazily
-        void fetch("/api/stats")
+        void fetch(apiUrl("/api/stats"), { credentials: "include" })
           .then((r) => r.json())
           .then((s) => setStats(s as Stats))
           .catch(() => {});

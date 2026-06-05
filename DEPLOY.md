@@ -46,6 +46,23 @@ The script looks up the `leetcards-backend` service and POSTs a deploy. If
 the service name with `RENDER_SERVICE_NAME` if you renamed it. No secrets are
 hardcoded.
 
+## Routing the Netlify frontend at the Render backend
+
+By default the frontend calls `/api/*` same-origin (Netlify Functions). To point
+it at the Render service instead, set two env vars:
+
+- **Netlify** build environment: `VITE_API_BASE=https://leetcards-backend.onrender.com`
+  — Vite inlines this at build time so `/api/*` fetches target the Render
+  backend. Leave it unset to keep the current same-origin Netlify Functions
+  behavior.
+- **Render** service env: `ALLOWED_ORIGINS=<your netlify site url>` (e.g.
+  `https://your-site.netlify.app`; comma-separated for multiple) so the backend
+  reflects that origin on credentialed CORS requests. `http://localhost:5173`
+  and `http://localhost:8888` are always allowed for local dev.
+
+The anonymous user cookie is sent cross-site as `SameSite=None; Secure` (both
+hosts are https), and the API fetches use `credentials: "include"`.
+
 ## Health check
 
 Render polls `GET /api/health` (`healthCheckPath` in `render.yaml`) to decide
