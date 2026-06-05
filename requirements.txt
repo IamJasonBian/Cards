@@ -1,0 +1,6 @@
+# These scripts (refresh.py, runner.py, fetch_leetcode_difficulty.py,
+# validate_difficulty.py) use only the Python standard library — no third-party
+# packages are required. Run with Python 3.9+ (uses PEP 585 builtin generics
+# like list[int] and dict[str, str]).
+#
+# requires-python = ">=3.9"
