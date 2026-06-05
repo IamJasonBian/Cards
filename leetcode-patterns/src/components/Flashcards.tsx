@@ -49,25 +49,25 @@ const gradeMeta: Record<
   again: {
     label: "Again",
     hint: "< 10m",
-    cls: "bg-rose-500/15 text-rose-300 border-rose-400/30 hover:bg-rose-500/25",
+    cls: "bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100",
     key: "1",
   },
   hard: {
     label: "Hard",
     hint: "~1d",
-    cls: "bg-amber-500/15 text-amber-300 border-amber-400/30 hover:bg-amber-500/25",
+    cls: "bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100",
     key: "2",
   },
   good: {
     label: "Good",
     hint: "3d+",
-    cls: "bg-emerald-500/15 text-emerald-300 border-emerald-400/30 hover:bg-emerald-500/25",
+    cls: "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100",
     key: "3",
   },
   easy: {
     label: "Easy",
     hint: "4d+",
-    cls: "bg-sky-500/15 text-sky-300 border-sky-400/30 hover:bg-sky-500/25",
+    cls: "bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-100",
     key: "4",
   },
 };
@@ -180,29 +180,29 @@ export function Flashcards() {
   return (
     <div className="max-w-4xl">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-slate-100 mb-2 flex items-center gap-3">
-          <Layers className="text-cyan-400" size={28} />
+        <h1 className="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">
+          <Layers className="text-cyan-600" size={28} />
           Flashcards
         </h1>
-        <p className="text-slate-300 text-sm">
+        <p className="text-slate-700 text-sm">
           Anki-style spaced-repetition deck. Rate each card to schedule the next
-          review. Linked to local backend at <code className="bg-slate-800/15 px-1 rounded text-xs">/api</code>.
+          review. Linked to local backend at <code className="bg-slate-100/90 sm:bg-slate-100/70 px-1 rounded text-xs">/api</code>.
         </p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
-        <StatPill label="Deck" value={flashcards.length} color="text-slate-300" />
-        <StatPill label="Reviewed" value={stats?.total ?? 0} color="text-cyan-400" />
-        <StatPill label="Due" value={stats?.due ?? 0} color="text-rose-400" />
-        <StatPill label="Learning" value={stats?.learning ?? 0} color="text-amber-300" />
-        <StatPill label="Mature" value={stats?.mature ?? 0} color="text-emerald-300" />
+        <StatPill label="Deck" value={flashcards.length} color="text-slate-700" />
+        <StatPill label="Reviewed" value={stats?.total ?? 0} color="text-cyan-600" />
+        <StatPill label="Due" value={stats?.due ?? 0} color="text-rose-600" />
+        <StatPill label="Learning" value={stats?.learning ?? 0} color="text-amber-700" />
+        <StatPill label="Mature" value={stats?.mature ?? 0} color="text-emerald-700" />
       </div>
 
       {serverUp === false && (
-        <div className="mb-4 rounded-2xl border border-amber-400/30 bg-amber-500/15 p-3 text-sm text-amber-300">
+        <div className="mb-4 rounded-none border border-amber-200 bg-amber-50 p-3 text-sm text-amber-700">
           Backend unreachable at <code>/api</code>. Run{" "}
-          <code className="bg-amber-500/15 px-1 rounded">npm run server</code> in a separate terminal — reviews won't persist without it.
+          <code className="bg-amber-50 px-1 rounded">npm run server</code> in a separate terminal — reviews won't persist without it.
         </div>
       )}
 
@@ -213,24 +213,24 @@ export function Flashcards() {
             setMode(mode === "due" ? "all" : "due");
             setIdx(0);
           }}
-          className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors cursor-pointer ${
+          className={`px-3 py-1.5 rounded-none text-sm font-medium border transition-colors cursor-pointer ${
             mode === "due"
-              ? "bg-rose-500/15 text-rose-300 border-rose-400/30"
-              : "bg-slate-800/15 text-slate-300 border-white/10 hover:bg-white/5"
+              ? "bg-rose-50 text-rose-700 border-rose-200"
+              : "bg-slate-100/90 sm:bg-slate-100/70 text-slate-700 border-slate-900/10 hover:bg-slate-900/5"
           }`}
         >
           {mode === "due" ? "Due only" : "All cards"}
         </button>
-        <div className="w-px h-5 bg-white/10 mx-1" />
+        <div className="w-px h-5 bg-slate-900/10 mx-1" />
         <button
           onClick={() => {
             setActiveTag("all");
             setIdx(0);
           }}
-          className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
+          className={`px-3 py-1 rounded-none text-xs font-medium border transition-colors cursor-pointer ${
             activeTag === "all"
-              ? "bg-cyan-500/15 text-cyan-300 border-cyan-400/30"
-              : "bg-slate-800/15 text-slate-400 border-white/10 hover:bg-white/5"
+              ? "bg-cyan-100 text-cyan-700 border-cyan-500/30"
+              : "bg-slate-100/90 sm:bg-slate-100/70 text-slate-500 border-slate-900/10 hover:bg-slate-900/5"
           }`}
         >
           all
@@ -242,10 +242,10 @@ export function Flashcards() {
               setActiveTag(activeTag === t ? "all" : t);
               setIdx(0);
             }}
-            className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
+            className={`px-3 py-1 rounded-none text-xs font-medium border transition-colors cursor-pointer ${
               activeTag === t
                 ? tagStyles[t]
-                : "bg-slate-800/15 text-slate-400 border-white/10 hover:bg-white/5"
+                : "bg-slate-100/90 sm:bg-slate-100/70 text-slate-500 border-slate-900/10 hover:bg-slate-900/5"
             }`}
           >
             {t}
@@ -271,19 +271,19 @@ export function Flashcards() {
             >
               {/* Front */}
               <div
-                className="absolute inset-0 bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-sm flex flex-col items-center justify-center p-8"
+                className="absolute inset-0 bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none border border-slate-900/10 shadow-sm flex flex-col items-center justify-center p-8"
                 style={{ backfaceVisibility: "hidden" }}
               >
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-semibold mb-4 ${tagStyles[card.tag]}`}
+                  className={`px-3 py-1 rounded-none text-xs font-semibold mb-4 ${tagStyles[card.tag]}`}
                 >
                   {card.tag}
                 </span>
-                <h2 className="text-2xl font-semibold text-slate-100 text-center mb-2">
+                <h2 className="text-2xl font-semibold text-slate-900 text-center mb-2">
                   {card.q}
                 </h2>
-                <p className="text-sm text-slate-400 text-center">{card.hint}</p>
-                <div className="mt-6 flex items-center gap-2 text-xs text-slate-400">
+                <p className="text-sm text-slate-500 text-center">{card.hint}</p>
+                <div className="mt-6 flex items-center gap-2 text-xs text-slate-500">
                   <EyeOff size={12} />
                   click / space to flip
                 </div>
@@ -291,14 +291,14 @@ export function Flashcards() {
 
               {/* Back */}
               <div
-                className="absolute inset-0 bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-sm p-5 overflow-auto"
+                className="absolute inset-0 bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none border border-slate-900/10 shadow-sm p-5 overflow-auto"
                 style={{
                   backfaceVisibility: "hidden",
                   transform: "rotateY(180deg)",
                 }}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">
+                  <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">
                     Implementation
                   </span>
                   <div className="flex items-center gap-2">
@@ -309,26 +309,26 @@ export function Flashcards() {
                           if (card.viz) setVizOpen({ kind: "algo", value: card.viz });
                           else if (card.vizPath) setVizOpen({ kind: "path", value: card.vizPath });
                         }}
-                        className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs text-violet-300 hover:bg-violet-500/15 border border-violet-400/30 transition-colors cursor-pointer"
+                        className="flex items-center gap-1 px-2 py-1 rounded-none text-xs text-violet-700 hover:bg-violet-50 border border-violet-200 transition-colors cursor-pointer"
                       >
                         <Sparkles size={12} />
                         Visualize
                       </button>
                     )}
-                    <Eye size={12} className="text-slate-400" />
+                    <Eye size={12} className="text-slate-500" />
                   </div>
                 </div>
-                <pre className="bg-slate-950/40 text-slate-100 rounded-lg p-3 text-xs overflow-auto font-mono leading-relaxed border border-white/5">
+                <pre className="bg-slate-100/90 text-slate-900 rounded-none p-3 text-xs overflow-auto font-mono leading-relaxed border border-slate-900/5">
                   <code>{card.code}</code>
                 </pre>
-                <p className="text-xs text-slate-400 mt-3 italic">{card.note}</p>
+                <p className="text-xs text-slate-500 mt-3 italic">{card.note}</p>
               </div>
             </div>
           </div>
 
           {/* Controls */}
           <div className="max-w-[720px] mx-auto">
-            <div className="flex items-center justify-between mb-3 text-xs text-slate-400">
+            <div className="flex items-center justify-between mb-3 text-xs text-slate-500">
               <span>
                 {idx + 1} / {pool.length}
               </span>
@@ -343,7 +343,7 @@ export function Flashcards() {
                     setFlipped(false);
                     setIdx((i) => (i - 1 + pool.length) % pool.length);
                   }}
-                  className="px-2 py-1 rounded border border-white/10 hover:bg-white/5 cursor-pointer"
+                  className="px-2 py-1 rounded border border-slate-900/10 hover:bg-slate-900/5 cursor-pointer"
                 >
                   ←
                 </button>
@@ -352,7 +352,7 @@ export function Flashcards() {
                     setFlipped(false);
                     setIdx((i) => (i + 1) % pool.length);
                   }}
-                  className="px-2 py-1 rounded border border-white/10 hover:bg-white/5 cursor-pointer"
+                  className="px-2 py-1 rounded border border-slate-900/10 hover:bg-slate-900/5 cursor-pointer"
                 >
                   →
                 </button>
@@ -365,7 +365,7 @@ export function Flashcards() {
                   <button
                     key={g}
                     onClick={() => grade(g)}
-                    className={`flex flex-col items-center justify-center gap-0.5 py-3 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${gradeMeta[g].cls}`}
+                    className={`flex flex-col items-center justify-center gap-0.5 py-3 rounded-none border text-sm font-medium transition-colors cursor-pointer ${gradeMeta[g].cls}`}
                   >
                     <span>{gradeMeta[g].label}</span>
                     <span className="text-[10px] opacity-70">
@@ -377,7 +377,7 @@ export function Flashcards() {
             ) : (
               <button
                 onClick={() => setFlipped(true)}
-                className="w-full py-3 rounded-lg bg-cyan-500 text-slate-950 font-medium hover:bg-cyan-400 transition-colors cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-none bg-cyan-600 text-white font-medium hover:bg-cyan-700 transition-colors cursor-pointer flex items-center justify-center gap-2"
               >
                 <RotateCcw size={16} />
                 Show answer
@@ -386,7 +386,7 @@ export function Flashcards() {
           </div>
         </>
       ) : (
-        <div className="text-center text-sm text-slate-400 py-12 bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10">
+        <div className="text-center text-sm text-slate-500 py-12 bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none border border-slate-900/10">
           Nothing to review here.{" "}
           <button
             onClick={() => {
@@ -394,7 +394,7 @@ export function Flashcards() {
               setActiveTag("all");
               setIdx(0);
             }}
-            className="text-cyan-400 hover:underline cursor-pointer"
+            className="text-cyan-600 hover:underline cursor-pointer"
           >
             Show all cards
           </button>
@@ -408,12 +408,12 @@ export function Flashcards() {
           onClick={() => setVizOpen(null)}
         >
           <div
-            className="bg-slate-900/20 backdrop-blur-2xl rounded-2xl shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden relative border border-white/10"
+            className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden relative border border-slate-900/10"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setVizOpen(null)}
-              className="absolute top-2 right-2 z-10 p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white cursor-pointer"
+              className="absolute top-2 right-2 z-10 p-1.5 rounded hover:bg-slate-900/10 text-slate-500 hover:text-slate-900 cursor-pointer"
               aria-label="Close"
             >
               <X size={18} />
@@ -436,8 +436,8 @@ export function Flashcards() {
 
 function StatPill({ label, value, color }: { label: string; value: number; color: string }) {
   return (
-    <div className="bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 px-3 py-2">
-      <p className="text-[10px] uppercase tracking-wide text-slate-400 font-medium">
+    <div className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none border border-slate-900/10 px-3 py-2">
+      <p className="text-[10px] uppercase tracking-wide text-slate-500 font-medium">
         {label}
       </p>
       <p className={`text-xl font-bold ${color}`}>{value}</p>

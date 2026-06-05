@@ -4,9 +4,9 @@ import { popularLists } from "../data/popularLists";
 import type { PopularProblem } from "../data/popularLists";
 
 const diffStyles: Record<PopularProblem["difficulty"], string> = {
-  Easy: "bg-emerald-500/15 text-emerald-300 border-emerald-400/30",
-  Medium: "bg-amber-500/15 text-amber-300 border-amber-400/30",
-  Hard: "bg-rose-500/15 text-rose-300 border-rose-400/30",
+  Easy: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  Medium: "bg-amber-50 text-amber-700 border-amber-200",
+  Hard: "bg-rose-50 text-rose-700 border-rose-200",
 };
 
 export function PopularLists() {
@@ -37,11 +37,11 @@ export function PopularLists() {
   return (
     <div className="max-w-5xl">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-slate-100 mb-2 flex items-center gap-3">
-          <BookOpen className="text-cyan-400" size={28} />
+        <h1 className="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">
+          <BookOpen className="text-cyan-600" size={28} />
           Popular Lists
         </h1>
-        <p className="text-slate-300 text-sm">
+        <p className="text-slate-700 text-sm">
           Curated problem sets from the community — each kept to 75 or fewer problems so they stay finishable.
         </p>
       </div>
@@ -54,16 +54,16 @@ export function PopularLists() {
               setActiveId(list.id);
               setDifficultyFilter(null);
             }}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer border ${
+            className={`px-4 py-2 rounded-none text-sm font-medium transition-colors cursor-pointer border ${
               activeId === list.id
-                ? "bg-cyan-500 text-slate-950 border-cyan-500"
-                : "bg-slate-900/20 backdrop-blur-2xl text-slate-300 border-white/10 hover:bg-white/5"
+                ? "bg-cyan-600 text-white border-cyan-500"
+                : "bg-white/85 sm:bg-white/65 backdrop-blur-2xl text-slate-700 border-slate-900/10 hover:bg-slate-900/5"
             }`}
           >
             {list.name}
             <span
               className={`ml-2 text-xs ${
-                activeId === list.id ? "text-slate-900/70" : "text-slate-400"
+                activeId === list.id ? "text-slate-900/70" : "text-slate-500"
               }`}
             >
               {list.problems.length}
@@ -72,32 +72,32 @@ export function PopularLists() {
         ))}
       </div>
 
-      <div className="bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 p-5 mb-4">
+      <div className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none border border-slate-900/10 p-5 mb-4">
         <div className="flex items-start justify-between gap-4 mb-3">
           <div>
-            <h2 className="text-xl font-bold text-slate-100">{active.name}</h2>
-            <p className="text-xs text-slate-400 mt-0.5">by {active.author}</p>
+            <h2 className="text-xl font-bold text-slate-900">{active.name}</h2>
+            <p className="text-xs text-slate-500 mt-0.5">by {active.author}</p>
           </div>
           <a
             href={active.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 text-sm text-cyan-400 hover:text-cyan-300 font-medium shrink-0"
+            className="flex items-center gap-1 text-sm text-cyan-600 hover:text-cyan-700 font-medium shrink-0"
           >
             Source
             <ExternalLink size={14} />
           </a>
         </div>
-        <p className="text-sm text-slate-300 mb-4">{active.description}</p>
+        <p className="text-sm text-slate-700 mb-4">{active.description}</p>
 
         <div className="flex flex-wrap items-center gap-2">
-          <Filter size={14} className="text-slate-400" />
+          <Filter size={14} className="text-slate-500" />
           <button
             onClick={() => setDifficultyFilter(null)}
-            className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
+            className={`px-3 py-1 rounded-none text-xs font-medium border transition-colors cursor-pointer ${
               difficultyFilter === null
-                ? "bg-cyan-500/15 text-cyan-300 border-cyan-400/30"
-                : "bg-slate-800/15 text-slate-400 border-white/10 hover:bg-white/5"
+                ? "bg-cyan-100 text-cyan-700 border-cyan-500/30"
+                : "bg-slate-100/90 sm:bg-slate-100/70 text-slate-500 border-slate-900/10 hover:bg-slate-900/5"
             }`}
           >
             All {active.problems.length}
@@ -106,10 +106,10 @@ export function PopularLists() {
             <button
               key={d}
               onClick={() => setDifficultyFilter(difficultyFilter === d ? null : d)}
-              className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
+              className={`px-3 py-1 rounded-none text-xs font-medium border transition-colors cursor-pointer ${
                 difficultyFilter === d
                   ? diffStyles[d]
-                  : "bg-slate-800/15 text-slate-400 border-white/10 hover:bg-white/5"
+                  : "bg-slate-100/90 sm:bg-slate-100/70 text-slate-500 border-slate-900/10 hover:bg-slate-900/5"
               }`}
             >
               {d} {counts[d]}
@@ -120,8 +120,8 @@ export function PopularLists() {
 
       <div className="space-y-3">
         {grouped.map(([category, problems]) => (
-          <div key={category} className="bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 p-5">
-            <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-3">
+          <div key={category} className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none border border-slate-900/10 p-5">
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-3">
               {category} ({problems.length})
             </p>
             <div className="flex flex-wrap gap-1.5">
@@ -131,15 +131,15 @@ export function PopularLists() {
                   href={`https://leetcode.com/problems/${p.slug}/`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800/15 border border-white/10 rounded-lg text-xs text-slate-300 hover:bg-cyan-500/10 hover:border-cyan-400/30 hover:text-cyan-300 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-100/90 sm:bg-slate-100/70 border border-slate-900/10 rounded-none text-xs text-slate-700 hover:bg-cyan-50 hover:border-cyan-500/30 hover:text-cyan-700 transition-colors"
                 >
                   <span
-                    className={`inline-block w-1.5 h-1.5 rounded-full ${
+                    className={`inline-block w-1.5 h-1.5 rounded-none ${
                       p.difficulty === "Easy"
-                        ? "bg-emerald-400"
+                        ? "bg-emerald-500"
                         : p.difficulty === "Medium"
-                        ? "bg-amber-400"
-                        : "bg-rose-400"
+                        ? "bg-amber-500"
+                        : "bg-rose-500"
                     }`}
                   />
                   {p.name}
@@ -150,7 +150,7 @@ export function PopularLists() {
           </div>
         ))}
         {grouped.length === 0 && (
-          <div className="text-center text-sm text-slate-400 py-8">
+          <div className="text-center text-sm text-slate-500 py-8">
             No problems match this difficulty filter.
           </div>
         )}
