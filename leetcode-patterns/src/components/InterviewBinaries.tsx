@@ -14,19 +14,19 @@ export function InterviewBinaries() {
   return (
     <div className="max-w-5xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-3 flex items-center gap-3">
-          <FileCode className="text-indigo-600" size={32} />
+        <h1 className="text-3xl font-bold text-slate-100 mb-3 flex items-center gap-3">
+          <FileCode className="text-cyan-400" size={32} />
           Interview Binaries
         </h1>
-        <p className="text-gray-600">
+        <p className="text-slate-300">
           Collection of interview problems and practice exercises from various platforms
         </p>
       </div>
 
       <div className="space-y-6">
         <section>
-          <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-            <Code2 size={20} className="text-indigo-600" />
+          <h2 className="text-xl font-semibold text-slate-100 mb-4 flex items-center gap-2">
+            <Code2 size={20} className="text-cyan-400" />
             CoderPad Problems
           </h2>
 
@@ -34,47 +34,47 @@ export function InterviewBinaries() {
             {coderpadProblems.map((problem, idx) => (
               <div
                 key={idx}
-                className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
+                className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:shadow-md transition-shadow"
               >
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-slate-100">
                     {problem.name}
                   </h3>
                   <a
                     href={`https://github.com/IamJasonBian/leetcode-contest/tree/main${problem.path}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+                    className="flex items-center gap-1 text-sm text-cyan-400 hover:text-cyan-300 font-medium"
                   >
                     View on GitHub
                     <ExternalLink size={14} />
                   </a>
                 </div>
 
-                <p className="text-gray-600 mb-4">{problem.description}</p>
+                <p className="text-slate-300 mb-4">{problem.description}</p>
 
                 <div className="flex flex-wrap gap-2 mb-4">
                   {problem.topics.map((topic) => (
                     <span
                       key={topic}
-                      className="px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-full text-xs font-medium"
+                      className="px-2.5 py-1 bg-cyan-500/15 text-cyan-300 rounded-full text-xs font-medium"
                     >
                       {topic}
                     </span>
                   ))}
                 </div>
 
-                <div className="border-t border-gray-100 pt-4">
-                  <p className="text-sm font-medium text-gray-700 mb-2">
+                <div className="border-t border-white/5 pt-4">
+                  <p className="text-sm font-medium text-slate-300 mb-2">
                     Problem Parts:
                   </p>
                   <ul className="grid grid-cols-2 gap-2">
                     {problem.parts.map((part, partIdx) => (
                       <li
                         key={partIdx}
-                        className="text-sm text-gray-600 flex items-center gap-2"
+                        className="text-sm text-slate-300 flex items-center gap-2"
                       >
-                        <span className="w-5 h-5 rounded-full bg-gray-100 text-gray-700 flex items-center justify-center text-xs font-medium">
+                        <span className="w-5 h-5 rounded-full bg-slate-800/50 text-slate-300 flex items-center justify-center text-xs font-medium">
                           {partIdx + 1}
                         </span>
                         {part}
@@ -87,32 +87,32 @@ export function InterviewBinaries() {
           </div>
         </section>
 
-        <section className="bg-blue-50 border border-blue-100 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center gap-2">
-            <Calendar size={18} className="text-blue-600" />
+        <section className="bg-cyan-500/10 border border-cyan-400/30 rounded-2xl p-6">
+          <h3 className="text-lg font-semibold text-slate-100 mb-2 flex items-center gap-2">
+            <Calendar size={18} className="text-cyan-400" />
             How to Use
           </h3>
-          <ul className="space-y-2 text-sm text-gray-700">
+          <ul className="space-y-2 text-sm text-slate-300">
             <li className="flex items-start gap-2">
-              <span className="text-blue-600 font-bold">•</span>
+              <span className="text-cyan-400 font-bold">•</span>
               <span>
                 Clone the repository and navigate to the problem directory
               </span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-blue-600 font-bold">•</span>
+              <span className="text-cyan-400 font-bold">•</span>
               <span>
                 Each problem has multiple parts that build on each other
               </span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-blue-600 font-bold">•</span>
+              <span className="text-cyan-400 font-bold">•</span>
               <span>
                 Run the test files to verify your implementation
               </span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-blue-600 font-bold">•</span>
+              <span className="text-cyan-400 font-bold">•</span>
               <span>
                 Review the notes files for hints and implementation details
               </span>
