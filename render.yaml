@@ -1,0 +1,36 @@
+# Render Blueprint for the leetcards Node/Hono backend.
+# Docs: https://render.com/docs/blueprint-spec
+#
+# This provisions a single persistent web service that runs the existing
+# Node/Hono server. SQLite lives on a persistent disk so review data survives
+# deploys and restarts. Netlify continues to host the frontend.
+services:
+  - type: web
+    name: leetcards-backend
+    runtime: node
+    # The app lives in a subdirectory of the monorepo.
+    rootDir: leetcode-patterns
+    plan: starter
+    buildCommand: npm install && npm run build
+    startCommand: npm run server
+    # Render polls this endpoint to confirm the service is healthy.
+    healthCheckPath: /api/health
+    # Persistent disk for the SQLite database file.
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      # SQLite database path, on the persistent disk mounted above.
+      - key: SQLITE_PATH
+        value: /data/leetcards.db
+      # Secrets / instance-specific values supplied via the Render dashboard
+      # (or `scripts/deploy-render.sh`). `sync: false` keeps them out of git.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: JUDGE0_URL
+        sync: false
+      - key: JUDGE0_AUTH_TOKEN
+        sync: false
+      - key: PORT
+        sync: false
