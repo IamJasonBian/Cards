@@ -119,6 +119,11 @@ export function buildProgram(problem: ServerProblem, userCode: string): string {
   ].join("\n");
 
   return [
+    // Must be the first statement: makes ALL annotations lazy (PEP 563) so the
+    // judge (Judge0 CE = Python 3.8) doesn't evaluate builtin-generic hints like
+    // `list[int]` at class-definition time, which raises
+    // "TypeError: 'type' object is not subscriptable" on 3.8.
+    "from __future__ import annotations",
     "# --- user code ---",
     userCode,
     "",
