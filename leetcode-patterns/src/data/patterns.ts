@@ -1431,7 +1431,7 @@ export interface DSRefEntry {
 export const dsReference: DSRefEntry[] = [
   {
     name: "dict / defaultdict",
-    color: "bg-purple-100 text-purple-700 border-purple-200",
+    color: "bg-purple-500/15 text-purple-300 border-purple-400/30",
     docUrl: "https://docs.python.org/3/library/collections.html#collections.defaultdict",
     code: `# Basic dict — O(1) lookup, insert, delete
 seen = {}
@@ -1468,7 +1468,7 @@ index = {val: i for i, val in enumerate(nums)}`,
   },
   {
     name: 'str — "".join(sorted(word))',
-    color: "bg-lime-100 text-lime-700 border-lime-200",
+    color: "bg-lime-500/15 text-lime-300 border-lime-400/30",
     docUrl: "https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str",
     code: `# Sorted string key (anagram grouping)
 key = "".join(sorted(word))       # "eat" -> "aet"
@@ -1503,7 +1503,7 @@ word[:i] + c + word[i+1:]         # swap char at index i`,
   },
   {
     name: "heapq (min-heap)",
-    color: "bg-teal-100 text-teal-700 border-teal-200",
+    color: "bg-teal-500/15 text-teal-300 border-teal-400/30",
     docUrl: "https://docs.python.org/3/library/heapq.html",
     code: `import heapq
 
@@ -1547,7 +1547,7 @@ for val in heapq.merge(*lists):   # lazy merge`,
   },
   {
     name: "Counter / frequency counting",
-    color: "bg-orange-100 text-orange-700 border-orange-200",
+    color: "bg-orange-500/15 text-orange-300 border-orange-400/30",
     docUrl: "https://docs.python.org/3/library/collections.html#collections.Counter",
     code: `from collections import Counter
 
@@ -1590,7 +1590,7 @@ count1 & count2                   # min of each element`,
   },
   {
     name: "deque — queue / BFS",
-    color: "bg-cyan-100 text-cyan-700 border-cyan-200",
+    color: "bg-cyan-500/15 text-cyan-300 border-cyan-400/30",
     docUrl: "https://docs.python.org/3/library/collections.html#collections.deque",
     code: `from collections import deque
 
@@ -1634,7 +1634,7 @@ for i, num in enumerate(nums):
   },
   {
     name: "set()",
-    color: "bg-pink-100 text-pink-700 border-pink-200",
+    color: "bg-pink-500/15 text-pink-300 border-pink-400/30",
     docUrl: "https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset",
     code: `# O(1) lookup, add, remove (hash-based)
 visited = set()
@@ -1678,7 +1678,7 @@ key = frozenset(items)`,
   },
   {
     name: "Grid DFS / BFS traversal",
-    color: "bg-rose-100 text-rose-700 border-rose-200",
+    color: "bg-rose-500/15 text-rose-300 border-rose-400/30",
     docUrl: "https://docs.python.org/3/library/collections.html#collections.deque",
     code: `# 4-directional movement
 directions = [(0,1), (0,-1), (1,0), (-1,0)]
@@ -1725,7 +1725,7 @@ for r in range(rows):
   },
   {
     name: "TreeNode / ListNode access",
-    color: "bg-green-100 text-green-700 border-green-200",
+    color: "bg-green-500/15 text-green-300 border-green-400/30",
     docUrl: "https://docs.python.org/3/tutorial/classes.html",
     code: `# TreeNode definition
 class TreeNode:
@@ -1785,7 +1785,7 @@ while fast and fast.next:
   },
   {
     name: "@dataclass / namedtuple",
-    color: "bg-violet-100 text-violet-700 border-violet-200",
+    color: "bg-violet-500/15 text-violet-300 border-violet-400/30",
     docUrl: "https://docs.python.org/3/library/dataclasses.html",
     code: `from dataclasses import dataclass, field
 
@@ -1834,7 +1834,7 @@ edges.sort(key=lambda e: e.weight)  # Kruskal's`,
   },
   {
     name: "classes / OOP patterns",
-    color: "bg-amber-100 text-amber-700 border-amber-200",
+    color: "bg-amber-500/15 text-amber-300 border-amber-400/30",
     docUrl: "https://docs.python.org/3/tutorial/classes.html",
     code: `# Union-Find with path compression + rank
 class UnionFind:
@@ -1892,7 +1892,7 @@ class Trie:
   },
   {
     name: "TrieNode — prefix tree",
-    color: "bg-indigo-100 text-indigo-700 border-indigo-200",
+    color: "bg-indigo-500/15 text-indigo-300 border-indigo-400/30",
     docUrl: "https://docs.python.org/3/library/stdtypes.html#dict",
     code: `# TrieNode definition
 class TrieNode:
@@ -1965,7 +1965,7 @@ def findWords(board, words):
   },
   {
     name: "sortedcontainers / bisect",
-    color: "bg-sky-100 text-sky-700 border-sky-200",
+    color: "bg-sky-500/15 text-sky-300 border-sky-400/30",
     docUrl: "https://docs.python.org/3/library/bisect.html",
     code: `import bisect
 
@@ -2011,7 +2011,7 @@ sd.peekitem(-1)                       # largest key`,
   },
   {
     name: "functools / itertools",
-    color: "bg-fuchsia-100 text-fuchsia-700 border-fuchsia-200",
+    color: "bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-400/30",
     docUrl: "https://docs.python.org/3/library/functools.html",
     code: `from functools import lru_cache, cache
 
@@ -2060,7 +2060,7 @@ prefix = list(accumulate(nums))       # running sum`,
   },
   {
     name: "BFS — binary tree leftmost node",
-    color: "bg-emerald-100 text-emerald-700 border-emerald-200",
+    color: "bg-emerald-500/15 text-emerald-300 border-emerald-400/30",
     docUrl: "https://docs.python.org/3/library/collections.html#collections.deque",
     code: `from collections import deque
 
@@ -2132,7 +2132,7 @@ def max_width(root):
   },
   {
     name: "Reverse Linked List",
-    color: "bg-red-100 text-red-700 border-red-200",
+    color: "bg-red-500/15 text-red-300 border-red-400/30",
     docUrl: "https://docs.python.org/3/tutorial/classes.html",
     code: `# Iterative reverse — O(n) time, O(1) space
 def reverse(head):
@@ -2230,7 +2230,7 @@ def isPalindrome(head):
   },
   {
     name: "Graph (Adjacency List)",
-    color: "bg-emerald-100 text-emerald-700 border-emerald-200",
+    color: "bg-emerald-500/15 text-emerald-300 border-emerald-400/30",
     docUrl: "https://docs.python.org/3/library/collections.html#collections.defaultdict",
     code: `from collections import defaultdict, deque
 
