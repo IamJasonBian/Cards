@@ -1392,6 +1392,299 @@ def get_ready_tasks_sorted_by_priority(self):
     optimalRuntime: "topo: O(N+E), priority sort: O(R log R)",
     optimalNote: "4-part progressive problem: (1) CRUD with auto-ID, (2) dependency graph with cascade failure, (3) status filtering, (4) tags/priority/topo sort. Key gotchas: diamond cascade needs 'if not FAILED' guard, IDs increment even on failed adds, transition validation makes SUCCEEDED/FAILED terminal.",
   },
+  {
+    id: 23,
+    name: "Key-Value Logger (Rate Limiter)",
+    solveCount: 0,
+    tag: "OOD",
+    problems: [
+      { name: "Logger Rate Limiter", slug: "logger-rate-limiter", difficulty: "Easy" },
+      { name: "Design HashMap", slug: "design-hashmap", difficulty: "Easy" },
+      { name: "Design Browser History", slug: "design-browser-history", difficulty: "Medium" },
+    ],
+    techniques: ["Strategy (pluggable rate-limit policy)", "Observer (fan-out to log sinks)", "Facade (one log() entry point)", "last-seen timestamp map", "sliding window"],
+    dataStructures: ["Dict[str, int] (key -> last allowed ts)", "List[LogSink] (observers)", "RateLimitPolicy (strategy object)"],
+    code: `from abc import ABC, abstractmethod
+
+# --- Strategy: swap the rate-limit rule without touching the logger ---
+class RateLimitPolicy(ABC):
+    @abstractmethod
+    def allow(self, last_ts, now): ...
+
+class FixedWindowPolicy(RateLimitPolicy):
+    def __init__(self, window=10):
+        self.window = window
+    def allow(self, last_ts, now):
+        return last_ts is None or now - last_ts >= self.window
+
+# --- Observer: sinks react to each accepted log line ---
+class LogSink(ABC):
+    @abstractmethod
+    def emit(self, key, value, ts): ...
+
+class ConsoleSink(LogSink):
+    def emit(self, key, value, ts):
+        print(f"[{ts}] {key}={value}")
+
+# --- Facade: callers only see log(); construction hidden ---
+class KeyValueLogger:
+    def __init__(self, policy=None):
+        self.policy = policy or FixedWindowPolicy(10)
+        self._last = {}          # key -> last accepted timestamp
+        self._sinks = []         # observers
+
+    def subscribe(self, sink):
+        self._sinks.append(sink)
+
+    def log(self, key, value, timestamp) -> bool:
+        if not self.policy.allow(self._last.get(key), timestamp):
+            return False         # throttled
+        self._last[key] = timestamp
+        for sink in self._sinks:
+            sink.emit(key, value, timestamp)
+        return True`,
+    runtime: "log: O(S) where S = #sinks, O(1) per key lookup",
+    optimalCode: `# Per-key sliding-window count instead of single last-ts:
+# allow at most N events per window (not just dedupe).
+from collections import deque
+
+class SlidingWindowPolicy(RateLimitPolicy):
+    def __init__(self, window=10, max_events=1):
+        self.window, self.max_events = window, max_events
+        self._hits = {}                       # key -> deque[ts]
+
+    def allow(self, key, now):
+        dq = self._hits.setdefault(key, deque())
+        while dq and dq[0] <= now - self.window:
+            dq.popleft()                      # evict stale
+        if len(dq) < self.max_events:
+            dq.append(now)
+            return True
+        return False`,
+    optimalRuntime: "log: O(1) amortized (each ts enqueued/dequeued once)",
+    optimalNote: "HelloInterview patterns at work: Strategy isolates the throttling rule (fixed-window dedupe vs sliding-window count) so swapping it never touches the logger; Observer fans accepted lines out to N sinks (console, file, metrics) without the logger knowing them; Facade keeps log() the single public verb. Gotcha: rate-limit on the ACCEPT decision, not on emit — and use >= window (LC 359) so an event exactly `window` later is allowed.",
+  },
+  {
+    id: 24,
+    name: "Design Shopping Cart",
+    solveCount: 0,
+    tag: "OOD",
+    problems: [
+      { name: "Design Parking System", slug: "design-parking-system", difficulty: "Easy" },
+      { name: "Design Underground System", slug: "design-underground-system", difficulty: "Medium" },
+      { name: "Design Movie Rental System", slug: "design-movie-rental-system", difficulty: "Hard" },
+    ],
+    techniques: ["Strategy (interchangeable discounts)", "Decorator (stack add-ons onto a line item)", "Observer (cart -> inventory/totals)", "Factory (build discount from a promo code)", "State (cart lifecycle)"],
+    dataStructures: ["Dict[str, LineItem] (sku -> item)", "List[Discount] (strategies)", "Enum CartState"],
+    code: `from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from enum import Enum
+
+@dataclass
+class LineItem:
+    sku: str
+    name: str
+    unit_price: float
+    qty: int
+    @property
+    def subtotal(self): return self.unit_price * self.qty
+
+# --- Strategy: each discount is a swappable pricing rule ---
+class Discount(ABC):
+    @abstractmethod
+    def apply(self, items) -> float: ...   # returns amount OFF
+
+class PercentOff(Discount):
+    def __init__(self, pct): self.pct = pct
+    def apply(self, items):
+        return sum(i.subtotal for i in items) * self.pct / 100
+
+class BuyOneGetOne(Discount):
+    def __init__(self, sku): self.sku = sku
+    def apply(self, items):
+        for i in items:
+            if i.sku == self.sku:
+                return (i.qty // 2) * i.unit_price
+        return 0.0
+
+# --- Factory: turn an opaque promo code into the right Strategy ---
+class DiscountFactory:
+    @staticmethod
+    def from_code(code):
+        if code == "SAVE10":  return PercentOff(10)
+        if code.startswith("BOGO:"): return BuyOneGetOne(code.split(":")[1])
+        raise ValueError(f"Unknown code {code}")
+
+class CartState(Enum):
+    OPEN = "OPEN"; CHECKED_OUT = "CHECKED_OUT"; PAID = "PAID"
+
+class ShoppingCart:
+    def __init__(self):
+        self._items = {}                 # sku -> LineItem
+        self._discounts = []             # list[Discount]
+        self._observers = []             # Observer fan-out
+        self.state = CartState.OPEN
+
+    def subscribe(self, fn): self._observers.append(fn)
+    def _notify(self):
+        for fn in self._observers: fn(self)
+
+    def add(self, item: LineItem):
+        if self.state != CartState.OPEN:
+            raise ValueError("cart is locked")
+        if item.sku in self._items:
+            self._items[item.sku].qty += item.qty
+        else:
+            self._items[item.sku] = item
+        self._notify()
+
+    def apply_code(self, code):
+        self._discounts.append(DiscountFactory.from_code(code))
+
+    def total(self) -> float:
+        items = list(self._items.values())
+        gross = sum(i.subtotal for i in items)
+        off = sum(d.apply(items) for d in self._discounts)
+        return round(max(0.0, gross - off), 2)
+
+    def checkout(self):
+        if not self._items: raise ValueError("empty cart")
+        self.state = CartState.CHECKED_OUT       # State transition
+        self._notify()
+        return self.total()`,
+    runtime: "add: O(1), total: O(I*D) items x discounts",
+    optimalCode: `# Decorator: layer optional add-ons (gift wrap, warranty) onto a
+# single line item at runtime — no LineItem subclass explosion.
+class PricedItem(ABC):
+    @abstractmethod
+    def price(self) -> float: ...
+    @abstractmethod
+    def label(self) -> str: ...
+
+class BaseItem(PricedItem):
+    def __init__(self, item): self.item = item
+    def price(self): return self.item.subtotal
+    def label(self): return self.item.name
+
+class AddOn(PricedItem):                 # decorator base
+    def __init__(self, wrapped): self.wrapped = wrapped
+
+class GiftWrap(AddOn):
+    def price(self): return self.wrapped.price() + 3.0
+    def label(self): return self.wrapped.label() + " + gift wrap"
+
+class Warranty(AddOn):
+    def __init__(self, wrapped, pct=0.1):
+        super().__init__(wrapped); self.pct = pct
+    def price(self): return self.wrapped.price() * (1 + self.pct)
+    def label(self): return self.wrapped.label() + " + warranty"
+
+# usage: Warranty(GiftWrap(BaseItem(li)))  ->  stacks both, order-independent api`,
+    optimalRuntime: "decorated price: O(L) in #layers, O(1) per layer",
+    optimalNote: "Every HelloInterview pattern earns its place: Strategy makes discounts pluggable (PercentOff, BOGO) and total() just sums them; Factory hides which Strategy a promo code maps to; Decorator stacks gift-wrap/warranty add-ons without N*M item subclasses; Observer pushes cart changes to inventory/totals/analytics; State (OPEN->CHECKED_OUT->PAID) blocks mutation after checkout. Gotcha: clamp total at 0 so stacked discounts can't go negative, and apply discounts on the line-item list (BOGO needs qty), not a pre-summed number.",
+  },
+  {
+    id: 25,
+    name: "Temporal Key-Value Store (Mock)",
+    solveCount: 0,
+    tag: "OOD",
+    problems: [
+      { name: "Time Based Key-Value Store", slug: "time-based-key-value-store", difficulty: "Medium" },
+      { name: "Snapshot Array", slug: "snapshot-array", difficulty: "Medium" },
+      { name: "My Calendar I", slug: "my-calendar-i", difficulty: "Medium" },
+    ],
+    techniques: ["binary search on (timestamp, seq)", "tombstones for delete", "global sequence # for same-ts tie-break", "Command journal for restore", "Memento / point-in-time recovery"],
+    dataStructures: ["Dict[str, list[(ts, seq, value|None)]] sorted", "global seq counter", "bisect"],
+    code: `import bisect
+
+# MOCK: temporal config store. Timestamps are NON-MONOTONIC — reads and
+# writes arrive out of order. Same timestamp? last-invoked wins, so every
+# event carries a global seq number to break ties. value=None is a tombstone.
+class TemporalKVStore:
+    def __init__(self):
+        self.store = {}          # key -> sorted list of (ts, seq, value|None)
+        self._seq = 0
+
+    def _tick(self):
+        self._seq += 1
+        return self._seq
+
+    def _latest(self, key, timestamp):
+        events = self.store.get(key)
+        if not events:
+            return None
+        # rightmost event with ts <= timestamp (ties broken by higher seq,
+        # since the list is sorted ascending by (ts, seq))
+        i = bisect.bisect_right(events, (timestamp, float('inf'), None)) - 1
+        return events[i] if i >= 0 else None
+
+    def get(self, key, timestamp):
+        ev = self._latest(key, timestamp)
+        return ev[2] if ev else None          # None if missing OR tombstoned
+
+    def set(self, key, value, timestamp):
+        bisect.insort(self.store.setdefault(key, []),
+                      (timestamp, self._tick(), value))
+
+    def delete(self, key, timestamp) -> bool:
+        ev = self._latest(key, timestamp)     # state as of ts, before delete
+        existed = ev is not None and ev[2] is not None
+        bisect.insort(self.store.setdefault(key, []),
+                      (timestamp, self._tick(), None))   # tombstone
+        return existed
+
+    def restore(self, timestamp):
+        # drop every event with ts > timestamp, on every key — as if those
+        # operations were never invoked. Events AT timestamp are kept.
+        for events in self.store.values():
+            cut = bisect.bisect_right(events, (timestamp, float('inf'), None))
+            del events[cut:]`,
+    runtime: "get: O(log n), set/delete: O(n) insort, restore: O(K + total_dropped)",
+    optimalCode: `# Restore via a Command journal (undo log): record every mutation in
+# invocation order; restore(t) replays-by-removing only the tail it touched
+# instead of scanning every key. Per-key dict still answers get() in O(log n).
+import bisect
+
+class TemporalKVStore:
+    def __init__(self):
+        self.store = {}          # key -> sorted [(ts, seq, value|None)]
+        self.journal = []        # [(ts, seq, key, value)] in invocation order
+        self._seq = 0
+
+    def _apply(self, key, value, timestamp):
+        self._seq += 1
+        ev = (timestamp, self._seq, value)
+        bisect.insort(self.store.setdefault(key, []), ev)
+        self.journal.append((timestamp, self._seq, key, value))
+
+    def get(self, key, timestamp):
+        evs = self.store.get(key)
+        if not evs: return None
+        i = bisect.bisect_right(evs, (timestamp, float('inf'), None)) - 1
+        return evs[i][2] if i >= 0 else None
+
+    def set(self, key, value, timestamp):
+        self._apply(key, value, timestamp)
+
+    def delete(self, key, timestamp) -> bool:
+        existed = self.get(key, timestamp) is not None
+        self._apply(key, None, timestamp)
+        return existed
+
+    def restore(self, timestamp):
+        keep = []
+        for ts, seq, key, value in self.journal:
+            if ts > timestamp:                 # undo this command
+                evs = self.store[key]
+                idx = bisect.bisect_left(evs, (ts, seq, value))
+                if idx < len(evs) and evs[idx][:2] == (ts, seq):
+                    evs.pop(idx)
+            else:
+                keep.append((ts, seq, key, value))
+        self.journal = keep`,
+    optimalRuntime: "restore: O(R log n) where R = commands after t (vs O(all keys))",
+    optimalNote: "Mock interview problem (~75 min). Three subtleties drive the design: (1) timestamps are non-monotonic, so writes need binary-search insertion, not append; (2) same-timestamp ties resolve by invocation order, so every event carries a monotonic seq — read/get sees writes at its own ts; (3) delete is a TOMBSTONE (value=None), and returns True only if an active value existed as of that ts. restore is the Memento/point-in-time-recovery pattern: drop events with ts > target. Gotchas: don't physically erase on delete (a later restore or earlier read still needs history), and keep events AT the restore timestamp.",
+  },
 ];
 
 export const tags = [...new Set(patterns.map((p) => p.tag))];
