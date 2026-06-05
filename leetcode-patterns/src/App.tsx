@@ -160,13 +160,13 @@ function App() {
         className="fixed inset-0 -z-10 bg-cover bg-center bg-fixed"
         style={wallpaper ? { backgroundImage: `url(${wallpaper})` } : undefined}
       />
-      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-slate-950/35 via-slate-950/50 to-slate-950/65" />
+      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-white/55 via-white/65 to-white/80" />
 
-      <nav className="bg-slate-900/20 backdrop-blur-2xl border-b border-white/10 sticky top-0 z-10">
+      <nav className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl border-b border-slate-900/10 sticky top-0 z-10">
         <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="flex items-center gap-3 min-w-0">
-            <Code size={24} className="text-cyan-400 shrink-0" />
-            <h1 className="text-lg sm:text-xl font-bold text-slate-100 truncate">
+            <Code size={24} className="text-cyan-600 shrink-0" />
+            <h1 className="text-lg sm:text-xl font-bold text-slate-900 truncate">
               LeetCode Patterns
             </h1>
             <span className="ml-auto sm:hidden text-sm text-slate-500">slenderman73</span>
@@ -175,20 +175,20 @@ function App() {
           <div className="flex flex-wrap gap-1 sm:ml-6">
             <button
               onClick={() => { setView("patterns"); clearSelection(); }}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
+              className={`px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
                 view === "patterns"
-                  ? "bg-cyan-500/15 text-cyan-300"
-                  : "bg-white/5 text-slate-300 hover:bg-white/10"
+                  ? "bg-cyan-100 text-cyan-700"
+                  : "bg-slate-900/5 text-slate-700 hover:bg-slate-900/10"
               }`}
             >
               Patterns
             </button>
             <button
               onClick={() => { setView("speed-apps"); clearSelection(); }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
                 view === "speed-apps"
-                  ? "bg-cyan-500/15 text-cyan-300"
-                  : "bg-white/5 text-slate-300 hover:bg-white/10"
+                  ? "bg-cyan-100 text-cyan-700"
+                  : "bg-slate-900/5 text-slate-700 hover:bg-slate-900/10"
               }`}
             >
               <Zap size={14} />
@@ -196,10 +196,10 @@ function App() {
             </button>
             <button
               onClick={() => { setView("popular-lists"); clearSelection(); }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
                 view === "popular-lists"
-                  ? "bg-cyan-500/15 text-cyan-300"
-                  : "bg-white/5 text-slate-300 hover:bg-white/10"
+                  ? "bg-cyan-100 text-cyan-700"
+                  : "bg-slate-900/5 text-slate-700 hover:bg-slate-900/10"
               }`}
             >
               <BookOpen size={14} />
@@ -211,10 +211,10 @@ function App() {
                 onClick={() => setExperimentalOpen((o) => !o)}
                 aria-haspopup="menu"
                 aria-expanded={experimentalOpen}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
                   isExperimental(view)
-                    ? "bg-amber-500/15 text-amber-300"
-                    : "bg-white/5 text-slate-300 hover:bg-white/10"
+                    ? "bg-amber-50 text-amber-700"
+                    : "bg-slate-900/5 text-slate-700 hover:bg-slate-900/10"
                 }`}
               >
                 <FlaskConical size={14} />
@@ -224,13 +224,13 @@ function App() {
               {experimentalOpen && (
                 <div
                   role="menu"
-                  className="absolute left-0 top-full mt-1 w-48 rounded-2xl bg-slate-900/85 backdrop-blur-2xl border border-white/10 shadow-lg py-1 z-20"
+                  className="absolute left-0 top-full mt-1 w-48 rounded-none bg-white/95 backdrop-blur-2xl border border-slate-900/10 shadow-lg py-1 z-20"
                 >
                   <button
                     role="menuitem"
                     onClick={() => { setView("submit"); clearSelection(); setExperimentalOpen(false); }}
                     className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
-                      view === "submit" ? "bg-cyan-500/10 text-cyan-300" : "text-slate-300 hover:bg-white/5"
+                      view === "submit" ? "bg-cyan-50 text-cyan-700" : "text-slate-700 hover:bg-slate-900/5"
                     }`}
                   >
                     <Play size={14} />
@@ -240,7 +240,7 @@ function App() {
                     role="menuitem"
                     onClick={() => { setView("flashcards"); clearSelection(); setExperimentalOpen(false); }}
                     className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
-                      view === "flashcards" ? "bg-cyan-500/10 text-cyan-300" : "text-slate-300 hover:bg-white/5"
+                      view === "flashcards" ? "bg-cyan-50 text-cyan-700" : "text-slate-700 hover:bg-slate-900/5"
                     }`}
                   >
                     <Layers size={14} />
@@ -250,7 +250,7 @@ function App() {
                     role="menuitem"
                     onClick={() => { setView("interview-drill"); clearSelection(); setExperimentalOpen(false); }}
                     className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
-                      view === "interview-drill" ? "bg-cyan-500/10 text-cyan-300" : "text-slate-300 hover:bg-white/5"
+                      view === "interview-drill" ? "bg-cyan-50 text-cyan-700" : "text-slate-700 hover:bg-slate-900/5"
                     }`}
                   >
                     <Code size={14} />
@@ -300,14 +300,14 @@ function App() {
               <StatsGrid />
 
               <div className="flex items-center gap-2 mb-6">
-                <Filter size={16} className="text-slate-400" />
+                <Filter size={16} className="text-slate-500" />
                 <div className="flex gap-1.5 flex-wrap">
                   <button
                     onClick={() => setActiveTag(null)}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
                       activeTag === null
-                        ? "bg-cyan-500/15 text-cyan-300"
-                        : "bg-white/5 text-slate-300 hover:bg-white/10"
+                        ? "bg-cyan-100 text-cyan-700"
+                        : "bg-slate-900/5 text-slate-700 hover:bg-slate-900/10"
                     }`}
                   >
                     All
@@ -318,10 +318,10 @@ function App() {
                       onClick={() =>
                         setActiveTag(activeTag === tag ? null : tag)
                       }
-                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
                         activeTag === tag
-                          ? "bg-cyan-500/15 text-cyan-300"
-                          : "bg-white/5 text-slate-300 hover:bg-white/10"
+                          ? "bg-cyan-100 text-cyan-700"
+                          : "bg-slate-900/5 text-slate-700 hover:bg-slate-900/10"
                       }`}
                     >
                       {tag}

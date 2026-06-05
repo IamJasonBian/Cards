@@ -220,21 +220,21 @@ export function WordHunt() {
     <div className="max-w-3xl mx-auto">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
-        <Grid3x3 size={28} className="text-cyan-400" />
+        <Grid3x3 size={28} className="text-cyan-600" />
         <div>
-          <h2 className="text-2xl font-bold text-slate-100">Word Hunt</h2>
-          <p className="text-sm text-slate-400">
+          <h2 className="text-2xl font-bold text-slate-900">Word Hunt</h2>
+          <p className="text-sm text-slate-500">
             Enter letters into the grid, then solve to find all words (LC 212)
           </p>
         </div>
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-slate-400">Loading dictionary…</div>
+        <div className="text-center py-12 text-slate-500">Loading dictionary…</div>
       ) : (
         <>
           {/* Grid */}
-          <div className="bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-sm p-6 mb-4">
+          <div className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none border border-slate-900/10 shadow-sm p-6 mb-4">
             <div className="grid grid-cols-4 gap-2 max-w-[264px] mx-auto mb-5">
               {letters.map((letter, i) => (
                 <input
@@ -246,7 +246,7 @@ export function WordHunt() {
                   value={letter.toUpperCase()}
                   onChange={(e) => handleInput(i, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(i, e)}
-                  className="w-14 h-14 text-2xl font-bold text-center rounded-lg border-2 border-white/15 text-slate-100 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/40 transition-colors bg-slate-950/40 uppercase"
+                  className="w-14 h-14 text-2xl font-bold text-center rounded-none border-2 border-slate-900/15 text-slate-900 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/40 transition-colors bg-slate-100/90 uppercase"
                 />
               ))}
             </div>
@@ -255,14 +255,14 @@ export function WordHunt() {
               <button
                 onClick={handleSolve}
                 disabled={!letters.every((l) => l !== "")}
-                className="flex items-center gap-2 px-5 py-2.5 bg-cyan-500 text-slate-950 rounded-lg font-medium hover:bg-cyan-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="flex items-center gap-2 px-5 py-2.5 bg-cyan-600 text-white rounded-none font-medium hover:bg-cyan-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 <Search size={16} />
                 Solve
               </button>
               <button
                 onClick={handleClear}
-                className="flex items-center gap-2 px-5 py-2.5 bg-slate-800/15 text-slate-300 rounded-lg font-medium hover:bg-white/5 transition-colors cursor-pointer"
+                className="flex items-center gap-2 px-5 py-2.5 bg-slate-100/90 sm:bg-slate-100/70 text-slate-700 rounded-none font-medium hover:bg-slate-900/5 transition-colors cursor-pointer"
               >
                 <RotateCcw size={16} />
                 Clear
@@ -274,17 +274,17 @@ export function WordHunt() {
           {tries.length > 0 && (() => {
             const best = tries.reduce((a, b) => a.totalPoints > b.totalPoints ? a : b);
             return (
-              <div className="bg-amber-500/15 border border-amber-400/30 rounded-2xl px-5 py-4 mb-4 flex items-center justify-between">
+              <div className="bg-amber-50 border border-amber-200 rounded-none px-5 py-4 mb-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Trophy size={22} className="text-amber-300" />
+                  <Trophy size={22} className="text-amber-700" />
                   <div>
-                    <p className="text-sm font-semibold text-amber-300">High Score</p>
-                    <p className="text-xs text-amber-300">
+                    <p className="text-sm font-semibold text-amber-700">High Score</p>
+                    <p className="text-xs text-amber-700">
                       Try #{best.id} · {best.words.length} words
                     </p>
                   </div>
                 </div>
-                <span className="text-2xl font-bold text-amber-300">
+                <span className="text-2xl font-bold text-amber-700">
                   {best.totalPoints.toLocaleString()} pts
                 </span>
               </div>
@@ -295,26 +295,26 @@ export function WordHunt() {
           {tries.length > 0 && (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wide">
+                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide">
                   Results — {tries.length} {tries.length === 1 ? "try" : "tries"}
                 </h3>
-                <div className="flex gap-1 bg-slate-800/15 rounded-lg p-0.5">
+                <div className="flex gap-1 bg-slate-100/90 sm:bg-slate-100/70 rounded-none p-0.5">
                   <button
                     onClick={() => setGroupMode("score")}
-                    className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+                    className={`px-3 py-1 rounded-none text-xs font-medium transition-colors cursor-pointer ${
                       groupMode === "score"
-                        ? "bg-slate-900/20 text-slate-100 shadow-sm"
-                        : "text-slate-400 hover:text-slate-300"
+                        ? "bg-white/85 sm:bg-white/65 text-slate-900 shadow-sm"
+                        : "text-slate-500 hover:text-slate-700"
                     }`}
                   >
                     By Score
                   </button>
                   <button
                     onClick={() => setGroupMode("trie")}
-                    className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+                    className={`px-3 py-1 rounded-none text-xs font-medium transition-colors cursor-pointer ${
                       groupMode === "trie"
-                        ? "bg-slate-900/20 text-slate-100 shadow-sm"
-                        : "text-slate-400 hover:text-slate-300"
+                        ? "bg-white/85 sm:bg-white/65 text-slate-900 shadow-sm"
+                        : "text-slate-500 hover:text-slate-700"
                     }`}
                   >
                     By Prefix
@@ -328,27 +328,27 @@ export function WordHunt() {
                 return (
                   <div
                     key={t.id}
-                    className="bg-slate-900/20 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-sm overflow-hidden"
+                    className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none border border-slate-900/10 shadow-sm overflow-hidden"
                   >
                     {/* Try header */}
                     <button
                       onClick={() => setExpandedTry(open ? null : t.id)}
-                      className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/5 transition-colors cursor-pointer"
+                      className="w-full flex items-center justify-between px-5 py-4 hover:bg-slate-900/5 transition-colors cursor-pointer"
                     >
                       <div className="flex items-center gap-3">
                         {open ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
-                        <span className="font-semibold text-slate-100">
+                        <span className="font-semibold text-slate-900">
                           Try #{t.id}
                         </span>
-                        <span className="text-sm text-slate-400">
+                        <span className="text-sm text-slate-500">
                           {t.grid.map((row) => row.join("")).join(" · ").toUpperCase()}
                         </span>
                       </div>
                       <div className="flex items-center gap-4">
-                        <span className="text-sm text-slate-400">
+                        <span className="text-sm text-slate-500">
                           {t.words.length} words
                         </span>
-                        <span className="flex items-center gap-1 text-sm font-semibold text-amber-300">
+                        <span className="flex items-center gap-1 text-sm font-semibold text-amber-700">
                           <Trophy size={14} />
                           {t.totalPoints.toLocaleString()} pts
                         </span>
@@ -357,15 +357,15 @@ export function WordHunt() {
 
                     {/* Expanded content */}
                     {open && (
-                      <div className="border-t border-white/5 px-5 py-4 space-y-4">
+                      <div className="border-t border-slate-900/5 px-5 py-4 space-y-4">
                         {groupMode === "score"
                           ? groupByLength(t.words).map(([len, words]) => (
                               <div key={len}>
                                 <div className="flex items-center gap-2 mb-2">
-                                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
                                     {len}-letter words
                                   </span>
-                                  <span className="text-xs text-slate-400">
+                                  <span className="text-xs text-slate-500">
                                     ({words.length}) · {wordPoints(len)} pts each
                                   </span>
                                 </div>
@@ -373,7 +373,7 @@ export function WordHunt() {
                                   {words.map((w) => (
                                     <span
                                       key={w}
-                                      className="px-2.5 py-1 bg-cyan-500/10 text-cyan-400 rounded-md text-sm font-medium"
+                                      className="px-2.5 py-1 bg-cyan-50 text-cyan-600 rounded-none text-sm font-medium"
                                     >
                                       {w}
                                     </span>
@@ -384,10 +384,10 @@ export function WordHunt() {
                           : groupByPrefix(t.words).map(({ prefix, words }) => (
                               <div key={prefix}>
                                 <div className="flex items-center gap-2 mb-2">
-                                  <span className="px-2 py-0.5 bg-slate-800/15 text-slate-100 rounded text-xs font-mono font-bold">
+                                  <span className="px-2 py-0.5 bg-slate-100/90 sm:bg-slate-100/70 text-slate-900 rounded text-xs font-mono font-bold">
                                     {prefix}—
                                   </span>
-                                  <span className="text-xs text-slate-400">
+                                  <span className="text-xs text-slate-500">
                                     {words.length} {words.length === 1 ? "word" : "words"}
                                   </span>
                                 </div>
@@ -395,7 +395,7 @@ export function WordHunt() {
                                   {words.map((w) => (
                                     <span
                                       key={w}
-                                      className="px-2.5 py-1 bg-cyan-500/10 text-cyan-400 rounded-md text-sm font-medium"
+                                      className="px-2.5 py-1 bg-cyan-50 text-cyan-600 rounded-none text-sm font-medium"
                                     >
                                       <span className="font-bold">{prefix}</span>
                                       {w.slice(prefix.length)}

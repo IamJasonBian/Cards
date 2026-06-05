@@ -24,9 +24,9 @@ function pickRandom(difficulty: Difficulty | null): Problem {
 }
 
 const diffStyles: Record<Difficulty, string> = {
-  Easy: "bg-emerald-500/15 text-emerald-300 border-emerald-400/30",
-  Medium: "bg-amber-500/15 text-amber-300 border-amber-400/30",
-  Hard: "bg-rose-500/15 text-rose-300 border-rose-400/30",
+  Easy: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  Medium: "bg-amber-50 text-amber-700 border-amber-200",
+  Hard: "bg-rose-50 text-rose-700 border-rose-200",
 };
 
 export function RandomProblem() {
@@ -41,20 +41,20 @@ export function RandomProblem() {
   }, [difficulty]);
 
   return (
-    <div className="mb-8 rounded-2xl border border-cyan-400/30 bg-cyan-500/10 backdrop-blur-2xl p-5">
+    <div className="mb-8 rounded-none border border-cyan-500/30 bg-cyan-50 backdrop-blur-2xl p-5">
       <div className="flex flex-wrap items-center gap-3">
-        <Shuffle size={20} className="text-cyan-400" />
-        <h2 className="text-base font-bold text-slate-100">Random Problem</h2>
+        <Shuffle size={20} className="text-cyan-600" />
+        <h2 className="text-base font-bold text-slate-900">Random Problem</h2>
 
         <div className="flex gap-1.5 ml-2">
           {(["Easy", "Medium", "Hard"] as Difficulty[]).map((d) => (
             <button
               key={d}
               onClick={() => setDifficulty(difficulty === d ? null : d)}
-              className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
+              className={`px-3 py-1 rounded-none text-xs font-medium border transition-colors cursor-pointer ${
                 difficulty === d
                   ? diffStyles[d]
-                  : "bg-slate-800/15 text-slate-400 border-white/10 hover:bg-white/5"
+                  : "bg-slate-100/90 sm:bg-slate-100/70 text-slate-500 border-slate-900/10 hover:bg-slate-900/5"
               }`}
             >
               {d}
@@ -64,7 +64,7 @@ export function RandomProblem() {
 
         <button
           onClick={roll}
-          className="ml-auto flex items-center gap-2 px-4 py-2 rounded-2xl bg-cyan-500 text-slate-950 text-sm font-medium hover:bg-cyan-400 transition-colors cursor-pointer"
+          className="ml-auto flex items-center gap-2 px-4 py-2 rounded-none bg-cyan-600 text-white text-sm font-medium hover:bg-cyan-700 transition-colors cursor-pointer"
         >
           <Shuffle size={14} className={spinning ? "animate-spin" : ""} />
           Roll
@@ -77,7 +77,7 @@ export function RandomProblem() {
             href={`https://leetcode.com/problems/${problem.slug}/`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-900/20 backdrop-blur-2xl border border-cyan-400/30 text-cyan-300 font-medium text-sm hover:bg-cyan-500/10 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-none bg-white/85 sm:bg-white/65 backdrop-blur-2xl border border-cyan-500/30 text-cyan-700 font-medium text-sm hover:bg-cyan-50 transition-colors"
           >
             {problem.name}
             <ExternalLink size={14} />

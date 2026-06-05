@@ -1,16 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html,
 body,
 #root {
-  background-color: #0b0e14;
-  color: #e2e8f0;
+  background-color: #ffffff;
+  color: #0f172a;
 }
 
+/* Grotesque close to galaxy.com's Forma DJR; loaded via index.html <link>. */
 body {
-  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-family: "Hanken Grotesk", Inter, system-ui, "Helvetica Neue", "Helvetica",
+    "Arial", sans-serif;
 }
