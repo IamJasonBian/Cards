@@ -47,6 +47,10 @@ export function SiteFooter({ onNavigate }: { onNavigate: (view: string) => void 
             </button>
           </div>
         </div>
+
+        <div className="border-t border-slate-900/10 mt-8 pt-6 text-center text-xs text-slate-500">
+          Data from LeetCode via alfa-leetcode-api and neetcode-gh
+        </div>
       </div>
     </footer>
   );

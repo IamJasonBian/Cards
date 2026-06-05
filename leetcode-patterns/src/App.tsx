@@ -350,7 +350,7 @@ function App() {
 
               <footer className="mt-12 pb-8 text-center text-xs text-slate-500">
                 639 problems solved | Python3 | Data from LeetCode via
-                alfa-leetcode-api
+                alfa-leetcode-api and neetcode-gh
               </footer>
             </>
           )}

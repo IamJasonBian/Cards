@@ -29,9 +29,6 @@ export function FeatureGrid({ onNavigate }: { onNavigate: (view: string) => void
   return (
     <section>
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 pt-16 sm:pt-24 pb-8 text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500 [text-shadow:_0_2px_18px_rgb(255_255_255_/_70%)]">
-          Explore
-        </p>
         <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 [text-shadow:_0_2px_18px_rgb(255_255_255_/_70%)]">
           Everything in one place
         </h2>

@@ -255,10 +255,6 @@ export function Blind75Submit() {
             </select>
           )}
         </div>
-        <p className="text-slate-700 text-sm mt-1">
-          Solve in Python. Code runs server-side in a sandboxed Judge0 container; you'll see only
-          the first failing hidden test on a wrong answer.
-        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
