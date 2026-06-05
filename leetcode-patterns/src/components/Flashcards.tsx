@@ -404,16 +404,16 @@ export function Flashcards() {
       {/* Viz modal */}
       {vizOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
           onClick={() => setVizOpen(null)}
         >
           <div
-            className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden relative border border-slate-900/10"
+            className="bg-slate-950 rounded-none shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden relative border border-white/10"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setVizOpen(null)}
-              className="absolute top-2 right-2 z-10 p-1.5 rounded hover:bg-slate-900/10 text-slate-500 hover:text-slate-900 cursor-pointer"
+              className="absolute top-2 right-2 z-10 p-1.5 rounded hover:bg-white/10 text-slate-400 hover:text-white cursor-pointer"
               aria-label="Close"
             >
               <X size={18} />
