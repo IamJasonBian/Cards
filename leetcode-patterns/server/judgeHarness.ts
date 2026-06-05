@@ -109,10 +109,13 @@ export function buildProgram(problem: ServerProblem, userCode: string): string {
   }));
   const cases = [...visible, ...hidden];
 
+  // Embed data as JSON *strings* parsed by json.loads, not as inline literals:
+  // JSON true/false/null are not valid Python, so inlining the cases array
+  // (which contains "visible": true/false) would raise NameError at runtime.
   const literals = [
-    `__LC_CASES = ${JSON.stringify(cases)}`,
-    `__LC_EQUALITY = ${JSON.stringify(problem.equality)}`,
-    `__LC_METHOD_NAME = ${JSON.stringify(problem.signature.methodName)}`,
+    `__LC_CASES = json.loads(${JSON.stringify(JSON.stringify(cases))})`,
+    `__LC_EQUALITY = json.loads(${JSON.stringify(JSON.stringify(problem.equality))})`,
+    `__LC_METHOD_NAME = json.loads(${JSON.stringify(JSON.stringify(problem.signature.methodName))})`,
   ].join("\n");
 
   return [
@@ -120,6 +123,7 @@ export function buildProgram(problem: ServerProblem, userCode: string): string {
     userCode,
     "",
     "# --- test data ---",
+    "import json",
     literals,
     "",
     "# --- judge harness ---",
