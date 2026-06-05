@@ -19,7 +19,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { existsSync, readFileSync } from "node:fs";
 import { spawn } from "node:child_process";
-import Anthropic from "@anthropic-ai/sdk";
+import { complete } from "./llm.ts";
 import { blind75Registry } from "./blind75Registry.ts";
 
 // Load .env if present (so `ANTHROPIC_API_KEY=...` in a project-root file works
@@ -38,8 +38,6 @@ function loadDotenv(): void {
 }
 loadDotenv();
 
-const anthropic = new Anthropic();
-const MODEL = "claude-haiku-4-5-20251001";
 const SEED_DIR = "scripts/seed";
 const REF_DIR = "scripts/references";
 const NORM_DIR = "scripts/normalized";
@@ -125,16 +123,11 @@ Return only the JSON object.`;
 async function callLLM(seed: SeedFile): Promise<NormalizedProblem | null> {
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const msg = await anthropic.messages.create({
-        model: MODEL,
-        max_tokens: 4000,
-        system: [{ type: "text", text: SYSTEM, cache_control: { type: "ephemeral" } }],
-        messages: [{ role: "user", content: buildPrompt(seed) }],
+      const text = await complete({
+        system: SYSTEM,
+        user: buildPrompt(seed),
+        maxTokens: 4000,
       });
-      const text = msg.content
-        .filter((b) => b.type === "text")
-        .map((b) => b.text)
-        .join("\n");
       const parsed = parseJSONLoose(text);
       if (!parsed) {
         console.warn(`  [${seed.slug}] could not parse LLM output, retrying…`);
