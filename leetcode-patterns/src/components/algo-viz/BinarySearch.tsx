@@ -79,8 +79,8 @@ export function BinarySearch() {
                 width={cellW - 8}
                 height={60}
                 rx={8}
-                fill={foundHit ? "#10b981" : isMid ? "#7c5cbf" : inRange ? "#1e2030" : "#111218"}
-                stroke={isMid ? "#a78bfa" : inRange ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.03)"}
+                fill={foundHit ? "#10b981" : isMid ? "#06b6d4" : inRange ? "#1e2030" : "#111218"}
+                stroke={isMid ? "#22d3ee" : inRange ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.03)"}
                 style={{ transition: "fill 300ms" }}
                 opacity={inRange ? 1 : 0.35}
               />

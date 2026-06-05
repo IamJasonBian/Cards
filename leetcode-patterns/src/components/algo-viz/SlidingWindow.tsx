@@ -83,8 +83,8 @@ export function SlidingWindow() {
                 width={cellW - 8}
                 height={60}
                 rx={8}
-                fill={inWin ? "#2d1f4e" : "#161820"}
-                stroke={inWin ? "#7c5cbf" : "rgba(255,255,255,0.06)"}
+                fill={inWin ? "#0e3a44" : "#161820"}
+                stroke={inWin ? "#06b6d4" : "rgba(255,255,255,0.06)"}
                 style={{ transition: "fill 300ms" }}
               />
               <text
