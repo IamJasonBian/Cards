@@ -49,25 +49,25 @@ const gradeMeta: Record<
   again: {
     label: "Again",
     hint: "< 10m",
-    cls: "bg-red-50 text-red-700 border-red-200 hover:bg-red-100",
+    cls: "bg-rose-500/15 text-rose-300 border-rose-400/30 hover:bg-rose-500/25",
     key: "1",
   },
   hard: {
     label: "Hard",
     hint: "~1d",
-    cls: "bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100",
+    cls: "bg-amber-500/15 text-amber-300 border-amber-400/30 hover:bg-amber-500/25",
     key: "2",
   },
   good: {
     label: "Good",
     hint: "3d+",
-    cls: "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100",
+    cls: "bg-emerald-500/15 text-emerald-300 border-emerald-400/30 hover:bg-emerald-500/25",
     key: "3",
   },
   easy: {
     label: "Easy",
     hint: "4d+",
-    cls: "bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-100",
+    cls: "bg-sky-500/15 text-sky-300 border-sky-400/30 hover:bg-sky-500/25",
     key: "4",
   },
 };
@@ -180,29 +180,29 @@ export function Flashcards() {
   return (
     <div className="max-w-4xl">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-3">
-          <Layers className="text-indigo-600" size={28} />
+        <h1 className="text-3xl font-bold text-slate-100 mb-2 flex items-center gap-3">
+          <Layers className="text-cyan-400" size={28} />
           Flashcards
         </h1>
-        <p className="text-gray-600 text-sm">
+        <p className="text-slate-300 text-sm">
           Anki-style spaced-repetition deck. Rate each card to schedule the next
-          review. Linked to local backend at <code className="bg-gray-100 px-1 rounded text-xs">/api</code>.
+          review. Linked to local backend at <code className="bg-slate-800/50 px-1 rounded text-xs">/api</code>.
         </p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
-        <StatPill label="Deck" value={flashcards.length} color="text-gray-700" />
-        <StatPill label="Reviewed" value={stats?.total ?? 0} color="text-indigo-600" />
-        <StatPill label="Due" value={stats?.due ?? 0} color="text-red-600" />
-        <StatPill label="Learning" value={stats?.learning ?? 0} color="text-amber-600" />
-        <StatPill label="Mature" value={stats?.mature ?? 0} color="text-emerald-600" />
+        <StatPill label="Deck" value={flashcards.length} color="text-slate-300" />
+        <StatPill label="Reviewed" value={stats?.total ?? 0} color="text-cyan-400" />
+        <StatPill label="Due" value={stats?.due ?? 0} color="text-rose-400" />
+        <StatPill label="Learning" value={stats?.learning ?? 0} color="text-amber-300" />
+        <StatPill label="Mature" value={stats?.mature ?? 0} color="text-emerald-300" />
       </div>
 
       {serverUp === false && (
-        <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+        <div className="mb-4 rounded-2xl border border-amber-400/30 bg-amber-500/15 p-3 text-sm text-amber-300">
           Backend unreachable at <code>/api</code>. Run{" "}
-          <code className="bg-amber-100 px-1 rounded">npm run server</code> in a separate terminal — reviews won't persist without it.
+          <code className="bg-amber-500/15 px-1 rounded">npm run server</code> in a separate terminal — reviews won't persist without it.
         </div>
       )}
 
@@ -215,13 +215,13 @@ export function Flashcards() {
           }}
           className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors cursor-pointer ${
             mode === "due"
-              ? "bg-red-100 text-red-700 border-red-200"
-              : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
+              ? "bg-rose-500/15 text-rose-300 border-rose-400/30"
+              : "bg-slate-800/50 text-slate-300 border-white/10 hover:bg-white/5"
           }`}
         >
           {mode === "due" ? "Due only" : "All cards"}
         </button>
-        <div className="w-px h-5 bg-gray-200 mx-1" />
+        <div className="w-px h-5 bg-white/10 mx-1" />
         <button
           onClick={() => {
             setActiveTag("all");
@@ -229,8 +229,8 @@ export function Flashcards() {
           }}
           className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
             activeTag === "all"
-              ? "bg-indigo-100 text-indigo-700 border-indigo-200"
-              : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
+              ? "bg-cyan-500/15 text-cyan-300 border-cyan-400/30"
+              : "bg-slate-800/50 text-slate-400 border-white/10 hover:bg-white/5"
           }`}
         >
           all
@@ -245,7 +245,7 @@ export function Flashcards() {
             className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
               activeTag === t
                 ? tagStyles[t]
-                : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
+                : "bg-slate-800/50 text-slate-400 border-white/10 hover:bg-white/5"
             }`}
           >
             {t}
@@ -271,19 +271,19 @@ export function Flashcards() {
             >
               {/* Front */}
               <div
-                className="absolute inset-0 bg-white rounded-2xl border border-gray-200 shadow-sm flex flex-col items-center justify-center p-8"
+                className="absolute inset-0 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-white/10 shadow-sm flex flex-col items-center justify-center p-8"
                 style={{ backfaceVisibility: "hidden" }}
               >
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-semibold mb-4 border ${tagStyles[card.tag]}`}
+                  className={`px-3 py-1 rounded-full text-xs font-semibold mb-4 ${tagStyles[card.tag]}`}
                 >
                   {card.tag}
                 </span>
-                <h2 className="text-2xl font-semibold text-gray-900 text-center mb-2">
+                <h2 className="text-2xl font-semibold text-slate-100 text-center mb-2">
                   {card.q}
                 </h2>
-                <p className="text-sm text-gray-500 text-center">{card.hint}</p>
-                <div className="mt-6 flex items-center gap-2 text-xs text-gray-400">
+                <p className="text-sm text-slate-400 text-center">{card.hint}</p>
+                <div className="mt-6 flex items-center gap-2 text-xs text-slate-400">
                   <EyeOff size={12} />
                   click / space to flip
                 </div>
@@ -291,14 +291,14 @@ export function Flashcards() {
 
               {/* Back */}
               <div
-                className="absolute inset-0 bg-white rounded-2xl border border-gray-200 shadow-sm p-5 overflow-auto"
+                className="absolute inset-0 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-white/10 shadow-sm p-5 overflow-auto"
                 style={{
                   backfaceVisibility: "hidden",
                   transform: "rotateY(180deg)",
                 }}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">
+                  <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">
                     Implementation
                   </span>
                   <div className="flex items-center gap-2">
@@ -309,26 +309,26 @@ export function Flashcards() {
                           if (card.viz) setVizOpen({ kind: "algo", value: card.viz });
                           else if (card.vizPath) setVizOpen({ kind: "path", value: card.vizPath });
                         }}
-                        className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs text-violet-600 hover:bg-violet-50 border border-violet-200 transition-colors cursor-pointer"
+                        className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs text-violet-300 hover:bg-violet-500/15 border border-violet-400/30 transition-colors cursor-pointer"
                       >
                         <Sparkles size={12} />
                         Visualize
                       </button>
                     )}
-                    <Eye size={12} className="text-gray-400" />
+                    <Eye size={12} className="text-slate-400" />
                   </div>
                 </div>
-                <pre className="bg-gray-900 text-gray-100 rounded-lg p-3 text-xs overflow-auto font-mono leading-relaxed">
+                <pre className="bg-slate-950/70 text-slate-100 rounded-lg p-3 text-xs overflow-auto font-mono leading-relaxed border border-white/5">
                   <code>{card.code}</code>
                 </pre>
-                <p className="text-xs text-gray-500 mt-3 italic">{card.note}</p>
+                <p className="text-xs text-slate-400 mt-3 italic">{card.note}</p>
               </div>
             </div>
           </div>
 
           {/* Controls */}
           <div className="max-w-[720px] mx-auto">
-            <div className="flex items-center justify-between mb-3 text-xs text-gray-500">
+            <div className="flex items-center justify-between mb-3 text-xs text-slate-400">
               <span>
                 {idx + 1} / {pool.length}
               </span>
@@ -343,7 +343,7 @@ export function Flashcards() {
                     setFlipped(false);
                     setIdx((i) => (i - 1 + pool.length) % pool.length);
                   }}
-                  className="px-2 py-1 rounded border border-gray-200 hover:bg-gray-50 cursor-pointer"
+                  className="px-2 py-1 rounded border border-white/10 hover:bg-white/5 cursor-pointer"
                 >
                   ←
                 </button>
@@ -352,7 +352,7 @@ export function Flashcards() {
                     setFlipped(false);
                     setIdx((i) => (i + 1) % pool.length);
                   }}
-                  className="px-2 py-1 rounded border border-gray-200 hover:bg-gray-50 cursor-pointer"
+                  className="px-2 py-1 rounded border border-white/10 hover:bg-white/5 cursor-pointer"
                 >
                   →
                 </button>
@@ -377,7 +377,7 @@ export function Flashcards() {
             ) : (
               <button
                 onClick={() => setFlipped(true)}
-                className="w-full py-3 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-colors cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-lg bg-cyan-500 text-slate-950 font-medium hover:bg-cyan-400 transition-colors cursor-pointer flex items-center justify-center gap-2"
               >
                 <RotateCcw size={16} />
                 Show answer
@@ -386,7 +386,7 @@ export function Flashcards() {
           </div>
         </>
       ) : (
-        <div className="text-center text-sm text-gray-500 py-12 bg-white rounded-xl border border-gray-200">
+        <div className="text-center text-sm text-slate-400 py-12 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-white/10">
           Nothing to review here.{" "}
           <button
             onClick={() => {
@@ -394,7 +394,7 @@ export function Flashcards() {
               setActiveTag("all");
               setIdx(0);
             }}
-            className="text-indigo-600 hover:underline cursor-pointer"
+            className="text-cyan-400 hover:underline cursor-pointer"
           >
             Show all cards
           </button>
@@ -408,7 +408,7 @@ export function Flashcards() {
           onClick={() => setVizOpen(null)}
         >
           <div
-            className="bg-white rounded-xl shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden relative"
+            className="bg-slate-900/60 backdrop-blur-md rounded-2xl shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden relative border border-white/10"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -436,8 +436,8 @@ export function Flashcards() {
 
 function StatPill({ label, value, color }: { label: string; value: number; color: string }) {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 px-3 py-2">
-      <p className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">
+    <div className="bg-slate-900/60 backdrop-blur-md rounded-2xl border border-white/10 px-3 py-2">
+      <p className="text-[10px] uppercase tracking-wide text-slate-400 font-medium">
         {label}
       </p>
       <p className={`text-xl font-bold ${color}`}>{value}</p>

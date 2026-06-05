@@ -540,11 +540,11 @@ export const flashcardTags: FlashcardTag[] = [
 ];
 
 export const tagStyles: Record<FlashcardTag, string> = {
-  "linked list": "bg-indigo-100 text-indigo-800 border-indigo-200",
-  tree: "bg-emerald-100 text-emerald-800 border-emerald-200",
-  graph: "bg-orange-100 text-orange-800 border-orange-200",
-  array: "bg-blue-100 text-blue-800 border-blue-200",
-  dp: "bg-lime-100 text-lime-800 border-lime-200",
-  heap: "bg-amber-100 text-amber-800 border-amber-200",
-  str: "bg-pink-100 text-pink-800 border-pink-200",
+  "linked list": "bg-indigo-500/15 text-indigo-300 border border-indigo-400/30",
+  tree: "bg-emerald-500/15 text-emerald-300 border border-emerald-400/30",
+  graph: "bg-orange-500/15 text-orange-300 border border-orange-400/30",
+  array: "bg-blue-500/15 text-blue-300 border border-blue-400/30",
+  dp: "bg-lime-500/15 text-lime-300 border border-lime-400/30",
+  heap: "bg-amber-500/15 text-amber-300 border border-amber-400/30",
+  str: "bg-pink-500/15 text-pink-300 border border-pink-400/30",
 };
