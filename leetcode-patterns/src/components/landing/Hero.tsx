@@ -3,20 +3,20 @@ import { SquareStack, ArrowRight } from "lucide-react";
 export function Hero({ onNavigate }: { onNavigate: (view: string) => void }) {
   return (
     <section className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-20 text-center sm:py-28">
-      <div className="flex h-16 w-16 items-center justify-center rounded-none border border-slate-900/15 bg-white/60 backdrop-blur-sm">
-        <SquareStack className="h-8 w-8 text-cyan-700" />
+      <div className="flex h-16 w-16 items-center justify-center rounded-none border border-white/15 bg-slate-900/65 backdrop-blur-sm">
+        <SquareStack className="h-8 w-8 text-cyan-300" />
       </div>
 
-      <div className="mt-8 w-full bg-white px-5 py-6 sm:mt-0 sm:bg-transparent sm:p-0">
-        <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:mt-8 sm:text-7xl sm:[text-shadow:_0_2px_20px_rgb(255_255_255_/_55%)]">
+      <div className="mt-8 w-full bg-slate-900 px-5 py-6 sm:mt-0 sm:bg-transparent sm:p-0">
+        <h1 className="text-4xl font-bold tracking-tight text-slate-100 sm:mt-8 sm:text-7xl sm:[text-shadow:_0_2px_20px_rgb(255_255_255_/_55%)]">
           One Card a Day
         </h1>
 
-        <p className="mt-2 text-3xl font-normal tracking-tight text-slate-700 sm:text-4xl sm:[text-shadow:_0_2px_16px_rgb(255_255_255_/_55%)]">
+        <p className="mt-2 text-3xl font-normal tracking-tight text-slate-300 sm:text-4xl sm:[text-shadow:_0_2px_16px_rgb(255_255_255_/_55%)]">
           Transform
         </p>
 
-        <p className="mt-6 mx-auto max-w-xl text-base font-bold text-slate-800 sm:[text-shadow:_0_1px_10px_rgb(255_255_255_/_65%)]">
+        <p className="mt-6 mx-auto max-w-xl text-base font-bold text-slate-200 sm:[text-shadow:_0_1px_10px_rgb(255_255_255_/_65%)]">
           Daily algorithm flashcards, drills, and pattern practice — one card at a time.
         </p>
       </div>
@@ -33,7 +33,7 @@ export function Hero({ onNavigate }: { onNavigate: (view: string) => void }) {
         <button
           type="button"
           onClick={() => onNavigate("patterns")}
-          className="cursor-pointer rounded-none border border-slate-900/15 bg-white/95 sm:bg-white/60 px-5 py-2.5 text-center font-medium text-slate-800 backdrop-blur-sm transition-colors hover:bg-white/80"
+          className="cursor-pointer rounded-none border border-white/15 bg-slate-900/95 sm:bg-slate-900/65 px-5 py-2.5 text-center font-medium text-slate-200 backdrop-blur-sm transition-colors hover:bg-slate-900/80"
         >
           Browse patterns
         </button>
