@@ -354,7 +354,7 @@ export function WordHunt() {
 
                     {/* Expanded content */}
                     {open && (
-                      <div className="border-t border-slate-900/5 px-5 py-4 space-y-4">
+                      <div className="border-t border-white/5 px-5 py-4 space-y-4">
                         {groupMode === "score"
                           ? groupByLength(t.words).map(([len, words]) => (
                               <div key={len}>
