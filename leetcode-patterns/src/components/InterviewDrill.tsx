@@ -83,14 +83,14 @@ function reviewCode(code: string, patterns: string[]): string {
 // ── Small shared UI pieces ────────────────────────────────────────────────────
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-xs font-bold uppercase tracking-widest text-cyan-600 mb-2">
+    <h3 className="text-xs font-bold uppercase tracking-widest text-cyan-400 mb-2">
       {children}
     </h3>
   );
 }
 function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`bg-white/85 sm:bg-white/65 backdrop-blur-2xl border border-slate-900/10 rounded-none p-5 ${className}`}>
+    <div className={`bg-slate-900/85 sm:bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-none p-5 ${className}`}>
       {children}
     </div>
   );
@@ -146,21 +146,21 @@ export function InterviewDrill() {
 
   const checkIcon = (s: CheckState) => s === "pass" ? "✓" : s === "fail" ? "✗" : "○";
   const checkRow = (s: CheckState) => ({
-    pending: "border-slate-900/10 bg-slate-100/90 sm:bg-slate-100/70 hover:bg-slate-900/5 text-slate-700",
-    pass:    "border-emerald-200 bg-emerald-50 text-emerald-700",
-    fail:    "border-rose-200 bg-rose-50 text-rose-700",
+    pending: "border-white/10 bg-slate-800/90 sm:bg-slate-800/70 hover:bg-slate-900/5 text-slate-300",
+    pass:    "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",
+    fail:    "border-rose-500/30 bg-rose-500/10 text-rose-300",
   }[s]);
   const checkIconColor = (s: CheckState) => ({
-    pending: "text-slate-500",
-    pass:    "text-emerald-700",
-    fail:    "text-rose-700",
+    pending: "text-slate-400",
+    pass:    "text-emerald-300",
+    fail:    "text-rose-300",
   }[s]);
 
   return (
     <div className="max-w-3xl mx-auto">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-slate-900">Interview Drill</h2>
-        <p className="text-sm text-slate-500 mt-1">
+        <h2 className="text-2xl font-bold text-slate-100">Interview Drill</h2>
+        <p className="text-sm text-slate-400 mt-1">
           Problem Solving → Coding → Verification
         </p>
       </div>
@@ -173,14 +173,14 @@ export function InterviewDrill() {
               onClick={() => setPhase(id)}
               className={`px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
                 phase === id
-                  ? "bg-cyan-100 text-cyan-700"
-                  : "bg-slate-100/90 sm:bg-slate-100/70 text-slate-700 hover:bg-slate-900/5"
+                  ? "bg-cyan-500/20 text-cyan-300"
+                  : "bg-slate-800/90 sm:bg-slate-800/70 text-slate-300 hover:bg-slate-900/5"
               }`}
             >
               {label}
             </button>
             {i < PHASE_CONFIG.length - 1 && (
-              <ChevronRight size={14} className="text-slate-500" />
+              <ChevronRight size={14} className="text-slate-400" />
             )}
           </div>
         ))}
@@ -194,11 +194,11 @@ export function InterviewDrill() {
               <SectionLabel>Problem Statement</SectionLabel>
               <CameraCapture mode="problem" onResult={(text) => setProblemText(text)} />
             </div>
-            <p className="text-xs text-slate-500 mb-2">
+            <p className="text-xs text-slate-400 mb-2">
               Paste the full problem — or capture it from your camera.
             </p>
             <textarea
-              className="w-full bg-slate-100/90 text-slate-900 border border-slate-900/15 rounded-none p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+              className="w-full bg-slate-800/90 text-slate-100 border border-white/15 rounded-none p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
               rows={7}
               placeholder="Paste or capture the problem here..."
               value={problemText}
@@ -216,15 +216,15 @@ export function InterviewDrill() {
             <>
               <Card>
                 <SectionLabel>Pattern Classification</SectionLabel>
-                <p className="text-xs text-slate-500 mb-2">Highlighted patterns match keywords in the problem.</p>
+                <p className="text-xs text-slate-400 mb-2">Highlighted patterns match keywords in the problem.</p>
                 <div className="flex flex-wrap gap-1.5">
                   {ALL_PATTERNS.map((p) => (
                     <span
                       key={p}
                       className={`px-2.5 py-1 rounded-none text-xs font-medium border ${
                         detectedPatterns.includes(p)
-                          ? "bg-cyan-50 border-cyan-500/30 text-cyan-700"
-                          : "bg-slate-100/90 sm:bg-slate-100/70 border-slate-900/10 text-slate-500"
+                          ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-300"
+                          : "bg-slate-800/90 sm:bg-slate-800/70 border-white/10 text-slate-400"
                       }`}
                     >
                       {p}
@@ -235,9 +235,9 @@ export function InterviewDrill() {
 
               <Card>
                 <SectionLabel>Brute Force Baseline</SectionLabel>
-                <p className="text-xs text-slate-500 mb-2">Describe the naive solution in plain English — no code. What is its time and space complexity?</p>
+                <p className="text-xs text-slate-400 mb-2">Describe the naive solution in plain English — no code. What is its time and space complexity?</p>
                 <textarea
-                  className="w-full bg-slate-100/90 border border-slate-900/15 rounded-none p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-900"
+                  className="w-full bg-slate-800/90 border border-white/15 rounded-none p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-100"
                   rows={3}
                   placeholder="e.g. Enumerate all possibilities with nested loops. Time: O(n²). Space: O(1)."
                 />
@@ -245,9 +245,9 @@ export function InterviewDrill() {
 
               <Card>
                 <SectionLabel>Optimal Algorithm (English only — no code)</SectionLabel>
-                <p className="text-xs text-slate-500 mb-2">Numbered steps. Include data structures, initialization, main loop, and termination.</p>
+                <p className="text-xs text-slate-400 mb-2">Numbered steps. Include data structures, initialization, main loop, and termination.</p>
                 <textarea
-                  className="w-full bg-slate-100/90 border border-slate-900/15 rounded-none p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-900"
+                  className="w-full bg-slate-800/90 border border-white/15 rounded-none p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-100"
                   rows={6}
                   placeholder={"1. Initialize ...\n2. Main loop: ...\n3. Return ..."}
                 />
@@ -257,10 +257,10 @@ export function InterviewDrill() {
                 <SectionLabel>Complexity Target</SectionLabel>
                 <div className="grid grid-cols-2 gap-3">
                   {["Time", "Space"].map((label) => (
-                    <div key={label} className="bg-slate-100/90 sm:bg-slate-100/70 rounded-none p-3">
-                      <div className="text-xs text-slate-500 uppercase tracking-wide mb-1">{label}</div>
+                    <div key={label} className="bg-slate-800/90 sm:bg-slate-800/70 rounded-none p-3">
+                      <div className="text-xs text-slate-400 uppercase tracking-wide mb-1">{label}</div>
                       <input
-                        className="w-full bg-transparent font-mono text-base font-bold text-cyan-600 focus:outline-none"
+                        className="w-full bg-transparent font-mono text-base font-bold text-cyan-400 focus:outline-none"
                         placeholder="O(?)"
                       />
                     </div>
@@ -270,15 +270,15 @@ export function InterviewDrill() {
 
               <Card>
                 <SectionLabel>Gotchas</SectionLabel>
-                <p className="text-xs text-slate-500 mb-2">List 2-3 things that commonly trip people up on this problem.</p>
+                <p className="text-xs text-slate-400 mb-2">List 2-3 things that commonly trip people up on this problem.</p>
                 <textarea
-                  className="w-full bg-slate-100/90 border border-slate-900/15 rounded-none p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-900"
+                  className="w-full bg-slate-800/90 border border-white/15 rounded-none p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-100"
                   rows={3}
                   placeholder={"• Off-by-one on boundary\n• Forgetting to handle empty input\n• ..."}
                 />
               </Card>
 
-              <div className="bg-emerald-50 border border-emerald-200 rounded-none p-4 text-sm text-emerald-700 font-medium">
+              <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-none p-4 text-sm text-emerald-300 font-medium">
                 Algorithm locked in —{" "}
                 <button
                   className="underline font-semibold cursor-pointer"
@@ -300,11 +300,11 @@ export function InterviewDrill() {
               <SectionLabel>Your Implementation</SectionLabel>
               <CameraCapture mode="code" onResult={(text) => setCodeText(text)} />
             </div>
-            <p className="text-xs text-slate-500 mb-2">
+            <p className="text-xs text-slate-400 mb-2">
               Type your code — or capture handwritten code from your camera.
             </p>
             <textarea
-              className="w-full bg-slate-100/90 text-slate-900 border border-slate-900/15 rounded-none p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+              className="w-full bg-slate-800/90 text-slate-100 border border-white/15 rounded-none p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
               rows={12}
               placeholder={"class Solution:\n    def solve(self, ...):\n        # your code here"}
               value={codeText}
@@ -315,19 +315,19 @@ export function InterviewDrill() {
           {/* Dry Run */}
           <Card>
             <SectionLabel>Dry Run</SectionLabel>
-            <p className="text-xs text-slate-500 mb-3">
+            <p className="text-xs text-slate-400 mb-3">
               Pick a small test input, trace your algorithm by hand, and write what you expect each step to do.
             </p>
             <div className="flex gap-2 mb-3">
               <input
-                className="flex-1 bg-slate-100/90 text-slate-900 border border-slate-900/15 rounded-none px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+                className="flex-1 bg-slate-800/90 text-slate-100 border border-white/15 rounded-none px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
                 placeholder="Test input (e.g. x=2, y=1)"
                 value={dryRunInput}
                 onChange={(e) => setDryRunInput(e.target.value)}
               />
             </div>
             <textarea
-              className="w-full bg-slate-100/90 text-slate-900 border border-slate-900/15 rounded-none p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+              className="w-full bg-slate-800/90 text-slate-100 border border-white/15 rounded-none p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
               rows={6}
               placeholder={"Step 1: queue = [(0,0)], visited = {(0,0)}\nStep 2: pop (0,0), enqueue (1,2),(2,1),...\n..."}
               value={dryRunText}
@@ -338,7 +338,7 @@ export function InterviewDrill() {
           {/* Verification Checklist */}
           <Card>
             <SectionLabel>Verification Checklist</SectionLabel>
-            <p className="text-xs text-slate-500 mb-3">
+            <p className="text-xs text-slate-400 mb-3">
               Mentally verify each claim against your code. Click to mark pass / fail.
             </p>
             <ul className="space-y-1.5">
@@ -357,7 +357,7 @@ export function InterviewDrill() {
             </ul>
             <button
               onClick={() => setChecks(VERIFY_CHECKS.map(() => "pending"))}
-              className="mt-2 flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700"
+              className="mt-2 flex items-center gap-1 text-xs text-slate-400 hover:text-slate-300"
             >
               <RotateCcw size={11} /> Reset
             </button>
@@ -366,13 +366,13 @@ export function InterviewDrill() {
           {/* Coding Hints */}
           <Card>
             <SectionLabel>Coding Hints</SectionLabel>
-            <p className="text-xs text-slate-500 mb-3">
+            <p className="text-xs text-slate-400 mb-3">
               3-hint budget — Socratic nudges only, no full solutions.
             </p>
-            <div className="flex items-center gap-2 mb-3 text-sm text-slate-500">
+            <div className="flex items-center gap-2 mb-3 text-sm text-slate-400">
               <span>Hints used:</span>
               {[0, 1, 2].map((i) => (
-                <span key={i} className={`font-mono text-base ${i < hintsUsed ? "text-amber-600" : "text-slate-600"}`}>
+                <span key={i} className={`font-mono text-base ${i < hintsUsed ? "text-amber-400" : "text-slate-400"}`}>
                   {i < hintsUsed ? "●" : "○"}
                 </span>
               ))}
@@ -381,7 +381,7 @@ export function InterviewDrill() {
               <button
                 onClick={handleHint}
                 disabled={hintsUsed >= 3}
-                className="px-3 py-1.5 border border-cyan-500/30 text-cyan-700 text-sm font-medium rounded-none hover:bg-cyan-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="px-3 py-1.5 border border-cyan-500/30 text-cyan-300 text-sm font-medium rounded-none hover:bg-cyan-500/10 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 Request a hint
               </button>
@@ -394,7 +394,7 @@ export function InterviewDrill() {
             </div>
 
             {codeFeedback && (
-              <div className="mt-3 p-3 bg-slate-100/90 sm:bg-slate-100/70 rounded-none text-sm text-slate-700 font-mono whitespace-pre-wrap">
+              <div className="mt-3 p-3 bg-slate-800/90 sm:bg-slate-800/70 rounded-none text-sm text-slate-300 font-mono whitespace-pre-wrap">
                 {codeFeedback}
               </div>
             )}
@@ -408,7 +408,7 @@ export function InterviewDrill() {
           <Card>
             <SectionLabel>Final Solution</SectionLabel>
             <textarea
-              className="w-full bg-slate-100/90 text-slate-900 border border-slate-900/15 rounded-none p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+              className="w-full bg-slate-800/90 text-slate-100 border border-white/15 rounded-none p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
               rows={12}
               placeholder="Paste your final solution..."
               value={verifyCode}
@@ -426,12 +426,12 @@ export function InterviewDrill() {
             <>
               <Card>
                 <SectionLabel>Test Cases</SectionLabel>
-                <p className="text-xs text-slate-500 mb-2">
+                <p className="text-xs text-slate-400 mb-2">
                   Fill in inputs, expected outputs, and your actual outputs. Mark pass/fail.
                 </p>
                 <table className="w-full text-sm border-collapse">
                   <thead>
-                    <tr className="text-left text-xs text-slate-500 border-b border-slate-900/5">
+                    <tr className="text-left text-xs text-slate-400 border-b border-white/5">
                       {["Input", "Expected", "Actual", "Pass?"].map((h) => (
                         <th key={h} className="py-1.5 pr-3 font-semibold uppercase tracking-wide">{h}</th>
                       ))}
@@ -439,14 +439,14 @@ export function InterviewDrill() {
                   </thead>
                   <tbody>
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <tr key={i} className="border-b border-slate-900/5">
+                      <tr key={i} className="border-b border-white/5">
                         {["", "", ""].map((_, j) => (
                           <td key={j} className="py-1 pr-3">
-                            <input className="w-full bg-slate-100/90 text-slate-900 font-mono text-xs border border-slate-900/15 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-cyan-400/40" />
+                            <input className="w-full bg-slate-800/90 text-slate-100 font-mono text-xs border border-white/15 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-cyan-400/40" />
                           </td>
                         ))}
                         <td className="py-1">
-                          <select className="bg-slate-100/90 text-slate-900 text-xs border border-slate-900/15 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-cyan-400/40">
+                          <select className="bg-slate-800/90 text-slate-100 text-xs border border-white/15 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-cyan-400/40">
                             <option>—</option>
                             <option>✓</option>
                             <option>✗</option>
@@ -460,9 +460,9 @@ export function InterviewDrill() {
 
               <Card>
                 <SectionLabel>Edge Cases</SectionLabel>
-                <p className="text-xs text-slate-500 mb-2">List the edge cases you checked and whether they passed.</p>
+                <p className="text-xs text-slate-400 mb-2">List the edge cases you checked and whether they passed.</p>
                 <textarea
-                  className="w-full bg-slate-100/90 border border-slate-900/15 rounded-none p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-900"
+                  className="w-full bg-slate-800/90 border border-white/15 rounded-none p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-100"
                   rows={4}
                   placeholder={"• Empty input → ?\n• Single element → ?\n• Max constraints → ?\n• Negative values → ?"}
                 />
@@ -472,10 +472,10 @@ export function InterviewDrill() {
                 <SectionLabel>Complexity Audit</SectionLabel>
                 <div className="grid grid-cols-2 gap-3">
                   {["Time", "Space"].map((label) => (
-                    <div key={label} className="bg-slate-100/90 sm:bg-slate-100/70 rounded-none p-3">
-                      <div className="text-xs text-slate-500 uppercase tracking-wide mb-1">{label}</div>
+                    <div key={label} className="bg-slate-800/90 sm:bg-slate-800/70 rounded-none p-3">
+                      <div className="text-xs text-slate-400 uppercase tracking-wide mb-1">{label}</div>
                       <input
-                        className="w-full bg-transparent font-mono text-base font-bold text-cyan-600 focus:outline-none"
+                        className="w-full bg-transparent font-mono text-base font-bold text-cyan-400 focus:outline-none"
                         placeholder="O(?)"
                       />
                     </div>
@@ -495,13 +495,13 @@ export function InterviewDrill() {
                     "Communication — explained approach before coding",
                   ].map((item, i) => (
                     <li key={i} className="flex items-center gap-2">
-                      <select className="bg-slate-100/90 text-slate-900 text-xs border border-slate-900/15 rounded px-1.5 py-0.5 focus:outline-none focus:ring-2 focus:ring-cyan-400/40">
+                      <select className="bg-slate-800/90 text-slate-100 text-xs border border-white/15 rounded px-1.5 py-0.5 focus:outline-none focus:ring-2 focus:ring-cyan-400/40">
                         <option>—</option>
                         <option>✓ Pass</option>
                         <option>⚠ Partial</option>
                         <option>✗ Fail</option>
                       </select>
-                      <span className="text-slate-700">{item}</span>
+                      <span className="text-slate-300">{item}</span>
                     </li>
                   ))}
                 </ul>
