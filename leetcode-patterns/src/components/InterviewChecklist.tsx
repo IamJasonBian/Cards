@@ -158,13 +158,13 @@ function SubChecklistSection({
         <p className={`text-xs font-semibold ${color} uppercase tracking-wide`}>
           {sub.title}
         </p>
-        <span className="text-xs text-slate-500">
+        <span className="text-xs text-slate-400">
           {checkedCount}/{sub.items.length}
         </span>
         {subOpen ? (
-          <ChevronUp size={14} className="text-slate-500" />
+          <ChevronUp size={14} className="text-slate-400" />
         ) : (
-          <ChevronDown size={14} className="text-slate-500" />
+          <ChevronDown size={14} className="text-slate-400" />
         )}
       </button>
       {subOpen && (
@@ -180,9 +180,9 @@ function SubChecklistSection({
                 {isChecked ? (
                   <CheckSquare size={16} className={`${color} mt-0.5 shrink-0`} />
                 ) : (
-                  <Square size={16} className="text-slate-500 group-hover:text-slate-500 mt-0.5 shrink-0" />
+                  <Square size={16} className="text-slate-400 group-hover:text-slate-400 mt-0.5 shrink-0" />
                 )}
-                <span className={`text-sm ${isChecked ? "text-slate-500 line-through" : "text-slate-700"}`}>
+                <span className={`text-sm ${isChecked ? "text-slate-400 line-through" : "text-slate-300"}`}>
                   {item}
                 </span>
               </button>
@@ -214,9 +214,9 @@ function ChecklistSection({ section }: { section: Section }) {
   const checkedCount = checked.size;
 
   const colorMap: Record<string, { border: string; bg: string; text: string; progress: string }> = {
-    indigo: { border: "border-cyan-500/30", bg: "bg-cyan-100", text: "text-cyan-700", progress: "bg-cyan-600" },
-    emerald: { border: "border-emerald-200", bg: "bg-emerald-50", text: "text-emerald-700", progress: "bg-emerald-500" },
-    amber: { border: "border-amber-200", bg: "bg-amber-50", text: "text-amber-700", progress: "bg-amber-500" },
+    indigo: { border: "border-cyan-500/30", bg: "bg-cyan-500/20", text: "text-cyan-300", progress: "bg-cyan-600" },
+    emerald: { border: "border-emerald-500/30", bg: "bg-emerald-500/10", text: "text-emerald-300", progress: "bg-emerald-500" },
+    amber: { border: "border-amber-500/30", bg: "bg-amber-500/10", text: "text-amber-300", progress: "bg-amber-500" },
   };
   const c = colorMap[section.color] ?? colorMap.indigo;
   const borderColor = c.border;
@@ -224,8 +224,8 @@ function ChecklistSection({ section }: { section: Section }) {
   const textColor = c.text;
   const progressBg = c.progress;
 
-  const subColors = ["text-amber-700", "text-violet-700", "text-rose-700"];
-  const subBorders = ["border-amber-200", "border-violet-200", "border-rose-200"];
+  const subColors = ["text-amber-300", "text-violet-300", "text-rose-300"];
+  const subBorders = ["border-amber-500/30", "border-violet-500/30", "border-rose-500/30"];
 
   const renderCheckItem = (item: string, color: string) => {
     const isChecked = checked.has(item);
@@ -243,11 +243,11 @@ function ChecklistSection({ section }: { section: Section }) {
         ) : (
           <Square
             size={16}
-            className="text-slate-500 group-hover:text-slate-500 mt-0.5 shrink-0"
+            className="text-slate-400 group-hover:text-slate-400 mt-0.5 shrink-0"
           />
         )}
         <span
-          className={`text-sm ${isChecked ? "text-slate-500 line-through" : "text-slate-700"}`}
+          className={`text-sm ${isChecked ? "text-slate-400 line-through" : "text-slate-300"}`}
         >
           {item}
         </span>
@@ -256,7 +256,7 @@ function ChecklistSection({ section }: { section: Section }) {
   };
 
   return (
-    <div className={`rounded-none border ${borderColor} bg-white/85 sm:bg-white/65 backdrop-blur-2xl`}>
+    <div className={`rounded-none border ${borderColor} bg-slate-900/85 sm:bg-slate-900/70 backdrop-blur-2xl`}>
       <button
         onClick={() => setOpen(!open)}
         className="w-full p-5 flex items-center justify-between text-left cursor-pointer"
@@ -266,14 +266,14 @@ function ChecklistSection({ section }: { section: Section }) {
             <CheckSquare size={20} className={textColor} />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-slate-900">
+            <h3 className="text-lg font-semibold text-slate-100">
               {section.title}
             </h3>
             <div className="flex items-center gap-3 mt-1">
-              <span className="text-xs text-slate-500">
+              <span className="text-xs text-slate-400">
                 {checkedCount} / {allItems} items
               </span>
-              <div className="w-24 h-1.5 bg-slate-100/90 sm:bg-slate-100/70 rounded-none overflow-hidden">
+              <div className="w-24 h-1.5 bg-slate-800/90 sm:bg-slate-800/70 rounded-none overflow-hidden">
                 <div
                   className={`h-full ${progressBg} rounded-none transition-all`}
                   style={{
@@ -285,14 +285,14 @@ function ChecklistSection({ section }: { section: Section }) {
           </div>
         </div>
         {open ? (
-          <ChevronUp size={20} className="text-slate-500" />
+          <ChevronUp size={20} className="text-slate-400" />
         ) : (
-          <ChevronDown size={20} className="text-slate-500" />
+          <ChevronDown size={20} className="text-slate-400" />
         )}
       </button>
 
       {open && (
-        <div className="border-t border-slate-900/5 px-5 pb-5 pt-3">
+        <div className="border-t border-white/5 px-5 pb-5 pt-3">
           <div className="space-y-1.5">
             {section.items.map((item) => renderCheckItem(item, textColor))}
           </div>
@@ -317,7 +317,7 @@ function ChecklistSection({ section }: { section: Section }) {
 export function InterviewChecklist() {
   return (
     <div className="mt-12">
-      <h2 className="text-lg font-bold text-slate-900 mb-4">
+      <h2 className="text-lg font-bold text-slate-100 mb-4">
         Interview Checklists
       </h2>
       <div className="space-y-3">
