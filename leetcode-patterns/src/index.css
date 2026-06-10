@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 /* Only <html> paints the opaque fallback. body and #root stay transparent so the
@@ -9,7 +9,7 @@
    opaque ancestor background — a negative-z child paints behind its parent's own
    background, so giving #root a background-color hides the wallpaper entirely. */
 html {
-  background-color: #ffffff;
+  background-color: #181a1b;
 }
 
 body,
@@ -19,7 +19,7 @@ body,
 
 /* Grotesque close to galaxy.com's Forma DJR; loaded via index.html <link>. */
 body {
-  color: #0f172a;
+  color: #e8e6e3;
   font-family: "Hanken Grotesk", Inter, system-ui, "Helvetica Neue", "Helvetica",
     "Arial", sans-serif;
 }

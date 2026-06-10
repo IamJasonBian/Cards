@@ -164,34 +164,34 @@ function App() {
         className="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
         style={wallpaper ? { backgroundImage: `url(${wallpaper})` } : undefined}
       />
-      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-white/20 via-white/30 to-white/40 sm:from-white/10 sm:via-white/20 sm:to-white/30" />
+      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-black/40 via-black/50 to-black/60 sm:from-black/30 sm:via-black/40 sm:to-black/50" />
 
       {view !== "home" && (
-      <nav className="bg-white/85 backdrop-blur-2xl border-b border-slate-900/10 sticky top-0 z-10">
-        <div className="grid grid-cols-2 sm:grid-cols-5 border-l border-t border-slate-900/10">
+      <nav className="bg-slate-900/85 backdrop-blur-2xl border-b border-white/10 sticky top-0 z-10">
+        <div className="grid grid-cols-2 sm:grid-cols-5 border-l border-t border-white/10">
             <button
               onClick={() => { setView("home"); clearSelection(); }}
-              className="flex items-center justify-center gap-1.5 border-r border-b border-slate-900/10 px-3 py-3 text-sm font-medium bg-white/50 text-slate-700 hover:bg-white/80 cursor-pointer transition-colors"
+              className="flex items-center justify-center gap-1.5 border-r border-b border-white/10 px-3 py-3 text-sm font-medium bg-slate-900/60 text-slate-300 hover:bg-slate-900/80 cursor-pointer transition-colors"
             >
-              <Code size={16} className="text-cyan-700" />
+              <Code size={16} className="text-cyan-300" />
               Home
             </button>
             <button
               onClick={() => { setView("patterns"); clearSelection(); }}
-              className={`flex items-center justify-center gap-1.5 border-r border-b border-slate-900/10 px-3 py-3 text-sm font-medium transition-colors cursor-pointer ${
+              className={`flex items-center justify-center gap-1.5 border-r border-b border-white/10 px-3 py-3 text-sm font-medium transition-colors cursor-pointer ${
                 view === "patterns"
-                  ? "bg-cyan-100 text-cyan-700"
-                  : "bg-white/50 text-slate-700 hover:bg-white/80"
+                  ? "bg-cyan-500/20 text-cyan-300"
+                  : "bg-slate-900/60 text-slate-300 hover:bg-slate-900/80"
               }`}
             >
               Patterns
             </button>
             <button
               onClick={() => { setView("speed-apps"); clearSelection(); }}
-              className={`flex items-center justify-center gap-1.5 border-r border-b border-slate-900/10 px-3 py-3 text-sm font-medium transition-colors cursor-pointer ${
+              className={`flex items-center justify-center gap-1.5 border-r border-b border-white/10 px-3 py-3 text-sm font-medium transition-colors cursor-pointer ${
                 view === "speed-apps"
-                  ? "bg-cyan-100 text-cyan-700"
-                  : "bg-white/50 text-slate-700 hover:bg-white/80"
+                  ? "bg-cyan-500/20 text-cyan-300"
+                  : "bg-slate-900/60 text-slate-300 hover:bg-slate-900/80"
               }`}
             >
               <Zap size={14} />
@@ -199,25 +199,25 @@ function App() {
             </button>
             <button
               onClick={() => { setView("popular-lists"); clearSelection(); }}
-              className={`flex items-center justify-center gap-1.5 border-r border-b border-slate-900/10 px-3 py-3 text-sm font-medium transition-colors cursor-pointer ${
+              className={`flex items-center justify-center gap-1.5 border-r border-b border-white/10 px-3 py-3 text-sm font-medium transition-colors cursor-pointer ${
                 view === "popular-lists"
-                  ? "bg-cyan-100 text-cyan-700"
-                  : "bg-white/50 text-slate-700 hover:bg-white/80"
+                  ? "bg-cyan-500/20 text-cyan-300"
+                  : "bg-slate-900/60 text-slate-300 hover:bg-slate-900/80"
               }`}
             >
               <BookOpen size={14} />
               Popular Lists
             </button>
 
-            <div className="relative border-r border-b border-slate-900/10" ref={experimentalRef}>
+            <div className="relative border-r border-b border-white/10" ref={experimentalRef}>
               <button
                 onClick={() => setExperimentalOpen((o) => !o)}
                 aria-haspopup="menu"
                 aria-expanded={experimentalOpen}
                 className={`flex w-full h-full items-center justify-center gap-1.5 px-3 py-3 text-sm font-medium transition-colors cursor-pointer ${
                   isExperimental(view)
-                    ? "bg-amber-50 text-amber-700"
-                    : "bg-white/50 text-slate-700 hover:bg-white/80"
+                    ? "bg-amber-500/10 text-amber-300"
+                    : "bg-slate-900/60 text-slate-300 hover:bg-slate-900/80"
                 }`}
               >
                 <FlaskConical size={14} />
@@ -227,13 +227,13 @@ function App() {
               {experimentalOpen && (
                 <div
                   role="menu"
-                  className="absolute right-0 top-full mt-1 w-48 rounded-none bg-white/95 backdrop-blur-2xl border border-slate-900/10 shadow-lg py-1 z-20"
+                  className="absolute right-0 top-full mt-1 w-48 rounded-none bg-slate-900/95 backdrop-blur-2xl border border-white/10 shadow-lg py-1 z-20"
                 >
                   <button
                     role="menuitem"
                     onClick={() => { setView("submit"); clearSelection(); setExperimentalOpen(false); }}
                     className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
-                      view === "submit" ? "bg-cyan-50 text-cyan-700" : "text-slate-700 hover:bg-slate-900/5"
+                      view === "submit" ? "bg-cyan-500/10 text-cyan-300" : "text-slate-300 hover:bg-slate-900/5"
                     }`}
                   >
                     <Play size={14} />
@@ -243,7 +243,7 @@ function App() {
                     role="menuitem"
                     onClick={() => { setView("flashcards"); clearSelection(); setExperimentalOpen(false); }}
                     className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
-                      view === "flashcards" ? "bg-cyan-50 text-cyan-700" : "text-slate-700 hover:bg-slate-900/5"
+                      view === "flashcards" ? "bg-cyan-500/10 text-cyan-300" : "text-slate-300 hover:bg-slate-900/5"
                     }`}
                   >
                     <Layers size={14} />
@@ -253,7 +253,7 @@ function App() {
                     role="menuitem"
                     onClick={() => { setView("interview-drill"); clearSelection(); setExperimentalOpen(false); }}
                     className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
-                      view === "interview-drill" ? "bg-cyan-50 text-cyan-700" : "text-slate-700 hover:bg-slate-900/5"
+                      view === "interview-drill" ? "bg-cyan-500/10 text-cyan-300" : "text-slate-300 hover:bg-slate-900/5"
                     }`}
                   >
                     <Code size={14} />
@@ -308,14 +308,14 @@ function App() {
               <RandomProblem />
 
               <div className="flex items-center gap-2 mb-6">
-                <Filter size={16} className="text-slate-500" />
+                <Filter size={16} className="text-slate-400" />
                 <div className="flex gap-1.5 flex-wrap">
                   <button
                     onClick={() => setActiveTag(null)}
                     className={`px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
                       activeTag === null
-                        ? "bg-cyan-100 text-cyan-700"
-                        : "bg-slate-900/5 text-slate-700 hover:bg-slate-900/10"
+                        ? "bg-cyan-500/20 text-cyan-300"
+                        : "bg-slate-900/5 text-slate-300 hover:bg-slate-900/10"
                     }`}
                   >
                     All
@@ -328,8 +328,8 @@ function App() {
                       }
                       className={`px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
                         activeTag === tag
-                          ? "bg-cyan-100 text-cyan-700"
-                          : "bg-slate-900/5 text-slate-700 hover:bg-slate-900/10"
+                          ? "bg-cyan-500/20 text-cyan-300"
+                          : "bg-slate-900/5 text-slate-300 hover:bg-slate-900/10"
                       }`}
                     >
                       {tag}
@@ -348,7 +348,7 @@ function App() {
 
               <InterviewChecklist />
 
-              <footer className="mt-12 pb-8 text-center text-xs text-slate-500">
+              <footer className="mt-12 pb-8 text-center text-xs text-slate-400">
                 639 problems solved | Python3 | Data from LeetCode via
                 alfa-leetcode-api and neetcode-gh
               </footer>
