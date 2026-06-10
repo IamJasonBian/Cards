@@ -1,22 +1,22 @@
 import { Code } from "lucide-react";
 
 const linkClass =
-  "block text-left text-sm text-slate-600 hover:text-cyan-700 cursor-pointer transition-colors py-0.5";
+  "block text-left text-sm text-slate-400 hover:text-cyan-300 cursor-pointer transition-colors py-0.5";
 
 const headingClass =
-  "text-xs font-semibold uppercase tracking-[0.15em] text-slate-500 mb-3";
+  "text-xs font-semibold uppercase tracking-[0.15em] text-slate-400 mb-3";
 
 export function SiteFooter({ onNavigate }: { onNavigate: (view: string) => void }) {
   return (
-    <footer className="w-full border-t border-slate-900/10 bg-white/95 sm:bg-white/60 backdrop-blur-sm rounded-none">
+    <footer className="w-full border-t border-white/10 bg-slate-900/95 sm:bg-slate-900/65 backdrop-blur-sm rounded-none">
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-2">
-              <Code className="text-cyan-700" size={22} />
-              <span className="font-bold text-slate-900">LeetCode Patterns</span>
+              <Code className="text-cyan-300" size={22} />
+              <span className="font-bold text-slate-100">LeetCode Patterns</span>
             </div>
-            <p className="mt-3 text-sm text-slate-600">
+            <p className="mt-3 text-sm text-slate-400">
               One card a day. Transform your pattern recognition.
             </p>
           </div>
@@ -48,7 +48,7 @@ export function SiteFooter({ onNavigate }: { onNavigate: (view: string) => void 
           </div>
         </div>
 
-        <div className="border-t border-slate-900/10 mt-8 pt-6 text-center text-xs text-slate-500">
+        <div className="border-t border-white/10 mt-8 pt-6 text-center text-xs text-slate-400">
           Data from LeetCode via alfa-leetcode-api and neetcode-gh
         </div>
       </div>

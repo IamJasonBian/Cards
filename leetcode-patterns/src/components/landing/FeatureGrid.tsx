@@ -29,28 +29,28 @@ export function FeatureGrid({ onNavigate }: { onNavigate: (view: string) => void
   return (
     <section>
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 pt-16 sm:pt-24 pb-8 text-center">
-        <h2 className="inline-block bg-white/95 px-4 py-2 text-3xl sm:bg-transparent sm:px-0 sm:py-0 sm:text-4xl font-bold tracking-tight text-slate-900 sm:[text-shadow:_0_2px_18px_rgb(255_255_255_/_70%)]">
+        <h2 className="inline-block bg-slate-900/95 px-4 py-2 text-3xl sm:bg-transparent sm:px-0 sm:py-0 sm:text-4xl font-bold tracking-tight text-slate-100 sm:[text-shadow:_0_2px_18px_rgb(255_255_255_/_70%)]">
           Everything in one place
         </h2>
       </div>
-      <div className="mx-auto w-full max-w-5xl border-l border-t border-slate-900/10">
+      <div className="mx-auto w-full max-w-5xl border-l border-t border-white/10">
         <div className="grid grid-cols-2 md:grid-cols-3">
           {blocks.map((block) => (
             <button
               key={block.id}
               type="button"
               onClick={() => onNavigate(block.id)}
-              className="border-r border-b border-slate-900/10 bg-white/95 sm:bg-white/50 backdrop-blur-sm hover:bg-white/80 p-6 sm:p-8 text-left transition-colors cursor-pointer group flex flex-col items-start gap-3"
+              className="border-r border-b border-white/10 bg-slate-900/95 sm:bg-slate-900/60 backdrop-blur-sm hover:bg-slate-900/80 p-6 sm:p-8 text-left transition-colors cursor-pointer group flex flex-col items-start gap-3"
             >
               <div className="flex w-full items-center justify-between">
-                <block.icon className="text-cyan-700" size={24} />
+                <block.icon className="text-cyan-300" size={24} />
                 <ArrowUpRight
-                  className="text-slate-400 group-hover:text-cyan-700 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  className="text-slate-500 group-hover:text-cyan-300 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                   size={20}
                 />
               </div>
-              <span className="text-lg font-semibold text-slate-900">{block.label}</span>
-              <span className="text-sm text-slate-600">{block.desc}</span>
+              <span className="text-lg font-semibold text-slate-100">{block.label}</span>
+              <span className="text-sm text-slate-400">{block.desc}</span>
             </button>
           ))}
         </div>
