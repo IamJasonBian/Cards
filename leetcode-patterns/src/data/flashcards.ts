@@ -13,7 +13,8 @@ export type VizKind =
   | "binary-search"
   | "bfs-layer"
   | "floyds-cycle"
-  | "stack-match";
+  | "stack-match"
+  | "union-find";
 
 export interface Flashcard {
   id: string;

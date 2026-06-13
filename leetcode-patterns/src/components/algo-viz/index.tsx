@@ -4,6 +4,7 @@ import { BinarySearch } from "./BinarySearch";
 import { BFSLayerOrder } from "./BFSLayerOrder";
 import { FloydsCycle } from "./FloydsCycle";
 import { StackMatch } from "./StackMatch";
+import { UnionFind } from "./UnionFind";
 
 export type VizKind =
   | "two-pointers"
@@ -11,7 +12,8 @@ export type VizKind =
   | "binary-search"
   | "bfs-layer"
   | "floyds-cycle"
-  | "stack-match";
+  | "stack-match"
+  | "union-find";
 
 export function AlgoViz({ kind }: { kind: VizKind }) {
   switch (kind) {
@@ -27,5 +29,7 @@ export function AlgoViz({ kind }: { kind: VizKind }) {
       return <FloydsCycle />;
     case "stack-match":
       return <StackMatch />;
+    case "union-find":
+      return <UnionFind />;
   }
 }

@@ -1685,6 +1685,86 @@ class TemporalKVStore:
     optimalRuntime: "restore: O(R log n) where R = commands after t (vs O(all keys))",
     optimalNote: "Mock interview problem (~75 min). Three subtleties drive the design: (1) timestamps are non-monotonic, so writes need binary-search insertion, not append; (2) same-timestamp ties resolve by invocation order, so every event carries a monotonic seq — read/get sees writes at its own ts; (3) delete is a TOMBSTONE (value=None), and returns True only if an active value existed as of that ts. restore is the Memento/point-in-time-recovery pattern: drop events with ts > target. Gotchas: don't physically erase on delete (a later restore or earlier read still needs history), and keep events AT the restore timestamp.",
   },
+  {
+    id: 26,
+    name: "Union Find (Disjoint Set Union)",
+    solveCount: 38,
+    tag: "Graph",
+    problems: [
+      { name: "Number of Provinces", slug: "number-of-provinces", difficulty: "Medium" },
+      { name: "Redundant Connection", slug: "redundant-connection", difficulty: "Medium" },
+      { name: "Number of Connected Components", slug: "number-of-connected-components-in-an-undirected-graph", difficulty: "Medium" },
+      { name: "Accounts Merge", slug: "accounts-merge", difficulty: "Medium" },
+      { name: "Most Stones Removed with Same Row or Column", slug: "most-stones-removed-with-same-row-or-column", difficulty: "Medium" },
+      { name: "Surrounded Regions", slug: "surrounded-regions", difficulty: "Medium" },
+      { name: "Graph Valid Tree", slug: "graph-valid-tree", difficulty: "Medium" },
+      { name: "Making a Large Island", slug: "making-a-large-island", difficulty: "Hard" },
+      { name: "Swim in Rising Water", slug: "swim-in-rising-water", difficulty: "Hard" },
+    ],
+    techniques: ["path compression", "union by rank", "connected components", "cycle detection", "offline queries"],
+    dataStructures: ["parent array", "rank array"],
+    code: `class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+        self.components = n
+
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])  # path compression
+        return self.parent[x]
+
+    def union(self, x, y) -> bool:
+        px, py = self.find(x), self.find(y)
+        if px == py:
+            return False  # already same component
+        if self.rank[px] < self.rank[py]:
+            px, py = py, px
+        self.parent[py] = px
+        if self.rank[px] == self.rank[py]:
+            self.rank[px] += 1
+        self.components -= 1
+        return True
+
+# Usage
+uf = UnionFind(n)
+for u, v in edges:
+    uf.union(u, v)
+print(uf.components)  # number of connected components`,
+    runtime: "O(α(n)) per operation — nearly O(1) amortized",
+    optimalCode: `# String / coordinate keys (Accounts Merge, Most Stones)
+class UnionFind:
+    def __init__(self):
+        self.parent = {}
+        self.rank = {}
+        self.components = 0
+
+    def add(self, x):
+        if x not in self.parent:
+            self.parent[x] = x
+            self.rank[x] = 0
+            self.components += 1
+
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+
+    def union(self, x, y) -> bool:
+        self.add(x); self.add(y)
+        px, py = self.find(x), self.find(y)
+        if px == py:
+            return False
+        if self.rank[px] < self.rank[py]:
+            px, py = py, px
+        self.parent[py] = px
+        if self.rank[px] == self.rank[py]:
+            self.rank[px] += 1
+        self.components -= 1
+        return True`,
+    optimalRuntime: "O(α(n)) per operation — nearly O(1) amortized",
+    optimalNote: "Use a dict-based DSU when node identifiers are strings or (row, col) tuples (Accounts Merge, Most Stones). Path compression on find() + union by rank together guarantee inverse-Ackermann α(n) amortized time — effectively constant for any realistic input. track components count directly in union() to answer 'how many groups?' in O(1). Cycle detection: if union() returns False, you found a redundant edge (Redundant Connection). For grid problems, flatten (r,c) → r*cols+c.",
+  },
 ];
 
 export const tags = [...new Set(patterns.map((p) => p.tag))];
