@@ -4,6 +4,8 @@ import { BinarySearch } from "./BinarySearch";
 import { FastSlowMiddle } from "./FastSlowMiddle";
 import { BSTInsertSearch } from "./BSTInsertSearch";
 import { LcsDpTable } from "./LcsDpTable";
+import { Knapsack01 } from "./Knapsack01";
+import { CoinChange } from "./CoinChange";
 import { HeapTopK } from "./HeapTopK";
 import { GraphTraversal } from "./GraphTraversal";
 import { BFSLayerOrder } from "./BFSLayerOrder";
@@ -17,6 +19,8 @@ export type VizKind =
   | "fast-slow-middle"
   | "bst-insert-search"
   | "lcs-dp-table"
+  | "knapsack-01"
+  | "coin-change"
   | "heap-top-k"
   | "graph-traversal"
   | "bfs-layer"
@@ -37,6 +41,10 @@ export function AlgoViz({ kind }: { kind: VizKind }) {
       return <BSTInsertSearch />;
     case "lcs-dp-table":
       return <LcsDpTable />;
+    case "knapsack-01":
+      return <Knapsack01 />;
+    case "coin-change":
+      return <CoinChange />;
     case "heap-top-k":
       return <HeapTopK />;
     case "graph-traversal":

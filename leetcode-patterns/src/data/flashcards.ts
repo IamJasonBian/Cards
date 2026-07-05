@@ -14,6 +14,8 @@ export type VizKind =
   | "fast-slow-middle"
   | "bst-insert-search"
   | "lcs-dp-table"
+  | "knapsack-01"
+  | "coin-change"
   | "heap-top-k"
   | "graph-traversal"
   | "bfs-layer"
@@ -386,6 +388,7 @@ def bisect_left(nums, target):
             dp[w] = max(dp[w], dp[w - weights[i]] + values[i])
     return dp[W]`,
     note: "Reverse inner loop prevents item reuse. Forward loop → unbounded knapsack.",
+    viz: "knapsack-01",
   },
   {
     id: "lcs",
@@ -418,6 +421,7 @@ def bisect_left(nums, target):
             dp[x] = min(dp[x], dp[x - coin] + 1)
     return dp[amount] if dp[amount] != float('inf') else -1`,
     note: "Unbounded (reuse coins) → forward inner loop. Initialize dp[0]=0, rest inf.",
+    viz: "coin-change",
   },
   {
     id: "k-largest",
