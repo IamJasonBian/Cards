@@ -15,6 +15,7 @@ export type VizKind =
   | "bst-insert-search"
   | "lcs-dp-table"
   | "heap-top-k"
+  | "graph-traversal"
   | "bfs-layer"
   | "floyds-cycle"
   | "stack-match";
@@ -240,7 +241,7 @@ def bfs(graph, start):
                 visited.add(nb)
                 q.append(nb)`,
     note: "Always mark visited on enqueue (BFS) or on entry (DFS) to avoid re-processing.",
-    viz: "bfs-layer",
+    viz: "graph-traversal",
   },
   {
     id: "topo-sort-kahn",
