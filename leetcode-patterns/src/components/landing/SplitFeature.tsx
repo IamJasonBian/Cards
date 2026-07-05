@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 export function SplitFeature({ onNavigate }: { onNavigate: (view: string) => void }) {
   return (
     <section className="mx-auto w-full max-w-5xl px-4 sm:px-6 py-16 sm:py-24">
-      <div className="rounded-none border border-slate-900/10 bg-white/95 sm:bg-transparent sm:bg-gradient-to-b sm:from-white/70 sm:to-white/40 backdrop-blur-sm p-8 sm:p-14 text-center">
+      <div className="rounded-none border border-slate-900/10 bg-white/95 sm:bg-transparent sm:bg-gradient-to-b sm:from-[#171b22]/85 sm:to-[#171b22]/60 backdrop-blur-sm p-8 sm:p-14 text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
           Instant feedback
         </p>

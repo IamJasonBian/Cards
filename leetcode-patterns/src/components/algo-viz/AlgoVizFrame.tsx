@@ -27,7 +27,7 @@ export function AlgoVizFrame({
   children,
 }: Props) {
   return (
-    <div className="h-full w-full flex flex-col bg-[#0e0f14] text-slate-100">
+    <div className="h-full w-full flex flex-col bg-[#0e0f14] text-slate-200">
       <div className="px-5 py-4 border-b border-white/5">
         <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
         {subtitle && (

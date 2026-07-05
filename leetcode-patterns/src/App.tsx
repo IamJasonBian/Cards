@@ -164,7 +164,7 @@ function App() {
         className="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
         style={wallpaper ? { backgroundImage: `url(${wallpaper})` } : undefined}
       />
-      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-white/20 via-white/30 to-white/40 sm:from-white/10 sm:via-white/20 sm:to-white/30" />
+      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-black/35 via-black/45 to-black/55 sm:from-black/25 sm:via-black/35 sm:to-black/45" />
 
       {view !== "home" && (
       <nav className="bg-white/85 backdrop-blur-2xl border-b border-slate-900/10 sticky top-0 z-10">

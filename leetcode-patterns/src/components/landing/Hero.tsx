@@ -7,7 +7,7 @@ export function Hero({ onNavigate }: { onNavigate: (view: string) => void }) {
         <SquareStack className="h-8 w-8 text-cyan-700" />
       </div>
 
-      <div className="mt-8 w-full bg-white px-5 py-6 sm:mt-0 sm:bg-transparent sm:p-0">
+      <div className="mt-8 w-full bg-white px-5 py-6 sm:mt-6 sm:bg-white/65 sm:py-8">
         <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:mt-8 sm:text-7xl sm:[text-shadow:_0_2px_20px_rgb(255_255_255_/_55%)]">
           One Card a Day
         </h1>
