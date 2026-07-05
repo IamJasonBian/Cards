@@ -15,7 +15,11 @@ import { Flashcards } from "./components/Flashcards";
 import { InterviewDrill } from "./components/InterviewDrill";
 import { Blind75Submit } from "./components/Blind75Submit";
 import { Landing } from "./components/Landing";
-import { fetchRandomWallpaper } from "./lib/wallpaper";
+import {
+  fetchRandomWallpaper,
+  getPreloadedWallpaper,
+  prefetchNextWallpaper,
+} from "./lib/wallpaper";
 
 type View =
   | "home"
@@ -81,7 +85,9 @@ function App() {
         return "home";
     }
   });
-  const [wallpaper, setWallpaper] = useState<string | null>(null);
+  // Repeat visits render the wallpaper prefetched by the previous visit
+  // synchronously — zero network round trips before the background paints.
+  const [wallpaper, setWallpaper] = useState<string | null>(getPreloadedWallpaper);
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [experimentalOpen, setExperimentalOpen] = useState(false);
   const experimentalRef = useRef<HTMLDivElement | null>(null);
@@ -90,10 +96,16 @@ function App() {
   );
   const [relatedProblems, setRelatedProblems] = useState<Problem[]>([]);
 
-  // Fetch a random nature wallpaper on startup for the abyss backdrop.
+  // Fetch a random nature wallpaper on startup for the abyss backdrop (first
+  // visits only — repeat visits start with the prefetched one). Once the
+  // backdrop is up, warm next visit's wallpaper during idle time.
   useEffect(() => {
-    fetchRandomWallpaper().then(setWallpaper).catch(() => {});
-  }, []);
+    if (!wallpaper) {
+      fetchRandomWallpaper().then(setWallpaper).catch(() => {});
+      return;
+    }
+    prefetchNextWallpaper();
+  }, [wallpaper]);
 
   const filtered = activeTag
     ? patterns.filter((p) => p.tag === activeTag)

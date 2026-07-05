@@ -28,10 +28,10 @@ export function Faq() {
     <section className="mx-auto w-full max-w-3xl px-4 sm:px-6 py-16 sm:py-24">
       <div className="text-center mb-8">
         <div className="inline-block bg-white/95 px-4 py-3 sm:bg-transparent sm:px-0 sm:py-0">
-          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500 sm:[text-shadow:_0_2px_18px_rgb(255_255_255_/_70%)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500 sm:[text-shadow:_0_1px_6px_rgb(0_0_0_/_45%)]">
             FAQ
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 sm:[text-shadow:_0_2px_18px_rgb(255_255_255_/_70%)]">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 sm:[text-shadow:_0_1px_6px_rgb(0_0_0_/_45%)]">
             How it works
           </h2>
         </div>
