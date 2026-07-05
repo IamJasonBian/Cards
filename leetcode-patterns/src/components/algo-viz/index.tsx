@@ -5,6 +5,7 @@ import { FastSlowMiddle } from "./FastSlowMiddle";
 import { BSTInsertSearch } from "./BSTInsertSearch";
 import { LcsDpTable } from "./LcsDpTable";
 import { HeapTopK } from "./HeapTopK";
+import { GraphTraversal } from "./GraphTraversal";
 import { BFSLayerOrder } from "./BFSLayerOrder";
 import { FloydsCycle } from "./FloydsCycle";
 import { StackMatch } from "./StackMatch";
@@ -17,6 +18,7 @@ export type VizKind =
   | "bst-insert-search"
   | "lcs-dp-table"
   | "heap-top-k"
+  | "graph-traversal"
   | "bfs-layer"
   | "floyds-cycle"
   | "stack-match";
@@ -37,6 +39,8 @@ export function AlgoViz({ kind }: { kind: VizKind }) {
       return <LcsDpTable />;
     case "heap-top-k":
       return <HeapTopK />;
+    case "graph-traversal":
+      return <GraphTraversal />;
     case "bfs-layer":
       return <BFSLayerOrder />;
     case "floyds-cycle":
