@@ -11,6 +11,10 @@ export type VizKind =
   | "two-pointers"
   | "sliding-window"
   | "binary-search"
+  | "fast-slow-middle"
+  | "bst-insert-search"
+  | "lcs-dp-table"
+  | "heap-top-k"
   | "bfs-layer"
   | "floyds-cycle"
   | "stack-match";
@@ -95,7 +99,6 @@ def cycle_start(head):
     cur.next = l1 or l2
     return dummy.next`,
     note: "Dummy head avoids edge case. Append remaining tail directly.",
-    viz: "two-pointers",
   },
   {
     id: "middle-of-linked-list",
@@ -109,7 +112,7 @@ def cycle_start(head):
         fast = fast.next.next
     return slow   # for even-length: 2nd middle`,
     note: "When fast reaches end, slow is at middle. Used in merge sort on LL.",
-    viz: "floyds-cycle",
+    viz: "fast-slow-middle",
   },
   {
     id: "bst-insert-search",
@@ -131,7 +134,7 @@ def search(root, val):
         root = root.left if val < root.val else root.right
     return None`,
     note: "Always return root on insert — re-wires parent's child pointer.",
-    viz: "binary-search",
+    viz: "bst-insert-search",
   },
   {
     id: "bst-delete",
@@ -154,7 +157,6 @@ def search(root, val):
         root.right = delete_node(root.right, succ.val)
     return root`,
     note: "3 cases: leaf, one child, two children. Two-child → replace with successor.",
-    viz: "binary-search",
   },
   {
     id: "level-order-bfs",
@@ -200,7 +202,6 @@ def lca(root, p, q):
     R = lca(root.right, p, q)
     return root if L and R else L or R`,
     note: "BST: walk toward both nodes — first split is LCA. Generic: post-order, two non-null children → root is LCA.",
-    viz: "binary-search",
   },
   {
     id: "validate-bst",
@@ -213,7 +214,6 @@ def lca(root, p, q):
     return (is_valid_bst(root.left,  lo, root.val) and
             is_valid_bst(root.right, root.val, hi))`,
     note: "Pass narrowing (lo, hi) window down. Don't just compare to parent — that misses ancestor violations.",
-    viz: "bfs-layer",
   },
   {
     id: "dfs-bfs-graph",
@@ -266,7 +266,6 @@ def topo_sort(n, edges):
                 q.append(nb)
     return order if len(order) == n else []  # [] = cycle`,
     note: "Empty result → cycle detected. DFS variant: post-order reverse.",
-    viz: "bfs-layer",
   },
   {
     id: "union-find-dsu",
@@ -386,7 +385,6 @@ def bisect_left(nums, target):
             dp[w] = max(dp[w], dp[w - weights[i]] + values[i])
     return dp[W]`,
     note: "Reverse inner loop prevents item reuse. Forward loop → unbounded knapsack.",
-    viz: "sliding-window",
   },
   {
     id: "lcs",
@@ -404,7 +402,7 @@ def bisect_left(nums, target):
                 dp[i][j] = max(dp[i-1][j], dp[i][j-1])
     return dp[m][n]`,
     note: "Match → diagonal + 1. No match → max of left / up.",
-    viz: "two-pointers",
+    viz: "lcs-dp-table",
   },
   {
     id: "coin-change",
@@ -419,7 +417,6 @@ def bisect_left(nums, target):
             dp[x] = min(dp[x], dp[x - coin] + 1)
     return dp[amount] if dp[amount] != float('inf') else -1`,
     note: "Unbounded (reuse coins) → forward inner loop. Initialize dp[0]=0, rest inf.",
-    viz: "sliding-window",
   },
   {
     id: "k-largest",
@@ -439,7 +436,7 @@ def k_largest(nums, k):
 # Or: nlargest (O(n log k))
 heapq.nlargest(k, nums)`,
     note: "Min-heap of size k: every element that enters forces the smallest out → remaining are top-k.",
-    viz: "sliding-window",
+    viz: "heap-top-k",
   },
   {
     id: "merge-k-lists",
@@ -462,7 +459,6 @@ def merge_k_lists(lists):
             heapq.heappush(heap, (node.next.val, i, node.next))
     return dummy.next`,
     note: "Push (val, list_idx, node) — list_idx breaks ties so node objects never compare.",
-    viz: "two-pointers",
   },
   {
     id: "valid-parens",
@@ -506,7 +502,6 @@ def freq(s):
     for c in s: a[ord(c) - ord('a')] += 1
     return a`,
     note: "sorted key is O(k log k) per word. Counter equality is O(n) total.",
-    viz: "sliding-window",
   },
   {
     id: "implement-trie",
@@ -541,7 +536,6 @@ class Trie:
             cur = cur.children[c]
         return True`,
     note: "setdefault is idiomatic for insert. is_end distinguishes full word from prefix.",
-    viz: "bfs-layer",
   },
 ];
 

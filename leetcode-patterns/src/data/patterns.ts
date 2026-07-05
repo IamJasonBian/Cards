@@ -127,7 +127,7 @@ def dfs_iterative(graph, start):
         front = nxt
         steps += 1
     return 0`,
-    optimalRuntime: "O(V + E) time, O(V) space -- but ~2x faster in practice",
+    optimalRuntime: "O(V + E) worst case -- explores O(b^(d/2)) vs O(b^d) nodes",
     optimalNote: "Bidirectional BFS meets in the middle, reducing explored nodes from O(b^d) to O(b^(d/2)). Always expand the smaller frontier.",
   },
   {
@@ -202,7 +202,8 @@ def lis(nums):
     ],
     techniques: ["opposite-end convergence", "skip duplicates", "early termination", "k-sum reduction", "sorted input required", "monotonically increasing/decreasing", "binary search on sorted half", "move min-bound pointer inward (bottleneck = shorter side)"],
     dataStructures: ["sort()", "two index variables", "set() (dedup alt)", "left/right max arrays"],
-    code: `nums.sort()
+    code: `# Base move: converge from both ends
+nums.sort()
 l, r = 0, len(nums) - 1
 while l < r:
     total = nums[l] + nums[r]
@@ -211,9 +212,24 @@ while l < r:
     elif total < target:
         l += 1
     else:
-        r -= 1`,
-    runtime: "O(n) time (O(n log n) with sort), O(1) space",
-    optimalCode: `# 3Sum with duplicate skipping
+        r -= 1
+
+# 3Sum — same core per anchor i, set() to dedup triplets
+def threeSum(nums):
+    nums.sort()
+    res = set()
+    for i in range(len(nums) - 2):
+        l, r = i + 1, len(nums) - 1
+        while l < r:
+            s = nums[i] + nums[l] + nums[r]
+            if s == 0:
+                res.add((nums[i], nums[l], nums[r]))
+                l += 1; r -= 1
+            elif s < 0: l += 1
+            else: r -= 1
+    return [list(t) for t in res]`,
+    runtime: "pair sum: O(n) / 3Sum: O(n^2) time, O(n) space (dedup set)",
+    optimalCode: `# Same 3Sum, but skip duplicates inline — no dedup set
 def threeSum(nums):
     nums.sort()
     res = []
@@ -233,8 +249,8 @@ def threeSum(nums):
             elif s < 0: l += 1
             else: r -= 1
     return res`,
-    optimalRuntime: "O(n^2) time, O(1) space",
-    optimalNote: "Early break when nums[i] > 0 and skip duplicates at both outer and inner loops. Avoids set-based dedup overhead.",
+    optimalRuntime: "3Sum: O(n^2) time, O(1) extra space",
+    optimalNote: "Same two-pointer core as Your Pattern above — but skipping duplicates at both loops and breaking early when nums[i] > 0 removes the dedup set and the redundant scans it papered over.",
   },
   {
     id: 5,
@@ -630,7 +646,7 @@ def topo_dfs(n, edges):
         return []
     return order[::-1]`,
     optimalRuntime: "O(V + E) time, O(V + E) space",
-    optimalNote: "DFS topo sort with 3-color marking detects cycles and builds order in one pass. Useful when you also need cycle detection (Alien Dictionary).",
+    optimalNote: "DFS topo sort builds the order in one pass, with GRAY hits flagging cycles mid-walk. Kahn's detects cycles too (order comes back short) — prefer DFS when you're already traversing (Alien Dictionary), Kahn's when you need level-by-level scheduling.",
   },
   {
     id: 13,
@@ -882,27 +898,7 @@ def shortestPathBinaryMatrix(grid):
     ],
     techniques: ["~c coordinate trick (row/col union)", "label + expand (try flipping)", "component counting", "DFS adjacency grouping", "total - components = removable"],
     dataStructures: ["Union-Find (dict)", "adjacency list", "label grid", "size{} map"],
-    code: `# Most Stones Removed -- group by shared row/col
-def removeStones(stones):
-    parent = {}
-
-    def find(x):
-        parent.setdefault(x, x)
-        while parent[x] != x:
-            parent[x] = parent[parent[x]]
-            x = parent[x]
-        return x
-
-    def union(a, b):
-        parent[find(a)] = find(b)
-
-    for r, c in stones:
-        union(r, ~c)  # ~c maps col to negative space
-
-    # answer = total stones - number of components
-    return len(stones) - len({find(r) for r, c in stones})`,
-    runtime: "O(n * alpha(n)) time, O(n) space",
-    optimalCode: `# DFS approach: fewer lines, same idea
+    code: `# Most Stones Removed -- build the graph explicitly, DFS components
 def removeStones(stones):
     adj = defaultdict(list)
     for i, (r1, c1) in enumerate(stones):
@@ -924,7 +920,27 @@ def removeStones(stones):
         if i not in visited:
             dfs(i)
             components += 1
-    return len(stones) - components
+    return len(stones) - components`,
+    runtime: "O(n^2) time (pairwise edge scan), O(n^2) space",
+    optimalCode: `# Union-Find with the ~c trick: no pairwise scan at all
+def removeStones(stones):
+    parent = {}
+
+    def find(x):
+        parent.setdefault(x, x)
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(a, b):
+        parent[find(a)] = find(b)
+
+    for r, c in stones:
+        union(r, ~c)  # ~c maps col to negative space
+
+    # answer = total stones - number of components
+    return len(stones) - len({find(r) for r, c in stones})
 
 # Making A Large Island: label + expand
 def largestIsland(grid):
@@ -959,8 +975,8 @@ def largestIsland(grid):
                             total += size[lbl]
                 res = max(res, total)
     return res`,
-    optimalRuntime: "O(n^2) time, O(n^2) space",
-    optimalNote: "For Most Stones: Union-Find with ~c trick maps rows and cols to the same space. For Making A Large Island: label components first, then try flipping each 0 and summing adjacent unique labels.",
+    optimalRuntime: "stones: O(n * alpha(n)) time, O(n) space / island flip: O(n^2)",
+    optimalNote: "Union-Find with the ~c trick unions each stone with its row and col directly — that skips the O(n^2) pairwise edge scan and adjacency list entirely. For Making A Large Island: label components first, then try flipping each 0 and summing adjacent unique labels.",
   },
   {
     id: 18,
@@ -1446,10 +1462,12 @@ class KeyValueLogger:
     runtime: "log: O(S) where S = #sinks, O(1) per key lookup",
     optimalCode: `# Per-key sliding-window count instead of single last-ts:
 # allow at most N events per window (not just dedupe).
+# Stateful policies own their history, so the Strategy interface
+# widens to allow(key, now) — the logger's _last map moves inside.
 from collections import deque
 
 class SlidingWindowPolicy(RateLimitPolicy):
-    def __init__(self, window=10, max_events=1):
+    def __init__(self, window=10, max_events=3):
         self.window, self.max_events = window, max_events
         self._hits = {}                       # key -> deque[ts]
 
@@ -1460,9 +1478,25 @@ class SlidingWindowPolicy(RateLimitPolicy):
         if len(dq) < self.max_events:
             dq.append(now)
             return True
-        return False`,
+        return False
+
+# Logger just hands the policy the key — no _last dict of its own
+class KeyValueLogger:
+    def __init__(self, policy=None):
+        self.policy = policy or SlidingWindowPolicy()
+        self._sinks = []
+
+    def subscribe(self, sink):
+        self._sinks.append(sink)
+
+    def log(self, key, value, timestamp) -> bool:
+        if not self.policy.allow(key, timestamp):
+            return False                      # throttled
+        for sink in self._sinks:
+            sink.emit(key, value, timestamp)
+        return True`,
     optimalRuntime: "log: O(1) amortized (each ts enqueued/dequeued once)",
-    optimalNote: "HelloInterview patterns at work: Strategy isolates the throttling rule (fixed-window dedupe vs sliding-window count) so swapping it never touches the logger; Observer fans accepted lines out to N sinks (console, file, metrics) without the logger knowing them; Facade keeps log() the single public verb. Gotcha: rate-limit on the ACCEPT decision, not on emit — and use >= window (LC 359) so an event exactly `window` later is allowed.",
+    optimalNote: "Same Strategy/Observer/Facade shape as Your Pattern above — the upgrade is moving per-key state into the policy (allow(key, now) instead of allow(last_ts, now)), which lets one Strategy express dedupe (max_events=1) or N-per-window without touching the logger. Gotcha: rate-limit on the ACCEPT decision, not on emit — and use >= window (LC 359) so an event exactly `window` later is allowed.",
   },
   {
     id: 24,
