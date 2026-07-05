@@ -126,6 +126,13 @@ body {
     .sm\:bg-white\/50 {
       background-color: rgb(23 27 34 / 0.55);
     }
+    /* Re-assert after the .bg-white overrides above: Tailwind emits
+       sm:bg-transparent before this block, so without this the overridden
+       .bg-white/* would win at desktop widths on `bg-white/95
+       sm:bg-transparent` combos and paint boxes that should be transparent. */
+    .sm\:bg-transparent {
+      background-color: transparent;
+    }
   }
 
   /* Accent TEXT: -600/-700 tokens double as solid button backgrounds, so the

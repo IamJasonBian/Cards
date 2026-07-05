@@ -10,6 +10,23 @@
          Preconnecting saves DNS+TLS setup on the critical background path. -->
     <link rel="preconnect" href="https://api.github.com" crossorigin />
     <link rel="preconnect" href="https://wsrv.nl" />
+    <!-- If the previous visit prefetched next visit's wallpaper (see
+         src/lib/wallpaper.ts), start loading it before the JS bundle is even
+         requested — the background then paints with zero waterfall. -->
+    <script>
+      try {
+        var wallpaperNext = localStorage.getItem("wallpaper:next:v1");
+        if (wallpaperNext) {
+          var link = document.createElement("link");
+          link.rel = "preload";
+          link.as = "image";
+          link.href = wallpaperNext;
+          document.head.appendChild(link);
+        }
+      } catch (e) {
+        /* storage disabled — first-visit path handles it */
+      }
+    </script>
     <link
       href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..800;1,300..800&display=swap"
       rel="stylesheet"
