@@ -1,5 +1,12 @@
 import { TwoPointers } from "./TwoPointers";
 import { SlidingWindow } from "./SlidingWindow";
+import { FixedWindow } from "./FixedWindow";
+import { MinWindow } from "./MinWindow";
+import { ExactlyK } from "./ExactlyK";
+import { MonotonicDeque } from "./MonotonicDeque";
+import { TwoSumHash } from "./TwoSumHash";
+import { PrefixSumHash } from "./PrefixSumHash";
+import { LRUCache } from "./LRUCache";
 import { BinarySearch } from "./BinarySearch";
 import { FastSlowMiddle } from "./FastSlowMiddle";
 import { BSTInsertSearch } from "./BSTInsertSearch";
@@ -15,6 +22,13 @@ import { StackMatch } from "./StackMatch";
 export type VizKind =
   | "two-pointers"
   | "sliding-window"
+  | "fixed-window"
+  | "min-window"
+  | "exactly-k"
+  | "monotonic-deque"
+  | "two-sum-hash"
+  | "prefix-sum-hash"
+  | "lru-cache"
   | "binary-search"
   | "fast-slow-middle"
   | "bst-insert-search"
@@ -33,6 +47,20 @@ export function AlgoViz({ kind }: { kind: VizKind }) {
       return <TwoPointers />;
     case "sliding-window":
       return <SlidingWindow />;
+    case "fixed-window":
+      return <FixedWindow />;
+    case "min-window":
+      return <MinWindow />;
+    case "exactly-k":
+      return <ExactlyK />;
+    case "monotonic-deque":
+      return <MonotonicDeque />;
+    case "two-sum-hash":
+      return <TwoSumHash />;
+    case "prefix-sum-hash":
+      return <PrefixSumHash />;
+    case "lru-cache":
+      return <LRUCache />;
     case "binary-search":
       return <BinarySearch />;
     case "fast-slow-middle":

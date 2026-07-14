@@ -3,6 +3,7 @@ export type FlashcardTag =
   | "tree"
   | "graph"
   | "array"
+  | "hash"
   | "dp"
   | "heap"
   | "str";
@@ -10,6 +11,13 @@ export type FlashcardTag =
 export type VizKind =
   | "two-pointers"
   | "sliding-window"
+  | "fixed-window"
+  | "min-window"
+  | "exactly-k"
+  | "monotonic-deque"
+  | "two-sum-hash"
+  | "prefix-sum-hash"
+  | "lru-cache"
   | "binary-search"
   | "fast-slow-middle"
   | "bst-insert-search"
@@ -298,8 +306,8 @@ def topo_sort(n, edges):
   {
     id: "sliding-window",
     tag: "array",
-    q: "Sliding window (variable size)",
-    hint: "expand right, shrink left",
+    q: "Sliding window — longest valid window",
+    hint: "expand right, shrink while INVALID",
     code: `def longest_substring_k_distinct(s, k):
     count = {}
     l = res = 0
@@ -314,6 +322,167 @@ def topo_sort(n, edges):
     return res`,
     note: "Template: expand r → violates condition? → shrink l until valid → update answer.",
     viz: "sliding-window",
+  },
+  {
+    id: "fixed-window",
+    tag: "array",
+    q: "Sliding window — fixed size k",
+    hint: "seed first k, then add right / drop left",
+    code: `def max_sum_window(nums, k):
+    window = sum(nums[:k])   # seed state with first k
+    best = window
+    for r in range(k, len(nums)):
+        window += nums[r] - nums[r - k]
+        best = max(best, window)
+    return best`,
+    note: "Seed state over first k elements, record answer, then slide: add arr[r], remove arr[r-k]. (643, 438, 567)",
+    viz: "fixed-window",
+  },
+  {
+    id: "min-window",
+    tag: "array",
+    q: "Sliding window — shortest valid window",
+    hint: "shrink while VALID, record inside the while",
+    code: `def min_subarray_len(nums, target):
+    l = total = 0
+    best = float('inf')
+    for r, x in enumerate(nums):
+        total += x
+        while total >= target:      # window VALID → try to shrink
+            best = min(best, r - l + 1)
+            total -= nums[l]
+            l += 1
+    return 0 if best == float('inf') else best`,
+    note: "Mirror of longest: longest shrinks while INVALID (answer after the while); shortest shrinks while VALID (answer inside). (209, 76)",
+    viz: "min-window",
+  },
+  {
+    id: "exactly-k",
+    tag: "array",
+    q: 'Counting subarrays — "exactly K" trick',
+    hint: "exactly(K) = atMost(K) - atMost(K-1)",
+    code: `def at_most(nums, k):
+    l = count = 0
+    freq = {}
+    for r, x in enumerate(nums):
+        freq[x] = freq.get(x, 0) + 1
+        while len(freq) > k:
+            freq[nums[l]] -= 1
+            if freq[nums[l]] == 0:
+                del freq[nums[l]]
+            l += 1
+        count += r - l + 1   # all windows ending at r
+    return count
+
+def exactly_k(nums, k):
+    return at_most(nums, k) - at_most(nums, k - 1)`,
+    note: "count += r - l + 1 counts every valid window ending at r. Subtract atMost(K-1) to isolate exactly K. (992, 930, 713)",
+    viz: "exactly-k",
+  },
+  {
+    id: "monotonic-deque",
+    tag: "array",
+    q: "Monotonic deque — sliding window maximum",
+    hint: "deque of indices, values decreasing",
+    code: `from collections import deque
+
+def max_sliding_window(nums, k):
+    dq, res = deque(), []   # dq: indices, values decreasing
+    for r, x in enumerate(nums):
+        while dq and nums[dq[-1]] <= x:
+            dq.pop()          # smaller values can never be max
+        dq.append(r)
+        if dq[0] <= r - k:
+            dq.popleft()      # front fell out of window
+        if r >= k - 1:
+            res.append(nums[dq[0]])
+    return res`,
+    note: "Front of deque = current window max. Each index pushed and popped at most once → O(n). (239)",
+    viz: "monotonic-deque",
+  },
+  {
+    id: "two-sum-hash",
+    tag: "hash",
+    q: "Complement lookup — Two Sum",
+    hint: "have I seen target - x?",
+    code: `def two_sum(nums, target):
+    seen = {}                 # value -> index
+    for i, x in enumerate(nums):
+        if target - x in seen:
+            return [seen[target - x], i]
+        seen[x] = i
+    return []`,
+    note: "Check for the complement before inserting — one pass, and duplicates can't pair with themselves incorrectly. (1, 454)",
+    viz: "two-sum-hash",
+  },
+  {
+    id: "prefix-sum-hash",
+    tag: "hash",
+    q: "Prefix sum + hash map — subarray sum equals K",
+    hint: "seen prefix - k before?",
+    code: `def subarray_sum(nums, k):
+    seen = {0: 1}            # prefix sum -> count
+    total = res = 0
+    for x in nums:
+        total += x
+        res += seen.get(total - k, 0)
+        seen[total] = seen.get(total, 0) + 1
+    return res`,
+    note: "Subarray (i, j] sums to k iff prefix[j] - k was seen before. Seed {0: 1} for subarrays starting at index 0. (560, 525, 974)",
+    viz: "prefix-sum-hash",
+  },
+  {
+    id: "seen-set",
+    tag: "hash",
+    q: "Seen set / last-seen index",
+    hint: "O(1) membership; value -> last index",
+    code: `def longest_consecutive(nums):
+    seen = set(nums)
+    best = 0
+    for x in seen:
+        if x - 1 not in seen:    # only start at run beginnings
+            end = x
+            while end + 1 in seen:
+                end += 1
+            best = max(best, end - x + 1)
+    return best
+
+# Last-seen index — nearby duplicates (219)
+def contains_nearby(nums, k):
+    last = {}                    # value -> last index
+    for i, x in enumerate(nums):
+        if x in last and i - last[x] <= k:
+            return True
+        last[x] = i
+    return False`,
+    note: "Set gives O(1) membership; starting runs only where x-1 is absent keeps it O(n). Map value → last index to measure gaps. (128, 217, 219)",
+  },
+  {
+    id: "lru-cache",
+    tag: "hash",
+    q: "LRU cache — hash map + design",
+    hint: "map + recency order, evict oldest",
+    code: `from collections import OrderedDict
+
+class LRUCache:
+    def __init__(self, capacity):
+        self.cap = capacity
+        self.od = OrderedDict()
+
+    def get(self, key):
+        if key not in self.od:
+            return -1
+        self.od.move_to_end(key)      # touch → most recent
+        return self.od[key]
+
+    def put(self, key, value):
+        if key in self.od:
+            self.od.move_to_end(key)
+        self.od[key] = value
+        if len(self.od) > self.cap:
+            self.od.popitem(last=False)   # evict LRU`,
+    note: "Hash map + doubly linked list (OrderedDict) = O(1) get/put. Touch moves to back; over capacity evicts front. (146, 359, 380)",
+    viz: "lru-cache",
   },
   {
     id: "two-pointers",
@@ -549,6 +718,7 @@ export const flashcardTags: FlashcardTag[] = [
   "tree",
   "graph",
   "array",
+  "hash",
   "dp",
   "heap",
   "str",
@@ -559,6 +729,7 @@ export const tagStyles: Record<FlashcardTag, string> = {
   tree: "bg-emerald-50 text-emerald-700 border border-emerald-200",
   graph: "bg-orange-50 text-orange-700 border border-orange-200",
   array: "bg-blue-50 text-blue-700 border border-blue-200",
+  hash: "bg-violet-50 text-violet-700 border border-violet-200",
   dp: "bg-lime-50 text-lime-700 border border-lime-200",
   heap: "bg-amber-50 text-amber-700 border border-amber-200",
   str: "bg-pink-50 text-pink-700 border border-pink-200",
