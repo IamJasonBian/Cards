@@ -1724,18 +1724,18 @@ class TemporalKVStore:
 export const tags = [...new Set(patterns.map((p) => p.tag))];
 
 export const tagColors: Record<string, string> = {
-  Graph: "bg-purple-100 text-purple-700",
-  DP: "bg-orange-100 text-orange-700",
-  Array: "bg-blue-100 text-blue-700",
-  Search: "bg-cyan-100 text-cyan-700",
-  Recursion: "bg-pink-100 text-pink-700",
-  Stack: "bg-amber-100 text-amber-700",
-  Heap: "bg-teal-100 text-teal-700",
-  Tree: "bg-green-100 text-green-700",
-  "Linked List": "bg-indigo-100 text-indigo-700",
-  Matrix: "bg-rose-100 text-rose-700",
-  String: "bg-lime-100 text-lime-700",
-  OOD: "bg-slate-100 text-slate-700",
+  Graph: "bg-purple-500/20 text-purple-300",
+  DP: "bg-orange-500/20 text-orange-300",
+  Array: "bg-blue-500/20 text-blue-300",
+  Search: "bg-cyan-500/20 text-cyan-300",
+  Recursion: "bg-pink-500/20 text-pink-300",
+  Stack: "bg-amber-500/20 text-amber-300",
+  Heap: "bg-teal-500/20 text-teal-300",
+  Tree: "bg-green-500/20 text-green-300",
+  "Linked List": "bg-indigo-500/20 text-indigo-300",
+  Matrix: "bg-rose-500/20 text-rose-300",
+  String: "bg-lime-500/20 text-lime-300",
+  OOD: "bg-slate-800 text-slate-300",
 };
 
 export const stats = {
@@ -1758,7 +1758,7 @@ export interface DSRefEntry {
 export const dsReference: DSRefEntry[] = [
   {
     name: "dict / defaultdict",
-    color: "bg-purple-50 text-purple-700 border-purple-200",
+    color: "bg-purple-500/10 text-purple-300 border-purple-500/30",
     docUrl: "https://docs.python.org/3/library/collections.html#collections.defaultdict",
     code: `# Basic dict — O(1) lookup, insert, delete
 seen = {}
@@ -1795,7 +1795,7 @@ index = {val: i for i, val in enumerate(nums)}`,
   },
   {
     name: 'str — "".join(sorted(word))',
-    color: "bg-lime-50 text-lime-700 border-lime-200",
+    color: "bg-lime-500/10 text-lime-300 border-lime-500/30",
     docUrl: "https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str",
     code: `# Sorted string key (anagram grouping)
 key = "".join(sorted(word))       # "eat" -> "aet"
@@ -1830,7 +1830,7 @@ word[:i] + c + word[i+1:]         # swap char at index i`,
   },
   {
     name: "heapq (min-heap)",
-    color: "bg-teal-50 text-teal-700 border-teal-200",
+    color: "bg-teal-500/10 text-teal-300 border-teal-500/30",
     docUrl: "https://docs.python.org/3/library/heapq.html",
     code: `import heapq
 
@@ -1874,7 +1874,7 @@ for val in heapq.merge(*lists):   # lazy merge`,
   },
   {
     name: "Counter / frequency counting",
-    color: "bg-orange-50 text-orange-700 border-orange-200",
+    color: "bg-orange-500/10 text-orange-300 border-orange-500/30",
     docUrl: "https://docs.python.org/3/library/collections.html#collections.Counter",
     code: `from collections import Counter
 
@@ -1917,7 +1917,7 @@ count1 & count2                   # min of each element`,
   },
   {
     name: "deque — queue / BFS",
-    color: "bg-cyan-100 text-cyan-700 border-cyan-500/30",
+    color: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
     docUrl: "https://docs.python.org/3/library/collections.html#collections.deque",
     code: `from collections import deque
 
@@ -1961,7 +1961,7 @@ for i, num in enumerate(nums):
   },
   {
     name: "set()",
-    color: "bg-pink-50 text-pink-700 border-pink-200",
+    color: "bg-pink-500/10 text-pink-300 border-pink-500/30",
     docUrl: "https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset",
     code: `# O(1) lookup, add, remove (hash-based)
 visited = set()
@@ -2005,7 +2005,7 @@ key = frozenset(items)`,
   },
   {
     name: "Grid DFS / BFS traversal",
-    color: "bg-rose-50 text-rose-700 border-rose-200",
+    color: "bg-rose-500/10 text-rose-300 border-rose-500/30",
     docUrl: "https://docs.python.org/3/library/collections.html#collections.deque",
     code: `# 4-directional movement
 directions = [(0,1), (0,-1), (1,0), (-1,0)]
@@ -2052,7 +2052,7 @@ for r in range(rows):
   },
   {
     name: "TreeNode / ListNode access",
-    color: "bg-green-50 text-green-700 border-green-200",
+    color: "bg-green-500/10 text-green-300 border-green-500/30",
     docUrl: "https://docs.python.org/3/tutorial/classes.html",
     code: `# TreeNode definition
 class TreeNode:
@@ -2112,7 +2112,7 @@ while fast and fast.next:
   },
   {
     name: "@dataclass / namedtuple",
-    color: "bg-violet-50 text-violet-700 border-violet-200",
+    color: "bg-violet-500/10 text-violet-300 border-violet-500/30",
     docUrl: "https://docs.python.org/3/library/dataclasses.html",
     code: `from dataclasses import dataclass, field
 
@@ -2161,7 +2161,7 @@ edges.sort(key=lambda e: e.weight)  # Kruskal's`,
   },
   {
     name: "classes / OOP patterns",
-    color: "bg-amber-50 text-amber-700 border-amber-200",
+    color: "bg-amber-500/10 text-amber-300 border-amber-500/30",
     docUrl: "https://docs.python.org/3/tutorial/classes.html",
     code: `# Union-Find with path compression + rank
 class UnionFind:
@@ -2219,7 +2219,7 @@ class Trie:
   },
   {
     name: "TrieNode — prefix tree",
-    color: "bg-indigo-50 text-indigo-700 border-indigo-200",
+    color: "bg-indigo-500/10 text-indigo-300 border-indigo-500/30",
     docUrl: "https://docs.python.org/3/library/stdtypes.html#dict",
     code: `# TrieNode definition
 class TrieNode:
@@ -2292,7 +2292,7 @@ def findWords(board, words):
   },
   {
     name: "sortedcontainers / bisect",
-    color: "bg-sky-50 text-sky-700 border-sky-200",
+    color: "bg-sky-500/10 text-sky-300 border-sky-500/30",
     docUrl: "https://docs.python.org/3/library/bisect.html",
     code: `import bisect
 
@@ -2387,7 +2387,7 @@ prefix = list(accumulate(nums))       # running sum`,
   },
   {
     name: "BFS — binary tree leftmost node",
-    color: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    color: "bg-emerald-500/10 text-emerald-300 border-emerald-500/30",
     docUrl: "https://docs.python.org/3/library/collections.html#collections.deque",
     code: `from collections import deque
 
@@ -2459,7 +2459,7 @@ def max_width(root):
   },
   {
     name: "Reverse Linked List",
-    color: "bg-red-50 text-red-700 border-red-200",
+    color: "bg-red-500/10 text-red-300 border-red-500/30",
     docUrl: "https://docs.python.org/3/tutorial/classes.html",
     code: `# Iterative reverse — O(n) time, O(1) space
 def reverse(head):
@@ -2557,7 +2557,7 @@ def isPalindrome(head):
   },
   {
     name: "Graph (Adjacency List)",
-    color: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    color: "bg-emerald-500/10 text-emerald-300 border-emerald-500/30",
     docUrl: "https://docs.python.org/3/library/collections.html#collections.defaultdict",
     code: `from collections import defaultdict, deque
 
