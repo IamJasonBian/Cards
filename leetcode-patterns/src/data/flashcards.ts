@@ -20,7 +20,8 @@ export type VizKind =
   | "graph-traversal"
   | "bfs-layer"
   | "floyds-cycle"
-  | "stack-match";
+  | "stack-match"
+  | "union-find";
 
 export interface Flashcard {
   id: string;
