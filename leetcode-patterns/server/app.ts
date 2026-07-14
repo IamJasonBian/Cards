@@ -137,6 +137,9 @@ export function buildApp(store: Storage): Hono {
     if (body.image.length > MAX_IMAGE_BYTES) {
       return c.json({ error: "Image too large — maximum 1 MB." }, 413);
     }
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return c.json({ error: "Server is missing ANTHROPIC_API_KEY." }, 503);
+    }
 
     const ip =
       c.req.header("x-nf-client-connection-ip") ??   // Netlify real IP header
@@ -147,24 +150,30 @@ export function buildApp(store: Storage): Hono {
       return c.json({ error: "Rate limit exceeded — max 10 parses per hour." }, 429);
     }
 
-    const message = await anthropic.messages.create({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 2048,
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "image",
-              source: { type: "base64", media_type: body.mimeType as "image/jpeg" | "image/png" | "image/gif" | "image/webp", data: body.image },
-            },
-            { type: "text", text: PARSE_PROMPTS[body.mode] },
-          ],
-        },
-      ],
-    });
-    const text = message.content.find((b) => b.type === "text")?.text ?? "";
-    return c.json({ text });
+    try {
+      const message = await anthropic.messages.create({
+        model: "claude-haiku-4-5-20251001",
+        max_tokens: 2048,
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "image",
+                source: { type: "base64", media_type: body.mimeType as "image/jpeg" | "image/png" | "image/gif" | "image/webp", data: body.image },
+              },
+              { type: "text", text: PARSE_PROMPTS[body.mode] },
+            ],
+          },
+        ],
+      });
+      const text = message.content.find((b) => b.type === "text")?.text ?? "";
+      return c.json({ text });
+    } catch (err) {
+      console.error("[parse-image] anthropic call failed:", err);
+      const msg = err instanceof Error ? err.message : "Claude request failed";
+      return c.json({ error: msg }, 502);
+    }
   });
 
   // Run user code against a problem's hidden + visible tests via Judge0.
