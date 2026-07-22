@@ -26,5 +26,11 @@ jobs:
         run: npm ci
       - name: Type check
         run: npx tsc --noEmit
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify judge harness
+        run: npm run verify-harness
       - name: Build
         run: npm run build

@@ -6,12 +6,16 @@ import { logger } from "hono/logger";
 import { secureHeaders } from "hono/secure-headers";
 import { schedule, type Grade, type Storage } from "./storage.ts";
 import { getProblem } from "./problemLoader.ts";
-import { buildProgram } from "./judgeHarness.ts";
+import { buildProgram, remapTracebackLines, type BuiltProgram } from "./judgeHarness.ts";
 import { runPython, Judge0Unavailable, JUDGE0_STATUS } from "./judge0Client.ts";
 import { getOrSetUserId } from "./userId.ts";
 import { preflight, recordSuccess, recordFailure, CircuitOpen } from "./circuit.ts";
 import { reviewWithLLM, ReviewUnavailable } from "./reviewClient.ts";
+import { log, errFields } from "./log.ts";
 import type { CaseReport, RunReport } from "./problemSchema.ts";
+
+const runLog = log("run");
+const reviewLog = log("review");
 
 const anthropic = new Anthropic();
 
@@ -198,15 +202,20 @@ export function buildApp(store: Storage): Hono {
       return c.json({ error: `Rate limit exceeded — max ${REVIEW_RATE_LIMIT} reviews per hour.` }, 429);
     }
 
+    const done = reviewLog.startTimer("review_complete");
     try {
       const review = await reviewWithLLM({
         code: body.code,
         patterns: Array.isArray(body.patterns) ? body.patterns.slice(0, 20) : undefined,
         problem: typeof body.problem === "string" ? body.problem.slice(0, 8_000) : undefined,
       });
+      done({ source: "llm", codeBytes: body.code.length, reviewChars: review.length });
       return c.json({ review, source: "llm" });
     } catch (e) {
       const detail = e instanceof ReviewUnavailable ? e.message : "review failed";
+      // Not an error level: the client has a local heuristic fallback, so an
+      // unreachable gateway is a normal degraded mode, not an outage.
+      reviewLog.warn("review_unavailable", { detail, codeBytes: body.code.length });
       return c.json({ error: detail }, 502);
     }
   });
@@ -247,8 +256,11 @@ export function buildApp(store: Storage): Hono {
       );
     }
 
+    const rlog = runLog.child({ userId, problemId: body.problemId, codeBytes: body.code.length });
+
     const problem = await getProblem(body.problemId);
     if (!problem) {
+      rlog.warn("unknown_problem");
       return c.json({ error: `unknown problemId '${body.problemId}'` }, 404);
     }
 
@@ -258,6 +270,7 @@ export function buildApp(store: Storage): Hono {
       await preflight(store, now);
     } catch (e) {
       if (e instanceof CircuitOpen) {
+        rlog.warn("circuit_open", { retryAfterMs: e.retryAfterMs });
         return c.json(
           {
             passed: 0,
@@ -277,16 +290,27 @@ export function buildApp(store: Storage): Hono {
       throw e;
     }
 
-    const program = buildProgram(problem, body.code);
+    const built = buildProgram(problem, body.code);
     const startedAt = Date.now();
+    const doneTimer = rlog.startTimer("run_complete");
     let report: RunReport;
     try {
-      const judgeResult = await runPython({ sourceCode: program });
-      report = parseJudge0Result(problem, judgeResult, Date.now() - startedAt);
+      const judgeResult = await runPython({ sourceCode: built.source });
+      report = parseJudge0Result(problem, judgeResult, Date.now() - startedAt, built);
       await recordSuccess(store);
+      doneTimer({
+        status: report.status,
+        passed: report.passed,
+        total: report.total,
+        judge0Status: judgeResult.status.id,
+        judge0Time: judgeResult.time,
+        casesParsed: report.cases.length,
+        fatal: report.fatal ? report.fatal.slice(0, 200) : undefined,
+      });
     } catch (e) {
       if (e instanceof Judge0Unavailable) {
         await recordFailure(store, Date.now());
+        rlog.error("judge0_unavailable", { cause: e.cause });
         return c.json(
           {
             passed: 0,
@@ -303,6 +327,7 @@ export function buildApp(store: Storage): Hono {
           503
         );
       }
+      rlog.error("run_failed", errFields(e));
       throw e;
     }
 
@@ -402,7 +427,8 @@ import type { Judge0Result } from "./judge0Client.ts";
 function parseJudge0Result(
   problem: ServerProblem,
   judge: Judge0Result,
-  durationMs: number
+  durationMs: number,
+  built: BuiltProgram
 ): RunReport {
   const visibleTotal = problem.visibleExamples.length;
   const hiddenTotal = problem.hiddenCases.length;
@@ -469,7 +495,10 @@ function parseJudge0Result(
   }
 
   if (!fatal && cases.length === 0) {
-    fatal = (judge.stderr ?? judge.message ?? "Judge produced no output.").trim().slice(0, 2000);
+    const raw = (judge.stderr ?? judge.message ?? "Judge produced no output.").trim();
+    // Tracebacks reference the assembled program; the user only sees their own
+    // lines, so translate the numbers before showing them.
+    fatal = remapTracebackLines(raw, built).slice(0, 2000);
     return {
       passed: 0,
       total: visibleTotal + hiddenTotal,
@@ -498,10 +527,12 @@ function parseJudge0Result(
     ...(firstFailingHidden ? [firstFailingHidden] : []),
   ];
 
+  // Order matters: a run that blew up is a Runtime Error even though it also
+  // scored 0/N. Labelling it "Wrong Answer" sends people hunting for a logic
+  // bug when the real message is "your code never ran".
   let status: RunReport["status"] = "accepted";
-  if (fatal || cases.some((c) => c.error)) status = "runtime-error";
   if (passed < total) status = "wrong-answer";
-  if (passed === total && !fatal) status = "accepted";
+  if (fatal || cases.some((c) => c.error)) status = "runtime-error";
 
   return {
     passed,
