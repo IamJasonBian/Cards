@@ -109,6 +109,8 @@ export function InterviewDrill() {
   const [codeText, setCodeText] = useState("");
   const [hintsUsed, setHintsUsed] = useState(0);
   const [codeFeedback, setCodeFeedback] = useState("");
+  const [reviewing, setReviewing] = useState(false);
+  const [reviewSource, setReviewSource] = useState<"ai" | "local" | null>(null);
   const [dryRunText, setDryRunText] = useState("");
   const [dryRunInput, setDryRunInput] = useState("");
   const [checks, setChecks] = useState<CheckState[]>(VERIFY_CHECKS.map(() => "pending"));
@@ -136,12 +138,38 @@ export function InterviewDrill() {
     if (hintsUsed >= 3) return;
     const n = hintsUsed + 1;
     setHintsUsed(n);
+    setReviewSource(null); // hints aren't reviews — no source badge
     setCodeFeedback(getHint(codeText, n, detectedPatterns));
   }
 
-  function handleReview() {
-    if (!codeText.trim()) return;
-    setCodeFeedback(reviewCode(codeText, detectedPatterns));
+  // Ask the LLM-backed reviewer first; if the endpoint is unreachable (e.g. a
+  // cloud deploy that can't reach the self-hosted model) or errors, fall back
+  // to the local structural heuristic so the button always returns something.
+  async function handleReview() {
+    if (!codeText.trim() || reviewing) return;
+    setReviewing(true);
+    setReviewSource(null);
+    try {
+      const res = await fetch("/api/review-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code: codeText,
+          patterns: detectedPatterns,
+          problem: problemText,
+        }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const { review } = (await res.json()) as { review?: string };
+      if (!review?.trim()) throw new Error("empty review");
+      setCodeFeedback(review);
+      setReviewSource("ai");
+    } catch {
+      setCodeFeedback(reviewCode(codeText, detectedPatterns));
+      setReviewSource("local");
+    } finally {
+      setReviewing(false);
+    }
   }
 
   const checkIcon = (s: CheckState) => s === "pass" ? "✓" : s === "fail" ? "✗" : "○";
@@ -387,15 +415,27 @@ export function InterviewDrill() {
               </button>
               <button
                 onClick={handleReview}
-                className="px-3 py-1.5 bg-cyan-600 text-white text-sm font-semibold rounded-none hover:bg-cyan-700 transition-colors"
+                disabled={reviewing || !codeText.trim()}
+                className="px-3 py-1.5 bg-cyan-600 text-white text-sm font-semibold rounded-none hover:bg-cyan-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
-                Review my code →
+                {reviewing ? "Reviewing…" : "Review my code →"}
               </button>
             </div>
 
             {codeFeedback && (
-              <div className="mt-3 p-3 bg-slate-100/90 sm:bg-slate-100/70 rounded-none text-sm text-slate-700 font-mono whitespace-pre-wrap">
-                {codeFeedback}
+              <div className="mt-3 p-3 bg-slate-100/90 sm:bg-slate-100/70 rounded-none text-sm text-slate-700">
+                {reviewSource && (
+                  <span
+                    className={`inline-block mb-2 px-2 py-0.5 rounded-none text-[11px] font-semibold ${
+                      reviewSource === "ai"
+                        ? "bg-cyan-100 text-cyan-700"
+                        : "bg-amber-100 text-amber-700"
+                    }`}
+                  >
+                    {reviewSource === "ai" ? "AI review" : "Offline heuristic"}
+                  </span>
+                )}
+                <div className="font-mono whitespace-pre-wrap">{codeFeedback}</div>
               </div>
             )}
           </Card>

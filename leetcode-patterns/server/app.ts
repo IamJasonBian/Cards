@@ -10,6 +10,7 @@ import { buildProgram } from "./judgeHarness.ts";
 import { runPython, Judge0Unavailable, JUDGE0_STATUS } from "./judge0Client.ts";
 import { getOrSetUserId } from "./userId.ts";
 import { preflight, recordSuccess, recordFailure, CircuitOpen } from "./circuit.ts";
+import { reviewWithLLM, ReviewUnavailable } from "./reviewClient.ts";
 import type { CaseReport, RunReport } from "./problemSchema.ts";
 
 const anthropic = new Anthropic();
@@ -24,6 +25,10 @@ const PARSE_PROMPTS = {
 const RATE_LIMIT = 10;          // max parses per IP
 const RATE_WINDOW_MS = 60 * 60 * 1000; // per hour
 const MAX_IMAGE_BYTES = 1.5 * 1024 * 1024; // 1.5 MB base64 (~1 MB raw)
+
+const REVIEW_RATE_LIMIT = 40;              // max LLM code reviews per IP
+const REVIEW_RATE_WINDOW_MS = 60 * 60 * 1000; // per hour
+const MAX_REVIEW_CODE_BYTES = 24 * 1024;   // 24 KB of pasted code
 
 const SUBMIT_RATE_LIMIT = 120;           // max submission writes per IP
 const SUBMIT_RATE_WINDOW_MS = 60 * 60 * 1000;
@@ -165,6 +170,45 @@ export function buildApp(store: Storage): Hono {
     });
     const text = message.content.find((b) => b.type === "text")?.text ?? "";
     return c.json({ text });
+  });
+
+  // LLM-backed code review for the Interview Drill. Proxies to a self-hosted
+  // model gateway (keeps the bearer token server-side). On any failure it
+  // returns 502 with { error } so the client falls back to its local heuristic —
+  // the "Review my code" button must never hard-fail.
+  app.post("/api/review-code", async (c) => {
+    const body = (await c.req.json().catch(() => null)) as {
+      code?: string;
+      patterns?: string[];
+      problem?: string;
+    } | null;
+    if (!body?.code?.trim()) {
+      return c.json({ error: "code is required" }, 400);
+    }
+    if (body.code.length > MAX_REVIEW_CODE_BYTES) {
+      return c.json({ error: "Code too large — maximum 24 KB." }, 413);
+    }
+
+    const ip =
+      c.req.header("x-nf-client-connection-ip") ??
+      c.req.header("x-forwarded-for")?.split(",")[0].trim() ??
+      "unknown";
+    const bucket = await store.incrementRateLimit(`review:${ip}`, REVIEW_RATE_WINDOW_MS, Date.now());
+    if (bucket.count > REVIEW_RATE_LIMIT) {
+      return c.json({ error: `Rate limit exceeded — max ${REVIEW_RATE_LIMIT} reviews per hour.` }, 429);
+    }
+
+    try {
+      const review = await reviewWithLLM({
+        code: body.code,
+        patterns: Array.isArray(body.patterns) ? body.patterns.slice(0, 20) : undefined,
+        problem: typeof body.problem === "string" ? body.problem.slice(0, 8_000) : undefined,
+      });
+      return c.json({ review, source: "llm" });
+    } catch (e) {
+      const detail = e instanceof ReviewUnavailable ? e.message : "review failed";
+      return c.json({ error: detail }, 502);
+    }
   });
 
   // Run user code against a problem's hidden + visible tests via Judge0.
