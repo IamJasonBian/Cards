@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { BookOpen, ChevronDown, Code, Filter, FlaskConical, Layers, Play, Zap } from "lucide-react";
+import { BookOpen, ChevronDown, Code, Filter, FlaskConical, Layers, Play, Sigma, Zap } from "lucide-react";
 import { patterns, tags } from "./data/patterns";
 import type { Pattern, Problem } from "./data/patterns";
 import { PatternCard } from "./components/PatternCard";
@@ -13,6 +13,7 @@ import { RandomProblem } from "./components/RandomProblem";
 import { PopularLists } from "./components/PopularLists";
 import { Flashcards } from "./components/Flashcards";
 import { InterviewDrill } from "./components/InterviewDrill";
+import { Theory } from "./components/Theory";
 import { Blind75Submit } from "./components/Blind75Submit";
 import { Landing } from "./components/Landing";
 import {
@@ -29,7 +30,8 @@ type View =
   | "interview-binaries"
   | "popular-lists"
   | "flashcards"
-  | "interview-drill";
+  | "interview-drill"
+  | "theory";
 
 function getRelatedProblems(
   selected: Pattern,
@@ -58,7 +60,7 @@ function getRelatedProblems(
   return pool.slice(0, count);
 }
 
-const EXPERIMENTAL_VIEWS = ["submit", "flashcards", "interview-drill"] as const;
+const EXPERIMENTAL_VIEWS = ["submit", "flashcards", "interview-drill", "theory"] as const;
 type ExperimentalView = (typeof EXPERIMENTAL_VIEWS)[number];
 const isExperimental = (v: View): v is ExperimentalView =>
   (EXPERIMENTAL_VIEWS as readonly string[]).includes(v);
@@ -79,6 +81,8 @@ function App() {
         return "flashcards";
       case "#interview-drill":
         return "interview-drill";
+      case "#theory":
+        return "theory";
       case "#patterns":
         return "patterns";
       default:
@@ -161,6 +165,7 @@ function App() {
       "popular-lists": "#popular-lists",
       flashcards: "#flashcards",
       "interview-drill": "#interview-drill",
+      theory: "#theory",
     };
     const target = hashable[view];
     if (target) {
@@ -271,6 +276,16 @@ function App() {
                     <Code size={14} />
                     Interview Drill
                   </button>
+                  <button
+                    role="menuitem"
+                    onClick={() => { setView("theory"); clearSelection(); setExperimentalOpen(false); }}
+                    className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
+                      view === "theory" ? "bg-cyan-50 text-cyan-700" : "text-slate-700 hover:bg-slate-900/5"
+                    }`}
+                  >
+                    <Sigma size={14} />
+                    Theory
+                  </button>
                 </div>
               )}
             </div>
@@ -308,6 +323,8 @@ function App() {
             <Flashcards />
           ) : view === "interview-drill" ? (
             <InterviewDrill />
+          ) : view === "theory" ? (
+            <Theory />
           ) : selectedPattern ? (
             <PracticeSetView
               pattern={selectedPattern}
