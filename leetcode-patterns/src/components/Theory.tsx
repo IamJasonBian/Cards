@@ -13,13 +13,13 @@ type TheoryResource = {
 
 const resources: TheoryResource[] = [
   {
-    title: "Computers and Intractability",
+    title: "OG NP 300 List",
     description:
-      "Garey & Johnson (1979) — the classic guide to the theory of NP-completeness.",
+      "Computers and Intractability, Garey & Johnson (1979) - appendix ~300 known T(n) = O(n^k) problems",
     links: [
       {
         label: "PDF",
-        url: "https://perso.limos.fr/~palafour/PAPERS/PDF/Garey-Johnson79.pdf",
+        url: "/garey-johnson-appendix-np-list.pdf",
       },
       {
         label: "Backup — Internet Archive",
@@ -28,17 +28,6 @@ const resources: TheoryResource[] = [
       {
         label: "Backup — Open Library",
         url: "https://openlibrary.org/works/OL4295313W/Computers_and_Intractability",
-      },
-    ],
-  },
-  {
-    title: "OG NP 300 List",
-    description:
-      "The appendix of Computers and Intractability: the original catalog of ~300 known NP-complete problems.",
-    links: [
-      {
-        label: "OG NP 300 List",
-        url: "https://perso.limos.fr/~palafour/PAPERS/PDF/Garey-Johnson79.pdf",
       },
     ],
   },
