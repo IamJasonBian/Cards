@@ -41,9 +41,6 @@ export function PopularLists() {
           <BookOpen className="text-cyan-600" size={28} />
           Popular Lists
         </h1>
-        <p className="text-slate-700 text-sm font-bold">
-          Curated problem sets from the community — each kept to 75 or fewer problems so they stay finishable.
-        </p>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-6">
