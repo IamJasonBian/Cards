@@ -7,6 +7,9 @@ import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { ServerProblem } from "./problemSchema.ts";
+import { log, errFields } from "./log.ts";
+
+const plog = log("problems");
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 // Try a few locations: repo-relative (dev) and function-bundle-relative (prod).
@@ -30,7 +33,7 @@ async function loadAll(): Promise<Map<string, ServerProblem>> {
   const dir = findProblemsDir();
   cache = new Map();
   if (!dir) {
-    console.warn("[problems] no problems directory found in any of:", CANDIDATE_DIRS);
+    plog.error("problems_dir_missing", { searched: CANDIDATE_DIRS });
     return cache;
   }
   const entries = await readdir(dir);
@@ -41,9 +44,10 @@ async function loadAll(): Promise<Map<string, ServerProblem>> {
       const p = JSON.parse(raw) as ServerProblem;
       if (p.slug) cache.set(p.slug, p);
     } catch (e) {
-      console.warn(`[problems] could not load ${entry}: ${e instanceof Error ? e.message : String(e)}`);
+      plog.warn("problem_load_failed", { entry, ...errFields(e) });
     }
   }
+  plog.info("problems_loaded", { dir, count: cache.size });
   return cache;
 }
 

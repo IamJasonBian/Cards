@@ -5,6 +5,10 @@
 // Auth: optional X-Auth-Token header (configured server-side in judge0.conf).
 // We never send the user's IP onward; the function is the only caller.
 
+import { log } from "./log.ts";
+
+const jlog = log("judge0");
+
 const DEFAULT_URL = process.env.JUDGE0_URL ?? "http://localhost:2358";
 const AUTH_TOKEN = process.env.JUDGE0_AUTH_TOKEN ?? "";
 const PYTHON_LANGUAGE_ID = 71; // Judge0 CE: Python 3.8.1
@@ -59,6 +63,14 @@ export async function runPython(opts: Judge0SubmitOptions): Promise<Judge0Result
     }
   }
 
+  const done = jlog.startTimer("submission");
+  jlog.debug("submitting", {
+    host: new URL(DEFAULT_URL).host,
+    languageId: PYTHON_LANGUAGE_ID,
+    sourceBytes: opts.sourceCode.length,
+    authed: Boolean(AUTH_TOKEN),
+  });
+
   let res: Response;
   try {
     res = await fetch(url, {
@@ -69,26 +81,40 @@ export async function runPython(opts: Judge0SubmitOptions): Promise<Judge0Result
       signal: AbortSignal.timeout(9_000),
     });
   } catch (e) {
-    throw new Judge0Unavailable(e instanceof Error ? e.message : String(e));
+    const cause = e instanceof Error ? e.message : String(e);
+    jlog.error("unreachable", { host: new URL(DEFAULT_URL).host, cause });
+    throw new Judge0Unavailable(cause);
   }
 
   if (res.status === 401 || res.status === 403) {
+    jlog.error("auth_rejected", { httpStatus: res.status });
     throw new Judge0Unavailable("auth rejected");
   }
   if (!res.ok) {
+    jlog.error("http_error", { httpStatus: res.status });
     throw new Judge0Unavailable(`HTTP ${res.status}`);
   }
 
   const json = (await res.json()) as Record<string, unknown>;
+  const status = (json.status as { id: number; description: string } | undefined) ?? {
+    id: 0,
+    description: "unknown",
+  };
+  done({
+    statusId: status.id,
+    statusDesc: status.description,
+    cpuTime: (json.time as string | null) ?? null,
+    memoryKb: (json.memory as number | null) ?? null,
+    stdoutBytes: ((json.stdout as string | null) ?? "").length,
+    stderrBytes: ((json.stderr as string | null) ?? "").length,
+  });
+
   return {
     stdout: (json.stdout as string | null) ?? null,
     stderr: (json.stderr as string | null) ?? null,
     compileOutput: (json.compile_output as string | null) ?? null,
     message: (json.message as string | null) ?? null,
-    status: (json.status as { id: number; description: string }) ?? {
-      id: 0,
-      description: "unknown",
-    },
+    status,
     time: (json.time as string | null) ?? null,
     memory: (json.memory as number | null) ?? null,
     exitCode: (json.exit_code as number | null) ?? null,

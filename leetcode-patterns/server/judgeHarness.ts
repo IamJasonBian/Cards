@@ -1,6 +1,6 @@
 // Builds the Python program we ship to Judge0.
 //
-// Layout: [user code] + [TEST_CASES literal] + [judge harness].
+// Layout: [preamble] + [user code] + [TEST_CASES literal] + [judge harness].
 // The harness instantiates Solution, iterates cases, and prints one JSON
 // line per case to stdout. We then parse those lines on the Node side.
 //
@@ -8,6 +8,30 @@
 // Hidden cases stay on the server; the client never sees them.
 
 import type { ServerProblem, ServerCase } from "./problemSchema.ts";
+
+// LeetCode's Python editor pre-imports these, so solutions are routinely
+// written against `List`, `@cache`, `defaultdict`, `deque` and friends with no
+// import line. Pasting such a solution here used to raise NameError on every
+// case, which surfaced as a failing run with no `actual` value.
+//
+// `from __future__ import annotations` must stay the first statement: it makes
+// ALL annotations lazy (PEP 563) so the judge (Judge0 CE = Python 3.8) doesn't
+// evaluate builtin-generic hints like `list[int]` at class-definition time,
+// which raises "TypeError: 'type' object is not subscriptable" on 3.8.
+const PREAMBLE = `from __future__ import annotations
+import bisect, collections, functools, heapq, itertools, math, operator, random, re, string, sys
+from collections import Counter, OrderedDict, defaultdict, deque
+from functools import lru_cache, reduce
+from heapq import heapify, heappop, heappush
+from typing import Any, Dict, List, Optional, Set, Tuple
+
+try:
+    from functools import cache
+except ImportError:  # Python < 3.9
+    def cache(__fn):
+        return lru_cache(maxsize=None)(__fn)
+
+sys.setrecursionlimit(20000)`;
 
 const HARNESS = `
 import json, time, traceback
@@ -61,7 +85,12 @@ def __lc_run():
         return
     method = getattr(sol, __LC_METHOD_NAME, None)
     if method is None:
-        print(json.dumps({"__fatal": f"Solution has no method '{__LC_METHOD_NAME}'"}))
+        defined = sorted(n for n in dir(sol) if not n.startswith("_"))
+        print(json.dumps({
+            "__fatal": f"Solution has no method '{__LC_METHOD_NAME}'. "
+                       f"This problem is graded on '{__LC_METHOD_NAME}'; you defined: "
+                       f"{', '.join(defined) or '(nothing)'}."
+        }))
         return
     for case in __LC_CASES:
         # Deep-copy inputs so user code can't mutate across cases
@@ -94,7 +123,24 @@ def __lc_run():
 __lc_run()
 `;
 
-export function buildProgram(problem: ServerProblem, userCode: string): string {
+export interface BuiltProgram {
+  source: string;
+  /** 1-based line in `source` holding the user's first line. */
+  userCodeStartLine: number;
+  /** How many lines of user code follow it. */
+  userCodeLineCount: number;
+}
+
+// A `__future__` import is only legal as the first statement of a module, and
+// the preamble already emits the one that matters, so a pasted copy has to go.
+function stripFutureImports(code: string): string {
+  return code
+    .split("\n")
+    .map((line) => (/^\s*from\s+__future__\s+import\s+/.test(line) ? "" : line))
+    .join("\n");
+}
+
+export function buildProgram(problem: ServerProblem, userCode: string): BuiltProgram {
   const visible: ServerCase[] = problem.visibleExamples.map((v, i) => ({
     name: `Example ${i + 1}`,
     input: v.input,
@@ -118,20 +164,37 @@ export function buildProgram(problem: ServerProblem, userCode: string): string {
     `__LC_METHOD_NAME = json.loads(${JSON.stringify(JSON.stringify(problem.signature.methodName))})`,
   ].join("\n");
 
-  return [
-    // Must be the first statement: makes ALL annotations lazy (PEP 563) so the
-    // judge (Judge0 CE = Python 3.8) doesn't evaluate builtin-generic hints like
-    // `list[int]` at class-definition time, which raises
-    // "TypeError: 'type' object is not subscriptable" on 3.8.
-    "from __future__ import annotations",
-    "# --- user code ---",
-    userCode,
-    "",
-    "# --- test data ---",
-    "import json",
-    literals,
-    "",
-    "# --- judge harness ---",
-    HARNESS,
-  ].join("\n");
+  const header = [PREAMBLE, "", "# --- user code ---"].join("\n");
+  const body = stripFutureImports(userCode);
+
+  return {
+    source: [
+      header,
+      body,
+      "",
+      "# --- test data ---",
+      "import json",
+      literals,
+      "",
+      "# --- judge harness ---",
+      HARNESS,
+    ].join("\n"),
+    userCodeStartLine: header.split("\n").length + 1,
+    userCodeLineCount: body.split("\n").length,
+  };
+}
+
+/**
+ * Rewrite absolute `line N` references in a Python traceback so they point at
+ * the line the user actually typed. Without this, a one-character typo is
+ * reported against a line number well below the bottom of the editor.
+ */
+export function remapTracebackLines(text: string, built: BuiltProgram): string {
+  const first = built.userCodeStartLine;
+  const last = first + built.userCodeLineCount - 1;
+  return text.replace(/\bline (\d+)\b/g, (match, digits: string) => {
+    const abs = Number(digits);
+    if (abs < first || abs > last) return match;
+    return `line ${abs - first + 1}`;
+  });
 }

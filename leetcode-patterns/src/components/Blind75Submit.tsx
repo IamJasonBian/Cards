@@ -30,7 +30,8 @@ function difficultyClass(d: string): string {
 }
 
 function formatValue(v: unknown, max = 80): string {
-  if (v === null || v === undefined) return "null";
+  if (v === undefined) return "—"; // no value was produced (the case threw)
+  if (v === null) return "null"; // the solution genuinely returned None
   const s = JSON.stringify(v);
   return s.length > max ? s.slice(0, max - 1) + "…" : s;
 }

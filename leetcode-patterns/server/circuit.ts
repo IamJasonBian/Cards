@@ -11,6 +11,9 @@
 // counter — three failures inside FAILURE_WINDOW_MS opens the circuit.
 
 import type { Storage } from "./storage.ts";
+import { log } from "./log.ts";
+
+const clog = log("circuit");
 
 const FAILURE_WINDOW_MS = 30_000;
 const FAILURE_THRESHOLD = 3;
@@ -59,6 +62,7 @@ export async function preflight(store: Storage, now: number): Promise<void> {
     const elapsed = now - state.openedAt;
     if (elapsed < OPEN_MS) throw new CircuitOpen(OPEN_MS - elapsed);
     // Window elapsed → transition to half-open and let the caller probe.
+    clog.info("half_open", { openForMs: elapsed });
     await writeState(store, { state: "half-open", openedAt: state.openedAt });
   }
 }
@@ -67,6 +71,7 @@ export async function preflight(store: Storage, now: number): Promise<void> {
 export async function recordSuccess(store: Storage): Promise<void> {
   const state = await readState(store);
   if (state.state !== "closed") {
+    clog.info("closed", { from: state.state });
     await writeState(store, { state: "closed", openedAt: 0 });
   }
 }
@@ -76,6 +81,9 @@ export async function recordFailure(store: Storage, now: number): Promise<void> 
   // Use the rate-limit log itself as the failure counter.
   const bucket = await store.incrementRateLimit(`circuit-fail:${KEY}`, FAILURE_WINDOW_MS, now);
   if (bucket.count >= FAILURE_THRESHOLD) {
+    clog.error("opened", { failures: bucket.count, openMs: OPEN_MS });
     await writeState(store, { state: "open", openedAt: now });
+  } else {
+    clog.warn("failure_recorded", { failures: bucket.count, threshold: FAILURE_THRESHOLD });
   }
 }
