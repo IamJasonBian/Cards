@@ -16,6 +16,23 @@ function donateHref(dollars?: number): string {
   return url.toString();
 }
 
+// Compact single-button variant for tight spots like section headers.
+export function DonateButton() {
+  if (!DONATE_URL) return null;
+
+  return (
+    <a
+      href={donateHref()}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="ml-auto flex items-center gap-1.5 border border-slate-900/10 bg-white/50 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-rose-50 hover:text-rose-600"
+    >
+      <Heart size={14} className="text-rose-500" />
+      Donate
+    </a>
+  );
+}
+
 export function Donate() {
   if (!DONATE_URL) return null;
 
