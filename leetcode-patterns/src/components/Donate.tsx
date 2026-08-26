@@ -1,25 +1,25 @@
 import { Heart } from "lucide-react";
 
-// Stripe Payment Link for the LeetCards billing account. Create the link in
-// the Stripe dashboard with "Customers choose what to pay" — the preset
-// buttons prefill an amount via ?__prefilled_amount (cents), and the bare
-// link lets donors type their own. Unset in environments without billing:
-// the component renders nothing so the footer stays unchanged.
-const DONATE_URL = import.meta.env.VITE_STRIPE_DONATE_URL as string | undefined;
+// Stripe Payment Link for the LeetCards billing account, created with
+// "Customers choose what to pay" — the preset buttons prefill an amount via
+// ?__prefilled_amount (cents), and the bare link lets donors type their own.
+// VITE_STRIPE_DONATE_URL overrides the live link so local dev and previews
+// can point at a test-mode link instead of real checkout.
+const DONATE_URL =
+  (import.meta.env.VITE_STRIPE_DONATE_URL as string | undefined) ??
+  "https://buy.stripe.com/aFa6oA6oq65e5ME4CNgUM00";
 
 const PRESETS = [3, 5, 10];
 
 function donateHref(dollars?: number): string {
-  if (!dollars) return DONATE_URL!;
-  const url = new URL(DONATE_URL!);
+  if (!dollars) return DONATE_URL;
+  const url = new URL(DONATE_URL);
   url.searchParams.set("__prefilled_amount", String(dollars * 100));
   return url.toString();
 }
 
 // Compact single-button variant for tight spots like section headers.
 export function DonateButton() {
-  if (!DONATE_URL) return null;
-
   return (
     <a
       href={donateHref()}
@@ -34,8 +34,6 @@ export function DonateButton() {
 }
 
 export function Donate() {
-  if (!DONATE_URL) return null;
-
   return (
     <div className="mt-12 flex items-center justify-center gap-2 text-sm">
       <span className="flex items-center gap-1.5 text-slate-600">
