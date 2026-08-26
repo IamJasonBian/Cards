@@ -42,6 +42,20 @@ export interface Submission {
   ts: number; // epoch ms
 }
 
+// ---- Theory PDF bookmarks ----
+// A bookmark is a named deep link into a PDF on the Theory page: docId picks
+// the document (stable key from src/data/theoryBooks.ts, decoupled from the
+// PDF's URL so a document can move between remote link and local copy without
+// orphaning bookmarks), page is the absolute 1-based viewer page (what the
+// `#page=N` open parameter takes).
+export interface TheoryBookmark {
+  id: string;        // server-minted, unique per (user, doc)
+  docId: string;
+  page: number;      // absolute 1-based PDF page
+  label: string;     // short user-facing name, may be ""
+  createdAt: number; // epoch ms
+}
+
 export interface Storage {
   getReview(userId: string, cardId: string): Promise<ReviewState | null>;
   saveReview(userId: string, state: ReviewState): Promise<void>;
@@ -54,18 +68,24 @@ export interface Storage {
   listSubmissions?(userId: string, problemId: string | undefined, limit?: number): Promise<Submission[]>;
   saveCodeBlob?(hash: string, code: string): Promise<void>;
   getCodeBlob?(hash: string): Promise<string | null>;
+  // Theory PDF bookmarks (optional, like submissions).
+  listBookmarks?(userId: string, docId: string): Promise<TheoryBookmark[]>;
+  saveBookmark?(userId: string, bookmark: TheoryBookmark): Promise<void>;
+  deleteBookmark?(userId: string, docId: string, bookmarkId: string): Promise<void>;
 }
 
 // ---- In-memory + JSON-backed store (single-user dev default) ----
 interface PersistedShape {
   reviews?: Record<string, Record<string, ReviewState>>;
   submissions?: Record<string, Submission[]>;
+  bookmarks?: Record<string, TheoryBookmark[]>;
 }
 
 export class InMemoryStore implements Storage {
   // reviews[userId][cardId] = ReviewState
   private reviews = new Map<string, Map<string, ReviewState>>();
   private submissions = new Map<string, Submission[]>();
+  private bookmarks = new Map<string, TheoryBookmark[]>();
   private codeBlobs = new Map<string, string>();
   private rateLimits = new Map<string, RateLimitLog>();
   private path: string | null;
@@ -92,6 +112,13 @@ export class InMemoryStore implements Storage {
         for (const [u, list] of Object.entries(submissionsRoot)) {
           this.submissions.set(u, list);
         }
+        const bookmarksRoot =
+          raw && typeof raw === "object" && "bookmarks" in raw && raw.bookmarks
+            ? (raw as PersistedShape).bookmarks!
+            : {};
+        for (const [u, list] of Object.entries(bookmarksRoot)) {
+          this.bookmarks.set(u, list);
+        }
       } catch {
         // ignore corrupt file; start fresh
       }
@@ -108,10 +135,18 @@ export class InMemoryStore implements Storage {
     for (const [u, list] of this.submissions) {
       submissionsOut[u] = list;
     }
+    const bookmarksOut: Record<string, TheoryBookmark[]> = {};
+    for (const [u, list] of this.bookmarks) {
+      bookmarksOut[u] = list;
+    }
     mkdirSync(dirname(this.path), { recursive: true });
     writeFileSync(
       this.path,
-      JSON.stringify({ reviews: reviewsOut, submissions: submissionsOut }, null, 2)
+      JSON.stringify(
+        { reviews: reviewsOut, submissions: submissionsOut, bookmarks: bookmarksOut },
+        null,
+        2
+      )
     );
   }
 
@@ -181,6 +216,29 @@ export class InMemoryStore implements Storage {
 
   async getCodeBlob(hash: string): Promise<string | null> {
     return this.codeBlobs.get(hash) ?? null;
+  }
+
+  async listBookmarks(userId: string, docId: string): Promise<TheoryBookmark[]> {
+    return (this.bookmarks.get(userId) ?? [])
+      .filter((b) => b.docId === docId)
+      .sort((a, b) => a.page - b.page || a.createdAt - b.createdAt);
+  }
+
+  async saveBookmark(userId: string, bookmark: TheoryBookmark): Promise<void> {
+    const list = this.bookmarks.get(userId) ?? [];
+    list.push(bookmark);
+    this.bookmarks.set(userId, list);
+    this.flush();
+  }
+
+  async deleteBookmark(userId: string, docId: string, bookmarkId: string): Promise<void> {
+    const list = this.bookmarks.get(userId);
+    if (!list) return;
+    this.bookmarks.set(
+      userId,
+      list.filter((b) => !(b.docId === docId && b.id === bookmarkId))
+    );
+    this.flush();
   }
 }
 

@@ -4,7 +4,7 @@ import { bodyLimit } from "hono/body-limit";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { secureHeaders } from "hono/secure-headers";
-import { schedule, type Grade, type Storage } from "./storage.ts";
+import { schedule, type Grade, type Storage, type TheoryBookmark } from "./storage.ts";
 import { getProblem } from "./problemLoader.ts";
 import { buildProgram } from "./judgeHarness.ts";
 import { runPython, Judge0Unavailable, JUDGE0_STATUS } from "./judge0Client.ts";
@@ -43,6 +43,15 @@ const RUN_RATE_WINDOW_MS = 60 * 60 * 1000;
 const RUN_PAIR_LIMIT = 3;                // submissions per problem in 5s
 const RUN_PAIR_WINDOW_MS = 5_000;
 const MAX_CODE_BYTES = 32 * 1024;
+
+// Theory PDF bookmarks — write limits keep one user/IP from flooding the store.
+const BOOKMARK_RATE_LIMIT = 120;               // writes per IP
+const BOOKMARK_RATE_WINDOW_MS = 60 * 60 * 1000; // per hour
+const MAX_BOOKMARKS_PER_DOC = 100;
+const MAX_BOOKMARK_LABEL = 120;
+const MAX_BOOKMARK_PAGE = 10_000;
+const DOC_ID_RE = /^[a-z0-9][a-z0-9-]{0,63}$/;
+const BOOKMARK_ID_RE = /^[a-zA-Z0-9-]{1,64}$/;
 
 const DEFAULT_USER = "local";
 
@@ -84,7 +93,7 @@ export function buildApp(store: Storage): Hono {
     cors({
       origin: (origin) => (origins.includes(origin) ? origin : null),
       credentials: true,
-      allowMethods: ["GET", "POST", "OPTIONS"],
+      allowMethods: ["GET", "POST", "DELETE", "OPTIONS"],
       allowHeaders: ["Content-Type"],
     })
   );
@@ -114,6 +123,70 @@ export function buildApp(store: Storage): Hono {
     const next = schedule(prev, body.grade, body.cardId, now);
     await store.saveReview(user, next);
     return c.json({ state: next });
+  });
+
+  // ---- Theory PDF bookmarks ----
+  // Identity comes from the anonymous user cookie (same mechanism as
+  // /api/submissions/run) so bookmarks are per-visitor without accounts.
+
+  app.get("/api/theory/bookmarks", async (c) => {
+    const docId = c.req.query("docId") ?? "";
+    if (!DOC_ID_RE.test(docId)) {
+      return c.json({ error: "valid docId query param required" }, 400);
+    }
+    const { userId } = getOrSetUserId(c);
+    const bookmarks = (await store.listBookmarks?.(userId, docId)) ?? [];
+    return c.json({ bookmarks });
+  });
+
+  app.post("/api/theory/bookmarks", async (c) => {
+    const body = (await c.req.json().catch(() => null)) as
+      | { docId?: string; page?: number; label?: string }
+      | null;
+    if (!body || !DOC_ID_RE.test(body.docId ?? "")) {
+      return c.json({ error: "valid docId required" }, 400);
+    }
+    const page = body.page;
+    if (typeof page !== "number" || !Number.isInteger(page) || page < 1 || page > MAX_BOOKMARK_PAGE) {
+      return c.json({ error: `page must be an integer between 1 and ${MAX_BOOKMARK_PAGE}` }, 400);
+    }
+    const label = (body.label ?? "").trim().slice(0, MAX_BOOKMARK_LABEL);
+
+    const { userId, ip } = getOrSetUserId(c);
+    const bucket = await store.incrementRateLimit(
+      `bookmark:${ip}`,
+      BOOKMARK_RATE_WINDOW_MS,
+      Date.now()
+    );
+    if (bucket.count > BOOKMARK_RATE_LIMIT) {
+      return c.json({ error: "Rate limit exceeded." }, 429);
+    }
+
+    const existing = (await store.listBookmarks?.(userId, body.docId!)) ?? [];
+    if (existing.length >= MAX_BOOKMARKS_PER_DOC) {
+      return c.json({ error: `Bookmark limit reached (${MAX_BOOKMARKS_PER_DOC} per document).` }, 400);
+    }
+
+    const bookmark: TheoryBookmark = {
+      id: crypto.randomUUID().replace(/-/g, ""),
+      docId: body.docId!,
+      page,
+      label,
+      createdAt: Date.now(),
+    };
+    await store.saveBookmark?.(userId, bookmark);
+    return c.json({ bookmark });
+  });
+
+  app.delete("/api/theory/bookmarks/:docId/:id", async (c) => {
+    const docId = c.req.param("docId");
+    const id = c.req.param("id");
+    if (!DOC_ID_RE.test(docId) || !BOOKMARK_ID_RE.test(id)) {
+      return c.json({ error: "invalid docId or id" }, 400);
+    }
+    const { userId } = getOrSetUserId(c);
+    await store.deleteBookmark?.(userId, docId, id);
+    return c.json({ ok: true });
   });
 
   // parse-image carries base64 image payloads — the only large body in the API.

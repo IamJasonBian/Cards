@@ -70,6 +70,8 @@ function App() {
   // still wins on mount via this lazy initializer (#patterns is a way out of the
   // default Submit view for users who bookmarked the old landing).
   const [view, setView] = useState<View>(() => {
+    // #theory also matches deep links like #theory/sicp-js/33 (page bookmarks).
+    if (window.location.hash.startsWith("#theory")) return "theory";
     switch (window.location.hash) {
       case "#submit":
         return "submit";
@@ -81,8 +83,6 @@ function App() {
         return "flashcards";
       case "#interview-drill":
         return "interview-drill";
-      case "#theory":
-        return "theory";
       case "#patterns":
         return "patterns";
       default:
@@ -169,7 +169,11 @@ function App() {
     };
     const target = hashable[view];
     if (target) {
-      window.history.replaceState(null, "", target);
+      // startsWith keeps view-owned deep paths (#theory/{docId}/{page}) intact
+      // instead of truncating them back to the bare view hash on mount.
+      if (!window.location.hash.startsWith(target)) {
+        window.history.replaceState(null, "", target);
+      }
     } else if (window.location.hash) {
       window.history.replaceState(null, "", window.location.pathname);
     }

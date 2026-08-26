@@ -1,5 +1,12 @@
 import { getStore, type Store } from "@netlify/blobs";
-import type { RateLimitBucket, RateLimitLog, ReviewState, Storage, Submission } from "./storage.ts";
+import type {
+  RateLimitBucket,
+  RateLimitLog,
+  ReviewState,
+  Storage,
+  Submission,
+  TheoryBookmark,
+} from "./storage.ts";
 
 // Key layout inside the single "leetcards-reviews" blob store:
 //   review/{userId}/{cardId}  → JSON ReviewState
@@ -115,5 +122,28 @@ export class NetlifyBlobsStore implements Storage {
 
   async getCodeBlob(hash: string): Promise<string | null> {
     return (await this.store.get(`code/${hash}`)) ?? null;
+  }
+
+  // Theory bookmarks live at bookmark/{userId}/{docId}/{id}, listed by prefix.
+  async listBookmarks(userId: string, docId: string): Promise<TheoryBookmark[]> {
+    const { blobs } = await this.store.list({ prefix: `bookmark/${userId}/${docId}/` });
+    if (!blobs.length) return [];
+    const items = await Promise.all(
+      blobs.map((b) => this.store.get(b.key, { type: "json" }))
+    );
+    return items
+      .filter((b): b is TheoryBookmark => b !== null)
+      .sort((a, b) => a.page - b.page || a.createdAt - b.createdAt);
+  }
+
+  async saveBookmark(userId: string, bookmark: TheoryBookmark): Promise<void> {
+    await this.store.setJSON(
+      `bookmark/${userId}/${bookmark.docId}/${bookmark.id}`,
+      bookmark
+    );
+  }
+
+  async deleteBookmark(userId: string, docId: string, bookmarkId: string): Promise<void> {
+    await this.store.delete(`bookmark/${userId}/${docId}/${bookmarkId}`);
   }
 }
