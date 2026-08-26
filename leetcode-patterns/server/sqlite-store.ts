@@ -7,6 +7,7 @@ import type {
   ReviewState,
   Storage,
   Submission,
+  TheoryBookmark,
 } from "./storage.ts";
 
 // SQLite-backed Storage for Render (or any host with a writable disk).
@@ -60,6 +61,14 @@ export class SqliteStore implements Storage {
       CREATE TABLE IF NOT EXISTS rate_limits (
         key TEXT PRIMARY KEY,
         log TEXT NOT NULL
+      );
+
+      CREATE TABLE IF NOT EXISTS theory_bookmarks (
+        user_id     TEXT NOT NULL,
+        doc_id      TEXT NOT NULL,
+        bookmark_id TEXT NOT NULL,
+        data        TEXT NOT NULL,
+        PRIMARY KEY (user_id, doc_id, bookmark_id)
       );
     `);
   }
@@ -169,5 +178,32 @@ export class SqliteStore implements Storage {
       .prepare("SELECT code FROM code_blobs WHERE hash = ?")
       .get(hash) as { code: string } | undefined;
     return row ? row.code : null;
+  }
+
+  async listBookmarks(userId: string, docId: string): Promise<TheoryBookmark[]> {
+    const rows = this.db
+      .prepare("SELECT data FROM theory_bookmarks WHERE user_id = ? AND doc_id = ?")
+      .all(userId, docId) as { data: string }[];
+    return rows
+      .map((r) => JSON.parse(r.data) as TheoryBookmark)
+      .sort((a, b) => a.page - b.page || a.createdAt - b.createdAt);
+  }
+
+  async saveBookmark(userId: string, bookmark: TheoryBookmark): Promise<void> {
+    this.db
+      .prepare(
+        `INSERT INTO theory_bookmarks (user_id, doc_id, bookmark_id, data)
+         VALUES (?, ?, ?, ?)
+         ON CONFLICT (user_id, doc_id, bookmark_id) DO UPDATE SET data = excluded.data`
+      )
+      .run(userId, bookmark.docId, bookmark.id, JSON.stringify(bookmark));
+  }
+
+  async deleteBookmark(userId: string, docId: string, bookmarkId: string): Promise<void> {
+    this.db
+      .prepare(
+        "DELETE FROM theory_bookmarks WHERE user_id = ? AND doc_id = ? AND bookmark_id = ?"
+      )
+      .run(userId, docId, bookmarkId);
   }
 }
