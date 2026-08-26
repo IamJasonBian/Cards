@@ -16,6 +16,7 @@ import { InterviewDrill } from "./components/InterviewDrill";
 import { Theory } from "./components/Theory";
 import { Blind75Submit } from "./components/Blind75Submit";
 import { Landing } from "./components/Landing";
+import { Donate } from "./components/Donate";
 import {
   fetchRandomWallpaper,
   getPreloadedWallpaper,
@@ -380,6 +381,8 @@ function App() {
               <DSReference />
 
               <InterviewChecklist />
+
+              <Donate />
 
               <footer className="mt-12 pb-8 text-center text-xs text-slate-500">
                 639 problems solved | Python3 | Data from LeetCode via

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Grid3x3, Trophy, RotateCcw, Search, ChevronDown, ChevronRight } from "lucide-react";
+import { DonateButton } from "./Donate";
 
 // ── Trie ──────────────────────────────────────────────────────────────
 interface TrieNode {
@@ -224,6 +225,7 @@ export function WordHunt() {
         <div>
           <h2 className="text-2xl font-bold text-slate-900">Word Hunt</h2>
         </div>
+        <DonateButton />
       </div>
 
       {loading ? (
