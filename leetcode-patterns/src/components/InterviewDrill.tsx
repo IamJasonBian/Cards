@@ -104,6 +104,9 @@ export function InterviewDrill() {
   const [problemText, setProblemText] = useState("");
   const [detectedPatterns, setDetectedPatterns] = useState<string[]>([]);
   const [solveVisible, setSolveVisible] = useState(false);
+  const [breakdown, setBreakdown] = useState("");
+  const [breakdownSource, setBreakdownSource] = useState<"ai" | "local" | null>(null);
+  const [solving, setSolving] = useState(false);
 
   // Phase 2
   const [codeText, setCodeText] = useState("");
@@ -119,10 +122,44 @@ export function InterviewDrill() {
   const [verifyCode, setVerifyCode] = useState("");
   const [verifyVisible, setVerifyVisible] = useState(false);
 
-  function handleSolve() {
-    if (!problemText.trim()) return;
-    setDetectedPatterns(detectPatterns(problemText));
+  // Local pattern matching renders instantly; the Hermes cloud breakdown fills
+  // in behind it. If /api/hermes is unreachable or unconfigured, the keyword
+  // patterns are the answer — the button must never hard-fail.
+  async function handleSolve() {
+    if (!problemText.trim() || solving) return;
+    const patterns = detectPatterns(problemText);
+    setDetectedPatterns(patterns);
     setSolveVisible(true);
+    setSolving(true);
+    setBreakdown("");
+    setBreakdownSource(null);
+    try {
+      const res = await fetch("/api/hermes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          system:
+            "You are a senior coding-interview coach. Break the problem down for a " +
+            "candidate who must solve it themselves. Respond as terse markdown bullets " +
+            "under these exact headings: Restatement (one line), Patterns (which apply " +
+            "and why), Approach (numbered steps, English only), Complexity target, " +
+            "Edge cases. Do NOT write code or hand over the full solution.",
+          prompt:
+            `${problemText.slice(0, 8_000)}\n\n` +
+            `Keyword-matched patterns (may be wrong): ${patterns.join(", ") || "none"}`,
+          max_tokens: 700,
+        }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const { content } = (await res.json()) as { content?: string };
+      if (!content?.trim()) throw new Error("empty breakdown");
+      setBreakdown(content);
+      setBreakdownSource("ai");
+    } catch {
+      setBreakdownSource("local");
+    } finally {
+      setSolving(false);
+    }
   }
 
   function toggleCheck(i: number) {
@@ -236,12 +273,39 @@ export function InterviewDrill() {
               onClick={handleSolve}
               className="mt-3 flex items-center gap-1.5 px-4 py-2 bg-cyan-600 text-white text-sm font-semibold rounded-none hover:bg-cyan-700 transition-colors"
             >
-              <Play size={14} /> Break it down
+              <Play size={14} /> {solving ? "Breaking it down…" : "Break it down"}
             </button>
           </Card>
 
           {solveVisible && (
             <>
+              <Card>
+                <div className="flex items-center gap-2 mb-2">
+                  <SectionLabel>Hermes Breakdown</SectionLabel>
+                  {breakdownSource && !solving && (
+                    <span
+                      className={`inline-block px-2 py-0.5 rounded-none text-[11px] font-semibold ${
+                        breakdownSource === "ai"
+                          ? "bg-cyan-100 text-cyan-700"
+                          : "bg-amber-100 text-amber-700"
+                      }`}
+                    >
+                      {breakdownSource === "ai" ? "Hermes cloud" : "Offline"}
+                    </span>
+                  )}
+                </div>
+                {solving && <p className="text-sm text-slate-500">Asking Hermes…</p>}
+                {breakdown && (
+                  <div className="text-sm text-slate-700 whitespace-pre-wrap">{breakdown}</div>
+                )}
+                {breakdownSource === "local" && !breakdown && (
+                  <p className="text-sm text-slate-500">
+                    Hermes cloud unavailable — keyword-matched patterns below are your
+                    starting point.
+                  </p>
+                )}
+              </Card>
+
               <Card>
                 <SectionLabel>Pattern Classification</SectionLabel>
                 <p className="text-xs text-slate-500 mb-2">Highlighted patterns match keywords in the problem.</p>

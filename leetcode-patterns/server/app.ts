@@ -11,6 +11,7 @@ import { runPython, Judge0Unavailable, JUDGE0_STATUS } from "./judge0Client.ts";
 import { getOrSetUserId } from "./userId.ts";
 import { preflight, recordSuccess, recordFailure, CircuitOpen } from "./circuit.ts";
 import { reviewWithLLM, ReviewUnavailable } from "./reviewClient.ts";
+import { queryHermesCloud, HermesUnavailable, type HermesMessage } from "./hermesCloudClient.ts";
 import type { CaseReport, RunReport } from "./problemSchema.ts";
 
 const anthropic = new Anthropic();
@@ -29,6 +30,10 @@ const MAX_IMAGE_BYTES = 1.5 * 1024 * 1024; // 1.5 MB base64 (~1 MB raw)
 const REVIEW_RATE_LIMIT = 40;              // max LLM code reviews per IP
 const REVIEW_RATE_WINDOW_MS = 60 * 60 * 1000; // per hour
 const MAX_REVIEW_CODE_BYTES = 24 * 1024;   // 24 KB of pasted code
+
+const HERMES_RATE_LIMIT = 60;                 // max Hermes cloud queries per IP
+const HERMES_RATE_WINDOW_MS = 60 * 60 * 1000; // per hour
+const MAX_HERMES_BODY_BYTES = 32 * 1024;      // total message content per query
 
 const SUBMIT_RATE_LIMIT = 120;           // max submission writes per IP
 const SUBMIT_RATE_WINDOW_MS = 60 * 60 * 1000;
@@ -280,6 +285,75 @@ export function buildApp(store: Storage): Hono {
       return c.json({ review, source: "llm" });
     } catch (e) {
       const detail = e instanceof ReviewUnavailable ? e.message : "review failed";
+      return c.json({ error: detail }, 502);
+    }
+  });
+
+  // Generic Hermes cloud model query (Nous Research inference API). One shared
+  // endpoint so every feature that needs a model answer — Interview Drill
+  // "Break it down" today, textbook explainers later — reuses the same key,
+  // rate limit, and fallback contract. Accepts raw chat messages or a
+  // prompt/system pair. 502 ⇒ the caller falls back to its local heuristic.
+  app.post("/api/hermes", async (c) => {
+    const body = (await c.req.json().catch(() => null)) as {
+      messages?: { role?: string; content?: string }[];
+      prompt?: string;
+      system?: string;
+      model?: string;
+      max_tokens?: number;
+      temperature?: number;
+    } | null;
+
+    const messages: HermesMessage[] = [];
+    const rawMessages = body?.messages;
+    if (Array.isArray(rawMessages)) {
+      for (const m of rawMessages.slice(0, 20)) {
+        if (
+          (m?.role === "system" || m?.role === "user" || m?.role === "assistant") &&
+          typeof m.content === "string"
+        ) {
+          messages.push({ role: m.role, content: m.content });
+        }
+      }
+    } else if (typeof body?.prompt === "string" && body.prompt.trim()) {
+      if (typeof body.system === "string" && body.system.trim()) {
+        messages.push({ role: "system", content: body.system });
+      }
+      messages.push({ role: "user", content: body.prompt });
+    }
+    if (!messages.length) {
+      return c.json({ error: "messages or prompt is required" }, 400);
+    }
+    const totalBytes = messages.reduce((s, m) => s + m.content.length, 0);
+    if (totalBytes > MAX_HERMES_BODY_BYTES) {
+      return c.json({ error: "Request too large — maximum 32 KB of message content." }, 413);
+    }
+
+    const ip =
+      c.req.header("x-nf-client-connection-ip") ??
+      c.req.header("x-forwarded-for")?.split(",")[0].trim() ??
+      "unknown";
+    const bucket = await store.incrementRateLimit(`hermes:${ip}`, HERMES_RATE_WINDOW_MS, Date.now());
+    if (bucket.count > HERMES_RATE_LIMIT) {
+      return c.json({ error: `Rate limit exceeded — max ${HERMES_RATE_LIMIT} queries per hour.` }, 429);
+    }
+
+    try {
+      const reply = await queryHermesCloud({
+        messages,
+        model: typeof body?.model === "string" ? body.model.slice(0, 100) : undefined,
+        maxTokens:
+          typeof body?.max_tokens === "number"
+            ? Math.min(Math.max(1, Math.floor(body.max_tokens)), 2048)
+            : undefined,
+        temperature:
+          typeof body?.temperature === "number"
+            ? Math.min(Math.max(0, body.temperature), 2)
+            : undefined,
+      });
+      return c.json({ content: reply.content, model: reply.model, source: "hermes-cloud" });
+    } catch (e) {
+      const detail = e instanceof HermesUnavailable ? e.message : "hermes query failed";
       return c.json({ error: detail }, 502);
     }
   });
