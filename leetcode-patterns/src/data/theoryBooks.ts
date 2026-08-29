@@ -5,7 +5,7 @@
 export interface TheoryChapter {
   title: string;
   page: number;
-  depth: 0 | 1; // 0 = part/chapter, 1 = section
+  depth: 0 | 1 | 2; // 0 = part/chapter, 1 = section, 2 = subsection
 }
 
 export interface TheoryDoc {
@@ -36,10 +36,34 @@ export const theoryDocs = {
       { title: "2.5 Systems with Generic Operations", page: 195, depth: 1 },
       { title: "3 Modularity, Objects, and State", page: 221, depth: 0 },
       { title: "3.1 Assignment and Local State", page: 222, depth: 1 },
+      { title: "3.1.1 Local State Variables", page: 222, depth: 2 },
+      { title: "3.1.2 The Benefits of Introducing Assignment", page: 229, depth: 2 },
+      { title: "3.1.3 The Costs of Introducing Assignment", page: 232, depth: 2 },
       { title: "3.2 The Environment Model of Evaluation", page: 238, depth: 1 },
+      { title: "3.2.1 The Rules for Evaluation", page: 239, depth: 2 },
+      { title: "3.2.2 Applying Simple Functions", page: 242, depth: 2 },
+      { title: "3.2.3 Frames as the Repository of Local State", page: 245, depth: 2 },
+      { title: "3.2.4 Internal Declarations", page: 250, depth: 2 },
+      { title: "3.2.5 CSE Machine", page: 254, depth: 2 },
       { title: "3.3 Modeling with Mutable Data", page: 254, depth: 1 },
+      { title: "3.3.1 Mutable List Structure", page: 255, depth: 2 },
+      { title: "3.3.2 Representing Queues", page: 263, depth: 2 },
+      { title: "3.3.3 Representing Tables", page: 268, depth: 2 },
+      { title: "3.3.4 A Simulator for Digital Circuits", page: 274, depth: 2 },
+      { title: "3.3.5 Propagation of Constraints", page: 285, depth: 2 },
       { title: "3.4 Concurrency: Time Is of the Essence", page: 295, depth: 1 },
+      { title: "3.4.1 The Nature of Time in Concurrent Systems", page: 297, depth: 2 },
+      { title: "3.4.2 Mechanisms for Controlling Concurrency", page: 301, depth: 2 },
       { title: "3.5 Streams", page: 313, depth: 1 },
+      { title: "3.5.1 Streams Are Delayed Lists", page: 314, depth: 2 },
+      { title: "3.5.2 Infinite Streams", page: 321, depth: 2 },
+      { title: "3.5.3 Exploiting the Stream Paradigm", page: 328, depth: 2 },
+      { title: "3.5.4 Streams and Delayed Evaluation", page: 338, depth: 2 },
+      {
+        title: "3.5.5 Modularity of Functional Programs and Modularity of Objects",
+        page: 344,
+        depth: 2,
+      },
       { title: "4 Metalinguistic Abstraction", page: 349, depth: 0 },
       { title: "4.1 The Metacircular Evaluator", page: 351, depth: 1 },
       { title: "4.2 Lazy Evaluation", page: 392, depth: 1 },
