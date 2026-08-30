@@ -39,6 +39,8 @@ jobs:
         uses: nwtgck/actions-netlify@v3
         with:
           publish-dir: leetcode-patterns/dist
+          functions-dir: leetcode-patterns/netlify/functions
+          netlify-config-path: leetcode-patterns/netlify.toml
           production-deploy: false
           deploy-message: "Deploy Preview from PR #${{ github.event.number }}"
           alias: pr-${{ github.event.number }}
