@@ -268,7 +268,7 @@ function DocReader({
             <option value="">Jump to chapter…</option>
             {doc.chapters.map((ch) => (
               <option key={`${ch.page}-${ch.title}`} value={ch.page}>
-                {ch.depth === 1 ? "\u00A0\u00A0\u00A0" + ch.title : ch.title}
+                {"\u00A0\u00A0\u00A0".repeat(ch.depth) + ch.title}
               </option>
             ))}
           </select>
