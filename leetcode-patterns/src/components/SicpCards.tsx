@@ -25,23 +25,45 @@ function Card({ card }: { card: SicpCard }) {
         </a>
       </div>
 
-      <p className="px-4 pt-2 text-sm text-slate-800">{card.q}</p>
+      {/* The exercise as the book prints it. */}
+      <div className="px-4 pt-2 flex flex-col gap-2">
+        {card.prompt.map((b, i) =>
+          b.kind === "p" ? (
+            <p key={i} className="text-sm text-slate-800">
+              {b.text}
+            </p>
+          ) : (
+            <pre
+              key={i}
+              className="bg-slate-100/90 text-slate-900 rounded-none p-3 text-xs overflow-x-auto font-mono leading-relaxed border border-slate-900/5"
+            >
+              <code>{b.text}</code>
+            </pre>
+          )
+        )}
+        {card.footnote && (
+          <p className="text-xs text-slate-500 italic">{card.footnote}</p>
+        )}
+      </div>
 
       <button
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="mt-2 mb-3 mx-4 px-3 py-1.5 rounded-none border border-slate-900/10 bg-slate-100/90 sm:bg-slate-100/70 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:border-cyan-500/30 hover:text-cyan-700 transition-colors cursor-pointer"
+        className="mt-3 mb-3 mx-4 px-3 py-1.5 rounded-none border border-slate-900/10 bg-slate-100/90 sm:bg-slate-100/70 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:border-cyan-500/30 hover:text-cyan-700 transition-colors cursor-pointer"
       >
-        {open ? "Hide answer" : "Show answer"}
+        {open ? "Hide our notes" : "Show our notes"}
       </button>
 
       {open && (
         <div className="px-4 pb-4 border-t border-slate-900/10 pt-3">
-          <p className="text-sm text-slate-700">{card.a}</p>
+          <p className="text-[10px] uppercase tracking-wide text-slate-500 font-medium mb-2">
+            Our working — SICP publishes no solutions
+          </p>
+          <p className="text-sm text-slate-700">{card.notes}</p>
 
-          {card.code && (
+          {card.notesCode && (
             <pre className="mt-3 bg-slate-100/90 text-slate-900 rounded-none p-3 text-xs overflow-x-auto font-mono leading-relaxed border border-slate-900/5">
-              <code>{card.code}</code>
+              <code>{card.notesCode}</code>
             </pre>
           )}
 
@@ -77,8 +99,8 @@ export function SicpCards() {
       </button>
 
       <p className="mt-1.5 text-xs text-slate-500">
-        Reading notes on exercises from the Theory copy of SICP. Not part of the
-        review schedule — these never count toward due cards.
+        Exercises quoted from the Theory copy of SICP, with a page link into the
+        PDF. Not part of the review schedule — these never count toward due cards.
       </p>
 
       {open && (
