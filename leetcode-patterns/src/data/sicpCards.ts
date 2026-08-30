@@ -5,9 +5,16 @@
 // print comes through as code.
 //
 // SICP ships no official solutions: Source Academy's worked material is
-// instructor-only, and every public set (the Scheme community wiki, the JS
-// solution repos) is reader-written. So what a card carries under the problem
-// is our own working, labelled as such — never presented as the book's answer.
+// instructor-only, so every public set is reader-written. Cards therefore link
+// out rather than carrying an answer of their own.
+//
+// The links point at mk12.github.io/sicp, which is the one set that is live,
+// covers chapter 3, and deep-links per exercise. It solves the *Scheme*
+// original, so the reasoning carries over but the code does not — worth saying
+// on the card, since our copy is the JavaScript edition. The community Scheme
+// wiki that these solutions are often credited to has been offline since 2018
+// (it answers every URL with a maintenance notice), and the JavaScript solution
+// repos on GitHub stop before chapter 3.
 
 export type SicpBlock =
   | { kind: "p"; text: string }
@@ -24,11 +31,15 @@ export interface SicpCard {
   prompt: SicpBlock[];
   /** The book's footnote on the exercise, where it has one. */
   footnote?: string;
-  /** Our working — not the book's, which does not exist. */
-  notes: string;
-  /** The one line worth remembering a week later. */
-  key: string;
-  notesCode?: string;
+  /** Reader-written solutions. SICP publishes none of its own. */
+  solutions: SicpSolutionLink[];
+}
+
+export interface SicpSolutionLink {
+  label: string;
+  url: string;
+  /** How this source differs from our copy, where it does. */
+  caveat?: string;
 }
 
 export const sicpCards: SicpCard[] = [
@@ -71,14 +82,14 @@ const W2 = make_withdraw(100);`,
         text: "Show that the two versions of make_withdraw create objects with the same behavior. How do the environment structures differ for the two versions?",
       },
     ],
-    notes:
-      "Both behave identically: each gives the returned function exactly one binding of balance on its environment chain, created fresh per call and kept alive because the returned function points at its frame. The extra frame in the lambda version binds a different name, initial_amount, and is never assigned to, so it cannot intercept a lookup. The structures differ in depth — one frame per withdrawal processor becomes two — and in what is retained: the lambda version keeps the opening amount for the life of the object, while the parameter version overwrites its only record of it on the first withdrawal.",
-    key: "The extra frame sits above balance, not around it — so balance is still one hop out, and only names in the program environment cost more.",
-    notesCode: `A:  make_withdraw(balance)
-      → E1{balance} → program
-
-B:  make_withdraw(initial_amount)
-      → E2{balance} → E1{initial_amount} → program`,
+    solutions: [
+      {
+        label: "mk12.github.io/sicp — exercise 3.10",
+        url: "https://mk12.github.io/sicp/exercise/3/2.html#ex3.10",
+        caveat:
+          "Scheme, where the original writes let rather than an immediately invoked lambda — the book notes the two are the same thing, so the environment argument carries over unchanged.",
+      },
+    ],
   },
   {
     id: "sicp-3-23",
@@ -93,24 +104,14 @@ B:  make_withdraw(initial_amount)
     ],
     footnote:
       "Be careful not to make the interpreter try to print a structure that contains cycles. (See exercise 3.13.)",
-    notes:
-      "Of the four mutators, the section's queue can already do three in constant time. The one it cannot is rear_delete_deque: it needs the rear's predecessor, and a singly linked list has to walk the whole chain to find it. Give every node a backward link as well as a forward one and that walk becomes a single hop, which puts all eight operations in Θ(1). The deque itself stays what it was — a pair of pointers at the two ends.",
-    key: "node = pair(item, pair(prev, next)). The back-pointer is the entire exercise; everything else is the queue you already had.",
-    notesCode: `function make_node(item) {
-    return pair(item, pair(null, null));
-}
-
-function rear_delete_deque(dq) {
-    const prv = node_prev(rear_ptr(dq));  // one link, no walk
-    if (is_null(prv)) {
-        set_front_ptr(dq, null);
-        set_rear_ptr(dq, null);
-    } else {
-        set_node_next(prv, null);
-        set_rear_ptr(dq, prv);
-    }
-    return dq;
-}`,
+    solutions: [
+      {
+        label: "mk12.github.io/sicp — exercise 3.23",
+        url: "https://mk12.github.io/sicp/exercise/3/3.html#ex3.23",
+        caveat:
+          "Scheme, so the pair operations are set-car!/set-cdr! rather than set_head/set_tail; the doubly linked representation is the same.",
+      },
+    ],
   },
 ];
 

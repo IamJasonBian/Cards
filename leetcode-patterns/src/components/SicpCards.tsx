@@ -51,25 +51,32 @@ function Card({ card }: { card: SicpCard }) {
         aria-expanded={open}
         className="mt-3 mb-3 mx-4 px-3 py-1.5 rounded-none border border-slate-900/10 bg-slate-100/90 sm:bg-slate-100/70 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:border-cyan-500/30 hover:text-cyan-700 transition-colors cursor-pointer"
       >
-        {open ? "Hide our notes" : "Show our notes"}
+        {open ? "Hide solutions" : "Show solutions"}
       </button>
 
       {open && (
         <div className="px-4 pb-4 border-t border-slate-900/10 pt-3">
           <p className="text-[10px] uppercase tracking-wide text-slate-500 font-medium mb-2">
-            Our working — SICP publishes no solutions
+            Reader-written — SICP publishes no solutions
           </p>
-          <p className="text-sm text-slate-700">{card.notes}</p>
-
-          {card.notesCode && (
-            <pre className="mt-3 bg-slate-100/90 text-slate-900 rounded-none p-3 text-xs overflow-x-auto font-mono leading-relaxed border border-slate-900/5">
-              <code>{card.notesCode}</code>
-            </pre>
-          )}
-
-          <p className="mt-3 text-xs text-violet-800 border-l-2 border-violet-300 pl-3">
-            {card.key}
-          </p>
+          <ul className="flex flex-col gap-2">
+            {card.solutions.map((sol) => (
+              <li key={sol.url}>
+                <a
+                  href={sol.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-sm text-cyan-700 hover:underline"
+                >
+                  {sol.label}
+                  <ExternalLink size={11} className="opacity-60" />
+                </a>
+                {sol.caveat && (
+                  <p className="text-xs text-slate-500 mt-0.5">{sol.caveat}</p>
+                )}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>
