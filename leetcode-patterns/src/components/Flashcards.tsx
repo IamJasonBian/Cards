@@ -9,6 +9,7 @@ import {
   type VizKind,
 } from "../data/flashcards";
 import { AlgoViz } from "./algo-viz";
+import { SicpCards } from "./SicpCards";
 import { apiUrl } from "../lib/api";
 
 type VizOpen = { kind: "path"; value: string } | { kind: "algo"; value: VizKind } | null;
@@ -402,6 +403,8 @@ export function Flashcards() {
           </button>
         </div>
       )}
+
+      <SicpCards />
 
       {/* Viz modal */}
       {vizOpen && (
