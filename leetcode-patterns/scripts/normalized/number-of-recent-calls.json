@@ -1,0 +1,81 @@
+{
+  "slug": "number-of-recent-calls",
+  "number": 933,
+  "title": "Number of Recent Calls",
+  "difficulty": "Easy",
+  "category": "Design",
+  "url": "https://leetcode.com/problems/number-of-recent-calls/",
+  "statement": "You have a request counter that records new requests (pings) and counts how many requests arrived in the past 3000 milliseconds. Each ping happens at a strictly increasing time t in milliseconds, and after recording it you report the number of pings that occurred in the inclusive range [t - 3000, t]. Adapted for this judge: instead of the stateful RecentCounter class, implement one batch call. Given the list of ping times in chronological order, return the list of counts, one per ping.",
+  "constraints": [
+    "0 <= len(pings) <= 10^4",
+    "1 <= pings[i] <= 10^9",
+    "pings is strictly increasing",
+    "The count for ping t includes every ping in [t - 3000, t], the ping itself included"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "countRecentCalls",
+    "params": [
+      {
+        "name": "pings",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "list[int]"
+  },
+  "starterCode": "class Solution:\n    def countRecentCalls(self, pings: list[int]) -> list[int]:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "pings": [
+          1,
+          100,
+          3001,
+          3002
+        ]
+      },
+      "output": [
+        1,
+        2,
+        3,
+        3
+      ],
+      "explanation": "At t=3001 the window is [1, 3001] and holds all three pings. At t=3002 the window is [2, 3002], so the ping at t=1 drops out and the ping at 3002 joins: still 3."
+    },
+    {
+      "input": {
+        "pings": [
+          1,
+          3001,
+          3002
+        ]
+      },
+      "output": [
+        1,
+        2,
+        2
+      ],
+      "explanation": "A gap of exactly 3000 keeps the older ping inside the window; a gap of 3001 pushes it out."
+    },
+    {
+      "input": {
+        "pings": [
+          10,
+          5000,
+          10000
+        ]
+      },
+      "output": [
+        1,
+        1,
+        1
+      ],
+      "explanation": "Every ping is more than 3000 ms after the previous one, so each window holds only itself."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": null,
+  "referenceCode": "class Solution:\n    def countRecentCalls(self, pings: list[int]) -> list[int]:\n        from collections import deque\n\n        window: deque[int] = deque()\n        out: list[int] = []\n        for t in pings:\n            window.append(t)\n            while window[0] < t - 3000:\n                window.popleft()\n            out.append(len(window))\n        return out"
+}

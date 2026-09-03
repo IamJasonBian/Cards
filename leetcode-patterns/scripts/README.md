@@ -52,3 +52,35 @@ subprocess) against the produced examples/inputs and discards anything that
 errors, times out, or disagrees with the reference. Bad generations are dropped,
 not shipped. If too many cases are rejected a problem is reported as failed
 rather than written.
+
+## Hand-authored sets: `gen-logger-cases.py`
+
+```bash
+python3 scripts/gen-logger-cases.py     # no API key, no network
+```
+
+The LLM pipeline only handles pure-function problems. LeetCode *design*
+problems — where you implement a stateful class driven by a call sequence —
+are marked `jsonFriendly: false` by `normalize-references.ts` and skipped,
+because the judge calls `Solution().method(**input)` exactly once per case.
+
+`gen-logger-cases.py` ships the logger / log-stream family anyway by adapting
+each one to a single batch call that replays the whole call stream:
+
+| Problem | Adapted signature |
+| --- | --- |
+| #359 Logger Rate Limiter | `shouldPrintMessages(timestamps, messages) -> list[bool]` |
+| #362 Design Hit Counter | `countHits(ops, timestamps) -> list[int]` |
+| #635 Design Log Storage System | `retrieveLogs(ids, timestamps, queries) -> list[list[int]]` |
+| #933 Number of Recent Calls | `countRecentCalls(pings) -> list[int]` |
+
+Hidden cases are hand-picked boundary cases (window edges at exactly 10 / 300 /
+3000, same-timestamp repeats, empty streams, granularity truncation) plus
+seeded-random streams, so the script is deterministic — rerunning it produces
+byte-identical files. Every case's expected output comes from executing the
+reference solution in-process, and the script refuses to write a problem whose
+reference disagrees with its own documented examples. It writes the same four
+outputs the TS pipeline does and merges its entries into the manifest.
+
+To extend the set, add an entry to `PROBLEMS` (reference solution, statement,
+visible examples, case generator) and rerun.

@@ -1415,6 +1415,9 @@ def get_ready_tasks_sorted_by_priority(self):
     tag: "OOD",
     problems: [
       { name: "Logger Rate Limiter", slug: "logger-rate-limiter", difficulty: "Easy" },
+      { name: "Number of Recent Calls", slug: "number-of-recent-calls", difficulty: "Easy" },
+      { name: "Design Hit Counter", slug: "design-hit-counter", difficulty: "Medium" },
+      { name: "Design Log Storage System", slug: "design-log-storage-system", difficulty: "Medium" },
       { name: "Design HashMap", slug: "design-hashmap", difficulty: "Easy" },
       { name: "Design Browser History", slug: "design-browser-history", difficulty: "Medium" },
     ],

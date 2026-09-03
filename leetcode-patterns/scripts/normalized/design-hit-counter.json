@@ -1,0 +1,105 @@
+{
+  "slug": "design-hit-counter",
+  "number": 362,
+  "title": "Design Hit Counter",
+  "difficulty": "Medium",
+  "category": "Design",
+  "url": "https://leetcode.com/problems/design-hit-counter/",
+  "statement": "Design a hit counter that counts the number of hits received in the past 5 minutes (300 seconds). Each call carries a timestamp in seconds, and calls arrive in chronological order (timestamps are non-decreasing). Several hits may share the same timestamp. A hit at time h counts for a query at time t when t - h < 300. Adapted for this judge: instead of the stateful HitCounter class, implement one batch call. ops[i] is either \"hit\" (record a hit at timestamps[i]) or \"getHits\" (query the count at timestamps[i]). Return the list of results for the \"getHits\" calls, in order.",
+  "constraints": [
+    "0 <= len(ops) == len(timestamps) <= 500",
+    "ops[i] is either \"hit\" or \"getHits\"",
+    "1 <= timestamps[i] <= 10^9, and timestamps is non-decreasing",
+    "A hit at time h is counted by a query at time t if and only if t - h < 300",
+    "The returned list contains one entry per \"getHits\" op (it is empty when there are none)"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "countHits",
+    "params": [
+      {
+        "name": "ops",
+        "pyType": "list[str]",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "timestamps",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "list[int]"
+  },
+  "starterCode": "class Solution:\n    def countHits(self, ops: list[str], timestamps: list[int]) -> list[int]:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "ops": [
+          "hit",
+          "hit",
+          "hit",
+          "getHits",
+          "hit",
+          "getHits",
+          "getHits"
+        ],
+        "timestamps": [
+          1,
+          2,
+          3,
+          4,
+          300,
+          300,
+          301
+        ]
+      },
+      "output": [
+        3,
+        4,
+        3
+      ],
+      "explanation": "At t=4 the three hits at 1, 2, 3 are all within 300 seconds. At t=300 the new hit makes four. At t=301 the hit from t=1 has expired (301 - 1 = 300), leaving three."
+    },
+    {
+      "input": {
+        "ops": [
+          "getHits",
+          "hit",
+          "getHits"
+        ],
+        "timestamps": [
+          1,
+          2,
+          2
+        ]
+      },
+      "output": [
+        0,
+        1
+      ],
+      "explanation": "The first query happens before any hit; the second sees the hit recorded in the same second."
+    },
+    {
+      "input": {
+        "ops": [
+          "hit",
+          "hit",
+          "getHits"
+        ],
+        "timestamps": [
+          5,
+          5,
+          400
+        ]
+      },
+      "output": [
+        0
+      ],
+      "explanation": "Both hits are older than 300 seconds by the time of the query (400 - 5 = 395), so the window is empty."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": null,
+  "referenceCode": "class Solution:\n    def countHits(self, ops: list[str], timestamps: list[int]) -> list[int]:\n        from collections import deque\n\n        window: deque[int] = deque()\n        out: list[int] = []\n        for op, t in zip(ops, timestamps):\n            while window and window[0] <= t - 300:\n                window.popleft()\n            if op == \"hit\":\n                window.append(t)\n            else:\n                out.append(len(window))\n        return out"
+}
