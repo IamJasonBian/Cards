@@ -1,0 +1,109 @@
+{
+  "slug": "logger-rate-limiter",
+  "number": 359,
+  "title": "Logger Rate Limiter",
+  "difficulty": "Easy",
+  "category": "Design",
+  "url": "https://leetcode.com/problems/logger-rate-limiter/",
+  "statement": "Design a logger that receives a stream of messages along with their timestamps (in seconds, non-decreasing) and decides whether each message should be printed. A message is printed only if it has not been printed in the previous 10 seconds, meaning it prints when it has never been seen before or when at least 10 seconds have passed since the last time that exact message was printed. A message that is rejected does NOT refresh the 10-second window. Adapted for this judge: instead of the stateful Logger class, implement one batch call. Given timestamps[i] and messages[i] for the i-th call, return a list where the i-th entry is true if messages[i] is printed and false if it is rate limited.",
+  "constraints": [
+    "0 <= len(timestamps) == len(messages) <= 500",
+    "0 <= timestamps[i] <= 10^9",
+    "timestamps is non-decreasing (calls arrive in chronological order)",
+    "0 <= len(messages[i]) <= 20; messages repeat, and they are compared case-sensitively as exact strings",
+    "The window is inclusive at 10: a message reprints when timestamp - last_printed >= 10"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "shouldPrintMessages",
+    "params": [
+      {
+        "name": "timestamps",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "messages",
+        "pyType": "list[str]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "list[bool]"
+  },
+  "starterCode": "class Solution:\n    def shouldPrintMessages(self, timestamps: list[int], messages: list[str]) -> list[bool]:\n        # write your solution here\n        pass\n",
+  "equality": "exact",
+  "visibleExamples": [
+    {
+      "input": {
+        "timestamps": [
+          1,
+          2,
+          3,
+          8,
+          10,
+          11
+        ],
+        "messages": [
+          "foo",
+          "bar",
+          "foo",
+          "bar",
+          "foo",
+          "foo"
+        ]
+      },
+      "output": [
+        true,
+        true,
+        false,
+        false,
+        false,
+        true
+      ],
+      "explanation": "foo prints at t=1; at t=3 and t=10 it is still inside the 10-second window (3-1 < 10, 10-1 < 10), and at t=11 it prints again because 11-1 >= 10. bar prints at t=2 and is blocked at t=8."
+    },
+    {
+      "input": {
+        "timestamps": [
+          1,
+          11,
+          21
+        ],
+        "messages": [
+          "a",
+          "a",
+          "a"
+        ]
+      },
+      "output": [
+        true,
+        true,
+        true
+      ],
+      "explanation": "Each call is exactly 10 seconds after the last printed one, so every call prints."
+    },
+    {
+      "input": {
+        "timestamps": [
+          0,
+          0,
+          0
+        ],
+        "messages": [
+          "x",
+          "y",
+          "x"
+        ]
+      },
+      "output": [
+        true,
+        true,
+        false
+      ],
+      "explanation": "Different messages have independent windows; the repeat of x at the same second is blocked."
+    }
+  ],
+  "jsonFriendly": true,
+  "jsonFriendlyReason": null,
+  "referenceCode": "class Solution:\n    def shouldPrintMessages(self, timestamps: list[int], messages: list[str]) -> list[bool]:\n        last_printed: dict[str, int] = {}\n        out: list[bool] = []\n        for t, msg in zip(timestamps, messages):\n            prev = last_printed.get(msg)\n            if prev is None or t - prev >= 10:\n                last_printed[msg] = t\n                out.append(True)\n            else:\n                out.append(False)\n        return out"
+}

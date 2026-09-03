@@ -325,6 +325,20 @@
       "category": "Heap"
     },
     {
+      "slug": "logger-rate-limiter",
+      "title": "Logger Rate Limiter",
+      "number": 359,
+      "difficulty": "Easy",
+      "category": "Design"
+    },
+    {
+      "slug": "design-hit-counter",
+      "title": "Design Hit Counter",
+      "number": 362,
+      "difficulty": "Medium",
+      "category": "Design"
+    },
+    {
       "slug": "sum-of-two-integers",
       "title": "Sum of Two Integers",
       "number": 371,
@@ -360,11 +374,25 @@
       "category": "Interval"
     },
     {
+      "slug": "design-log-storage-system",
+      "title": "Design Log Storage System",
+      "number": 635,
+      "difficulty": "Medium",
+      "category": "Design"
+    },
+    {
       "slug": "palindromic-substrings",
       "title": "Palindromic Substrings",
       "number": 647,
       "difficulty": "Medium",
       "category": "String"
+    },
+    {
+      "slug": "number-of-recent-calls",
+      "title": "Number of Recent Calls",
+      "number": 933,
+      "difficulty": "Easy",
+      "category": "Design"
     },
     {
       "slug": "longest-common-subsequence",

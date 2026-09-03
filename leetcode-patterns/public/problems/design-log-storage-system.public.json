@@ -1,0 +1,127 @@
+{
+  "slug": "design-log-storage-system",
+  "title": "Design Log Storage System",
+  "number": 635,
+  "difficulty": "Medium",
+  "category": "Design",
+  "url": "https://leetcode.com/problems/design-log-storage-system/",
+  "statement": "You are given several logs, each with a unique id and a timestamp of the form Year:Month:Day:Hour:Minute:Second, for example \"2017:01:01:23:59:59\" (all fields are zero-padded and every timestamp has the same length). Answer range queries of the form [start, end, granularity]: return the ids of every log whose timestamp lies between start and end inclusive, comparing only the fields down to the given granularity and ignoring the finer ones. granularity is one of \"Year\", \"Month\", \"Day\", \"Hour\", \"Minute\", \"Second\". Adapted for this judge: instead of the stateful LogSystem class, implement one batch call. ids[i] and timestamps[i] describe the i-th stored log. Return one list per query, each holding the matching ids in ascending order.",
+  "constraints": [
+    "0 <= len(ids) == len(timestamps) <= 300",
+    "1 <= ids[i] <= 10^4 and the ids are distinct",
+    "timestamps[i] matches \"YYYY:MM:DD:HH:MM:SS\" with 2000 <= YYYY <= 2020 style zero-padded fields",
+    "0 <= len(queries) <= 20; each query is [start, end, granularity] with timestamps in the same format",
+    "granularity is one of \"Year\", \"Month\", \"Day\", \"Hour\", \"Minute\", \"Second\"",
+    "Each result list must be sorted in ascending id order; an empty match is an empty list"
+  ],
+  "signature": {
+    "className": "Solution",
+    "methodName": "retrieveLogs",
+    "params": [
+      {
+        "name": "ids",
+        "pyType": "list[int]",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "timestamps",
+        "pyType": "list[str]",
+        "inputKind": "primitive"
+      },
+      {
+        "name": "queries",
+        "pyType": "list[list[str]]",
+        "inputKind": "primitive"
+      }
+    ],
+    "returns": "list[list[int]]"
+  },
+  "starterCode": "class Solution:\n    def retrieveLogs(\n        self, ids: list[int], timestamps: list[str], queries: list[list[str]]\n    ) -> list[list[int]]:\n        # write your solution here\n        pass\n",
+  "visibleExamples": [
+    {
+      "input": {
+        "ids": [
+          1,
+          2,
+          3
+        ],
+        "timestamps": [
+          "2017:01:01:23:59:59",
+          "2017:01:01:22:59:59",
+          "2016:01:01:00:00:00"
+        ],
+        "queries": [
+          [
+            "2016:01:01:01:01:01",
+            "2017:01:01:23:00:00",
+            "Year"
+          ],
+          [
+            "2016:01:01:01:01:01",
+            "2017:01:01:23:00:00",
+            "Hour"
+          ]
+        ]
+      },
+      "output": [
+        [
+          1,
+          2,
+          3
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "explanation": "At Year granularity the range is 2016..2017, so all three logs match. At Hour granularity the range is 2016:01:01:01 .. 2017:01:01:23: log 1 truncates to 2017:01:01:23 (equal to the end, so inside) and log 2 to 2017:01:01:22, while log 3 truncates to 2016:01:01:00, one hour before the start, so it drops out."
+    },
+    {
+      "input": {
+        "ids": [
+          7,
+          4
+        ],
+        "timestamps": [
+          "2020:02:29:12:00:00",
+          "2020:02:29:12:00:01"
+        ],
+        "queries": [
+          [
+            "2020:02:29:12:00:00",
+            "2020:02:29:12:00:00",
+            "Second"
+          ]
+        ]
+      },
+      "output": [
+        [
+          7
+        ]
+      ],
+      "explanation": "At Second granularity only the log with the exact timestamp matches."
+    },
+    {
+      "input": {
+        "ids": [
+          5
+        ],
+        "timestamps": [
+          "2019:07:04:10:20:30"
+        ],
+        "queries": [
+          [
+            "2018:01:01:00:00:00",
+            "2018:12:31:23:59:59",
+            "Year"
+          ]
+        ]
+      },
+      "output": [
+        []
+      ],
+      "explanation": "The only log is from 2019, outside the 2018 range, so the query returns an empty list."
+    }
+  ],
+  "hiddenCount": 24
+}
