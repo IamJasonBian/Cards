@@ -190,30 +190,30 @@ function App() {
 
       {view !== "home" && (
       <nav className="bg-white/85 backdrop-blur-2xl border-b border-slate-900/10 sticky top-0 z-10">
-        <div className="grid grid-cols-2 sm:grid-cols-5 border-l border-t border-slate-900/10">
+        <div className="flex flex-wrap items-center justify-center gap-1 px-3 py-2">
             <button
               onClick={() => { setView("home"); clearSelection(); }}
-              className="flex items-center justify-center gap-1.5 border-r border-b border-slate-900/10 px-3 py-3 text-sm font-medium bg-white/50 text-slate-700 hover:bg-white/80 cursor-pointer transition-colors"
+              className="flex items-center justify-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-900/10 cursor-pointer transition-colors"
             >
               <Code size={16} className="text-cyan-700" />
               Home
             </button>
             <button
               onClick={() => { setView("patterns"); clearSelection(); }}
-              className={`flex items-center justify-center gap-1.5 border-r border-b border-slate-900/10 px-3 py-3 text-sm font-medium transition-colors cursor-pointer ${
+              className={`flex items-center justify-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
                 view === "patterns"
                   ? "bg-cyan-100 text-cyan-700"
-                  : "bg-white/50 text-slate-700 hover:bg-white/80"
+                  : "text-slate-700 hover:bg-slate-900/10"
               }`}
             >
               Patterns
             </button>
             <button
               onClick={() => { setView("speed-apps"); clearSelection(); }}
-              className={`flex items-center justify-center gap-1.5 border-r border-b border-slate-900/10 px-3 py-3 text-sm font-medium transition-colors cursor-pointer ${
+              className={`flex items-center justify-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
                 view === "speed-apps"
                   ? "bg-cyan-100 text-cyan-700"
-                  : "bg-white/50 text-slate-700 hover:bg-white/80"
+                  : "text-slate-700 hover:bg-slate-900/10"
               }`}
             >
               <Zap size={14} />
@@ -221,25 +221,25 @@ function App() {
             </button>
             <button
               onClick={() => { setView("popular-lists"); clearSelection(); }}
-              className={`flex items-center justify-center gap-1.5 border-r border-b border-slate-900/10 px-3 py-3 text-sm font-medium transition-colors cursor-pointer ${
+              className={`flex items-center justify-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
                 view === "popular-lists"
                   ? "bg-cyan-100 text-cyan-700"
-                  : "bg-white/50 text-slate-700 hover:bg-white/80"
+                  : "text-slate-700 hover:bg-slate-900/10"
               }`}
             >
               <BookOpen size={14} />
               Popular Lists
             </button>
 
-            <div className="relative border-r border-b border-slate-900/10" ref={experimentalRef}>
+            <div className="relative" ref={experimentalRef}>
               <button
                 onClick={() => setExperimentalOpen((o) => !o)}
                 aria-haspopup="menu"
                 aria-expanded={experimentalOpen}
-                className={`flex w-full h-full items-center justify-center gap-1.5 px-3 py-3 text-sm font-medium transition-colors cursor-pointer ${
+                className={`flex items-center justify-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
                   isExperimental(view)
                     ? "bg-amber-50 text-amber-700"
-                    : "bg-white/50 text-slate-700 hover:bg-white/80"
+                    : "text-slate-700 hover:bg-slate-900/10"
                 }`}
               >
                 <FlaskConical size={14} />
@@ -249,12 +249,12 @@ function App() {
               {experimentalOpen && (
                 <div
                   role="menu"
-                  className="absolute right-0 top-full mt-1 w-48 rounded-none bg-white/95 backdrop-blur-2xl border border-slate-900/10 shadow-lg py-1 z-20"
+                  className="absolute right-0 top-full mt-2 w-48 rounded-xl bg-white/95 backdrop-blur-2xl border border-slate-900/10 shadow-lg p-1 z-20"
                 >
                   <button
                     role="menuitem"
                     onClick={() => { setView("submit"); clearSelection(); setExperimentalOpen(false); }}
-                    className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
+                    className={`w-full flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm cursor-pointer transition-colors ${
                       view === "submit" ? "bg-cyan-50 text-cyan-700" : "text-slate-700 hover:bg-slate-900/5"
                     }`}
                   >
@@ -264,7 +264,7 @@ function App() {
                   <button
                     role="menuitem"
                     onClick={() => { setView("flashcards"); clearSelection(); setExperimentalOpen(false); }}
-                    className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
+                    className={`w-full flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm cursor-pointer transition-colors ${
                       view === "flashcards" ? "bg-cyan-50 text-cyan-700" : "text-slate-700 hover:bg-slate-900/5"
                     }`}
                   >
@@ -274,7 +274,7 @@ function App() {
                   <button
                     role="menuitem"
                     onClick={() => { setView("interview-drill"); clearSelection(); setExperimentalOpen(false); }}
-                    className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
+                    className={`w-full flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm cursor-pointer transition-colors ${
                       view === "interview-drill" ? "bg-cyan-50 text-cyan-700" : "text-slate-700 hover:bg-slate-900/5"
                     }`}
                   >
@@ -284,7 +284,7 @@ function App() {
                   <button
                     role="menuitem"
                     onClick={() => { setView("theory"); clearSelection(); setExperimentalOpen(false); }}
-                    className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer ${
+                    className={`w-full flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm cursor-pointer transition-colors ${
                       view === "theory" ? "bg-cyan-50 text-cyan-700" : "text-slate-700 hover:bg-slate-900/5"
                     }`}
                   >
@@ -346,7 +346,7 @@ function App() {
                 <div className="flex gap-1.5 flex-wrap">
                   <button
                     onClick={() => setActiveTag(null)}
-                    className={`px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
                       activeTag === null
                         ? "bg-cyan-100 text-cyan-700"
                         : "bg-slate-900/5 text-slate-700 hover:bg-slate-900/10"
@@ -360,7 +360,7 @@ function App() {
                       onClick={() =>
                         setActiveTag(activeTag === tag ? null : tag)
                       }
-                      className={`px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
                         activeTag === tag
                           ? "bg-cyan-100 text-cyan-700"
                           : "bg-slate-900/5 text-slate-700 hover:bg-slate-900/10"

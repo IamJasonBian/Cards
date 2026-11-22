@@ -233,7 +233,7 @@ export function WordHunt() {
       ) : (
         <>
           {/* Grid */}
-          <div className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none border border-slate-900/10 shadow-sm p-6 mb-4">
+          <div className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-2xl border border-slate-900/10 shadow-sm p-6 mb-4">
             <div className="grid grid-cols-4 gap-2 max-w-[264px] mx-auto mb-5">
               {letters.map((letter, i) => (
                 <input
@@ -245,7 +245,7 @@ export function WordHunt() {
                   value={letter.toUpperCase()}
                   onChange={(e) => handleInput(i, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(i, e)}
-                  className="w-14 h-14 text-2xl font-bold text-center rounded-none border-2 border-slate-900/15 text-slate-900 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/40 transition-colors bg-slate-100/90 uppercase"
+                  className="w-14 h-14 text-2xl font-bold text-center rounded-xl border-2 border-slate-900/15 text-slate-900 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/40 transition-colors bg-slate-100/90 uppercase"
                 />
               ))}
             </div>
@@ -254,14 +254,14 @@ export function WordHunt() {
               <button
                 onClick={handleSolve}
                 disabled={!letters.every((l) => l !== "")}
-                className="flex items-center gap-2 px-5 py-2.5 bg-cyan-600 text-white rounded-none font-medium hover:bg-cyan-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="flex items-center gap-2 px-5 py-2.5 bg-cyan-600 text-white rounded-full font-medium hover:bg-cyan-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 <Search size={16} />
                 Solve
               </button>
               <button
                 onClick={handleClear}
-                className="flex items-center gap-2 px-5 py-2.5 bg-slate-100/90 sm:bg-slate-100/70 text-slate-700 rounded-none font-medium hover:bg-slate-900/5 transition-colors cursor-pointer"
+                className="flex items-center gap-2 px-5 py-2.5 bg-slate-100/90 sm:bg-slate-100/70 text-slate-700 rounded-full font-medium hover:bg-slate-900/5 transition-colors cursor-pointer"
               >
                 <RotateCcw size={16} />
                 Clear
@@ -273,7 +273,7 @@ export function WordHunt() {
           {tries.length > 0 && (() => {
             const best = tries.reduce((a, b) => a.totalPoints > b.totalPoints ? a : b);
             return (
-              <div className="bg-amber-50 border border-amber-200 rounded-none px-5 py-4 mb-4 flex items-center justify-between">
+              <div className="bg-amber-50 border border-amber-200 rounded-2xl px-5 py-4 mb-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Trophy size={22} className="text-amber-700" />
                   <div>
@@ -297,10 +297,10 @@ export function WordHunt() {
                 <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide">
                   Results — {tries.length} {tries.length === 1 ? "try" : "tries"}
                 </h3>
-                <div className="flex gap-1 bg-slate-100/90 sm:bg-slate-100/70 rounded-none p-0.5">
+                <div className="flex gap-1 bg-slate-100/90 sm:bg-slate-100/70 rounded-lg p-0.5">
                   <button
                     onClick={() => setGroupMode("score")}
-                    className={`px-3 py-1 rounded-none text-xs font-medium transition-colors cursor-pointer ${
+                    className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                       groupMode === "score"
                         ? "bg-white/85 sm:bg-white/65 text-slate-900 shadow-sm"
                         : "text-slate-500 hover:text-slate-700"
@@ -310,7 +310,7 @@ export function WordHunt() {
                   </button>
                   <button
                     onClick={() => setGroupMode("trie")}
-                    className={`px-3 py-1 rounded-none text-xs font-medium transition-colors cursor-pointer ${
+                    className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                       groupMode === "trie"
                         ? "bg-white/85 sm:bg-white/65 text-slate-900 shadow-sm"
                         : "text-slate-500 hover:text-slate-700"
@@ -327,7 +327,7 @@ export function WordHunt() {
                 return (
                   <div
                     key={t.id}
-                    className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none border border-slate-900/10 shadow-sm overflow-hidden"
+                    className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-2xl border border-slate-900/10 shadow-sm overflow-hidden"
                   >
                     {/* Try header */}
                     <button
@@ -372,7 +372,7 @@ export function WordHunt() {
                                   {words.map((w) => (
                                     <span
                                       key={w}
-                                      className="px-2.5 py-1 bg-cyan-50 text-cyan-600 rounded-none text-sm font-medium"
+                                      className="px-2.5 py-1 bg-cyan-50 text-cyan-600 rounded-full text-sm font-medium"
                                     >
                                       {w}
                                     </span>
@@ -394,7 +394,7 @@ export function WordHunt() {
                                   {words.map((w) => (
                                     <span
                                       key={w}
-                                      className="px-2.5 py-1 bg-cyan-50 text-cyan-600 rounded-none text-sm font-medium"
+                                      className="px-2.5 py-1 bg-cyan-50 text-cyan-600 rounded-full text-sm font-medium"
                                     >
                                       <span className="font-bold">{prefix}</span>
                                       {w.slice(prefix.length)}

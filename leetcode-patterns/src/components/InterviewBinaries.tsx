@@ -34,7 +34,7 @@ export function InterviewBinaries() {
             {coderpadProblems.map((problem, idx) => (
               <div
                 key={idx}
-                className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl border border-slate-900/10 rounded-none p-6 hover:shadow-md transition-shadow"
+                className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl border border-slate-900/10 rounded-2xl p-6 hover:shadow-md transition-shadow"
               >
                 <div className="flex items-start justify-between mb-3">
                   <h3 className="text-lg font-semibold text-slate-900">
@@ -57,7 +57,7 @@ export function InterviewBinaries() {
                   {problem.topics.map((topic) => (
                     <span
                       key={topic}
-                      className="px-2.5 py-1 bg-cyan-100 text-cyan-700 rounded-none text-xs font-medium"
+                      className="px-2.5 py-1 bg-cyan-100 text-cyan-700 rounded-full text-xs font-medium"
                     >
                       {topic}
                     </span>
@@ -74,7 +74,7 @@ export function InterviewBinaries() {
                         key={partIdx}
                         className="text-sm text-slate-700 flex items-center gap-2"
                       >
-                        <span className="w-5 h-5 rounded-none bg-slate-100/90 sm:bg-slate-100/70 text-slate-700 flex items-center justify-center text-xs font-medium">
+                        <span className="w-5 h-5 rounded-full bg-slate-100/90 sm:bg-slate-100/70 text-slate-700 flex items-center justify-center text-xs font-medium">
                           {partIdx + 1}
                         </span>
                         {part}
@@ -87,7 +87,7 @@ export function InterviewBinaries() {
           </div>
         </section>
 
-        <section className="bg-cyan-50 border border-cyan-500/30 rounded-none p-6">
+        <section className="bg-cyan-50 border border-cyan-500/30 rounded-2xl p-6">
           <h3 className="text-lg font-semibold text-slate-900 mb-2 flex items-center gap-2">
             <Calendar size={18} className="text-cyan-600" />
             How to Use

@@ -51,7 +51,7 @@ export function PopularLists() {
               setActiveId(list.id);
               setDifficultyFilter(null);
             }}
-            className={`px-4 py-2 rounded-none text-sm font-medium transition-colors cursor-pointer border ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer border ${
               activeId === list.id
                 ? "bg-cyan-600 text-white border-cyan-500"
                 : "bg-white/85 sm:bg-white/65 backdrop-blur-2xl text-slate-700 border-slate-900/10 hover:bg-slate-900/5"
@@ -69,7 +69,7 @@ export function PopularLists() {
         ))}
       </div>
 
-      <div className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none border border-slate-900/10 p-5 mb-4">
+      <div className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-2xl border border-slate-900/10 p-5 mb-4">
         <div className="flex items-start justify-between gap-4 mb-3">
           <div>
             <h2 className="text-xl font-bold text-slate-900">{active.name}</h2>
@@ -91,7 +91,7 @@ export function PopularLists() {
           <Filter size={14} className="text-slate-500" />
           <button
             onClick={() => setDifficultyFilter(null)}
-            className={`px-3 py-1 rounded-none text-xs font-medium border transition-colors cursor-pointer ${
+            className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
               difficultyFilter === null
                 ? "bg-cyan-100 text-cyan-700 border-cyan-500/30"
                 : "bg-slate-100/90 sm:bg-slate-100/70 text-slate-500 border-slate-900/10 hover:bg-slate-900/5"
@@ -103,7 +103,7 @@ export function PopularLists() {
             <button
               key={d}
               onClick={() => setDifficultyFilter(difficultyFilter === d ? null : d)}
-              className={`px-3 py-1 rounded-none text-xs font-medium border transition-colors cursor-pointer ${
+              className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
                 difficultyFilter === d
                   ? diffStyles[d]
                   : "bg-slate-100/90 sm:bg-slate-100/70 text-slate-500 border-slate-900/10 hover:bg-slate-900/5"
@@ -117,7 +117,7 @@ export function PopularLists() {
 
       <div className="space-y-3">
         {grouped.map(([category, problems]) => (
-          <div key={category} className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none border border-slate-900/10 p-5">
+          <div key={category} className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-2xl border border-slate-900/10 p-5">
             <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-3">
               {category} ({problems.length})
             </p>
@@ -128,10 +128,10 @@ export function PopularLists() {
                   href={`https://leetcode.com/problems/${p.slug}/`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-100/90 sm:bg-slate-100/70 border border-slate-900/10 rounded-none text-xs text-slate-700 hover:bg-cyan-50 hover:border-cyan-500/30 hover:text-cyan-700 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-100/90 sm:bg-slate-100/70 border border-slate-900/10 rounded-full text-xs text-slate-700 hover:bg-cyan-50 hover:border-cyan-500/30 hover:text-cyan-700 transition-colors"
                 >
                   <span
-                    className={`inline-block w-1.5 h-1.5 rounded-none ${
+                    className={`inline-block w-1.5 h-1.5 rounded-full ${
                       p.difficulty === "Easy"
                         ? "bg-emerald-500"
                         : p.difficulty === "Medium"

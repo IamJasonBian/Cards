@@ -4,11 +4,11 @@ const linkClass =
   "block text-left text-sm text-slate-600 hover:text-cyan-700 cursor-pointer transition-colors py-0.5";
 
 const headingClass =
-  "text-xs font-semibold uppercase tracking-[0.15em] text-slate-500 mb-3";
+  "text-sm font-semibold text-slate-500 mb-3";
 
 export function SiteFooter({ onNavigate }: { onNavigate: (view: string) => void }) {
   return (
-    <footer className="w-full border-t border-slate-900/10 bg-white/95 sm:bg-white/60 backdrop-blur-sm rounded-none">
+    <footer className="w-full border-t border-slate-900/10 bg-white/95 sm:bg-white/60 backdrop-blur-sm">
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
           <div>

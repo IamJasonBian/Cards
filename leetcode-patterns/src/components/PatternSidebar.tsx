@@ -22,9 +22,9 @@ export function PatternSidebar({
             <button
               key={p.id}
               onClick={() => onSelect(p.id)}
-              className={`w-full text-left px-3 py-2 rounded-none text-sm transition-colors cursor-pointer ${
+              className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors cursor-pointer ${
                 selectedId === p.id
-                  ? "bg-cyan-100 text-cyan-700 border-l-2 border-cyan-500"
+                  ? "bg-cyan-100 text-cyan-700"
                   : "text-slate-700 hover:bg-slate-900/5"
               }`}
             >
@@ -36,7 +36,7 @@ export function PatternSidebar({
               </div>
               <div className="flex items-center gap-2 mt-0.5 ml-7">
                 <span
-                  className={`px-1.5 py-0 rounded-none text-[10px] font-medium ${tagColors[p.tag] || "bg-slate-100/90 sm:bg-slate-100/70 text-slate-700"}`}
+                  className={`px-1.5 py-0 rounded-full text-[10px] font-medium ${tagColors[p.tag] || "bg-slate-100/90 sm:bg-slate-100/70 text-slate-700"}`}
                 >
                   {p.tag}
                 </span>

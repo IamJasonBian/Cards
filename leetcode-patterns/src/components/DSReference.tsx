@@ -31,14 +31,14 @@ function DSCard({ entry }: { entry: DSRefEntry }) {
   );
 
   return (
-    <div className={`rounded-none border ${borderClass} bg-white/85 sm:bg-white/65 backdrop-blur-2xl`}>
+    <div className={`rounded-2xl border ${borderClass} bg-white/85 sm:bg-white/65 backdrop-blur-2xl`}>
       <button
         onClick={() => setOpen(!open)}
         className="w-full p-4 flex items-center justify-between text-left cursor-pointer"
       >
         <div className="flex items-center gap-3">
           <span
-            className={`px-3 py-1 rounded-none text-sm font-bold ${bgClass} ${textClass}`}
+            className={`px-3 py-1 rounded-full text-sm font-bold ${bgClass} ${textClass}`}
           >
             {entry.name}
           </span>
@@ -52,7 +52,7 @@ function DSCard({ entry }: { entry: DSRefEntry }) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1 px-2 py-1 rounded-none text-xs font-medium text-cyan-600 hover:bg-cyan-50 transition-colors"
+            className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium text-cyan-600 hover:bg-cyan-50 transition-colors"
           >
             Python Docs
             <ExternalLink size={10} />
@@ -67,7 +67,7 @@ function DSCard({ entry }: { entry: DSRefEntry }) {
 
       {open && (
         <div className="border-t border-slate-900/5 px-4 pb-4 pt-3 space-y-3">
-          <pre className="bg-slate-100/90 text-slate-900 rounded-none p-4 text-xs leading-relaxed overflow-x-auto">
+          <pre className="bg-slate-100/90 text-slate-900 rounded-xl p-4 text-xs leading-relaxed overflow-x-auto">
             <code>{entry.code}</code>
           </pre>
 
@@ -80,7 +80,7 @@ function DSCard({ entry }: { entry: DSRefEntry }) {
                 <button
                   onClick={handleRotate}
                   title="Shuffle to a new set"
-                  className="flex items-center gap-1 px-2 py-1 rounded-none text-xs text-cyan-600 hover:text-cyan-700 hover:bg-cyan-50 border border-transparent hover:border-cyan-500/30 transition-colors cursor-pointer"
+                  className="flex items-center gap-1 px-2 py-1 rounded-full text-xs text-cyan-600 hover:text-cyan-700 hover:bg-cyan-50 border border-transparent hover:border-cyan-500/30 transition-colors cursor-pointer"
                 >
                   <RotateCw size={12} className={spinning ? "animate-spin" : ""} />
                   Refresh
@@ -94,7 +94,7 @@ function DSCard({ entry }: { entry: DSRefEntry }) {
                   href={`https://leetcode.com/problems/${p.slug}/`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-1 px-2 py-1 rounded-none text-xs font-medium ${bgClass} ${textClass} hover:opacity-80 transition-opacity`}
+                  className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${bgClass} ${textClass} hover:opacity-80 transition-opacity`}
                 >
                   {p.name}
                   <ExternalLink size={10} />

@@ -6,10 +6,10 @@
  * The site renders over a photographic wallpaper. The original "light" theme
  * layered translucent white panels and dark slate text over it, which washed
  * out badly on dark wallpapers. These overrides re-tone the existing utility
- * classes to the palette Dark Reader produces (brightness 100 / contrast 90 /
- * sepia 10), so the shipped site matches the Dark Reader reference without
- * touching every component. Compare against the reference in dev via
- * `?darkreader` (see main.tsx).
+ * classes without touching every component. The palette started from what
+ * Dark Reader produces (brightness 100 / contrast 90 / sepia 10; still
+ * viewable in dev via `?darkreader`, see main.tsx) and on this branch is
+ * re-toned to neutral grays with a blue accent, so the two no longer match.
  *
  * Two mechanisms:
  *  1. @theme token remaps — safe when every use of a token inverts coherently
@@ -26,23 +26,96 @@
   font-display: swap;
 }
 
+/*
+ * Site chrome design language (design/apple-style): system San Francisco
+ * stack, neutral grays, one blue accent, continuous rounded corners, hairline
+ * borders, soft layered shadows and blurred "material" panels. Almost all of
+ * it is expressed as token remaps here, so components keep their existing
+ * utility classes (the accent is still spelled `cyan-*` in the markup; the
+ * token now resolves to blue). The algo-viz paper style sets its own inline
+ * colours, font and transitions and uses none of the remapped tokens.
+ *
+ * Radius scale used in components: rounded-full = buttons, tabs, tags;
+ * rounded-md/lg = segments, small inputs, sidebar rows; rounded-xl = text
+ * areas, code blocks, callouts, icon tiles; rounded-2xl = cards and modals;
+ * rounded-3xl = landing hero/feature panels.
+ */
 @theme {
-  /* Slate: text/border/tint scale, inverted for a dark ground. slate-950,
-     -400, -300, -200 are left alone — they are only used on already-dark
-     surfaces (flashcard modal, algo-viz frames). */
-  --color-slate-100: #1c222c;
-  --color-slate-500: #9aabc0;
-  --color-slate-600: #aab8c8;
-  --color-slate-700: #c6d1de;
-  --color-slate-800: #dde4ee;
-  --color-slate-900: #eff3f8;
+  /* Type: system fonts only — nothing is downloaded or bundled. */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  /* `font-bold` renders semibold; headings stay confident without going heavy. */
+  --font-weight-bold: 600;
+  /* Tight tracking on display sizes (text-2xl and below keep the default). */
+  --text-3xl--letter-spacing: -0.02em;
+  --text-4xl--letter-spacing: -0.022em;
+  --text-5xl--letter-spacing: -0.025em;
+  --text-7xl--letter-spacing: -0.03em;
+  /* Small uppercase section labels: barely-open tracking instead of wide. */
+  --tracking-wide: 0.04em;
+  --tracking-widest: 0.06em;
+
+  /* Motion: short ease-out for every `transition-*` utility. */
+  --default-transition-duration: 200ms;
+  --default-transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
+
+  /* Elevation: a tight contact shadow plus a wide soft one. */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.16), 0 4px 16px -4px rgb(0 0 0 / 0.24);
+  --shadow-md: 0 2px 4px rgb(0 0 0 / 0.18), 0 12px 32px -8px rgb(0 0 0 / 0.36);
+  --shadow-lg: 0 4px 8px rgb(0 0 0 / 0.2), 0 20px 48px -12px rgb(0 0 0 / 0.5);
+  --shadow-2xl: 0 8px 16px rgb(0 0 0 / 0.24),
+    0 32px 80px -16px rgb(0 0 0 / 0.6);
+
+  /* Slate: text/border/tint scale, inverted for a dark ground and made a
+     neutral gray. slate-950, -400, -300, -200 are left alone — they are only
+     used on already-dark surfaces (flashcard modal, algo-viz frames). */
+  --color-slate-100: #2c2c2e;
+  --color-slate-500: #98989f;
+  --color-slate-600: #aeaeb4;
+  --color-slate-700: #d1d1d6;
+  --color-slate-800: #e8e8ed;
+  --color-slate-900: #f5f5f7;
+
+  /* The single accent. `cyan-*` is the app's accent token; it resolves to a
+     system-style blue: -600 solid buttons, -700 their hover, -500 borders,
+     -400 focus rings. */
+  --color-cyan-400: #409cff;
+  --color-cyan-500: #0a84ff;
+  --color-cyan-600: #0071e3;
+  --color-cyan-700: #0a7cf0;
+
+  /* Semantic solids (difficulty dots, progress bars), slightly softened. */
+  --color-emerald-500: #30d158;
+  --color-amber-500: #ff9f0a;
+  --color-rose-500: #ff453a;
 
   /* Accent chip surfaces: {hue}-50/100 backgrounds and {hue}-200 borders
-     become deep tints of the same hue. Solid accent buttons (cyan-600/700,
-     emerald-500, ...) are intentionally untouched. */
-  --color-cyan-50: #0a2f38;
-  --color-cyan-100: #0e3c47;
-  --color-cyan-200: #14556b;
+     become deep tints of the same hue. */
+  --color-cyan-50: #0d2138;
+  --color-cyan-100: #112d4e;
+  --color-cyan-200: #184173;
+  --color-purple-50: #24163f;
+  --color-purple-100: #2f1d54;
+  --color-purple-200: #432a78;
+  --color-pink-50: #3a1430;
+  --color-pink-100: #4a1a3d;
+  --color-pink-200: #6d275b;
+  --color-fuchsia-50: #36133d;
+  --color-fuchsia-100: #45194e;
+  --color-fuchsia-200: #672674;
+  --color-teal-50: #0a2e2b;
+  --color-teal-100: #0e3b37;
+  --color-teal-200: #165a54;
+  --color-green-50: #0d2e17;
+  --color-green-100: #123c1e;
+  --color-green-200: #1c5c2e;
+  --color-lime-50: #222e0b;
+  --color-lime-100: #2c3b0f;
+  --color-lime-200: #445a18;
+  --color-red-50: #3a1513;
+  --color-red-100: #4a1b18;
+  --color-red-200: #6d2824;
   --color-amber-50: #33270c;
   --color-amber-100: #453413;
   --color-amber-200: #6a521e;
@@ -78,7 +151,7 @@
    opaque ancestor background — a negative-z child paints behind its parent's own
    background, so giving #root a background-color hides the wallpaper entirely. */
 html {
-  background-color: #0d1015;
+  background-color: #0b0b0d;
 }
 
 body,
@@ -86,52 +159,81 @@ body,
   background-color: transparent;
 }
 
-/* Grotesque close to galaxy.com's Forma DJR; loaded via index.html <link>. */
+/* The font family comes from --font-sans above (system stack; index.html no
+   longer requests a web font). Unsized copy sits at a comfortable 17px;
+   anything with a text-* utility keeps its own size. */
 body {
-  color: #e7ecf3;
-  font-family: "Hanken Grotesk", Inter, system-ui, "Helvetica Neue", "Helvetica",
-    "Arial", sans-serif;
+  color: #f5f5f7;
+  font-size: 17px;
+}
+
+/* Tailwind transition utilities only (attribute match on the class name), so
+   the algo-viz step animations, which are inline styles, are not affected. */
+@media (prefers-reduced-motion: reduce) {
+  [class*="transition"] {
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @layer utilities {
-  /* White SURFACES become dark panels. bg-white/5 and /10 are excluded on
-     purpose: they are subtle light tints on already-dark surfaces, exactly
-     what a dark theme wants. text-white / border-white are untouched. */
+  /* White SURFACES become dark neutral panels. bg-white/5 and /10 are
+     excluded on purpose: they are subtle light tints on already-dark
+     surfaces, exactly what a dark theme wants. text-white / border-white are
+     untouched. */
   .bg-white {
-    background-color: #171b22;
+    background-color: #1c1c1e;
   }
   .bg-white\/95 {
-    background-color: rgb(23 27 34 / 0.95);
+    background-color: rgb(28 28 30 / 0.95);
   }
   .bg-white\/85 {
-    background-color: rgb(23 27 34 / 0.88);
+    background-color: rgb(28 28 30 / 0.88);
   }
   .bg-white\/80 {
-    background-color: rgb(23 27 34 / 0.85);
+    background-color: rgb(28 28 30 / 0.85);
   }
   .bg-white\/65 {
-    background-color: rgb(23 27 34 / 0.7);
+    background-color: rgb(28 28 30 / 0.7);
   }
   .bg-white\/60 {
-    background-color: rgb(23 27 34 / 0.65);
+    background-color: rgb(28 28 30 / 0.65);
   }
   .bg-white\/50 {
-    background-color: rgb(23 27 34 / 0.55);
+    background-color: rgb(28 28 30 / 0.55);
   }
   @media (hover: hover) {
     .hover\:bg-white\/80:hover {
-      background-color: rgb(30 36 45 / 0.9);
+      background-color: rgb(44 44 46 / 0.9);
     }
   }
+
+  /* Material: every glass panel in the app carries backdrop-blur-2xl, so the
+     material treatment hangs off that class instead of editing each panel.
+     Adds saturation behind the blur, a 1px top highlight and a soft default
+     shadow. The variables are Tailwind's own shadow/backdrop slots, so
+     shadow-*, hover:shadow-* and focus:ring-* on the same element still
+     compose (hover/focus variants outrank this rule). */
+  .backdrop-blur-2xl {
+    --tw-backdrop-saturate: saturate(180%);
+    --tw-inset-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
+    --tw-shadow: var(--shadow-sm);
+    box-shadow:
+      var(--tw-inset-shadow, 0 0 #0000),
+      var(--tw-inset-ring-shadow, 0 0 #0000),
+      var(--tw-ring-offset-shadow, 0 0 #0000),
+      var(--tw-ring-shadow, 0 0 #0000),
+      var(--tw-shadow, 0 0 #0000);
+  }
+
   @media (min-width: 40rem) {
     .sm\:bg-white\/65 {
-      background-color: rgb(23 27 34 / 0.7);
+      background-color: rgb(28 28 30 / 0.7);
     }
     .sm\:bg-white\/60 {
-      background-color: rgb(23 27 34 / 0.65);
+      background-color: rgb(28 28 30 / 0.65);
     }
     .sm\:bg-white\/50 {
-      background-color: rgb(23 27 34 / 0.55);
+      background-color: rgb(28 28 30 / 0.55);
     }
     /* Re-assert after the .bg-white overrides above: Tailwind emits
        sm:bg-transparent before this block, so without this the overridden
@@ -145,21 +247,33 @@ body {
   /* Accent TEXT: -600/-700 tokens double as solid button backgrounds, so the
      light-text flip happens per-class instead of per-token. */
   .text-cyan-600 {
-    color: #59c7de;
+    color: #2997ff;
   }
   .text-cyan-700 {
-    color: #7edced;
+    color: #4aa3ff;
   }
   @media (hover: hover) {
     .hover\:text-cyan-700:hover {
-      color: #7edced;
+      color: #4aa3ff;
     }
     .hover\:text-cyan-800:hover {
-      color: #a5e9f4;
+      color: #7cbcff;
     }
   }
   .group-hover\:text-cyan-700:is(:where(.group):hover *) {
-    color: #7edced;
+    color: #4aa3ff;
+  }
+  .text-purple-700 {
+    color: #c4a5f7;
+  }
+  .text-pink-700 {
+    color: #f39ccb;
+  }
+  .text-fuchsia-700 {
+    color: #e59cf2;
+  }
+  .text-lime-700 {
+    color: #b5d96a;
   }
   .text-amber-600 {
     color: #e3b65e;

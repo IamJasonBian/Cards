@@ -90,7 +90,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`bg-white/85 sm:bg-white/65 backdrop-blur-2xl border border-slate-900/10 rounded-none p-5 ${className}`}>
+    <div className={`bg-white/85 sm:bg-white/65 backdrop-blur-2xl border border-slate-900/10 rounded-2xl p-5 ${className}`}>
       {children}
     </div>
   );
@@ -236,7 +236,7 @@ export function InterviewDrill() {
           <div key={id} className="flex items-center gap-2">
             <button
               onClick={() => setPhase(id)}
-              className={`px-3 py-1.5 rounded-none text-sm font-medium transition-colors cursor-pointer ${
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer ${
                 phase === id
                   ? "bg-cyan-100 text-cyan-700"
                   : "bg-slate-100/90 sm:bg-slate-100/70 text-slate-700 hover:bg-slate-900/5"
@@ -263,7 +263,7 @@ export function InterviewDrill() {
               Paste the full problem — or capture it from your camera.
             </p>
             <textarea
-              className="w-full bg-slate-100/90 text-slate-900 border border-slate-900/15 rounded-none p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+              className="w-full bg-slate-100/90 text-slate-900 border border-slate-900/15 rounded-xl p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
               rows={7}
               placeholder="Paste or capture the problem here..."
               value={problemText}
@@ -271,7 +271,7 @@ export function InterviewDrill() {
             />
             <button
               onClick={handleSolve}
-              className="mt-3 flex items-center gap-1.5 px-4 py-2 bg-cyan-600 text-white text-sm font-semibold rounded-none hover:bg-cyan-700 transition-colors"
+              className="mt-3 flex items-center gap-1.5 px-4 py-2 bg-cyan-600 text-white text-sm font-semibold rounded-full hover:bg-cyan-700 transition-colors"
             >
               <Play size={14} /> {solving ? "Breaking it down…" : "Break it down"}
             </button>
@@ -284,7 +284,7 @@ export function InterviewDrill() {
                   <SectionLabel>Hermes Breakdown</SectionLabel>
                   {breakdownSource && !solving && (
                     <span
-                      className={`inline-block px-2 py-0.5 rounded-none text-[11px] font-semibold ${
+                      className={`inline-block px-2 py-0.5 rounded-full text-[11px] font-semibold ${
                         breakdownSource === "ai"
                           ? "bg-cyan-100 text-cyan-700"
                           : "bg-amber-100 text-amber-700"
@@ -313,7 +313,7 @@ export function InterviewDrill() {
                   {ALL_PATTERNS.map((p) => (
                     <span
                       key={p}
-                      className={`px-2.5 py-1 rounded-none text-xs font-medium border ${
+                      className={`px-2.5 py-1 rounded-full text-xs font-medium border ${
                         detectedPatterns.includes(p)
                           ? "bg-cyan-50 border-cyan-500/30 text-cyan-700"
                           : "bg-slate-100/90 sm:bg-slate-100/70 border-slate-900/10 text-slate-500"
@@ -329,7 +329,7 @@ export function InterviewDrill() {
                 <SectionLabel>Brute Force Baseline</SectionLabel>
                 <p className="text-xs text-slate-500 mb-2">Describe the naive solution in plain English — no code. What is its time and space complexity?</p>
                 <textarea
-                  className="w-full bg-slate-100/90 border border-slate-900/15 rounded-none p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-900"
+                  className="w-full bg-slate-100/90 border border-slate-900/15 rounded-xl p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-900"
                   rows={3}
                   placeholder="e.g. Enumerate all possibilities with nested loops. Time: O(n²). Space: O(1)."
                 />
@@ -339,7 +339,7 @@ export function InterviewDrill() {
                 <SectionLabel>Optimal Algorithm (English only — no code)</SectionLabel>
                 <p className="text-xs text-slate-500 mb-2">Numbered steps. Include data structures, initialization, main loop, and termination.</p>
                 <textarea
-                  className="w-full bg-slate-100/90 border border-slate-900/15 rounded-none p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-900"
+                  className="w-full bg-slate-100/90 border border-slate-900/15 rounded-xl p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-900"
                   rows={6}
                   placeholder={"1. Initialize ...\n2. Main loop: ...\n3. Return ..."}
                 />
@@ -349,7 +349,7 @@ export function InterviewDrill() {
                 <SectionLabel>Complexity Target</SectionLabel>
                 <div className="grid grid-cols-2 gap-3">
                   {["Time", "Space"].map((label) => (
-                    <div key={label} className="bg-slate-100/90 sm:bg-slate-100/70 rounded-none p-3">
+                    <div key={label} className="bg-slate-100/90 sm:bg-slate-100/70 rounded-xl p-3">
                       <div className="text-xs text-slate-500 uppercase tracking-wide mb-1">{label}</div>
                       <input
                         className="w-full bg-transparent font-mono text-base font-bold text-cyan-600 focus:outline-none"
@@ -364,13 +364,13 @@ export function InterviewDrill() {
                 <SectionLabel>Gotchas</SectionLabel>
                 <p className="text-xs text-slate-500 mb-2">List 2-3 things that commonly trip people up on this problem.</p>
                 <textarea
-                  className="w-full bg-slate-100/90 border border-slate-900/15 rounded-none p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-900"
+                  className="w-full bg-slate-100/90 border border-slate-900/15 rounded-xl p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-900"
                   rows={3}
                   placeholder={"• Off-by-one on boundary\n• Forgetting to handle empty input\n• ..."}
                 />
               </Card>
 
-              <div className="bg-emerald-50 border border-emerald-200 rounded-none p-4 text-sm text-emerald-700 font-medium">
+              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-sm text-emerald-700 font-medium">
                 Algorithm locked in —{" "}
                 <button
                   className="underline font-semibold cursor-pointer"
@@ -396,7 +396,7 @@ export function InterviewDrill() {
               Type your code — or capture handwritten code from your camera.
             </p>
             <textarea
-              className="w-full bg-slate-100/90 text-slate-900 border border-slate-900/15 rounded-none p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+              className="w-full bg-slate-100/90 text-slate-900 border border-slate-900/15 rounded-xl p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
               rows={12}
               placeholder={"class Solution:\n    def solve(self, ...):\n        # your code here"}
               value={codeText}
@@ -412,14 +412,14 @@ export function InterviewDrill() {
             </p>
             <div className="flex gap-2 mb-3">
               <input
-                className="flex-1 bg-slate-100/90 text-slate-900 border border-slate-900/15 rounded-none px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+                className="flex-1 bg-slate-100/90 text-slate-900 border border-slate-900/15 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
                 placeholder="Test input (e.g. x=2, y=1)"
                 value={dryRunInput}
                 onChange={(e) => setDryRunInput(e.target.value)}
               />
             </div>
             <textarea
-              className="w-full bg-slate-100/90 text-slate-900 border border-slate-900/15 rounded-none p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+              className="w-full bg-slate-100/90 text-slate-900 border border-slate-900/15 rounded-xl p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
               rows={6}
               placeholder={"Step 1: queue = [(0,0)], visited = {(0,0)}\nStep 2: pop (0,0), enqueue (1,2),(2,1),...\n..."}
               value={dryRunText}
@@ -438,7 +438,7 @@ export function InterviewDrill() {
                 <li
                   key={i}
                   onClick={() => toggleCheck(i)}
-                  className={`flex items-start gap-2.5 p-2.5 rounded-none border cursor-pointer transition-colors select-none text-sm ${checkRow(checks[i])}`}
+                  className={`flex items-start gap-2.5 p-2.5 rounded-xl border cursor-pointer transition-colors select-none text-sm ${checkRow(checks[i])}`}
                 >
                   <span className={`font-mono text-base leading-tight min-w-[1rem] text-center font-bold ${checkIconColor(checks[i])}`}>
                     {checkIcon(checks[i])}
@@ -473,24 +473,24 @@ export function InterviewDrill() {
               <button
                 onClick={handleHint}
                 disabled={hintsUsed >= 3}
-                className="px-3 py-1.5 border border-cyan-500/30 text-cyan-700 text-sm font-medium rounded-none hover:bg-cyan-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="px-3 py-1.5 border border-cyan-500/30 text-cyan-700 text-sm font-medium rounded-full hover:bg-cyan-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 Request a hint
               </button>
               <button
                 onClick={handleReview}
                 disabled={reviewing || !codeText.trim()}
-                className="px-3 py-1.5 bg-cyan-600 text-white text-sm font-semibold rounded-none hover:bg-cyan-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="px-3 py-1.5 bg-cyan-600 text-white text-sm font-semibold rounded-full hover:bg-cyan-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 {reviewing ? "Reviewing…" : "Review my code →"}
               </button>
             </div>
 
             {codeFeedback && (
-              <div className="mt-3 p-3 bg-slate-100/90 sm:bg-slate-100/70 rounded-none text-sm text-slate-700">
+              <div className="mt-3 p-3 bg-slate-100/90 sm:bg-slate-100/70 rounded-xl text-sm text-slate-700">
                 {reviewSource && (
                   <span
-                    className={`inline-block mb-2 px-2 py-0.5 rounded-none text-[11px] font-semibold ${
+                    className={`inline-block mb-2 px-2 py-0.5 rounded-full text-[11px] font-semibold ${
                       reviewSource === "ai"
                         ? "bg-cyan-100 text-cyan-700"
                         : "bg-amber-100 text-amber-700"
@@ -512,7 +512,7 @@ export function InterviewDrill() {
           <Card>
             <SectionLabel>Final Solution</SectionLabel>
             <textarea
-              className="w-full bg-slate-100/90 text-slate-900 border border-slate-900/15 rounded-none p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+              className="w-full bg-slate-100/90 text-slate-900 border border-slate-900/15 rounded-xl p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
               rows={12}
               placeholder="Paste your final solution..."
               value={verifyCode}
@@ -520,7 +520,7 @@ export function InterviewDrill() {
             />
             <button
               onClick={() => { if (verifyCode.trim()) setVerifyVisible(true); }}
-              className="mt-3 flex items-center gap-1.5 px-4 py-2 bg-cyan-600 text-white text-sm font-semibold rounded-none hover:bg-cyan-700 transition-colors"
+              className="mt-3 flex items-center gap-1.5 px-4 py-2 bg-cyan-600 text-white text-sm font-semibold rounded-full hover:bg-cyan-700 transition-colors"
             >
               <Play size={14} /> Run verification
             </button>
@@ -566,7 +566,7 @@ export function InterviewDrill() {
                 <SectionLabel>Edge Cases</SectionLabel>
                 <p className="text-xs text-slate-500 mb-2">List the edge cases you checked and whether they passed.</p>
                 <textarea
-                  className="w-full bg-slate-100/90 border border-slate-900/15 rounded-none p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-900"
+                  className="w-full bg-slate-100/90 border border-slate-900/15 rounded-xl p-3 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-cyan-400/40 text-slate-900"
                   rows={4}
                   placeholder={"• Empty input → ?\n• Single element → ?\n• Max constraints → ?\n• Negative values → ?"}
                 />
@@ -576,7 +576,7 @@ export function InterviewDrill() {
                 <SectionLabel>Complexity Audit</SectionLabel>
                 <div className="grid grid-cols-2 gap-3">
                   {["Time", "Space"].map((label) => (
-                    <div key={label} className="bg-slate-100/90 sm:bg-slate-100/70 rounded-none p-3">
+                    <div key={label} className="bg-slate-100/90 sm:bg-slate-100/70 rounded-xl p-3">
                       <div className="text-xs text-slate-500 uppercase tracking-wide mb-1">{label}</div>
                       <input
                         className="w-full bg-transparent font-mono text-base font-bold text-cyan-600 focus:outline-none"

@@ -194,7 +194,7 @@ export function Blind75Submit() {
 
   if (problemError) {
     return (
-      <div className="max-w-2xl rounded-none border border-rose-200 bg-rose-50 backdrop-blur-2xl p-4 text-sm text-rose-700">
+      <div className="max-w-2xl rounded-xl border border-rose-200 bg-rose-50 backdrop-blur-2xl p-4 text-sm text-rose-700">
         <div className="flex items-center gap-2 font-medium mb-1">
           <AlertTriangle size={16} />
           Couldn't load the problem.
@@ -221,11 +221,11 @@ export function Blind75Submit() {
             Blind 75 · #{problem.number}
           </span>
           <span
-            className={`px-2 py-0.5 rounded-none text-[11px] font-semibold border ${difficultyClass(problem.difficulty)}`}
+            className={`px-2 py-0.5 rounded-full text-[11px] font-semibold border ${difficultyClass(problem.difficulty)}`}
           >
             {problem.difficulty}
           </span>
-          <span className="px-2 py-0.5 rounded-none text-[11px] font-medium bg-slate-100/90 sm:bg-slate-100/70 text-slate-700 border border-slate-900/10">
+          <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100/90 sm:bg-slate-100/70 text-slate-700 border border-slate-900/10">
             {problem.category}
           </span>
           <span className="ml-auto text-[11px] text-slate-500 flex items-center gap-1">
@@ -247,7 +247,7 @@ export function Blind75Submit() {
             <select
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
-              className="ml-auto text-sm border border-slate-900/10 rounded-none px-2 py-1 bg-white/85 sm:bg-white/65 backdrop-blur-2xl text-slate-900 focus:ring-2 focus:ring-cyan-400/40 focus:outline-none"
+              className="ml-auto text-sm border border-slate-900/10 rounded-lg px-2 py-1 bg-white/85 sm:bg-white/65 backdrop-blur-2xl text-slate-900 focus:ring-2 focus:ring-cyan-400/40 focus:outline-none"
             >
               {sortedManifest.map((p) => (
                 <option key={p.slug} value={p.slug}>
@@ -260,7 +260,7 @@ export function Blind75Submit() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <section className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none border border-slate-900/10 p-5">
+        <section className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-2xl border border-slate-900/10 p-5">
           <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">Problem</h2>
           <p className="text-slate-900 whitespace-pre-line text-sm leading-relaxed mb-4">
             {problem.statement}
@@ -272,7 +272,7 @@ export function Blind75Submit() {
           </h3>
           <div className="space-y-3">
             {problem.visibleExamples.map((ex, i) => (
-              <div key={i} className="rounded-none border border-slate-900/10 bg-slate-100/90 sm:bg-slate-100/70 p-3 text-xs">
+              <div key={i} className="rounded-xl border border-slate-900/10 bg-slate-100/90 sm:bg-slate-100/70 p-3 text-xs">
                 <div className="font-mono text-slate-700">
                   <span className="text-slate-500">Input:</span> {formatInputCompact(ex.input, 200)}
                 </div>
@@ -301,7 +301,7 @@ export function Blind75Submit() {
         </section>
 
         <section className="space-y-4">
-          <div className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none border border-slate-900/10 overflow-hidden">
+          <div className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-2xl border border-slate-900/10 overflow-hidden">
             <div className="flex items-center justify-between px-4 py-2 border-b border-slate-900/10 bg-slate-100/90 sm:bg-slate-100/70">
               <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
                 Solution · Python 3
@@ -331,7 +331,7 @@ export function Blind75Submit() {
               <button
                 onClick={submit}
                 disabled={running}
-                className="flex items-center gap-2 px-4 py-2 rounded-none bg-cyan-600 text-white text-sm font-medium hover:bg-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-600 text-white text-sm font-medium hover:bg-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors"
               >
                 {running ? <Loader2 size={14} className="animate-spin" /> : <Play size={14} />}
                 {running ? "Running…" : "Submit"}
@@ -352,7 +352,7 @@ function ResultsPanel({ result }: { result: RunResult }) {
   const firstFailingHidden = result.cases.find((c) => !c.visible);
 
   return (
-    <div className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none border border-slate-900/10 p-5">
+    <div className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-2xl border border-slate-900/10 p-5">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           {status.tone === "good" ? (
@@ -388,7 +388,7 @@ function ResultsPanel({ result }: { result: RunResult }) {
       </div>
 
       {result.fatal && (
-        <pre className="bg-rose-50 border border-rose-200 text-rose-700 text-xs font-mono p-3 rounded-none whitespace-pre-wrap mb-3">
+        <pre className="bg-rose-50 border border-rose-200 text-rose-700 text-xs font-mono p-3 rounded-xl whitespace-pre-wrap mb-3">
           {result.fatal}
         </pre>
       )}
@@ -411,7 +411,7 @@ function ResultsPanel({ result }: { result: RunResult }) {
             Hidden cases
           </div>
           <div
-            className={`rounded-none border p-3 text-xs ${
+            className={`rounded-xl border p-3 text-xs ${
               result.hiddenPassed === result.hiddenTotal
                 ? "bg-emerald-50 border-emerald-200"
                 : "bg-rose-50 border-rose-200"
@@ -454,7 +454,7 @@ function ResultsPanel({ result }: { result: RunResult }) {
 function CaseRow({ c }: { c: CaseResult }) {
   return (
     <div
-      className={`rounded-none border p-3 text-xs ${
+      className={`rounded-xl border p-3 text-xs ${
         c.passed ? "bg-emerald-50 border-emerald-200" : "bg-rose-50 border-rose-200"
       }`}
     >

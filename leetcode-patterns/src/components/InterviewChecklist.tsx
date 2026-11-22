@@ -256,13 +256,13 @@ function ChecklistSection({ section }: { section: Section }) {
   };
 
   return (
-    <div className={`rounded-none border ${borderColor} bg-white/85 sm:bg-white/65 backdrop-blur-2xl`}>
+    <div className={`rounded-2xl border ${borderColor} bg-white/85 sm:bg-white/65 backdrop-blur-2xl`}>
       <button
         onClick={() => setOpen(!open)}
         className="w-full p-5 flex items-center justify-between text-left cursor-pointer"
       >
         <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-none ${bgColor}`}>
+          <div className={`p-2 rounded-xl ${bgColor}`}>
             <CheckSquare size={20} className={textColor} />
           </div>
           <div>
@@ -273,9 +273,9 @@ function ChecklistSection({ section }: { section: Section }) {
               <span className="text-xs text-slate-500">
                 {checkedCount} / {allItems} items
               </span>
-              <div className="w-24 h-1.5 bg-slate-100/90 sm:bg-slate-100/70 rounded-none overflow-hidden">
+              <div className="w-24 h-1.5 bg-slate-100/90 sm:bg-slate-100/70 rounded-full overflow-hidden">
                 <div
-                  className={`h-full ${progressBg} rounded-none transition-all`}
+                  className={`h-full ${progressBg} rounded-full transition-all`}
                   style={{
                     width: `${allItems > 0 ? (checkedCount / allItems) * 100 : 0}%`,
                   }}
