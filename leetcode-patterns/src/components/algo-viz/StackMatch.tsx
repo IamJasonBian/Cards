@@ -1,162 +1,147 @@
 import { AlgoVizFrame } from "./AlgoVizFrame";
-import { useFrames } from "./useFrames";
+import { Cell, Edge, Ink, Pointer, Sketch, type Tone } from "./paper";
+import { useViz, type NonEmpty, type Scenario } from "./useViz";
 
-const INPUT = "{[()]}";
-const MATCH: Record<string, string> = { ")": "(", "]": "[", "}": "{" };
+interface Input {
+  text: string;
+}
 
 interface Frame {
+  /** Index of the character being read; -1 before the scan, text.length after it. */
   i: number;
   stack: string[];
   note: string;
-  status: "running" | "ok" | "bad";
-  popped?: string;
+  valid?: boolean;
+  /** The top of the stack is what makes the input invalid. */
+  blameTop?: boolean;
 }
 
-const frames: Frame[] = (() => {
-  const out: Frame[] = [];
+const SCENARIOS: NonEmpty<Scenario<Input>> = [
+  { id: "valid", label: "balanced", input: { text: "{[()]}" } },
+  { id: "extra-closer", label: "closer on empty stack", input: { text: "())" } },
+  { id: "not-a-bracket", label: "non-bracket character", malformed: true, input: { text: "{[x]}" } },
+];
+
+const OPENERS = "([{";
+const OPENER_FOR = new Map([
+  [")", "("],
+  ["]", "["],
+  ["}", "{"],
+]);
+
+function buildFrames({ text }: Input): NonEmpty<Frame> {
   const stack: string[] = [];
-  out.push({ i: -1, stack: [...stack], note: `begin: stack = []`, status: "running" });
-  for (let i = 0; i < INPUT.length; i += 1) {
-    const c = INPUT[i];
-    if ("([{".includes(c)) {
+  const out: NonEmpty<Frame> = [{ i: -1, stack: [], note: "Start with an empty stack. Openers get pushed, closers must match the top." }];
+
+  for (const [i, c] of [...text].entries()) {
+    if (OPENERS.includes(c)) {
       stack.push(c);
-      out.push({ i, stack: [...stack], note: `push '${c}'`, status: "running" });
-    } else {
-      const top = stack[stack.length - 1];
-      if (!top || top !== MATCH[c]) {
-        out.push({ i, stack: [...stack], note: `'${c}' does not match '${top ?? "⊥"}' → invalid`, status: "bad" });
-        return out;
-      }
-      const popped = stack.pop()!;
-      out.push({ i, stack: [...stack], note: `'${c}' closes '${popped}' → pop`, status: "running", popped });
+      out.push({ i, stack: [...stack], note: `'${c}' is an opener: push it.` });
+      continue;
     }
+    const want = OPENER_FOR.get(c);
+    const top = stack.at(-1);
+    if (want === undefined) {
+      out.push({ i, stack: [...stack], note: `Precondition broken: '${c}' at index ${i} is not one of ()[]{}.` });
+      out.push({
+        i,
+        stack: [...stack],
+        note: `It is neither an opener nor a closer, so there is nothing to compare it with. No answer: real code should reject the input, or skip such characters if the spec says to ignore them.`,
+      });
+      return out;
+    }
+    if (top === undefined) {
+      out.push({
+        i,
+        stack: [],
+        valid: false,
+        note: `'${c}' needs '${want}' on top, but the stack is empty. Invalid. Check for an empty stack before popping.`,
+      });
+      return out;
+    }
+    if (top !== want) {
+      out.push({
+        i,
+        stack: [...stack],
+        valid: false,
+        blameTop: true,
+        note: `'${c}' needs '${want}' on top, but the top is '${top}'. Invalid.`,
+      });
+      return out;
+    }
+    stack.pop();
+    out.push({ i, stack: [...stack], note: `'${c}' closes the top '${top}': pop it.` });
   }
-  out.push({
-    i: INPUT.length - 1,
-    stack: [...stack],
-    note: stack.length === 0 ? "stack empty → valid ✓" : "stack non-empty → invalid",
-    status: stack.length === 0 ? "ok" : "bad",
-  });
+
+  out.push(
+    stack.length === 0
+      ? { i: text.length, stack: [], valid: true, note: "End of input and the stack is empty: every opener was closed. Valid." }
+      : {
+          i: text.length,
+          stack: [...stack],
+          valid: false,
+          blameTop: true,
+          note: `End of input but ${stack.length} opener${stack.length === 1 ? " is" : "s are"} still on the stack, never closed. Invalid.`,
+        }
+  );
   return out;
-})();
+}
+
+const CELL = 48;
+const GAP = 8;
+const PAD = 24;
+const SLOT = CELL + GAP;
+const ROW_Y = 58;
+const BIN_TOP = 36;
 
 export function StackMatch() {
-  const { step, frame, running, playToggle, stepBy, reset } = useFrames(frames);
-  const cellW = 50;
+  const { input, frame, controls } = useViz(SCENARIOS, buildFrames);
+  const chars = [...input.text];
+  // The stack can never be deeper than the number of openers in the input.
+  const depth = Math.max(1, chars.filter((c) => OPENERS.includes(c)).length);
+  const cx = (i: number) => PAD + i * SLOT + CELL / 2;
+  const binX = PAD + Math.max(chars.length, 1) * SLOT + 40;
+  const binBottom = BIN_TOP + depth * SLOT + GAP / 2;
+  const binW = CELL + GAP * 2;
+
+  const charTone = (i: number): Tone => {
+    if (frame.valid) return "done";
+    if (i === frame.i) return "active";
+    return i < frame.i ? "dim" : "idle";
+  };
+  const stackTone = (idx: number): Tone => {
+    if (idx < frame.stack.length - 1) return "idle";
+    return frame.blameTop ? "active" : "done";
+  };
 
   return (
     <AlgoVizFrame
-      title="Valid parentheses — stack matching"
-      subtitle={`input = "${INPUT}"`}
-      step={step}
-      stepCount={frames.length}
-      running={running}
-      onPlayToggle={playToggle}
-      onStep={stepBy}
-      onReset={reset}
+      title="Valid parentheses: stack matching"
+      subtitle={`input = "${input.text}"`}
       caption={frame.note}
+      {...controls}
     >
-      <svg viewBox={`0 0 ${cellW * INPUT.length + 200} 260`} className="w-full">
-        {/* input string */}
-        {INPUT.split("").map((c, i) => {
-          const x = 20 + i * cellW;
-          const isCurrent = i === frame.i;
-          return (
-            <g key={i}>
-              <rect
-                x={x}
-                y={40}
-                width={cellW - 8}
-                height={50}
-                rx={8}
-                fill={isCurrent ? "#06b6d4" : "#1e2030"}
-                stroke={isCurrent ? "#22d3ee" : "rgba(255,255,255,0.08)"}
-                style={{ transition: "fill 300ms" }}
-              />
-              <text
-                x={x + (cellW - 8) / 2}
-                y={74}
-                textAnchor="middle"
-                fill="#f1f5f9"
-                fontSize={20}
-                fontFamily="JetBrains Mono, monospace"
-              >
-                {c}
-              </text>
-            </g>
-          );
-        })}
-        {frame.i >= 0 && (
-          <g transform={`translate(${20 + frame.i * cellW + (cellW - 8) / 2}, 0)`} style={{ transition: "transform 400ms" }}>
-            <text x={0} y={20} textAnchor="middle" fill="#22d3ee" fontSize={12} fontFamily="JetBrains Mono, monospace" fontWeight={600}>
-              ▼
-            </text>
-          </g>
-        )}
+      <Sketch
+        width={binX + binW + PAD}
+        height={Math.max(ROW_Y + CELL + 30, binBottom + 20)}
+        label={`Characters of "${input.text}" and the stack of open brackets`}
+      >
+        {chars.map((c, i) => (
+          <Cell key={i} x={cx(i) - CELL / 2} y={ROW_Y} w={CELL} tone={charTone(i)} label={c} sub={i} />
+        ))}
+        {frame.i >= 0 && frame.i < chars.length && <Pointer x={cx(frame.i)} y={ROW_Y - 2} label="i" />}
 
-        {/* stack (stacked vertically, rightmost is top) */}
-        <g transform={`translate(${cellW * INPUT.length + 60}, 40)`}>
-          <text x={0} y={-8} fill="#64748b" fontSize={11} fontFamily="JetBrains Mono, monospace">
-            stack
-          </text>
-          <rect
-            x={0}
-            y={0}
-            width={50}
-            height={180}
-            rx={6}
-            fill="none"
-            stroke="rgba(255,255,255,0.08)"
-            strokeDasharray="3 3"
-          />
-          {frame.stack.map((c, idx) => (
-            <g key={idx} style={{ transition: "transform 300ms" }}>
-              <rect
-                x={5}
-                y={180 - (idx + 1) * 42}
-                width={40}
-                height={36}
-                rx={6}
-                fill="#0e3a44"
-                stroke="#06b6d4"
-                style={{ transition: "y 300ms" }}
-              />
-              <text
-                x={25}
-                y={180 - (idx + 1) * 42 + 24}
-                textAnchor="middle"
-                fill="#f1f5f9"
-                fontSize={18}
-                fontFamily="JetBrains Mono, monospace"
-              >
-                {c}
-              </text>
-            </g>
-          ))}
-        </g>
-
-        {/* status chip */}
-        <g transform="translate(20, 220)">
-          <rect
-            width={frame.status === "ok" ? 70 : frame.status === "bad" ? 90 : 80}
-            height={22}
-            rx={11}
-            fill={frame.status === "ok" ? "rgba(52,211,153,0.15)" : frame.status === "bad" ? "rgba(248,113,113,0.15)" : "rgba(167,139,250,0.10)"}
-            stroke={frame.status === "ok" ? "#34d399" : frame.status === "bad" ? "#f87171" : "rgba(167,139,250,0.4)"}
-          />
-          <text
-            x={frame.status === "ok" ? 35 : frame.status === "bad" ? 45 : 40}
-            y={15}
-            textAnchor="middle"
-            fill={frame.status === "ok" ? "#34d399" : frame.status === "bad" ? "#f87171" : "#22d3ee"}
-            fontSize={11}
-            fontFamily="JetBrains Mono, monospace"
-            fontWeight={600}
-          >
-            {frame.status === "ok" ? "VALID" : frame.status === "bad" ? "INVALID" : "running..."}
-          </text>
-        </g>
-      </svg>
+        <Ink x={binX + binW / 2} y={16} tone="dim">
+          {frame.stack.length === 0 ? "stack (empty)" : "stack"}
+        </Ink>
+        {/* Open-topped bin: left wall, floor, right wall. */}
+        <Edge x1={binX} y1={BIN_TOP} x2={binX} y2={binBottom} />
+        <Edge x1={binX} y1={binBottom} x2={binX + binW} y2={binBottom} />
+        <Edge x1={binX + binW} y1={BIN_TOP} x2={binX + binW} y2={binBottom} />
+        {frame.stack.map((c, idx) => (
+          <Cell key={idx} x={binX + GAP} y={binBottom - (idx + 1) * SLOT} w={CELL} tone={stackTone(idx)} label={c} />
+        ))}
+      </Sketch>
     </AlgoVizFrame>
   );
 }

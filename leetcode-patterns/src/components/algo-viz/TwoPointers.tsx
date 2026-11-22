@@ -1,119 +1,108 @@
 import { AlgoVizFrame } from "./AlgoVizFrame";
-import { useFrames } from "./useFrames";
+import { Cell, Pointer, Sketch, type Tone } from "./paper";
+import { useViz, type NonEmpty, type Scenario } from "./useViz";
+
+interface Input {
+  nums: number[];
+  target: number;
+}
 
 interface Frame {
   l: number;
   r: number;
   note: string;
   found?: boolean;
+  /** Index i where nums[i] > nums[i + 1]: the input is not sorted. */
+  unsortedAt?: number;
 }
 
-const NUMS = [1, 3, 4, 5, 7, 10, 11];
-const TARGET = 9;
+const SCENARIOS: NonEmpty<Scenario<Input>> = [
+  { id: "found", label: "pair exists", input: { nums: [1, 3, 4, 5, 7, 10, 11], target: 9 } },
+  { id: "none", label: "no pair", input: { nums: [1, 2, 4, 8, 16], target: 11 } },
+  {
+    id: "unsorted",
+    label: "unsorted input",
+    malformed: true,
+    input: { nums: [5, 1, 9, 3, 4], target: 4 },
+  },
+];
 
-const frames: Frame[] = (() => {
-  const out: Frame[] = [];
+function buildFrames({ nums, target }: Input): NonEmpty<Frame> {
   let l = 0;
-  let r = NUMS.length - 1;
-  out.push({ l, r, note: `target = ${TARGET}, l=${l}, r=${r}` });
+  let r = nums.length - 1;
+  const out: NonEmpty<Frame> = [{ l, r, note: `target = ${target}. Start l at the left end, r at the right end.` }];
+
+  // Moving a pointer only discards candidates safely when the array is sorted.
+  const unsortedAt = nums.findIndex((n, i) => i + 1 < nums.length && n > nums[i + 1]);
+  if (unsortedAt >= 0) {
+    out.push({
+      l,
+      r,
+      unsortedAt,
+      note: `Precondition broken: ${nums[unsortedAt]} comes before ${nums[unsortedAt + 1]}, so the array is not sorted.`,
+    });
+    out.push({
+      l,
+      r,
+      unsortedAt,
+      note: `"sum too big → r--" assumes everything left of r is smaller. Here it is not, so real pairs get skipped. Sort first, or use a hash set.`,
+    });
+    return out;
+  }
+
   while (l < r) {
-    const s = NUMS[l] + NUMS[r];
-    if (s === TARGET) {
-      out.push({ l, r, note: `${NUMS[l]} + ${NUMS[r]} = ${TARGET} ✓ found`, found: true });
-      break;
+    const sum = nums[l] + nums[r];
+    if (sum === target) {
+      out.push({ l, r, found: true, note: `${nums[l]} + ${nums[r]} = ${target} ✓ found` });
+      return out;
     }
-    if (s < TARGET) {
-      out.push({ l, r, note: `${NUMS[l]} + ${NUMS[r]} = ${s} < ${TARGET} → l++` });
+    if (sum < target) {
+      out.push({ l, r, note: `${nums[l]} + ${nums[r]} = ${sum} < ${target} → need more, l++` });
       l += 1;
     } else {
-      out.push({ l, r, note: `${NUMS[l]} + ${NUMS[r]} = ${s} > ${TARGET} → r--` });
+      out.push({ l, r, note: `${nums[l]} + ${nums[r]} = ${sum} > ${target} → need less, r--` });
       r -= 1;
     }
-    out.push({ l, r, note: `l=${l}, r=${r}` });
   }
+  out.push({ l, r, note: `l met r with no match → no pair sums to ${target}.` });
   return out;
-})();
+}
+
+const CELL = 56;
+const GAP = 8;
+const PAD = 24;
 
 export function TwoPointers() {
-  const { step, frame, running, playToggle, stepBy, reset } = useFrames(frames);
-  const cellW = 60;
+  const { input, frame, controls } = useViz(SCENARIOS, buildFrames);
+  const { nums } = input;
+  const cx = (i: number) => PAD + i * (CELL + GAP) + CELL / 2;
+
+  const tone = (i: number): Tone => {
+    if (frame.unsortedAt !== undefined) {
+      return i === frame.unsortedAt || i === frame.unsortedAt + 1 ? "active" : "dim";
+    }
+    if (i === frame.l || i === frame.r) return frame.found ? "done" : "active";
+    return i < frame.l || i > frame.r ? "dim" : "idle";
+  };
 
   return (
     <AlgoVizFrame
-      title="Two pointers — sorted pair sum"
-      subtitle={`target = ${TARGET}`}
-      step={step}
-      stepCount={frames.length}
-      running={running}
-      onPlayToggle={playToggle}
-      onStep={stepBy}
-      onReset={reset}
+      title="Two pointers: sorted pair sum"
+      subtitle={`find two numbers that add up to ${input.target}`}
       caption={frame.note}
+      {...controls}
     >
-      <svg viewBox={`0 0 ${cellW * NUMS.length + 40} 160`} className="w-full">
-        {NUMS.map((n, i) => {
-          const x = 20 + i * cellW;
-          const active = i === frame.l || i === frame.r;
-          const found = frame.found && active;
-          return (
-            <g key={i}>
-              <rect
-                x={x}
-                y={60}
-                width={cellW - 8}
-                height={60}
-                rx={8}
-                fill={found ? "#10b981" : active ? "#06b6d4" : "#1e2030"}
-                stroke={active ? "#22d3ee" : "rgba(255,255,255,0.08)"}
-                strokeWidth={active ? 2 : 1}
-                style={{ transition: "fill 300ms, stroke 300ms" }}
-              />
-              <text
-                x={x + (cellW - 8) / 2}
-                y={95}
-                textAnchor="middle"
-                fill="#f1f5f9"
-                fontSize={18}
-                fontFamily="JetBrains Mono, monospace"
-              >
-                {n}
-              </text>
-              <text
-                x={x + (cellW - 8) / 2}
-                y={140}
-                textAnchor="middle"
-                fill="#64748b"
-                fontSize={11}
-                fontFamily="JetBrains Mono, monospace"
-              >
-                {i}
-              </text>
-            </g>
-          );
-        })}
-        {/* pointer labels */}
-        <PointerLabel x={20 + frame.l * cellW + (cellW - 8) / 2} label="l" color="#34d399" />
-        <PointerLabel x={20 + frame.r * cellW + (cellW - 8) / 2} label="r" color="#f87171" />
-      </svg>
-    </AlgoVizFrame>
-  );
-}
-
-function PointerLabel({ x, label, color }: { x: number; label: string; color: string }) {
-  return (
-    <g style={{ transition: "transform 400ms" }} transform={`translate(${x}, 0)`}>
-      <text
-        x={0}
-        y={40}
-        textAnchor="middle"
-        fill={color}
-        fontSize={14}
-        fontFamily="JetBrains Mono, monospace"
-        fontWeight={600}
+      <Sketch
+        width={PAD * 2 + nums.length * (CELL + GAP) - GAP}
+        height={150}
+        label={`Array ${nums.join(", ")} with a left and a right pointer`}
       >
-        {label}
-      </text>
-      <path d="M -6 45 L 6 45 L 0 55 Z" fill={color} />
-    </g>
+        {nums.map((n, i) => (
+          <Cell key={i} x={cx(i) - CELL / 2} y={58} w={CELL} tone={tone(i)} label={n} sub={i} />
+        ))}
+        <Pointer x={cx(frame.l)} y={56} label="l" />
+        <Pointer x={cx(frame.r)} y={56} label="r" />
+      </Sketch>
+    </AlgoVizFrame>
   );
 }

@@ -1,106 +1,109 @@
 import { AlgoVizFrame } from "./AlgoVizFrame";
-import { useFrames } from "./useFrames";
+import { Edge, Node, Pointer, Sketch, type Tone } from "./paper";
+import { useViz, type NonEmpty, type Scenario } from "./useViz";
 
-// 1 → 2 → 3 → 4 → 5 → 6 → 7 (no cycle — slow lands on the middle)
-const NODES = [1, 2, 3, 4, 5, 6, 7];
+interface Input {
+  /** Node values from head to tail; an empty array is head = None. */
+  values: number[];
+}
 
 interface Frame {
+  /** Indices into values; values.length stands for None. */
   slow: number;
   fast: number;
   note: string;
   done?: boolean;
 }
 
-const frames: Frame[] = (() => {
-  const out: Frame[] = [];
+const SCENARIOS: NonEmpty<Scenario<Input>> = [
+  { id: "odd", label: "odd length", input: { values: [1, 2, 3, 4, 5, 6, 7] } },
+  { id: "even", label: "even length", input: { values: [1, 2, 3, 4, 5, 6] } },
+  { id: "empty", label: "empty list", malformed: true, input: { values: [] } },
+];
+
+function buildFrames({ values }: Input): NonEmpty<Frame> {
+  const n = values.length;
+  if (n === 0) {
+    return [
+      { slow: 0, fast: 0, note: `head is None: the list has no nodes, so slow and fast both start at None.` },
+      { slow: 0, fast: 0, note: `"while fast and fast.next" is false right away, so the loop never touches a missing node.` },
+      {
+        slow: 0,
+        fast: 0,
+        done: true,
+        note: `There is no middle. Return None, and make the caller check for it before reading .val.`,
+      },
+    ];
+  }
+
   let slow = 0;
   let fast = 0;
-  out.push({ slow, fast, note: "slow = fast = head" });
+  const out: NonEmpty<Frame> = [{ slow, fast, note: `slow and fast both start at the head, node ${values[0]}.` }];
   // while fast and fast.next: slow = slow.next; fast = fast.next.next
-  while (fast + 2 <= NODES.length - 1) {
+  while (fast < n && fast + 1 < n) {
     slow += 1;
     fast += 2;
-    out.push({ slow, fast, note: `slow → ${NODES[slow]} (×1), fast → ${NODES[fast]} (×2)` });
+    out.push({
+      slow,
+      fast,
+      note:
+        fast < n
+          ? `slow takes one step to ${values[slow]}. fast takes two steps to ${values[fast]}.`
+          : `slow takes one step to ${values[slow]}. fast takes two steps and runs off the end.`,
+    });
   }
   out.push({
     slow,
     fast,
-    note: `fast.next is None → stop. slow is at node ${NODES[slow]} — the middle`,
     done: true,
+    note:
+      fast < n
+        ? `fast.next is None, so stop. slow is on node ${values[slow]}, the middle.`
+        : `fast is None, so stop. slow is on node ${values[slow]}, the second of the two middle nodes.`,
   });
   return out;
-})();
+}
+
+const R = 22;
+const STEP = 76;
+const PAD = 30;
+const Y = 78;
 
 export function FastSlowMiddle() {
-  const { step, frame, running, playToggle, stepBy, reset } = useFrames(frames, 1100);
+  const { input, frame, controls } = useViz(SCENARIOS, buildFrames, 1100);
+  const { values } = input;
+  const n = values.length;
+  // Slot n is the None after the tail.
+  const x = (i: number) => PAD + R + i * STEP;
 
-  const cellGap = 76;
-  const y = 120;
-  const positions = NODES.map((_, i) => ({ x: 50 + i * cellGap, y }));
-  const midIdx = Math.floor(NODES.length / 2);
+  const tone = (i: number): Tone => {
+    if (frame.done && i === frame.slow && i < n) return "done";
+    if (i === frame.slow || i === frame.fast) return "active";
+    return i === n ? "dim" : "idle";
+  };
 
   return (
     <AlgoVizFrame
-      title="Middle of linked list"
-      subtitle="slow (×1) / fast (×2) — slow stops at the middle"
-      step={step}
-      stepCount={frames.length}
-      running={running}
-      onPlayToggle={playToggle}
-      onStep={stepBy}
-      onReset={reset}
+      title="Middle of a linked list"
+      subtitle="slow moves 1 node per step, fast moves 2; when fast runs out, slow is halfway"
       caption={frame.note}
+      {...controls}
     >
-      <svg viewBox="0 0 560 240" className="w-full">
-        <defs>
-          <marker id="mid-arrow" markerWidth="10" markerHeight="10" refX="14" refY="3" orient="auto">
-            <path d="M0,0 L0,6 L6,3 z" fill="rgba(255,255,255,0.35)" />
-          </marker>
-        </defs>
-        {NODES.slice(0, -1).map((_, i) => (
-          <line
-            key={i}
-            x1={positions[i].x}
-            y1={positions[i].y}
-            x2={positions[i + 1].x}
-            y2={positions[i + 1].y}
-            stroke="rgba(255,255,255,0.15)"
-            strokeWidth={1.5}
-            markerEnd="url(#mid-arrow)"
-          />
+      <Sketch
+        width={x(n) + R + PAD}
+        height={Y * 2}
+        label={`Linked list ${values.join(" to ")} ending in None, with a slow and a fast pointer`}
+      >
+        {values.map((_, i) => (
+          <Edge key={i} x1={x(i)} y1={Y} x2={x(i + 1)} y2={Y} trim={R + 3} arrow />
         ))}
-        {NODES.map((v, i) => {
-          const { x } = positions[i];
-          const onSlow = frame.slow === i;
-          const onFast = frame.fast === i;
-          const isMiddle = frame.done && i === midIdx;
-          const fill = isMiddle ? "#10b981" : onSlow ? "#0d9e6e" : onFast ? "#06b6d4" : "#1e2030";
-          const stroke = isMiddle || onSlow ? "#34d399" : onFast ? "#22d3ee" : "rgba(255,255,255,0.1)";
-          return (
-            <g key={i} style={{ transition: "all 400ms" }}>
-              <circle cx={x} cy={y} r={20} fill={fill} stroke={stroke} strokeWidth={2} style={{ transition: "fill 300ms" }} />
-              <text x={x} y={y + 5} textAnchor="middle" fill="#f1f5f9" fontSize={13} fontFamily="JetBrains Mono, monospace">
-                {v}
-              </text>
-              {onSlow && (
-                <text x={x} y={y - 32} textAnchor="middle" fill="#34d399" fontSize={11} fontFamily="JetBrains Mono, monospace" fontWeight={600}>
-                  slow
-                </text>
-              )}
-              {onFast && (
-                <text x={x} y={y + (onSlow ? 44 : -32)} textAnchor="middle" fill="#22d3ee" fontSize={11} fontFamily="JetBrains Mono, monospace" fontWeight={600}>
-                  fast
-                </text>
-              )}
-              {isMiddle && (
-                <text x={x} y={y + 44} textAnchor="middle" fill="#34d399" fontSize={11} fontFamily="JetBrains Mono, monospace" fontWeight={600}>
-                  middle
-                </text>
-              )}
-            </g>
-          );
-        })}
-      </svg>
+        {values.map((v, i) => (
+          <Node key={i} x={x(i)} y={Y} r={R} tone={tone(i)} label={v} />
+        ))}
+        <Node x={x(n)} y={Y} r={R} tone={tone(n)} label="None" />
+        <Pointer x={x(frame.slow)} y={Y - R - 2} label="slow" />
+        <Pointer x={x(frame.fast)} y={Y + R + 2} label="fast" dir="up" />
+      </Sketch>
     </AlgoVizFrame>
   );
 }
