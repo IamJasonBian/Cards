@@ -17,7 +17,7 @@ export function Hero({ onNavigate }: { onNavigate: (view: string) => void }) {
         </p>
 
         <p className="mt-6 mx-auto max-w-xl text-base font-bold text-slate-800">
-          Daily algorithm flashcards, drills, and pattern practice — one card at a time.
+          Mobile first flashcards, drills, and patterns practice
         </p>
       </div>
 

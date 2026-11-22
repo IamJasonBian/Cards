@@ -19,13 +19,6 @@
  *     and light text (white, cyan-600/700), where a token remap would break
  *     one of the two.
  */
-/* Excalidraw's handwriting font (Latin subset), used by the algorithm visualizations. */
-@font-face {
-  font-family: "Excalifont";
-  src: url("./assets/fonts/Excalifont-Regular.woff2") format("woff2");
-  font-display: swap;
-}
-
 /*
  * Site chrome design language (design/apple-style): system San Francisco
  * stack, neutral grays, one blue accent, continuous rounded corners, hairline
