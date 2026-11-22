@@ -444,7 +444,8 @@ export function buildApp(store: Storage): Hono {
             hiddenTotal: problem.hiddenCases.length,
             durationMs: Date.now() - startedAt,
             cases: [],
-            fatal: `Judge unavailable: ${e.cause}. Set JUDGE0_URL and start your Judge0 instance.`,
+            // The cause is logged by judge0Client; visitors get no ops detail.
+            fatal: "The code judge is temporarily unavailable. Your code was not run. Please try again later.",
             status: "judge-unavailable",
           } satisfies RunReport,
           503

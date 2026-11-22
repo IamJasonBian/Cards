@@ -36,6 +36,15 @@ export class Judge0Unavailable extends Error {
   }
 }
 
+/** Name the upstream failure: a rejected key/subscription, a quota, or other. */
+export function describeFailure(status: number): string {
+  if (status === 401 || status === 403) {
+    return `auth rejected (HTTP ${status}: key invalid or not subscribed)`;
+  }
+  if (status === 429) return "quota exceeded (HTTP 429: rate limit or plan quota)";
+  return `HTTP ${status}`;
+}
+
 export async function runPython(opts: Judge0SubmitOptions): Promise<Judge0Result> {
   const url = `${DEFAULT_URL}/submissions?base64_encoded=false&wait=true`;
   const body = {
@@ -69,14 +78,18 @@ export async function runPython(opts: Judge0SubmitOptions): Promise<Judge0Result
       signal: AbortSignal.timeout(9_000),
     });
   } catch (e) {
-    throw new Judge0Unavailable(e instanceof Error ? e.message : String(e));
+    const cause = e instanceof Error ? e.message : String(e);
+    console.error(`[judge0] ${new URL(DEFAULT_URL).host} unreachable: ${cause}`);
+    throw new Judge0Unavailable(cause);
   }
 
-  if (res.status === 401 || res.status === 403) {
-    throw new Judge0Unavailable("auth rejected");
-  }
   if (!res.ok) {
-    throw new Judge0Unavailable(`HTTP ${res.status}`);
+    // Log the upstream status and message so the cause is one log read away.
+    // The cause string is for logs only; callers must not show it to users.
+    const upstream = (await res.text().catch(() => "")).replace(/\s+/g, " ").slice(0, 200);
+    const cause = describeFailure(res.status);
+    console.error(`[judge0] ${new URL(DEFAULT_URL).host} ${cause}: ${upstream}`);
+    throw new Judge0Unavailable(cause);
   }
 
   const json = (await res.json()) as Record<string, unknown>;
