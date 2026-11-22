@@ -16,8 +16,9 @@ function chapterFromId(id: string): Chapter {
 }
 
 type FlowItem =
-  | { id: string; kind: "subhead"; text: string }
+  | { id: string; kind: "subhead"; text: string; level?: number }
   | { id: string; kind: "diagram"; src: string }
+  | { id: string; kind: "code"; text: string; lang: string }
   | { id: string; kind: "note"; text: string; saved?: boolean; open?: boolean }
   | { id: string; kind: "ai"; lines: string[]; open?: boolean };
 
@@ -32,7 +33,10 @@ type SectionState = {
   sourceHref: string;
 };
 
-type RemoteItem = { kind: "subhead"; text: string } | { kind: "diagram"; src: string };
+type RemoteItem =
+  | { kind: "subhead"; text: string; level?: number }
+  | { kind: "diagram"; src: string }
+  | { kind: "code"; text: string; lang: string };
 
 type RemoteChapter = {
   id: string;
@@ -125,11 +129,7 @@ function fromRemote(remote: RemoteChapter, chapter: Chapter): SectionState[] {
       chapter,
       section.title,
       [
-        ...section.items.map((item): FlowItem =>
-          item.kind === "subhead"
-            ? { id: nextId("sub"), kind: "subhead", text: item.text }
-            : { id: nextId("fig"), kind: "diagram", src: item.src }
-        ),
+        ...section.items.map((item): FlowItem => ({ ...item, id: nextId(item.kind) })),
       ]
     )
   );
@@ -396,7 +396,9 @@ export function SystemsDesign({ initialChapterId }: { initialChapterId?: string 
                       key={item.id}
                       // Collapsed rows center their controls; tall content keeps them at the top.
                       className={`flex gap-2 ${
-                        item.kind === "diagram" || (item.kind !== "subhead" && item.open)
+                        item.kind === "diagram" ||
+                        item.kind === "code" ||
+                        ((item.kind === "note" || item.kind === "ai") && item.open)
                           ? "items-start"
                           : "items-center"
                       }`}
@@ -437,8 +439,25 @@ export function SystemsDesign({ initialChapterId }: { initialChapterId?: string 
                             onChange={(e) =>
                               updateItem(sectionIndex, itemIndex, { text: e.target.value })
                             }
-                            className="w-full bg-transparent text-sm font-semibold text-slate-800 outline-none border-b border-transparent focus:border-cyan-500/40"
+                            // h2 is the section; h3 reads as a sub-header, h4/h5 as a lighter, indented one.
+                            className={`w-full bg-transparent text-sm outline-none border-b border-transparent focus:border-cyan-500/40 ${
+                              (item.level ?? 3) > 3
+                                ? "pl-3 font-medium text-slate-700"
+                                : "font-semibold text-slate-800"
+                            }`}
                           />
+                        )}
+                        {item.kind === "code" && (
+                          <div className="rounded-xl border border-slate-900/10 bg-slate-900/5">
+                            {item.lang && (
+                              <div className="px-3 pt-2 font-mono text-[10px] uppercase tracking-wider text-slate-500">
+                                {item.lang}
+                              </div>
+                            )}
+                            <pre className="overflow-x-auto px-3 py-2 font-mono text-xs leading-relaxed text-slate-800">
+                              {item.text}
+                            </pre>
+                          </div>
                         )}
                         {item.kind === "diagram" && (
                           <div

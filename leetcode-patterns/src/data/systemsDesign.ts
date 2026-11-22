@@ -395,7 +395,16 @@ export const chapters: Chapter[] = [
         id: "core-database",
         title: "Core Database",
         anchor: "core-database",
-        subsections: ["Relational Databases", "NoSQL Databases"],
+        subsections: [
+          "Relational Databases",
+          "What is a relational database and when should you use it?",
+          "Things you should know about relational databases",
+          "What are the most common relational databases?",
+          "NoSQL Databases",
+          "What is a NoSQL database and when should you use it?",
+          "Things you should know about NoSQL databases",
+          "What are the most common NoSQL databases?",
+        ],
         summary: [
           "Know one database deeply (Postgres for product-style rounds, DynamoDB for infrastructure-style) and justify it by the features you will use.",
           "Avoid blanket SQL-versus-NoSQL claims; the two overlap heavily in what they can model and how far they scale.",
@@ -410,7 +419,11 @@ export const chapters: Chapter[] = [
         id: "blob-storage",
         title: "Blob Storage",
         anchor: "blob-storage",
-        subsections: [],
+        subsections: [
+          "What is blob storage and when should you use it?",
+          "Things you should know about blob storage",
+          "Examples of blob storage services",
+        ],
         summary: [
           "Put large unstructured files in an object store such as S3 and keep only metadata and a pointer in the main database.",
           "Upload and download go directly between client and storage through presigned URLs, with a CDN in front for reads.",
@@ -424,7 +437,11 @@ export const chapters: Chapter[] = [
         id: "search-optimized-database",
         title: "Search Optimized Database",
         anchor: "search-optimized-database",
-        subsections: [],
+        subsections: [
+          "What is a search optimized database and when should you use it?",
+          "Things you should know about search optimized databases",
+          "Examples of search optimized databases",
+        ],
         summary: [
           "Substring matching with LIKE forces a full table scan; a search engine instead keeps an inverted index from term to documents.",
           "Text is tokenized and stemmed before indexing, and fuzzy matching tolerates typos using edit distance.",
@@ -438,7 +455,10 @@ export const chapters: Chapter[] = [
         id: "api-gateway",
         title: "API Gateway",
         anchor: "api-gateway",
-        subsections: [],
+        subsections: [
+          "What is an API gateway and when should you use it?",
+          "What are the most common API gateways?",
+        ],
         summary: [
           "A gateway is the single client entry point that routes each request to the right backend service.",
           "It also owns cross-cutting concerns: authentication, rate limiting, logging.",
@@ -451,7 +471,10 @@ export const chapters: Chapter[] = [
         id: "load-balancer",
         title: "Load Balancer",
         anchor: "load-balancer",
-        subsections: [],
+        subsections: [
+          "What is a load balancer and when should you use it?",
+          "What are the most common load balancers?",
+        ],
         summary: [
           "A load balancer spreads traffic across the identical instances of a horizontally scaled service.",
           "On the diagram, draw one at the front or simply state that services are horizontally scaled, not one per service.",
@@ -464,7 +487,11 @@ export const chapters: Chapter[] = [
         id: "queue",
         title: "Queue",
         anchor: "queue",
-        subsections: [],
+        subsections: [
+          "What are queues and when should you use them?",
+          "Things you should know about queues for your interview",
+          "What are the most common queueing technologies?",
+        ],
         summary: [
           "Queues buffer bursts and hand work to a pool of workers, decoupling producers from consumers so each scales on its own.",
           "A queue in a synchronous path with a tight latency target (around 500 ms) will almost certainly break that target.",
@@ -478,7 +505,11 @@ export const chapters: Chapter[] = [
         id: "streams-event-sourcing",
         title: "Streams / Event Sourcing",
         anchor: "streams-event-sourcing",
-        subsections: [],
+        subsections: [
+          "What are streams and when should you use them?",
+          "Things you should know about streams for your interview",
+          "What are the most common streaming technologies?",
+        ],
         summary: [
           "A stream retains messages for a configured period, so consumers can re-read from an earlier position, unlike a queue.",
           "Event sourcing records state changes as an ordered event log that can be replayed to rebuild or audit state.",
@@ -492,7 +523,10 @@ export const chapters: Chapter[] = [
         id: "distributed-lock",
         title: "Distributed Lock",
         anchor: "distributed-lock",
-        subsections: [],
+        subsections: [
+          "What are distributed locks and when should you use them?",
+          "Things you should know about distributed locks for your interview",
+        ],
         summary: [
           "Database transaction locks are short-lived; a distributed lock holds a resource across processes for minutes, such as a seat during checkout.",
           "It is built on an atomic set in a key-value store like Redis or ZooKeeper; Redlock is the multi-instance Redis variant.",
@@ -506,7 +540,11 @@ export const chapters: Chapter[] = [
         id: "distributed-cache",
         title: "Distributed Cache",
         anchor: "distributed-cache",
-        subsections: [],
+        subsections: [
+          "What is a distributed cache and when should you use it?",
+          "Things you should know about distributed caches for your interview",
+          "What are the most common distributed cache technologies?",
+        ],
         summary: [
           "An in-memory cache tier cuts latency and database load for expensive queries, precomputed aggregates, and session data.",
           "Eviction policies: LRU, LFU, FIFO.",
@@ -520,7 +558,11 @@ export const chapters: Chapter[] = [
         id: "cdn",
         title: "CDN",
         anchor: "cdn",
-        subsections: [],
+        subsections: [
+          "What is a CDN and when should you use it?",
+          "Things you should know about CDNs",
+          "Examples of CDNs",
+        ],
         summary: [
           "A CDN is a geographically distributed cache that answers from the edge nearest the user and pulls from the origin on a miss.",
           "Main use is static media, but it can also cache rarely-changing dynamic pages and API responses.",
