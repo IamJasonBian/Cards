@@ -27,8 +27,8 @@ export function Faq() {
   return (
     <section className="mx-auto w-full max-w-3xl px-4 sm:px-6 py-16 sm:py-24">
       <div className="text-center mb-8">
-        <div className="inline-block bg-white/95 px-4 py-3 sm:bg-transparent sm:px-0 sm:py-0">
-          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500 sm:[text-shadow:_0_1px_6px_rgb(0_0_0_/_45%)]">
+        <div className="inline-block rounded-2xl bg-white/95 px-4 py-3 sm:bg-transparent sm:px-0 sm:py-0">
+          <p className="text-sm font-semibold text-slate-500 sm:[text-shadow:_0_1px_6px_rgb(0_0_0_/_45%)]">
             FAQ
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 sm:[text-shadow:_0_1px_6px_rgb(0_0_0_/_45%)]">
@@ -36,11 +36,11 @@ export function Faq() {
           </h2>
         </div>
       </div>
-      <div className="border-t border-slate-900/10">
+      <div className="space-y-2">
         {FAQ_ITEMS.map((item) => (
           <details
             key={item.question}
-            className="group border-b border-slate-900/10 bg-white/95 sm:bg-white/50 backdrop-blur-sm"
+            className="group rounded-2xl border border-slate-900/10 bg-white/95 sm:bg-white/50 backdrop-blur-sm"
           >
             <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none text-slate-900 font-medium [&::-webkit-details-marker]:hidden">
               {item.question}

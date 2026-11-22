@@ -3,11 +3,11 @@ import { SquareStack, ArrowRight } from "lucide-react";
 export function Hero({ onNavigate }: { onNavigate: (view: string) => void }) {
   return (
     <section className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-20 text-center sm:py-28">
-      <div className="flex h-16 w-16 items-center justify-center rounded-none border border-slate-900/15 bg-white/60 backdrop-blur-sm">
+      <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-900/15 bg-white/60 backdrop-blur-sm">
         <SquareStack className="h-8 w-8 text-cyan-700" />
       </div>
 
-      <div className="mt-8 w-full bg-white px-5 py-6 sm:mt-6 sm:bg-white/65 sm:py-8">
+      <div className="mt-8 w-full max-w-5xl rounded-3xl border border-slate-900/10 bg-white px-5 py-6 sm:mt-6 sm:bg-white/65 sm:py-8 sm:backdrop-blur-2xl">
         <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:mt-8 sm:text-7xl">
           One Card a Day
         </h1>
@@ -25,7 +25,7 @@ export function Hero({ onNavigate }: { onNavigate: (view: string) => void }) {
         <button
           type="button"
           onClick={() => onNavigate("submit")}
-          className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-none bg-cyan-600 px-5 py-2.5 font-medium text-white transition-colors hover:bg-cyan-700"
+          className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full bg-cyan-600 px-5 py-2.5 font-medium text-white transition-colors hover:bg-cyan-700"
         >
           Start today's card
           <ArrowRight className="h-4 w-4" />
@@ -33,7 +33,7 @@ export function Hero({ onNavigate }: { onNavigate: (view: string) => void }) {
         <button
           type="button"
           onClick={() => onNavigate("patterns")}
-          className="cursor-pointer rounded-none border border-slate-900/15 bg-white/95 sm:bg-white/60 px-5 py-2.5 text-center font-medium text-slate-800 backdrop-blur-sm transition-colors hover:bg-white/80"
+          className="cursor-pointer rounded-full border border-slate-900/15 bg-white/95 sm:bg-white/60 px-5 py-2.5 text-center font-medium text-slate-800 backdrop-blur-sm transition-colors hover:bg-white/80"
         >
           Browse patterns
         </button>

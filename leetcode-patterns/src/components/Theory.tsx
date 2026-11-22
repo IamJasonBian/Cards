@@ -206,7 +206,7 @@ function useBookmarks(docId: string) {
 }
 
 const chipClass =
-  "inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-100/90 sm:bg-slate-100/70 border border-slate-900/10 rounded-none text-xs text-slate-700 hover:bg-cyan-50 hover:border-cyan-500/30 hover:text-cyan-700 transition-colors cursor-pointer";
+  "inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-100/90 sm:bg-slate-100/70 border border-slate-900/10 rounded-full text-xs text-slate-700 hover:bg-cyan-50 hover:border-cyan-500/30 hover:text-cyan-700 transition-colors cursor-pointer";
 
 // Reader for one bookmarkable PDF: a controlled "current page" that chapter
 // jumps, bookmarks, the page box, and the URL hash all read/write, plus an
@@ -262,7 +262,7 @@ function DocReader({
             onChange={(e) => {
               if (e.target.value) jump(Number(e.target.value));
             }}
-            className="px-2 py-1.5 max-w-64 bg-white/80 border border-slate-900/10 rounded-none text-xs text-slate-700 cursor-pointer"
+            className="px-2 py-1.5 max-w-64 bg-white/80 border border-slate-900/10 rounded-lg text-xs text-slate-700 cursor-pointer"
             aria-label="Jump to chapter"
           >
             <option value="">Jump to chapter…</option>
@@ -287,7 +287,7 @@ function DocReader({
             onChange={(e) => setPageText(e.target.value.replace(/[^0-9]/g, ""))}
             onBlur={() => jump(Number(pageText), previewOpen)}
             inputMode="numeric"
-            className="w-14 px-1.5 py-1.5 bg-white/80 border border-slate-900/10 rounded-none text-xs text-slate-900 text-center"
+            className="w-14 px-1.5 py-1.5 bg-white/80 border border-slate-900/10 rounded-lg text-xs text-slate-900 text-center"
             aria-label="Page number"
           />
           <span className="text-slate-400">/ {doc.pages}</span>
@@ -324,7 +324,7 @@ function DocReader({
         {sorted.map((b) => (
           <span
             key={b.id}
-            className="inline-flex items-stretch bg-slate-100/90 sm:bg-slate-100/70 border border-slate-900/10 rounded-none text-xs"
+            className="inline-flex items-stretch bg-slate-100/90 sm:bg-slate-100/70 border border-slate-900/10 rounded-full overflow-hidden text-xs"
           >
             <button
               onClick={() => jump(b.page)}
@@ -357,12 +357,12 @@ function DocReader({
             value={label}
             onChange={(e) => setLabel(e.target.value.slice(0, 120))}
             placeholder="Label (optional)"
-            className="w-32 px-2 py-1 bg-white/80 border border-slate-900/10 border-r-0 rounded-none text-xs text-slate-900 placeholder:text-slate-400"
+            className="w-32 px-2 py-1 bg-white/80 border border-slate-900/10 border-r-0 rounded-l-full pl-3 text-xs text-slate-900 placeholder:text-slate-400"
             aria-label="Bookmark label"
           />
           <button
             type="submit"
-            className="inline-flex items-center gap-1 px-2 py-1 bg-slate-100/90 sm:bg-slate-100/70 border border-slate-900/10 rounded-none text-xs text-slate-700 hover:bg-cyan-50 hover:border-cyan-500/30 hover:text-cyan-700 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1 px-2 py-1 bg-slate-100/90 sm:bg-slate-100/70 border border-slate-900/10 rounded-r-full pr-3 text-xs text-slate-700 hover:bg-cyan-50 hover:border-cyan-500/30 hover:text-cyan-700 transition-colors cursor-pointer"
             title={`Bookmark page ${page}`}
           >
             <BookmarkIcon size={10} />
@@ -413,7 +413,7 @@ export function Theory() {
         {resources.map((resource) => (
           <div
             key={resource.title}
-            className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none border border-slate-900/10 p-5"
+            className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-2xl border border-slate-900/10 p-5"
           >
             <h2 className="text-xl font-bold text-slate-900">{resource.title}</h2>
             <p className="text-sm text-slate-700 mt-1 mb-4">{resource.description}</p>
@@ -424,7 +424,7 @@ export function Theory() {
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-100/90 sm:bg-slate-100/70 border border-slate-900/10 rounded-none text-xs text-slate-700 hover:bg-cyan-50 hover:border-cyan-500/30 hover:text-cyan-700 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-100/90 sm:bg-slate-100/70 border border-slate-900/10 rounded-full text-xs text-slate-700 hover:bg-cyan-50 hover:border-cyan-500/30 hover:text-cyan-700 transition-colors"
                 >
                   {link.label}
                   <ExternalLink size={10} className="opacity-60" />

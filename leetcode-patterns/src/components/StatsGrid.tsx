@@ -14,10 +14,10 @@ export function StatsGrid() {
       {statItems.map((item) => (
         <div
           key={item.label}
-          className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-none shadow-sm border border-slate-900/10 p-5 hover:shadow-md transition-shadow"
+          className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-2xl shadow-sm border border-slate-900/10 p-5 hover:shadow-md transition-shadow"
         >
           <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-none ${item.color}`}>
+            <div className={`p-2 rounded-xl ${item.color}`}>
               <item.icon size={20} />
             </div>
             <div>

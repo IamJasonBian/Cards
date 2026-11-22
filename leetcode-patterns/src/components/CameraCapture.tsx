@@ -204,14 +204,14 @@ export function CameraCapture({ mode, onResult }: Props) {
         type="button"
         onClick={handleOpen}
         title={`Capture ${label} from camera or file`}
-        className="flex items-center gap-1 px-2 py-1 text-xs text-cyan-600 border border-cyan-500/30 rounded-none hover:bg-cyan-50 transition-colors"
+        className="flex items-center gap-1 px-2 py-1 text-xs text-cyan-600 border border-cyan-500/30 rounded-full hover:bg-cyan-50 transition-colors"
       >
         <Camera size={13} /> Capture
       </button>
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-          <div className="bg-white/95 backdrop-blur-2xl border border-slate-900/10 rounded-none shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
+          <div className="bg-white/95 backdrop-blur-2xl border border-slate-900/10 rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-3 border-b border-slate-900/5">
               <div>
@@ -276,7 +276,7 @@ export function CameraCapture({ mode, onResult }: Props) {
               {step !== "parsing" && (
                 <button
                   onClick={() => fileRef.current?.click()}
-                  className="flex items-center gap-1.5 px-3 py-2 border border-slate-900/10 text-slate-700 text-sm rounded-none hover:bg-slate-900/5 transition-colors mr-auto"
+                  className="flex items-center gap-1.5 px-3 py-2 border border-slate-900/10 text-slate-700 text-sm rounded-full hover:bg-slate-900/5 transition-colors mr-auto"
                 >
                   <Upload size={13} /> Upload
                 </button>
@@ -284,7 +284,7 @@ export function CameraCapture({ mode, onResult }: Props) {
               {step === "preview" && (
                 <button
                   onClick={capture}
-                  className="flex items-center gap-1.5 px-4 py-2 bg-cyan-600 text-white text-sm font-semibold rounded-none hover:bg-cyan-700 transition-colors"
+                  className="flex items-center gap-1.5 px-4 py-2 bg-cyan-600 text-white text-sm font-semibold rounded-full hover:bg-cyan-700 transition-colors"
                 >
                   <Camera size={14} /> Capture
                 </button>
@@ -293,19 +293,19 @@ export function CameraCapture({ mode, onResult }: Props) {
                 <>
                   <button
                     onClick={retake}
-                    className="flex items-center gap-1.5 px-3 py-2 border border-slate-900/10 text-slate-700 text-sm rounded-none hover:bg-slate-900/5 transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-2 border border-slate-900/10 text-slate-700 text-sm rounded-full hover:bg-slate-900/5 transition-colors"
                   >
                     <RotateCcw size={13} /> Retake
                   </button>
                   <button
                     onClick={extractText}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-cyan-600 text-white text-sm font-semibold rounded-none hover:bg-cyan-700 transition-colors"
+                    className="flex items-center gap-1.5 px-4 py-2 bg-cyan-600 text-white text-sm font-semibold rounded-full hover:bg-cyan-700 transition-colors"
                   >
                     <ScanText size={14} /> Extract text
                   </button>
                   <button
                     onClick={parse}
-                    className="flex items-center gap-1.5 px-3 py-2 border border-cyan-500/30 text-cyan-700 text-sm rounded-none hover:bg-cyan-50 transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-2 border border-cyan-500/30 text-cyan-700 text-sm rounded-full hover:bg-cyan-50 transition-colors"
                   >
                     <Sparkles size={13} /> Parse
                   </button>
@@ -314,7 +314,7 @@ export function CameraCapture({ mode, onResult }: Props) {
               {step === "error" && (
                 <button
                   onClick={retake}
-                  className="flex items-center gap-1.5 px-3 py-2 border border-slate-900/10 text-slate-700 text-sm rounded-none hover:bg-slate-900/5 transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-2 border border-slate-900/10 text-slate-700 text-sm rounded-full hover:bg-slate-900/5 transition-colors"
                 >
                   <RotateCcw size={13} /> Try again
                 </button>
