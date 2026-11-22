@@ -147,7 +147,12 @@ export function Blind75Submit() {
       if (!("status" in data)) {
         throw new Error(data.error ?? `HTTP ${res.status}`);
       }
-      setResult({ slug: submissionSlug, result: data });
+      // Never show the server's diagnostic text for a judge outage.
+      const shown: RunResult =
+        data.status === "judge-unavailable"
+          ? { ...data, fatal: "The code judge is temporarily unavailable. Your code was not run. Please try again later." }
+          : data;
+      setResult({ slug: submissionSlug, result: shown });
     } catch (e) {
       setResult({
         slug: submissionSlug,
