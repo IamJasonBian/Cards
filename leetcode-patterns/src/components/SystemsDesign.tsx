@@ -18,14 +18,14 @@ function chapterFromId(id: string): Chapter {
 type FlowItem =
   | { id: string; kind: "subhead"; text: string }
   | { id: string; kind: "diagram"; src: string }
-  | { id: string; kind: "note"; text: string; saved?: boolean; open?: boolean };
+  | { id: string; kind: "note"; text: string; saved?: boolean; open?: boolean }
+  | { id: string; kind: "ai"; lines: string[]; open?: boolean };
 
 type SectionState = {
   id: string;
   title: string;
   open: boolean;
   items: FlowItem[];
-  aiNotes: string[];
   /** localStorage key part for this section's submitted notes. */
   noteKey: string;
   terms: string[];
@@ -70,6 +70,25 @@ function persistNotes(noteKey: string, items: FlowItem[]) {
   }
 }
 
+// Sections whose bundled "Note (AI)" row this browser has deleted.
+const AI_HIDDEN_KEY = "leetcards:sd:ai-hidden";
+
+function readHiddenAi(): string[] {
+  try {
+    return JSON.parse(localStorage.getItem(AI_HIDDEN_KEY) ?? "[]") as string[];
+  } catch {
+    return [];
+  }
+}
+
+function hideAi(noteKey: string) {
+  try {
+    localStorage.setItem(AI_HIDDEN_KEY, JSON.stringify([...new Set([...readHiddenAi(), noteKey])]));
+  } catch {
+    /* storage unavailable: it is only hidden for this visit */
+  }
+}
+
 function savedNoteItems(noteKey: string): FlowItem[] {
   return (readNotes()[noteKey] ?? []).map(
     (text): FlowItem => ({ id: nextId("note"), kind: "note", text, saved: true })
@@ -83,15 +102,18 @@ function decorate(
 ): SectionState {
   const source = chapter.sections.find((section) => section.title === title);
   const noteKey = `${chapter.id}/${source?.id ?? title}`;
-  const saved = savedNoteItems(noteKey);
+  const summary = source?.summary ?? [];
+  const ai: FlowItem[] =
+    summary.length > 0 && !readHiddenAi().includes(noteKey)
+      ? [{ id: nextId("ai"), kind: "ai", lines: summary }]
+      : [];
   return {
     id: source?.id ?? nextId("sec"),
     title,
     open: true,
-    // Submitted notes sit just above the trailing empty note box.
-    items: [...items.slice(0, -1), ...saved, ...items.slice(-1)],
+    // A new browser sees only the bundled note; submitted notes follow the outline.
+    items: [...ai, ...items, ...savedNoteItems(noteKey)],
     noteKey,
-    aiNotes: source?.summary ?? [],
     terms: source?.terms ?? [],
     sourceHref: source ? `${chapter.sourceUrl}#${source.anchor}` : chapter.sourceUrl,
   };
@@ -108,7 +130,6 @@ function fromRemote(remote: RemoteChapter, chapter: Chapter): SectionState[] {
             ? { id: nextId("sub"), kind: "subhead", text: item.text }
             : { id: nextId("fig"), kind: "diagram", src: item.src }
         ),
-        noteItem(),
       ]
     )
   );
@@ -120,7 +141,6 @@ function fromStatic(chapter: Chapter): SectionState[] {
       ...section.subsections.map(
         (text): FlowItem => ({ id: nextId("sub"), kind: "subhead", text })
       ),
-      noteItem(),
     ])
   );
 }
@@ -133,6 +153,11 @@ function move<T>(list: T[], index: number, dir: -1 | 1): T[] {
   copy.splice(next, 0, item);
   return copy;
 }
+
+// Every note row, bundled or user-written, shares this shell so they line up.
+const NOTE_ROW = "group rounded-xl border border-slate-900/10 bg-slate-900/5 px-3 py-2";
+const NOTE_SUMMARY =
+  "flex cursor-pointer list-none items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500 hover:text-slate-800 [&::-webkit-details-marker]:hidden";
 
 const iconBtn =
   "inline-flex items-center justify-center rounded-full p-1 text-slate-500 hover:bg-slate-900/10 hover:text-cyan-700 cursor-pointer disabled:opacity-30 disabled:pointer-events-none";
@@ -366,25 +391,17 @@ export function SystemsDesign({ initialChapterId }: { initialChapterId?: string 
 
               {section.open && (
                 <div className="px-4 pb-4 space-y-3">
-                  {section.aiNotes.length > 0 && (
-                    <details className="group rounded-xl border border-slate-900/10 bg-slate-900/5 px-3 py-2">
-                      <summary className="flex cursor-pointer list-none items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500 hover:text-slate-800 [&::-webkit-details-marker]:hidden">
-                        <ChevronDown size={14} className="transition-transform group-open:rotate-180" />
-                        Note
-                        <span className="font-mono font-normal normal-case tracking-normal">
-                          {section.aiNotes.length}
-                        </span>
-                      </summary>
-                      <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
-                        {section.aiNotes.map((line) => (
-                          <li key={line}>{line}</li>
-                        ))}
-                      </ul>
-                    </details>
-                  )}
                   {section.items.map((item, itemIndex) => (
-                    <div key={item.id} className="flex items-start gap-2">
-                      <div className="flex flex-col pt-1">
+                    <div
+                      key={item.id}
+                      // Collapsed rows center their controls; tall content keeps them at the top.
+                      className={`flex gap-2 ${
+                        item.kind === "diagram" || (item.kind !== "subhead" && item.open)
+                          ? "items-start"
+                          : "items-center"
+                      }`}
+                    >
+                      <div className="flex flex-col">
                         <button
                           type="button"
                           aria-label="Move up"
@@ -435,6 +452,26 @@ export function SystemsDesign({ initialChapterId }: { initialChapterId?: string 
                             />
                           </div>
                         )}
+                        {item.kind === "ai" && (
+                          <details
+                            open={item.open ?? false}
+                            onToggle={(e) => {
+                              const open = e.currentTarget.open;
+                              if (open !== (item.open ?? false)) updateItem(sectionIndex, itemIndex, { open });
+                            }}
+                            className={NOTE_ROW}
+                          >
+                            <summary className={NOTE_SUMMARY}>
+                              <ChevronDown size={14} className="shrink-0 transition-transform group-open:rotate-180" />
+                              <span className="shrink-0">Note (AI)</span>
+                            </summary>
+                            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
+                              {item.lines.map((line) => (
+                                <li key={line}>{line}</li>
+                              ))}
+                            </ul>
+                          </details>
+                        )}
                         {item.kind === "note" && (
                           <details
                             open={item.open ?? false}
@@ -442,9 +479,9 @@ export function SystemsDesign({ initialChapterId }: { initialChapterId?: string 
                               const open = e.currentTarget.open;
                               if (open !== (item.open ?? false)) updateItem(sectionIndex, itemIndex, { open });
                             }}
-                            className="group rounded-xl border border-slate-900/10 bg-slate-900/5 px-3 py-2"
+                            className={NOTE_ROW}
                           >
-                            <summary className="flex cursor-pointer list-none items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500 hover:text-slate-800 [&::-webkit-details-marker]:hidden">
+                            <summary className={NOTE_SUMMARY}>
                               <ChevronDown size={14} className="shrink-0 transition-transform group-open:rotate-180" />
                               <span className="shrink-0">
                                 Note {section.items.slice(0, itemIndex + 1).filter((i) => i.kind === "note").length}
@@ -506,6 +543,7 @@ export function SystemsDesign({ initialChapterId }: { initialChapterId?: string 
                           aria-label="Remove"
                           onClick={() => {
                             const items = section.items.filter((_, i) => i !== itemIndex);
+                            if (item.kind === "ai") hideAi(section.noteKey);
                             persistNotes(section.noteKey, items);
                             updateSection(sectionIndex, { items });
                           }}

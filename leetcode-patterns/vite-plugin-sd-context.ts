@@ -50,7 +50,8 @@ export function parseChapterHtml(html: string, id: string): SdContextChapter {
   const title = titleMatch ? stripTags(titleMatch[1]) : id;
 
   const token =
-    /<h([23])\b[^>]*>([\s\S]*?)<\/h\1>|<img\b[^>]*\bsrc="(data:image\/svg\+xml;base64,[^"]+)"/g;
+    // Diagrams are either <img> data URIs or inline Excalidraw exports (<svg ... version="1.1">).
+    /<h([23])\b[^>]*>([\s\S]*?)<\/h\1>|<img\b[^>]*\bsrc="(data:image\/svg\+xml;base64,[^"]+)"|(<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" version="1\.1"[\s\S]*?<\/svg>)/g;
 
   const sections: SdContextSection[] = [];
   let current: SdContextSection | null = null;
@@ -67,6 +68,9 @@ export function parseChapterHtml(html: string, id: string): SdContextChapter {
       }
     } else if (match[3] && current) {
       current.items.push({ kind: "diagram", src: match[3] });
+    } else if (match[4] && current) {
+      const src = `data:image/svg+xml;base64,${Buffer.from(match[4]).toString("base64")}`;
+      current.items.push({ kind: "diagram", src });
     }
   }
 
