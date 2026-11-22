@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Play, Pause, SkipBack, SkipForward, RotateCcw } from "lucide-react";
-import { HAND, INK, PAPER } from "./paper";
+import { INK, PAPER } from "./paper";
 import type { VizControls } from "./useViz";
 
 interface Props extends VizControls {
@@ -34,7 +34,7 @@ export function AlgoVizFrame({
   return (
     <div
       className="h-full w-full flex flex-col"
-      style={{ background: PAPER, color: INK, fontFamily: HAND }}
+      style={{ background: PAPER, color: INK }}
     >
       <div className="px-5 pt-4 pb-3 pr-12 border-b-2 border-dashed border-[#1e1e1e]/30">
         <h3 className="text-2xl leading-tight">{title}</h3>

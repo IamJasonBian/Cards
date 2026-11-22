@@ -7,9 +7,6 @@ import type { ReactNode, SVGProps } from "react";
 export const INK = "#1e1e1e";
 export const PAPER = "#fffdf7";
 export const GRAY = "#9a9a9a";
-// Excalifont is declared in index.css; the rest only show while it loads.
-export const HAND = 'Excalifont, "Chalkboard SE", "Comic Sans MS", cursive';
-
 export type Tone = "idle" | "active" | "done" | "dim";
 
 const EASE = "350ms ease";
@@ -66,7 +63,6 @@ export function Sketch({ width, height, label, children }: SketchProps) {
       style={{ maxWidth: width * 1.6 }}
       role="img"
       aria-label={label}
-      fontFamily={HAND}
     >
       <defs>
         <filter
@@ -127,7 +123,7 @@ interface TextProps {
   bold?: boolean;
 }
 
-/** Handwritten text. A paper-colored halo keeps it readable over hatching and lines. */
+/** Text on the sketch. A paper-colored halo keeps it readable over hatching and lines. */
 export function Ink({ x, y, children, size = 16, tone = "idle", anchor = "middle", bold }: TextProps) {
   const fill = TONES[tone].text;
   return (

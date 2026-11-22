@@ -3,13 +3,8 @@ import {
   Play,
   RotateCcw,
   ExternalLink,
-  CheckCircle2,
-  XCircle,
-  Clock,
   AlertTriangle,
   Loader2,
-  Eye,
-  EyeOff,
 } from "lucide-react";
 import type {
   CaseResult,
@@ -23,10 +18,18 @@ const STORAGE_PREFIX = "leetcards:submit:code:";
 const LAST_PROBLEM_KEY = "leetcards:submit:last";
 const DEFAULT_SLUG = "two-sum";
 
+type Tab = "solution" | "tests" | "results";
+
+// Flat "task page" vocabulary: small uppercase labels, hairline rows, mono counts.
+const EYEBROW = "text-[11px] uppercase tracking-wider text-slate-500";
+const CHIP = "px-1.5 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider";
+const ROW = "flex items-start gap-3 py-3 border-t border-slate-900/10 first:border-t-0";
+const COUNT = "font-mono text-[11px] text-slate-500 tabular-nums";
+
 function difficultyClass(d: string): string {
-  if (d === "Easy") return "bg-emerald-50 text-emerald-700 border-emerald-200";
-  if (d === "Medium") return "bg-amber-50 text-amber-700 border-amber-200";
-  return "bg-rose-50 text-rose-700 border-rose-200";
+  if (d === "Easy") return "bg-emerald-50 text-emerald-700";
+  if (d === "Medium") return "bg-amber-50 text-amber-700";
+  return "bg-rose-50 text-rose-700";
 }
 
 function formatValue(v: unknown, max = 80): string {
@@ -66,6 +69,9 @@ export function Blind75Submit() {
   const [result, setResult] = useState<{ slug: string; result: RunResult } | null>(null);
   const [problemError, setProblemError] = useState<string | null>(null);
   const [running, setRunning] = useState(false);
+  const [tab, setTab] = useState<Tab>("solution");
+  const [expandedSlug, setExpandedSlug] = useState<string | null>(null);
+  const expanded = expandedSlug === slug;
 
   // Derived: only show problem/code/results when they belong to the current slug.
   const problem = loaded?.slug === slug ? loaded.problem : null;
@@ -128,6 +134,7 @@ export function Blind75Submit() {
     const submissionSlug = slug;
     setRunning(true);
     setResult(null);
+    setTab("results");
     try {
       const res = await fetch(apiUrl("/api/submissions/run"), {
         method: "POST",
@@ -213,41 +220,35 @@ export function Blind75Submit() {
     );
   }
 
+  const lineCount = currentCode.split("\n").length;
+  const tabs: { id: Tab; label: string; count?: string }[] = [
+    { id: "solution", label: "Solution", count: `${lineCount} lines` },
+    {
+      id: "tests",
+      label: "Tests",
+      count: `${problem.visibleExamples.length} + ${problem.hiddenCount} hidden`,
+    },
+    {
+      id: "results",
+      label: "Results",
+      count: currentResult && currentResult.total > 0 ? `${currentResult.passed}/${currentResult.total}` : undefined,
+    },
+  ];
+  const longStatement = problem.statement.length > 480;
+
   return (
-    <div className="max-w-7xl">
-      <div className="mb-6">
-        <div className="flex items-center gap-3 mb-1">
-          <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">
-            Blind 75 · #{problem.number}
+    <div className="max-w-5xl bg-[#3a3a3c]/55 backdrop-blur-2xl rounded-2xl border border-slate-900/10 px-4 sm:px-6 pb-6">
+      <header className="pt-6 pb-8">
+        <div className="flex items-center gap-3 mb-3">
+          <span className={`${EYEBROW} font-mono`}>
+            Blind 75 · Problem #{problem.number} · {problem.slug}
           </span>
-          <span
-            className={`px-2 py-0.5 rounded-full text-[11px] font-semibold border ${difficultyClass(problem.difficulty)}`}
-          >
-            {problem.difficulty}
-          </span>
-          <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100/90 sm:bg-slate-100/70 text-slate-700 border border-slate-900/10">
-            {problem.category}
-          </span>
-          <span className="ml-auto text-[11px] text-slate-500 flex items-center gap-1">
-            <EyeOff size={11} />
-            {problem.hiddenCount} hidden tests · graded server-side via Judge0
-          </span>
-        </div>
-        <div className="flex items-center gap-3 flex-wrap">
-          <h1 className="text-3xl font-bold text-slate-900">{problem.title}</h1>
-          <a
-            href={problem.url}
-            target="_blank"
-            rel="noreferrer"
-            className="text-sm text-cyan-600 hover:underline flex items-center gap-1"
-          >
-            on LeetCode <ExternalLink size={12} />
-          </a>
           {sortedManifest.length > 1 && (
             <select
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
-              className="ml-auto text-sm border border-slate-900/10 rounded-lg px-2 py-1 bg-white/85 sm:bg-white/65 backdrop-blur-2xl text-slate-900 focus:ring-2 focus:ring-cyan-400/40 focus:outline-none"
+              aria-label="Problem"
+              className="ml-auto max-w-[50%] text-xs border border-slate-900/10 rounded-md px-2 py-1 bg-transparent text-slate-700 focus:ring-2 focus:ring-cyan-400/40 focus:outline-none"
             >
               {sortedManifest.map((p) => (
                 <option key={p.slug} value={p.slug}>
@@ -257,64 +258,82 @@ export function Blind75Submit() {
             </select>
           )}
         </div>
+        <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900">{problem.title}</h1>
+        <div className="mt-3 flex items-center gap-3 flex-wrap text-sm text-slate-700">
+          <span>{problem.category}</span>
+          <span className={`${CHIP} ${difficultyClass(problem.difficulty)}`}>{problem.difficulty}</span>
+          <span className={`${CHIP} bg-slate-100/70 text-slate-500`}>Python 3</span>
+          <a
+            href={problem.url}
+            target="_blank"
+            rel="noreferrer"
+            className="text-xs text-slate-500 hover:text-slate-900 flex items-center gap-1 transition-colors"
+          >
+            on LeetCode <ExternalLink size={11} />
+          </a>
+        </div>
+
+        <h2 className={`${EYEBROW} mt-8 mb-4`}>Instruction</h2>
+        <p
+          className={`text-slate-900 whitespace-pre-line text-[15px] leading-relaxed max-w-3xl ${
+            longStatement && !expanded ? "line-clamp-6" : ""
+          }`}
+        >
+          {problem.statement}
+        </p>
+        {problem.constraints?.length > 0 && (!longStatement || expanded) && (
+          <ul className="mt-4 text-xs text-slate-700 space-y-1 font-mono">
+            {problem.constraints.map((c) => (
+              <li key={c}>{c}</li>
+            ))}
+          </ul>
+        )}
+        {longStatement && (
+          <button
+            onClick={() => setExpandedSlug(expanded ? null : slug)}
+            aria-expanded={expanded}
+            className={`${EYEBROW} mt-4 hover:text-slate-900 transition-colors cursor-pointer`}
+          >
+            {expanded ? "Show less" : "Show more"}
+          </button>
+        )}
+      </header>
+
+      <div
+        role="tablist"
+        aria-label="Solution, tests and results"
+        className="sticky top-12 z-[5] -mx-4 sm:-mx-6 px-4 sm:px-6 flex flex-wrap gap-x-6 gap-y-1 border-b border-slate-900/10 bg-[#3a3a3c]/60 backdrop-blur-2xl"
+      >
+        {tabs.map((t) => {
+          const selected = t.id === tab;
+          return (
+            <button
+              key={t.id}
+              role="tab"
+              type="button"
+              id={`submit-tab-${t.id}`}
+              aria-selected={selected}
+              aria-controls="submit-tabpanel"
+              onClick={() => setTab(t.id)}
+              className={`relative py-3 text-[12px] uppercase tracking-wider transition-colors cursor-pointer ${
+                selected ? "text-slate-900" : "text-slate-500 hover:text-slate-900"
+              }`}
+            >
+              <span>{t.label}</span>
+              {t.count && (
+                <span className="ml-1.5 font-mono normal-case tracking-normal text-[11px] text-slate-500 tabular-nums">
+                  {t.count}
+                </span>
+              )}
+              {selected && <span aria-hidden="true" className="absolute inset-x-0 -bottom-px h-[2px] bg-slate-900" />}
+            </button>
+          );
+        })}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <section className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-2xl border border-slate-900/10 p-5">
-          <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">Problem</h2>
-          <p className="text-slate-900 whitespace-pre-line text-sm leading-relaxed mb-4">
-            {problem.statement}
-          </p>
-
-          <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wide mt-4 mb-2 flex items-center gap-1">
-            <Eye size={12} />
-            Examples
-          </h3>
-          <div className="space-y-3">
-            {problem.visibleExamples.map((ex, i) => (
-              <div key={i} className="rounded-xl border border-slate-900/10 bg-slate-100/90 sm:bg-slate-100/70 p-3 text-xs">
-                <div className="font-mono text-slate-700">
-                  <span className="text-slate-500">Input:</span> {formatInputCompact(ex.input, 200)}
-                </div>
-                <div className="font-mono text-slate-700">
-                  <span className="text-slate-500">Output:</span> {formatValue(ex.output, 200)}
-                </div>
-                {ex.explanation && <div className="text-slate-500 mt-1">{ex.explanation}</div>}
-              </div>
-            ))}
-          </div>
-
-          {problem.constraints?.length > 0 && (
-            <>
-              <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wide mt-4 mb-2">
-                Constraints
-              </h3>
-              <ul className="text-xs text-slate-700 space-y-1 list-disc pl-4">
-                {problem.constraints.map((c) => (
-                  <li key={c} className="font-mono">
-                    {c}
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-        </section>
-
-        <section className="space-y-4">
-          <div className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-2xl border border-slate-900/10 overflow-hidden">
-            <div className="flex items-center justify-between px-4 py-2 border-b border-slate-900/10 bg-slate-100/90 sm:bg-slate-100/70">
-              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                Solution · Python 3
-              </div>
-              <button
-                onClick={reset}
-                className="text-xs text-slate-500 hover:text-slate-800 flex items-center gap-1 cursor-pointer"
-                title="Reset to starter code"
-              >
-                <RotateCcw size={12} />
-                Reset
-              </button>
-            </div>
+      <div role="tabpanel" id="submit-tabpanel" aria-labelledby={`submit-tab-${tab}`} className="pt-4">
+        {tab === "solution" && (
+          <>
             <textarea
               value={currentCode}
               onChange={(e) => {
@@ -323,25 +342,100 @@ export function Blind75Submit() {
               }}
               onKeyDown={handleKeyDown}
               spellCheck={false}
-              className="w-full font-mono text-sm bg-slate-100/90 text-slate-900 p-4 outline-none resize-y leading-relaxed focus:ring-2 focus:ring-cyan-400/40"
-              style={{ minHeight: 360, tabSize: 4 }}
+              aria-label="Solution code"
+              className="w-full font-mono text-sm bg-white/[0.08] text-slate-900 p-4 rounded-lg border border-slate-900/10 outline-none resize-y leading-relaxed focus:ring-2 focus:ring-cyan-400/40"
+              style={{ minHeight: 420, tabSize: 4 }}
             />
-            <div className="flex items-center justify-between px-4 py-3 bg-slate-100/90 sm:bg-slate-100/70 border-t border-slate-900/10">
-              <span className="text-[11px] text-slate-500">Tab indents · ⌘/Ctrl + Enter to submit</span>
+            <div className="flex items-center gap-4 pt-3">
+              <span className="text-[11px] text-slate-500 font-mono">Tab indents · ⌘/Ctrl + Enter submits</span>
+              <button
+                onClick={reset}
+                className="ml-auto text-xs text-slate-500 hover:text-slate-900 flex items-center gap-1 cursor-pointer transition-colors"
+                title="Reset to starter code"
+              >
+                <RotateCcw size={12} />
+                Reset
+              </button>
               <button
                 onClick={submit}
                 disabled={running}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-600 text-white text-sm font-medium hover:bg-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-600 text-white text-sm font-medium hover:bg-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors"
               >
                 {running ? <Loader2 size={14} className="animate-spin" /> : <Play size={14} />}
                 {running ? "Running…" : "Submit"}
               </button>
             </div>
-          </div>
+          </>
+        )}
 
-          {currentResult && <ResultsPanel result={currentResult} />}
-        </section>
+        {tab === "tests" && (
+          <div>
+            {problem.visibleExamples.map((ex, i) => (
+              <div key={i} className={ROW}>
+                <span className="w-28 shrink-0 text-sm text-slate-900">example {i + 1}</span>
+                <div className="min-w-0 flex-1 font-mono text-xs text-slate-700 grid gap-0.5">
+                  <div>
+                    <span className="text-slate-500">input </span>
+                    {formatInputCompact(ex.input, 200)}
+                  </div>
+                  <div>
+                    <span className="text-slate-500">output </span>
+                    {formatValue(ex.output, 200)}
+                  </div>
+                  {ex.explanation && <div className="font-sans text-slate-500 mt-1">{ex.explanation}</div>}
+                </div>
+              </div>
+            ))}
+            <div className={ROW}>
+              <span className="w-28 shrink-0 text-sm text-slate-900">hidden</span>
+              <span className="flex-1 text-xs text-slate-500">graded server-side via Judge0</span>
+              <span className={COUNT}>{problem.hiddenCount}</span>
+            </div>
+          </div>
+        )}
+
+        {tab === "results" &&
+          (running ? (
+            <div className="py-8 text-sm text-slate-500 flex items-center gap-2">
+              <Loader2 size={14} className="animate-spin" />
+              Running against {problem.visibleExamples.length + problem.hiddenCount} tests…
+            </div>
+          ) : currentResult ? (
+            <ResultsPanel result={currentResult} />
+          ) : (
+            <div className="py-8 text-sm text-slate-500">No run yet. Submit the solution to grade it.</div>
+          ))}
       </div>
+    </div>
+  );
+}
+
+function PassChip({ passed }: { passed: boolean }) {
+  return (
+    <span className={`${CHIP} ${passed ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"}`}>
+      {passed ? "Pass" : "Fail"}
+    </span>
+  );
+}
+
+function CaseDetail({ c, max }: { c: CaseResult; max: number }) {
+  return (
+    <div className="font-mono text-[11px] text-slate-700 grid gap-0.5 pb-3 pl-28">
+      {c.input && (
+        <div>
+          <span className="text-slate-500">input </span>
+          {formatInputCompact(c.input, max)}
+        </div>
+      )}
+      <div>
+        <span className="text-slate-500">expected </span>
+        {formatValue(c.expected, max)}
+      </div>
+      <div>
+        <span className="text-slate-500">actual </span>
+        {formatValue(c.actual, max)}
+      </div>
+      {c.error && <div className="text-rose-700 mt-1 whitespace-pre-wrap">{c.error}</div>}
     </div>
   );
 }
@@ -350,146 +444,53 @@ function ResultsPanel({ result }: { result: RunResult }) {
   const status = statusLabel(result);
   const visibleCases = result.cases.filter((c) => c.visible);
   const firstFailingHidden = result.cases.find((c) => !c.visible);
+  const hiddenPassed = result.hiddenPassed === result.hiddenTotal;
+  const toneClass =
+    status.tone === "good" ? "text-emerald-700" : status.tone === "warn" ? "text-amber-700" : "text-rose-700";
 
   return (
-    <div className="bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-2xl border border-slate-900/10 p-5">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          {status.tone === "good" ? (
-            <CheckCircle2 size={18} className="text-emerald-600" />
-          ) : status.tone === "warn" ? (
-            <AlertTriangle size={18} className="text-amber-600" />
-          ) : (
-            <XCircle size={18} className="text-rose-600" />
-          )}
-          <h2
-            className={`text-sm font-semibold ${
-              status.tone === "good"
-                ? "text-emerald-700"
-                : status.tone === "warn"
-                  ? "text-amber-700"
-                  : "text-rose-700"
-            }`}
-          >
-            {status.text}
-          </h2>
-        </div>
-        <div className="text-xs text-slate-500 flex items-center gap-3">
-          <span className="flex items-center gap-1">
-            <Clock size={11} />
-            {result.durationMs}ms
+    <div>
+      <div className="flex items-center gap-3 pb-3">
+        <span className={`text-sm font-semibold ${toneClass}`}>{status.text}</span>
+        <span className="ml-auto font-mono text-[11px] text-slate-500 tabular-nums">{result.durationMs}ms</span>
+        {result.total > 0 && (
+          <span className={COUNT}>
+            {result.passed}/{result.total}
           </span>
-          {result.total > 0 && (
-            <span className="font-medium">
-              {result.passed} / {result.total} passed
-            </span>
-          )}
-        </div>
+        )}
       </div>
 
       {result.fatal && (
-        <pre className="bg-rose-50 border border-rose-200 text-rose-700 text-xs font-mono p-3 rounded-xl whitespace-pre-wrap mb-3">
+        <pre className="bg-rose-50 border border-rose-200 text-rose-700 text-xs font-mono p-3 rounded-lg whitespace-pre-wrap mb-3">
           {result.fatal}
         </pre>
       )}
 
-      {visibleCases.length > 0 && (
-        <div className="space-y-2 mb-3">
-          <div className="text-[11px] uppercase tracking-wide text-slate-500 font-semibold">
-            Visible examples
+      {visibleCases.map((c, i) => (
+        <div key={i} className="border-t border-slate-900/10">
+          <div className="flex items-center gap-3 py-2.5">
+            <span className="w-28 shrink-0 truncate text-sm text-slate-900">{c.name}</span>
+            <PassChip passed={c.passed} />
           </div>
-          {visibleCases.map((c, i) => (
-            <CaseRow key={i} c={c} />
-          ))}
+          {!c.passed && <CaseDetail c={c} max={200} />}
         </div>
-      )}
+      ))}
 
       {result.hiddenTotal > 0 && (
-        <div className="space-y-2">
-          <div className="text-[11px] uppercase tracking-wide text-slate-500 font-semibold flex items-center gap-1">
-            <EyeOff size={11} />
-            Hidden cases
-          </div>
-          <div
-            className={`rounded-xl border p-3 text-xs ${
-              result.hiddenPassed === result.hiddenTotal
-                ? "bg-emerald-50 border-emerald-200"
-                : "bg-rose-50 border-rose-200"
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <span className="font-medium text-slate-900">
-                {result.hiddenPassed === result.hiddenTotal
-                  ? "All hidden tests passed"
-                  : `Wrong Answer on case ${result.hiddenPassed + 1} / ${result.hiddenTotal}`}
+        <div className="border-t border-slate-900/10">
+          <div className="flex items-center gap-3 py-2.5">
+            <span className="w-28 shrink-0 text-sm text-slate-900">hidden</span>
+            <PassChip passed={hiddenPassed} />
+            {!hiddenPassed && (
+              <span className="text-xs text-slate-500">
+                first failure at case {result.hiddenPassed + 1}
               </span>
-              <span className="font-mono text-slate-500">
-                {result.hiddenPassed} / {result.hiddenTotal}
-              </span>
-            </div>
-            {firstFailingHidden && (
-              <div className="mt-2 pt-2 border-t border-slate-900/10 font-mono text-[11px] text-slate-700 grid gap-0.5">
-                <div>
-                  <span className="text-slate-500">input:&nbsp;&nbsp;&nbsp;</span>
-                  {formatInputCompact(firstFailingHidden.input, 60)}
-                </div>
-                <div>
-                  <span className="text-slate-500">expected:</span> {formatValue(firstFailingHidden.expected, 60)}
-                </div>
-                <div>
-                  <span className="text-slate-500">actual:&nbsp;&nbsp;</span> {formatValue(firstFailingHidden.actual, 60)}
-                </div>
-                {firstFailingHidden.error && (
-                  <div className="text-rose-700 mt-1 whitespace-pre-wrap">{firstFailingHidden.error}</div>
-                )}
-              </div>
             )}
+            <span className={`ml-auto ${COUNT}`}>
+              {result.hiddenPassed}/{result.hiddenTotal}
+            </span>
           </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function CaseRow({ c }: { c: CaseResult }) {
-  return (
-    <div
-      className={`rounded-xl border p-3 text-xs ${
-        c.passed ? "bg-emerald-50 border-emerald-200" : "bg-rose-50 border-rose-200"
-      }`}
-    >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          {c.passed ? (
-            <CheckCircle2 size={12} className="text-emerald-600" />
-          ) : (
-            <XCircle size={12} className="text-rose-600" />
-          )}
-          <span className="font-medium text-slate-900">{c.name}</span>
-        </div>
-        <span
-          className={`text-[10px] font-semibold uppercase ${
-            c.passed ? "text-emerald-700" : "text-rose-700"
-          }`}
-        >
-          {c.passed ? "passed" : "failed"}
-        </span>
-      </div>
-      {!c.passed && (
-        <div className="font-mono text-[11px] text-slate-700 grid grid-cols-1 gap-0.5 ml-5 mt-1">
-          {c.input && (
-            <div>
-              <span className="text-slate-500">input:&nbsp;&nbsp;&nbsp;</span>
-              {formatInputCompact(c.input, 200)}
-            </div>
-          )}
-          <div>
-            <span className="text-slate-500">expected:</span> {formatValue(c.expected, 200)}
-          </div>
-          <div>
-            <span className="text-slate-500">actual:&nbsp;&nbsp;</span> {formatValue(c.actual, 200)}
-          </div>
-          {c.error && <div className="text-rose-700 mt-1 whitespace-pre-wrap">{c.error}</div>}
+          {firstFailingHidden && <CaseDetail c={firstFailingHidden} max={60} />}
         </div>
       )}
     </div>

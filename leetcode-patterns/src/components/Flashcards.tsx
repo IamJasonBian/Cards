@@ -292,7 +292,7 @@ export function Flashcards() {
 
               {/* Back */}
               <div
-                className="absolute inset-0 bg-white/85 sm:bg-white/65 backdrop-blur-2xl rounded-2xl border border-slate-900/10 shadow-sm p-5 overflow-auto"
+                className="absolute inset-0 bg-[#3a3a3c]/55 backdrop-blur-2xl rounded-2xl border border-slate-900/10 shadow-sm p-5 overflow-auto"
                 style={{
                   backfaceVisibility: "hidden",
                   transform: "rotateY(180deg)",
@@ -318,7 +318,7 @@ export function Flashcards() {
                     <Eye size={12} className="text-slate-500" />
                   </div>
                 </div>
-                <pre className="bg-slate-100/90 text-slate-900 rounded-xl p-3 text-xs overflow-auto font-mono leading-relaxed border border-slate-900/5">
+                <pre className="bg-white/[0.08] text-slate-900 rounded-xl p-3 text-xs overflow-auto font-mono leading-relaxed border border-slate-900/5">
                   <code>{card.code}</code>
                 </pre>
                 <p className="text-xs text-slate-500 mt-3 italic">{card.note}</p>

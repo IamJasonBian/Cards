@@ -11,9 +11,7 @@ export function SplitFeature({ onNavigate }: { onNavigate: (view: string) => voi
           Submit &amp; run — see results in seconds
         </h2>
         <p className="mt-5 mx-auto max-w-2xl text-base sm:text-lg text-slate-600">
-          Write your solution, run it against the real test cases, and get
-          accepted/wrong-answer feedback with the failing case — right in the
-          browser.
+          Benchmark - judge evaluation runtime for human and model environments
         </p>
         <div className="mt-8 flex justify-center">
           <button
