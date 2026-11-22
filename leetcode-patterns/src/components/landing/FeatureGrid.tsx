@@ -5,6 +5,7 @@ import {
   Play,
   Layers,
   Code,
+  Network,
   ArrowUpRight,
   type LucideIcon,
 } from "lucide-react";
@@ -23,6 +24,7 @@ const blocks: FeatureBlock[] = [
   { id: "submit", label: "Submit", desc: "Solve & run against tests", icon: Play },
   { id: "flashcards", label: "Flashcards", desc: "Spaced-repetition review", icon: Layers },
   { id: "interview-drill", label: "Interview Drill", desc: "Mock interview practice", icon: Code },
+  { id: "systems-design", label: "Systems Design", desc: "Four-chapter SD study cards", icon: Network },
 ];
 
 export function FeatureGrid({ onNavigate }: { onNavigate: (view: string) => void }) {

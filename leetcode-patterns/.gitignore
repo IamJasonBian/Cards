@@ -29,3 +29,6 @@ server/.data/
 .env
 .env.local
 scripts/seed/
+
+# Saved third-party pages used as private study source material (never commit)
+leetcode-cards-context/

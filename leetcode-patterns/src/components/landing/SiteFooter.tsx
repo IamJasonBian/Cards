@@ -45,6 +45,9 @@ export function SiteFooter({ onNavigate }: { onNavigate: (view: string) => void 
             <button type="button" className={linkClass} onClick={() => onNavigate("submit")}>
               Submit
             </button>
+            <button type="button" className={linkClass} onClick={() => onNavigate("systems-design")}>
+              Systems Design
+            </button>
           </div>
         </div>
 

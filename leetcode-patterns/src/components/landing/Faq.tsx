@@ -21,6 +21,11 @@ const FAQ_ITEMS = [
     answer:
       "Curated favorites like Blind 75, NeetCode 150, and Grind 75, plus pattern-grouped sets you can practice by topic.",
   },
+  {
+    question: "What are the system design study cards?",
+    answer:
+      "Four chapters kept as section headers, with the diagrams from each page placed in reading order. Expand a section to write and reorder — nothing is saved.",
+  },
 ];
 
 export function Faq() {
