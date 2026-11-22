@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { BookOpen, ChevronDown, Code, Filter, FlaskConical, Layers, Play, Sigma, Zap } from "lucide-react";
+import { BookOpen, ChevronDown, Code, Filter, FlaskConical, Layers, Network, Play, Sigma, Zap } from "lucide-react";
 import { patterns, tags } from "./data/patterns";
 import type { Pattern, Problem } from "./data/patterns";
 import { PatternCard } from "./components/PatternCard";
@@ -14,6 +14,7 @@ import { PopularLists } from "./components/PopularLists";
 import { Flashcards } from "./components/Flashcards";
 import { InterviewDrill } from "./components/InterviewDrill";
 import { Theory } from "./components/Theory";
+import { SystemsDesign } from "./components/SystemsDesign";
 import { Blind75Submit } from "./components/Blind75Submit";
 import { Landing } from "./components/Landing";
 import { Donate } from "./components/Donate";
@@ -32,7 +33,8 @@ type View =
   | "popular-lists"
   | "flashcards"
   | "interview-drill"
-  | "theory";
+  | "theory"
+  | "systems-design";
 
 function getRelatedProblems(
   selected: Pattern,
@@ -73,6 +75,7 @@ function App() {
   const [view, setView] = useState<View>(() => {
     // #theory also matches deep links like #theory/sicp-js/33 (page bookmarks).
     if (window.location.hash.startsWith("#theory")) return "theory";
+    if (window.location.hash.startsWith("#systems-design")) return "systems-design";
     switch (window.location.hash) {
       case "#submit":
         return "submit";
@@ -100,6 +103,20 @@ function App() {
     null
   );
   const [relatedProblems, setRelatedProblems] = useState<Problem[]>([]);
+  const [systemsDesignChapter, setSystemsDesignChapter] = useState<string | null>(
+    () => /^#systems-design\/([a-z0-9-]+)/.exec(window.location.hash)?.[1] ?? null
+  );
+
+  function openSystemsDesign(chapterId?: string) {
+    clearSelection();
+    setSystemsDesignChapter(chapterId ?? null);
+    setView("systems-design");
+    window.history.replaceState(
+      null,
+      "",
+      chapterId ? `#systems-design/${chapterId}` : "#systems-design"
+    );
+  }
 
   // Fetch a random nature wallpaper on startup for the abyss backdrop (first
   // visits only — repeat visits start with the prefetched one). Once the
@@ -167,6 +184,7 @@ function App() {
       flashcards: "#flashcards",
       "interview-drill": "#interview-drill",
       theory: "#theory",
+      "systems-design": "#systems-design",
     };
     const target = hashable[view];
     if (target) {
@@ -229,6 +247,17 @@ function App() {
             >
               <BookOpen size={14} />
               Popular Lists
+            </button>
+            <button
+              onClick={() => openSystemsDesign()}
+              className={`flex items-center justify-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
+                view === "systems-design"
+                  ? "bg-cyan-100 text-cyan-700"
+                  : "text-slate-700 hover:bg-slate-900/10"
+              }`}
+            >
+              <Network size={14} />
+              Systems Design
             </button>
 
             <div className="relative" ref={experimentalRef}>
@@ -301,9 +330,14 @@ function App() {
       {view === "home" ? (
         <Landing
           onNavigate={(v) => {
+            if (v === "systems-design") {
+              openSystemsDesign();
+              return;
+            }
             setView(v);
             clearSelection();
           }}
+          onOpenSystemsChapter={(id) => openSystemsDesign(id)}
         />
       ) : (
       <div className="flex">
@@ -330,6 +364,8 @@ function App() {
             <InterviewDrill />
           ) : view === "theory" ? (
             <Theory />
+          ) : view === "systems-design" ? (
+            <SystemsDesign initialChapterId={systemsDesignChapter} />
           ) : selectedPattern ? (
             <PracticeSetView
               pattern={selectedPattern}

@@ -4,6 +4,7 @@ import { StatBand } from "./landing/StatBand";
 import { FeatureGrid } from "./landing/FeatureGrid";
 import { PostList } from "./landing/PostList";
 import { SplitFeature } from "./landing/SplitFeature";
+import { SystemsDesignChapterList } from "./landing/SystemsDesignChapterList";
 import { Faq } from "./landing/Faq";
 import { SiteFooter } from "./landing/SiteFooter";
 
@@ -13,15 +14,18 @@ export type LandingView =
   | "popular-lists"
   | "submit"
   | "flashcards"
-  | "interview-drill";
+  | "interview-drill"
+  | "systems-design";
 
 // Galaxy.com-style product landing: stacked full-width sections. Each section is
 // a self-contained component under ./landing; this just orders them and threads
 // navigation. Sections receive a loose (view: string) callback; we narrow here.
 export function Landing({
   onNavigate,
+  onOpenSystemsChapter,
 }: {
   onNavigate: (view: LandingView) => void;
+  onOpenSystemsChapter: (chapterId: string) => void;
 }) {
   const nav = (view: string) => onNavigate(view as LandingView);
   return (
@@ -30,6 +34,7 @@ export function Landing({
       <TagRail onNavigate={nav} />
       <StatBand />
       <FeatureGrid onNavigate={nav} />
+      <SystemsDesignChapterList onNavigate={nav} onOpenChapter={onOpenSystemsChapter} />
       <PostList onNavigate={nav} />
       <SplitFeature onNavigate={nav} />
       <Faq />
