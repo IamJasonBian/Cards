@@ -1,189 +1,186 @@
 import { AlgoVizFrame } from "./AlgoVizFrame";
-import { useFrames } from "./useFrames";
+import { Cell, Edge, Ink, Sketch, type Tone } from "./paper";
+import { useViz, type NonEmpty, type Scenario } from "./useViz";
 
-const ITEMS: { wt: number; val: number }[] = [
-  { wt: 3, val: 4 },
-  { wt: 4, val: 5 },
-  { wt: 5, val: 6 },
-];
-const W = 8;
+interface Item {
+  wt: number;
+  val: number;
+}
+
+interface Input {
+  items: Item[];
+  capacity: number;
+}
 
 interface Frame {
-  item: number; // index into ITEMS, -1 = none
-  w: number | null; // dp cell being written
-  src: number | null; // dp[w - wt] source cell
+  /** Index of the item being placed; -1 = none yet, items.length = all placed. */
+  item: number;
+  /** dp cell being written. */
+  w?: number;
+  /** dp cell being read: w - wt. Past the end of dp when the weight is negative. */
+  src?: number;
   dp: number[];
-  updated: boolean;
   note: string;
   done?: boolean;
 }
 
-const frames: Frame[] = (() => {
-  const out: Frame[] = [];
-  const dp = Array(W + 1).fill(0);
+const SCENARIOS: NonEmpty<Scenario<Input>> = [
+  {
+    id: "normal",
+    label: "3 items, W = 8",
+    input: { items: [{ wt: 3, val: 4 }, { wt: 4, val: 5 }, { wt: 5, val: 6 }], capacity: 8 },
+  },
+  {
+    id: "too-heavy",
+    label: "one item too heavy",
+    input: { items: [{ wt: 2, val: 3 }, { wt: 9, val: 20 }, { wt: 3, val: 4 }], capacity: 5 },
+  },
+  {
+    id: "negative-weight",
+    label: "negative weight",
+    malformed: true,
+    input: { items: [{ wt: 3, val: 4 }, { wt: -2, val: 5 }, { wt: 4, val: 6 }], capacity: 6 },
+  },
+];
+
+function buildFrames({ items, capacity }: Input): NonEmpty<Frame> {
+  if (capacity < 0) {
+    return [{ item: -1, dp: [], note: `Capacity ${capacity} is negative, so dp[0..W] cannot be built. Nothing fits: real code should return 0 or reject the input.` }];
+  }
+  const dp = Array.from({ length: capacity + 1 }, () => 0);
   const snap = () => [...dp];
-  out.push({ item: -1, w: null, src: null, dp: snap(), updated: false, note: `dp[0..${W}] = 0 — no items considered yet` });
-  ITEMS.forEach(({ wt, val }, i) => {
+  const out: NonEmpty<Frame> = [
+    { item: -1, dp: snap(), note: `dp[w] = best value with total weight at most w. No items yet, so dp[0..${capacity}] = 0.` },
+  ];
+
+  // dp[w - wt] is only a valid, already-solved cell when wt >= 0.
+  const bad = items.findIndex((it) => it.wt < 0);
+  if (bad >= 0) {
+    const { wt } = items[bad];
+    const src = capacity - wt;
+    out.push({ item: bad, dp: snap(), note: `Precondition broken: item ${bad + 1} has weight ${wt}. Weights must be 0 or more.` });
+    out.push({
+      item: bad,
+      w: capacity,
+      src,
+      dp: snap(),
+      note: `dp[${capacity}] would read dp[${capacity} - (${wt})] = dp[${src}], past the end of dp[0..${capacity}]. The loop bound w >= ${wt} then runs into negative indexes.`,
+    });
+    out.push({
+      item: bad,
+      w: capacity,
+      src,
+      dp: snap(),
+      note: "No answer. Real code should validate the weights first and reject the input instead of indexing out of bounds.",
+    });
+    return out;
+  }
+
+  items.forEach(({ wt, val }, i) => {
     out.push({
       item: i,
-      w: null,
-      src: null,
       dp: snap(),
-      updated: false,
-      note: `item ${i + 1} (wt=${wt}, val=${val}) — sweep w from ${W} DOWN to ${wt} (reverse → used once)`,
+      note:
+        wt > capacity
+          ? `Item ${i + 1} weighs ${wt}, more than capacity ${capacity}. It never fits, so skip it.`
+          : `Item ${i + 1} (wt ${wt}, val ${val}): sweep w from ${capacity} down to ${wt}. Right to left, so dp[w - ${wt}] has not used this item yet.`,
     });
-    for (let w = W; w >= wt; w -= 1) {
-      const cand = dp[w - wt] + val;
-      if (cand > dp[w]) {
-        dp[w] = cand;
-        out.push({
-          item: i,
-          w,
-          src: w - wt,
-          dp: snap(),
-          updated: true,
-          note: `dp[${w}] = max(dp[${w}], dp[${w - wt}] + ${val}) = ${cand} — take item`,
-        });
-      } else {
-        out.push({
-          item: i,
-          w,
-          src: w - wt,
-          dp: snap(),
-          updated: false,
-          note: `dp[${w - wt}] + ${val} = ${cand} ≤ dp[${w}] = ${dp[w]} — skip item`,
-        });
-      }
+    for (let w = capacity; w >= wt; w -= 1) {
+      const skip = dp[w];
+      const rest = dp[w - wt];
+      dp[w] = Math.max(skip, rest + val);
+      out.push({
+        item: i,
+        w,
+        src: w - wt,
+        dp: snap(),
+        note: `dp[${w}] = max(dp[${w}], dp[${w - wt}] + ${val}) = max(${skip}, ${rest} + ${val}) = ${dp[w]}. ${rest + val > skip ? "Take" : "Skip"} item ${i + 1}.`,
+      });
     }
   });
   out.push({
-    item: -1,
-    w: W,
-    src: null,
+    item: items.length,
+    w: capacity,
     dp: snap(),
-    updated: false,
     done: true,
-    note: `done — dp[${W}] = ${dp[W]} is the best value within capacity ${W}`,
+    note: `Done: dp[${capacity}] = ${dp[capacity]} is the best value that fits in capacity ${capacity}.`,
   });
   return out;
-})();
+}
 
-const CELL = 52;
-const X0 = 20;
+const CELL = 48;
+const GAP = 8;
+const PAD = 24;
+const LABEL = 56;
+const ITEM_W = 112;
+const ITEM_Y = 16;
+const DP_Y = 136;
 
 export function Knapsack01() {
-  const { step, frame, running, playToggle, stepBy, reset } = useFrames(frames, 1000);
+  const { input, frame, controls } = useViz(SCENARIOS, buildFrames, 1000);
+  const { items, capacity } = input;
+  // A negative weight reads past the end of dp; leave room to draw that slot.
+  const slots = Math.max(0, capacity + 1) + Math.max(0, ...items.map((it) => -it.wt));
+  const cx = (w: number) => PAD + LABEL + w * (CELL + GAP) + CELL / 2;
+  const { w, src } = frame;
+
+  const itemTone = (i: number): Tone => (i === frame.item ? "active" : i < frame.item ? "dim" : "idle");
+  const dpTone = (i: number): Tone => {
+    if (i === w) return frame.done ? "done" : "active";
+    return i === src ? "done" : "idle";
+  };
 
   return (
     <AlgoVizFrame
-      title="0/1 Knapsack — 1-D dp"
-      subtitle={`capacity W = ${W}; reverse sweep keeps each item 0/1`}
-      step={step}
-      stepCount={frames.length}
-      running={running}
-      onPlayToggle={playToggle}
-      onStep={stepBy}
-      onReset={reset}
+      title="0/1 knapsack: one dp row"
+      subtitle={`capacity W = ${capacity}; each item used at most once`}
       caption={frame.note}
+      {...controls}
     >
-      <svg viewBox={`0 0 ${X0 * 2 + (W + 1) * CELL} 260`} className="w-full">
-        {/* items row */}
-        <text x={X0} y={30} fill="#64748b" fontSize={11} fontFamily="JetBrains Mono, monospace">
-          items:
-        </text>
-        {ITEMS.map(({ wt, val }, i) => {
-          const active = frame.item === i;
-          return (
-            <g key={i}>
-              <rect
-                x={X0 + 70 + i * 118}
-                y={12}
-                width={106}
-                height={30}
-                rx={7}
-                fill={active ? "#06b6d4" : "#1e2030"}
-                stroke={active ? "#22d3ee" : "rgba(255,255,255,0.08)"}
-                style={{ transition: "fill 300ms" }}
-              />
-              <text
-                x={X0 + 70 + i * 118 + 53}
-                y={32}
-                textAnchor="middle"
-                fill="#f1f5f9"
-                fontSize={12}
-                fontFamily="JetBrains Mono, monospace"
-              >
-                wt {wt} · val {val}
-              </text>
-            </g>
-          );
-        })}
+      <Sketch
+        width={PAD * 2 + LABEL + Math.max(items.length * (ITEM_W + GAP), slots * (CELL + GAP)) - GAP}
+        height={DP_Y + CELL + 36}
+        label={`Knapsack dp row for capacity ${capacity} and ${items.length} items`}
+      >
+        <Ink x={PAD} y={ITEM_Y + 20} anchor="start" tone="dim">
+          items
+        </Ink>
+        {items.map(({ wt, val }, i) => (
+          <Cell
+            key={i}
+            x={PAD + LABEL + i * (ITEM_W + GAP)}
+            y={ITEM_Y}
+            w={ITEM_W}
+            h={40}
+            size={16}
+            tone={itemTone(i)}
+            label={`wt ${wt} · val ${val}`}
+            sub={`item ${i + 1}`}
+          />
+        ))}
 
-        {/* dp row */}
-        <text x={X0} y={105} fill="#64748b" fontSize={11} fontFamily="JetBrains Mono, monospace">
-          dp:
-        </text>
-        {frame.dp.map((v, i) => {
-          const isCur = frame.w === i;
-          const isSrc = frame.src === i;
-          const isAnswer = frame.done && i === W;
-          const fill = isAnswer
-            ? "#10b981"
-            : isCur
-            ? frame.updated
-              ? "#0d9e6e"
-              : "#06b6d4"
-            : isSrc
-            ? "#1e3a34"
-            : "#1e2030";
-          const stroke = isAnswer
-            ? "#34d399"
-            : isCur
-            ? "#22d3ee"
-            : isSrc
-            ? "#34d399"
-            : "rgba(255,255,255,0.08)";
-          return (
-            <g key={i}>
-              <rect
-                x={X0 + i * CELL}
-                y={120}
-                width={CELL - 8}
-                height={54}
-                rx={8}
-                fill={fill}
-                stroke={stroke}
-                strokeWidth={isCur || isSrc || isAnswer ? 2 : 1}
-                style={{ transition: "fill 300ms, stroke 300ms" }}
-              />
-              <text
-                x={X0 + i * CELL + (CELL - 8) / 2}
-                y={153}
-                textAnchor="middle"
-                fill="#f1f5f9"
-                fontSize={15}
-                fontFamily="JetBrains Mono, monospace"
-              >
-                {v}
-              </text>
-              <text
-                x={X0 + i * CELL + (CELL - 8) / 2}
-                y={195}
-                textAnchor="middle"
-                fill="#64748b"
-                fontSize={11}
-                fontFamily="JetBrains Mono, monospace"
-              >
-                {i}
-              </text>
-            </g>
-          );
-        })}
-        {/* sweep direction hint */}
-        <text x={X0} y={235} fill="#64748b" fontSize={11} fontFamily="JetBrains Mono, monospace">
-          w sweeps ← right to left, so dp[w - wt] still holds the PREVIOUS item row
-        </text>
-      </svg>
+        <Ink x={PAD} y={DP_Y + CELL / 2} anchor="start" tone="dim">
+          dp
+        </Ink>
+        {frame.dp.map((v, i) => (
+          <Cell key={i} x={cx(i) - CELL / 2} y={DP_Y} w={CELL} tone={dpTone(i)} label={v} sub={i} />
+        ))}
+        {/* Slots past the end of dp, up to the one a negative weight reads. */}
+        {Array.from({ length: Math.max(0, (src ?? 0) - capacity) }, (_, k) => capacity + 1 + k).map((i) => (
+          <Cell key={i} x={cx(i) - CELL / 2} y={DP_Y} w={CELL} tone="dim" label="?" sub={i} />
+        ))}
+        {w !== undefined && src !== undefined && src !== w && (
+          <Edge
+            x1={cx(src)}
+            y1={DP_Y - 4}
+            x2={cx(w)}
+            y2={DP_Y - 4}
+            bend={src < w ? -34 : 34}
+            tone={src > capacity ? "dim" : "idle"}
+            arrow
+          />
+        )}
+      </Sketch>
     </AlgoVizFrame>
   );
 }

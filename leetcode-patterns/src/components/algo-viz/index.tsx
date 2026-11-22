@@ -1,3 +1,5 @@
+import type { ComponentType } from "react";
+import type { VizKind } from "../../data/flashcards";
 import { TwoPointers } from "./TwoPointers";
 import { SlidingWindow } from "./SlidingWindow";
 import { BinarySearch } from "./BinarySearch";
@@ -11,49 +13,27 @@ import { GraphTraversal } from "./GraphTraversal";
 import { BFSLayerOrder } from "./BFSLayerOrder";
 import { FloydsCycle } from "./FloydsCycle";
 import { StackMatch } from "./StackMatch";
+import { ReverseLinkedList } from "./ReverseLinkedList";
 
-export type VizKind =
-  | "two-pointers"
-  | "sliding-window"
-  | "binary-search"
-  | "fast-slow-middle"
-  | "bst-insert-search"
-  | "lcs-dp-table"
-  | "knapsack-01"
-  | "coin-change"
-  | "heap-top-k"
-  | "graph-traversal"
-  | "bfs-layer"
-  | "floyds-cycle"
-  | "stack-match";
+// Keyed by VizKind, so adding a kind without a component is a type error.
+const VIZ: Record<VizKind, ComponentType> = {
+  "two-pointers": TwoPointers,
+  "sliding-window": SlidingWindow,
+  "binary-search": BinarySearch,
+  "fast-slow-middle": FastSlowMiddle,
+  "bst-insert-search": BSTInsertSearch,
+  "lcs-dp-table": LcsDpTable,
+  "knapsack-01": Knapsack01,
+  "coin-change": CoinChange,
+  "heap-top-k": HeapTopK,
+  "graph-traversal": GraphTraversal,
+  "bfs-layer": BFSLayerOrder,
+  "floyds-cycle": FloydsCycle,
+  "stack-match": StackMatch,
+  "reverse-linked-list": ReverseLinkedList,
+};
 
 export function AlgoViz({ kind }: { kind: VizKind }) {
-  switch (kind) {
-    case "two-pointers":
-      return <TwoPointers />;
-    case "sliding-window":
-      return <SlidingWindow />;
-    case "binary-search":
-      return <BinarySearch />;
-    case "fast-slow-middle":
-      return <FastSlowMiddle />;
-    case "bst-insert-search":
-      return <BSTInsertSearch />;
-    case "lcs-dp-table":
-      return <LcsDpTable />;
-    case "knapsack-01":
-      return <Knapsack01 />;
-    case "coin-change":
-      return <CoinChange />;
-    case "heap-top-k":
-      return <HeapTopK />;
-    case "graph-traversal":
-      return <GraphTraversal />;
-    case "bfs-layer":
-      return <BFSLayerOrder />;
-    case "floyds-cycle":
-      return <FloydsCycle />;
-    case "stack-match":
-      return <StackMatch />;
-  }
+  const Viz = VIZ[kind];
+  return <Viz />;
 }

@@ -1,201 +1,225 @@
 import { AlgoVizFrame } from "./AlgoVizFrame";
-import { useFrames } from "./useFrames";
+import { Cell, Edge, Ink, Node, Sketch, type Tone } from "./paper";
+import { useViz, type NonEmpty, type Scenario } from "./useViz";
 
-// A real graph (not a tree): cross edges and two cycles, so the visited
-// set actually earns its keep — D and G are each reachable two ways.
-//
-//   A ── B          A: (90, 90)   B: (250, 60)
-//   │    │          C: (170, 200) D: (330, 170)
-//   C ── D ── E     E: (470, 120) F: (250, 300)
-//   │         │     G: (430, 270)
-//   F ─────── G ────┘
-const NODES = ["A", "B", "C", "D", "E", "F", "G"] as const;
-const POS: { x: number; y: number }[] = [
-  { x: 90, y: 90 },
-  { x: 250, y: 60 },
-  { x: 170, y: 200 },
-  { x: 330, y: 170 },
-  { x: 470, y: 120 },
-  { x: 250, y: 300 },
-  { x: 430, y: 270 },
-];
-const EDGES: [number, number][] = [
-  [0, 1], // A-B
-  [0, 2], // A-C
-  [1, 3], // B-D
-  [2, 3], // C-D  (cycle A-B-D-C-A)
-  [3, 4], // D-E
-  [2, 5], // C-F
-  [4, 6], // E-G
-  [5, 6], // F-G  (cycle C-D-E-G-F-C)
-];
+interface GraphNode {
+  id: string;
+  x: number;
+  y: number;
+}
 
-const ADJ: number[][] = NODES.map(() => []);
-for (const [u, v] of EDGES) {
-  ADJ[u].push(v);
-  ADJ[v].push(u);
+interface Input {
+  /** Where each node is drawn. */
+  nodes: GraphNode[];
+  /** Adjacency list, as real code would hold it. A node can be missing its entry. */
+  adj: Partial<Record<string, string[]>>;
+  start: string;
 }
 
 interface Frame {
-  queue: number[];
-  visited: Set<number>;
-  current: number | null;
-  enqueuing: number | null;
-  activeEdge: [number, number] | null;
+  queue: string[];
+  /** Nodes marked visited, in the order BFS discovered them. */
+  visited: string[];
+  /** Nodes already popped and fully scanned. */
+  done: string[];
+  current: string | null;
+  /** The neighbor link being checked: [from, to]. */
+  edge: [string, string] | null;
+  /** Nodes to call out: a broken entry, or nodes BFS never reached. */
+  flagged: string[];
   note: string;
 }
 
-const frames: Frame[] = (() => {
-  const out: Frame[] = [];
-  const queue = [0];
-  const visited = new Set<number>([0]);
-  out.push({
+const SCENARIOS: NonEmpty<Scenario<Input>> = [
+  {
+    // Not a tree: two cycles, so D and G can each be reached two ways.
+    id: "cycles",
+    label: "graph with cycles",
+    input: {
+      start: "A",
+      nodes: [
+        { id: "A", x: 90, y: 90 },
+        { id: "B", x: 250, y: 60 },
+        { id: "C", x: 170, y: 200 },
+        { id: "D", x: 330, y: 170 },
+        { id: "E", x: 470, y: 120 },
+        { id: "F", x: 250, y: 300 },
+        { id: "G", x: 430, y: 270 },
+      ],
+      adj: {
+        A: ["B", "C"],
+        B: ["A", "D"],
+        C: ["A", "D", "F"],
+        D: ["B", "C", "E"],
+        E: ["D", "G"],
+        F: ["C", "G"],
+        G: ["E", "F"],
+      },
+    },
+  },
+  {
+    id: "islands",
+    label: "two components",
+    input: {
+      start: "A",
+      nodes: [
+        { id: "A", x: 90, y: 90 },
+        { id: "B", x: 250, y: 60 },
+        { id: "C", x: 170, y: 200 },
+        { id: "D", x: 330, y: 170 },
+        { id: "E", x: 470, y: 90 },
+        { id: "F", x: 470, y: 250 },
+      ],
+      adj: { A: ["B", "C"], B: ["A", "D"], C: ["A", "D"], D: ["B", "C"], E: ["F"], F: ["E"] },
+    },
+  },
+  {
+    // B, C and E all list D as a neighbor, but D has no entry of its own.
+    id: "missing",
+    label: "missing adjacency entry",
+    malformed: true,
+    input: {
+      start: "A",
+      nodes: [
+        { id: "A", x: 90, y: 90 },
+        { id: "B", x: 250, y: 60 },
+        { id: "C", x: 170, y: 200 },
+        { id: "D", x: 330, y: 170 },
+        { id: "E", x: 470, y: 120 },
+      ],
+      adj: { A: ["B", "C"], B: ["A", "D"], C: ["A", "D"], E: ["D"] },
+    },
+  },
+];
+
+function buildFrames({ nodes, adj, start }: Input): NonEmpty<Frame> {
+  const queue = [start];
+  const visited = [start];
+  const done: string[] = [];
+  let current: string | null = null;
+  const snap = (note: string, edge: Frame["edge"] = null, flagged: string[] = []): Frame => ({
     queue: [...queue],
-    visited: new Set(visited),
-    current: null,
-    enqueuing: null,
-    activeEdge: null,
-    note: "BFS from A — enqueue A, visited = {A}",
+    visited: [...visited],
+    done: [...done],
+    current,
+    edge,
+    flagged,
+    note,
   });
-  while (queue.length > 0) {
-    const u = queue.shift()!;
-    out.push({
-      queue: [...queue],
-      visited: new Set(visited),
-      current: u,
-      enqueuing: null,
-      activeEdge: null,
-      note: `pop ${NODES[u]} — scan its neighbors`,
-    });
-    for (const v of ADJ[u]) {
-      if (!visited.has(v)) {
-        visited.add(v);
-        queue.push(v);
-        out.push({
-          queue: [...queue],
-          visited: new Set(visited),
-          current: u,
-          enqueuing: v,
-          activeEdge: [u, v],
-          note: `${NODES[v]} unvisited → mark + enqueue`,
-        });
+
+  const out: NonEmpty<Frame> = [snap(`BFS from ${start}: mark ${start} visited and put it in the queue.`)];
+  const broken: string[] = [];
+  for (let u = queue.shift(); u !== undefined; u = queue.shift()) {
+    current = u;
+    const neighbors = adj[u];
+    if (neighbors === undefined) {
+      broken.push(u);
+      out.push(snap(`Pop ${u} and look up adj[${u}]. There is no such entry: other lists mention ${u}, but ${u} has no list of its own.`, null, [u]));
+      out.push(
+        snap(`In Python, adj[${u}] raises KeyError here. Build the list with defaultdict(list) and add both directions of every edge, or read adj.get(${u}, []).`, null, [u])
+      );
+    } else {
+      out.push(snap(`Pop ${u} from the front and scan its neighbors: ${neighbors.join(", ") || "none"}.`));
+    }
+    for (const v of neighbors ?? []) {
+      if (visited.includes(v)) {
+        out.push(snap(`${v} is already visited, so skip it. This check is what stops cycles from looping forever.`, [u, v]));
       } else {
-        out.push({
-          queue: [...queue],
-          visited: new Set(visited),
-          current: u,
-          enqueuing: null,
-          activeEdge: [u, v],
-          note: `${NODES[v]} already visited → skip (no re-processing)`,
-        });
+        visited.push(v);
+        queue.push(v);
+        out.push(snap(`${v} is new: mark it visited now and push it to the back of the queue.`, [u, v]));
       }
     }
+    done.push(u);
   }
-  out.push({
-    queue: [],
-    visited,
-    current: null,
-    enqueuing: null,
-    activeEdge: null,
-    note: "queue empty — all 7 nodes visited exactly once",
-  });
+
+  current = null;
+  const missed = nodes.map((n) => n.id).filter((id) => !visited.includes(id));
+  const order = visited.join(", ");
+  if (missed.length === 0 && broken.length === 0) {
+    out.push(snap(`Queue is empty. All ${visited.length} nodes were visited exactly once, in order ${order}.`));
+  } else if (broken.length > 0) {
+    out.push(
+      snap(
+        `Queue is empty. Visited ${order}, treating ${broken.join(", ")} as having no neighbors. ${
+          missed.length > 0 ? `${missed.join(", ")} was never reached, so the answer is silently incomplete.` : ""
+        } Fix the adjacency list instead of hiding the error.`,
+        null,
+        [...broken, ...missed]
+      )
+    );
+  } else {
+    out.push(
+      snap(
+        `Queue is empty. Visited ${order}, but never reached ${missed.join(", ")}: no path leads there from ${start}. To cover every component, start a new BFS from each unvisited node.`,
+        null,
+        missed
+      )
+    );
+  }
   return out;
-})();
+}
+
+const QUEUE_Y = 346;
+const CELL = 36;
 
 export function GraphTraversal() {
-  const { step, frame, running, playToggle, stepBy, reset } = useFrames(frames);
+  const { input, frame, controls } = useViz(SCENARIOS, buildFrames);
+  const { nodes, adj } = input;
+  const pos = new Map(nodes.map((n) => [n.id, n]));
+
+  // Each undirected edge is drawn once, even if only one endpoint lists it.
+  const edges = [
+    ...new Set(Object.entries(adj).flatMap(([u, vs]) => (vs ?? []).map((v) => [u, v].sort().join(" ")))),
+  ].map((key) => key.split(" "));
+  const isChecked = (u: string, v: string) =>
+    frame.edge !== null && frame.edge.includes(u) && frame.edge.includes(v);
+
+  const tone = (id: string): Tone => {
+    if (frame.flagged.includes(id) || frame.current === id) return "active";
+    if (frame.done.includes(id)) return "done";
+    return frame.visited.includes(id) ? "idle" : "dim";
+  };
 
   return (
     <AlgoVizFrame
       title="Graph BFS"
-      subtitle="adjacency list + queue + visited set (cycles won't loop)"
-      step={step}
-      stepCount={frames.length}
-      running={running}
-      onPlayToggle={playToggle}
-      onStep={stepBy}
-      onReset={reset}
+      subtitle="adjacency list + queue + visited set"
       caption={frame.note}
+      {...controls}
     >
-      <svg viewBox="0 0 560 360" className="w-full">
-        {EDGES.map(([u, v], i) => {
-          const isActive =
-            frame.activeEdge &&
-            ((frame.activeEdge[0] === u && frame.activeEdge[1] === v) ||
-              (frame.activeEdge[0] === v && frame.activeEdge[1] === u));
+      <Sketch
+        width={560}
+        height={430}
+        label={`Graph with nodes ${nodes.map((n) => n.id).join(", ")}, the BFS queue and the visited set`}
+      >
+        {edges.map(([u, v]) => {
+          const a = pos.get(u);
+          const b = pos.get(v);
+          if (!a || !b) return null;
           return (
-            <line
-              key={i}
-              x1={POS[u].x}
-              y1={POS[u].y}
-              x2={POS[v].x}
-              y2={POS[v].y}
-              stroke={isActive ? "#22d3ee" : "rgba(255,255,255,0.15)"}
-              strokeWidth={isActive ? 2.5 : 1.5}
-              style={{ transition: "stroke 300ms" }}
-            />
+            <Edge key={`${u} ${v}`} x1={a.x} y1={a.y} x2={b.x} y2={b.y} trim={22} tone={isChecked(u, v) ? "active" : "idle"} />
           );
         })}
-        {NODES.map((name, i) => {
-          const visited = frame.visited.has(i);
-          const isCurrent = frame.current === i;
-          const isEnqueuing = frame.enqueuing === i;
-          const fill = isCurrent
-            ? "#06b6d4"
-            : isEnqueuing
-            ? "#0d9e6e"
-            : visited
-            ? "#1e2030"
-            : "#0e0f14";
-          const stroke = isCurrent
-            ? "#22d3ee"
-            : isEnqueuing
-            ? "#34d399"
-            : visited
-            ? "rgba(255,255,255,0.25)"
-            : "rgba(255,255,255,0.08)";
-          return (
-            <g key={i} style={{ transition: "all 300ms" }}>
-              <circle
-                cx={POS[i].x}
-                cy={POS[i].y}
-                r={22}
-                fill={fill}
-                stroke={stroke}
-                strokeWidth={2}
-                style={{ transition: "fill 300ms, stroke 300ms" }}
-              />
-              <text
-                x={POS[i].x}
-                y={POS[i].y + 5}
-                textAnchor="middle"
-                fill="#f1f5f9"
-                fontSize={14}
-                fontFamily="JetBrains Mono, monospace"
-                fontWeight={600}
-              >
-                {name}
-              </text>
-            </g>
-          );
-        })}
-        <g transform="translate(0, 348)">
-          <text x={10} y={0} fill="#64748b" fontSize={11} fontFamily="JetBrains Mono, monospace">
-            queue:
-          </text>
-          <text x={62} y={0} fill="#22d3ee" fontSize={12} fontFamily="JetBrains Mono, monospace">
-            [{frame.queue.map((i) => NODES[i]).join(", ")}]
-          </text>
-          <text x={210} y={0} fill="#64748b" fontSize={11} fontFamily="JetBrains Mono, monospace">
-            visited:
-          </text>
-          <text x={272} y={0} fill="#34d399" fontSize={12} fontFamily="JetBrains Mono, monospace">
-            {"{"}
-            {NODES.filter((_, i) => frame.visited.has(i)).join(", ")}
-            {"}"}
-          </text>
-        </g>
-      </svg>
+        {nodes.map((n) => (
+          <Node key={n.id} x={n.x} y={n.y} tone={tone(n.id)} label={n.id} />
+        ))}
+
+        <Ink x={20} y={QUEUE_Y + CELL / 2} anchor="start">
+          queue
+        </Ink>
+        {frame.queue.map((id, i) => (
+          <Cell key={id} x={84 + i * (CELL + 6)} y={QUEUE_Y} w={CELL} label={id} sub={i === 0 ? "front" : undefined} />
+        ))}
+        {frame.queue.length === 0 && (
+          <Ink x={84} y={QUEUE_Y + CELL / 2} anchor="start" tone="dim">
+            empty
+          </Ink>
+        )}
+        <Ink x={20} y={412} anchor="start">
+          visited = {`{${frame.visited.join(", ")}}`}
+        </Ink>
+      </Sketch>
     </AlgoVizFrame>
   );
 }

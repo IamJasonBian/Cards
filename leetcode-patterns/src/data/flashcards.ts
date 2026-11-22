@@ -20,7 +20,8 @@ export type VizKind =
   | "graph-traversal"
   | "bfs-layer"
   | "floyds-cycle"
-  | "stack-match";
+  | "stack-match"
+  | "reverse-linked-list";
 
 export interface Flashcard {
   id: string;
@@ -29,7 +30,6 @@ export interface Flashcard {
   hint: string;
   code: string;
   note: string;
-  vizPath?: string;
   viz?: VizKind;
 }
 
@@ -57,7 +57,7 @@ def reverse_list(head):
     head.next = None
     return new_head`,
     note: "Iterative: 3-pointer walk. Recursive: trust the base + wire backward.",
-    vizPath: "/viz/reverse-linked-list.html",
+    viz: "reverse-linked-list",
   },
   {
     id: "detect-cycle-floyd",

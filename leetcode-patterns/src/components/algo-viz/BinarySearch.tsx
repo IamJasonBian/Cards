@@ -1,130 +1,136 @@
 import { AlgoVizFrame } from "./AlgoVizFrame";
-import { useFrames } from "./useFrames";
+import { Cell, Pointer, Sketch, type Tone } from "./paper";
+import { useViz, type NonEmpty, type Scenario } from "./useViz";
+
+interface Input {
+  nums: number[];
+  target: number;
+}
 
 interface Frame {
   lo: number;
   hi: number;
+  /** Last index probed; null before the first probe. */
   mid: number | null;
   note: string;
-  resolved?: "found" | "not-found";
+  found?: boolean;
+  /** Cells that show what is wrong with the input. */
+  flagged?: number[];
 }
 
-const NUMS = [2, 5, 8, 12, 16, 23, 38, 45, 56, 72, 91];
-const TARGET = 23;
+const SCENARIOS: NonEmpty<Scenario<Input>> = [
+  { id: "found", label: "target present", input: { nums: [2, 5, 8, 12, 16, 23, 38, 45, 56, 72, 91], target: 23 } },
+  { id: "missing", label: "target missing", input: { nums: [2, 5, 8, 12, 16, 23, 38, 45, 56, 72, 91], target: 40 } },
+  {
+    id: "unsorted",
+    label: "unsorted input",
+    malformed: true,
+    input: { nums: [2, 5, 8, 23, 16, 12, 38, 45, 56, 72, 91], target: 23 },
+  },
+];
 
-const frames: Frame[] = (() => {
-  const out: Frame[] = [];
+const UNSORTED_FIX = "Throwing away half the array is only safe when it is sorted. Sort first, or scan linearly.";
+
+function buildFrames({ nums, target }: Input): NonEmpty<Frame> {
   let lo = 0;
-  let hi = NUMS.length - 1;
-  out.push({ lo, hi, mid: null, note: `target = ${TARGET}, lo=${lo}, hi=${hi}` });
+  let hi = nums.length - 1;
+  let mid: number | null = null;
+  const out: NonEmpty<Frame> = [
+    { lo, hi, mid, note: `target = ${target}. lo = ${lo} and hi = ${hi} bracket the whole array.` },
+  ];
+
+  // The search still runs on unsorted input (real code would not notice), so show where it goes wrong.
+  const unsortedAt = nums.findIndex((n, i) => i + 1 < nums.length && n > nums[i + 1]);
+  const unsorted = unsortedAt >= 0;
+  if (unsorted) {
+    out.push({
+      lo,
+      hi,
+      mid,
+      flagged: [unsortedAt, unsortedAt + 1],
+      note: `Precondition broken: ${nums[unsortedAt]} comes before ${nums[unsortedAt + 1]}, so the array is not sorted. Watch the search run anyway.`,
+    });
+  }
+
   while (lo <= hi) {
-    const mid = Math.floor((lo + hi) / 2);
-    out.push({ lo, hi, mid, note: `mid = ${mid}, nums[mid] = ${NUMS[mid]}` });
-    if (NUMS[mid] === TARGET) {
-      out.push({ lo, hi, mid, note: `nums[${mid}] = ${TARGET} ✓ found at index ${mid}`, resolved: "found" });
-      break;
+    mid = Math.floor((lo + hi) / 2);
+    const v = nums[mid];
+    out.push({ lo, hi, mid, note: `mid = (${lo} + ${hi}) // 2 = ${mid}. Compare nums[${mid}] = ${v} with ${target}.` });
+    if (v === target) {
+      out.push({
+        lo,
+        hi,
+        mid,
+        found: true,
+        note: unsorted
+          ? `Found at index ${mid}, but only by luck. ${UNSORTED_FIX}`
+          : `${v} = ${target} ✓ found at index ${mid}.`,
+      });
+      return out;
     }
-    if (NUMS[mid] < TARGET) {
+    if (v < target) {
       lo = mid + 1;
-      out.push({ lo, hi, mid: null, note: `${NUMS[mid]} < ${TARGET} → lo = ${lo}` });
+      out.push({ lo, hi, mid, note: `${v} < ${target}, so the target can only be to the right: lo = mid + 1 = ${lo}.` });
     } else {
       hi = mid - 1;
-      out.push({ lo, hi, mid: null, note: `${NUMS[mid]} > ${TARGET} → hi = ${hi}` });
+      out.push({ lo, hi, mid, note: `${v} > ${target}, so the target can only be to the left: hi = mid - 1 = ${hi}.` });
     }
   }
+
+  const missedAt = nums.indexOf(target);
+  if (unsorted && missedAt >= 0) {
+    out.push({
+      lo,
+      hi,
+      mid,
+      flagged: [missedAt],
+      note: `The search says "not found", yet ${target} sits at index ${missedAt}. ${UNSORTED_FIX}`,
+    });
+  } else if (unsorted) {
+    out.push({ lo, hi, mid, note: `The search says "not found", but that answer cannot be trusted here. ${UNSORTED_FIX}` });
+  } else {
+    out.push({ lo, hi, mid, note: `lo (${lo}) passed hi (${hi}): the range is empty, so ${target} is not in the array. Return -1.` });
+  }
   return out;
-})();
+}
+
+const CELL = 56;
+const GAP = 8;
+// Wide enough that lo and hi stay on the paper when they cross past either end.
+const PAD = 60;
 
 export function BinarySearch() {
-  const { step, frame, running, playToggle, stepBy, reset } = useFrames(frames);
-  const cellW = 52;
+  const { input, frame, controls } = useViz(SCENARIOS, buildFrames);
+  const { nums } = input;
+  const cx = (i: number) => PAD + i * (CELL + GAP) + CELL / 2;
+
+  const tone = (i: number): Tone => {
+    if (frame.flagged) return frame.flagged.includes(i) ? "active" : "dim";
+    if (frame.found && i === frame.mid) return "done";
+    if (i < frame.lo || i > frame.hi) return "dim";
+    return i === frame.mid ? "active" : "idle";
+  };
 
   return (
     <AlgoVizFrame
       title="Binary search"
-      subtitle={`target = ${TARGET}`}
-      step={step}
-      stepCount={frames.length}
-      running={running}
-      onPlayToggle={playToggle}
-      onStep={stepBy}
-      onReset={reset}
+      subtitle={`find ${input.target} in a sorted array by halving the range`}
       caption={frame.note}
+      {...controls}
     >
-      <svg viewBox={`0 0 ${cellW * NUMS.length + 40} 170`} className="w-full">
-        {/* active range */}
-        {frame.lo <= frame.hi && (
-          <rect
-            x={20 + frame.lo * cellW - 4}
-            y={52}
-            width={(frame.hi - frame.lo + 1) * cellW}
-            height={76}
-            rx={10}
-            fill="rgba(52,211,153,0.08)"
-            stroke="rgba(52,211,153,0.35)"
-            strokeWidth={1.5}
-            style={{ transition: "all 400ms" }}
-          />
-        )}
-        {NUMS.map((n, i) => {
-          const x = 20 + i * cellW;
-          const inRange = i >= frame.lo && i <= frame.hi;
-          const isMid = frame.mid === i;
-          const foundHit = isMid && frame.resolved === "found";
-          return (
-            <g key={i}>
-              <rect
-                x={x}
-                y={60}
-                width={cellW - 8}
-                height={60}
-                rx={8}
-                fill={foundHit ? "#10b981" : isMid ? "#06b6d4" : inRange ? "#1e2030" : "#111218"}
-                stroke={isMid ? "#22d3ee" : inRange ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.03)"}
-                style={{ transition: "fill 300ms" }}
-                opacity={inRange ? 1 : 0.35}
-              />
-              <text
-                x={x + (cellW - 8) / 2}
-                y={97}
-                textAnchor="middle"
-                fill="#f1f5f9"
-                fontSize={15}
-                fontFamily="JetBrains Mono, monospace"
-                opacity={inRange ? 1 : 0.35}
-              >
-                {n}
-              </text>
-              <text
-                x={x + (cellW - 8) / 2}
-                y={142}
-                textAnchor="middle"
-                fill="#64748b"
-                fontSize={11}
-                fontFamily="JetBrains Mono, monospace"
-              >
-                {i}
-              </text>
-            </g>
-          );
-        })}
-        {frame.lo <= frame.hi && (
-          <>
-            <g transform={`translate(${20 + frame.lo * cellW + (cellW - 8) / 2}, 0)`} style={{ transition: "transform 400ms" }}>
-              <text x={0} y={40} textAnchor="middle" fill="#34d399" fontSize={13} fontFamily="JetBrains Mono, monospace" fontWeight={600}>
-                lo
-              </text>
-              <path d="M -6 45 L 6 45 L 0 55 Z" fill="#34d399" />
-            </g>
-            <g transform={`translate(${20 + frame.hi * cellW + (cellW - 8) / 2}, 0)`} style={{ transition: "transform 400ms" }}>
-              <text x={0} y={40} textAnchor="middle" fill="#f87171" fontSize={13} fontFamily="JetBrains Mono, monospace" fontWeight={600}>
-                hi
-              </text>
-              <path d="M -6 45 L 6 45 L 0 55 Z" fill="#f87171" />
-            </g>
-          </>
-        )}
-      </svg>
+      <Sketch
+        width={PAD * 2 + nums.length * (CELL + GAP) - GAP}
+        height={190}
+        label={`Array ${nums.join(", ")} with lo, hi and mid pointers`}
+      >
+        {nums.map((n, i) => (
+          <Cell key={i} x={cx(i) - CELL / 2} y={58} w={CELL} tone={tone(i)} label={n} sub={i} />
+        ))}
+        {/* lo and hi can share a cell, so each takes one half of it; mid points from below. */}
+        <Pointer x={cx(frame.lo) - 14} y={56} label="lo" />
+        <Pointer x={cx(frame.hi) + 14} y={56} label="hi" />
+        {frame.mid !== null && <Pointer x={cx(frame.mid)} y={138} label="mid" dir="up" />}
+      </Sketch>
     </AlgoVizFrame>
   );
 }
